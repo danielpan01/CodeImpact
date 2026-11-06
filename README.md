@@ -11,8 +11,8 @@ deliberate limitations; it is not yet a hosted GitHub App or a safe test-skippin
 
 ## Run it
 
-Prerequisites: Python 3.12+, Node 24, npm, Git. Dependencies are already installed in
-the original local checkout. Start it from the repository root:
+Prerequisites: Python 3.12+, Node 24, npm, Git. Dependencies are installed in the
+active local Codex checkout. Start it from the repository root:
 
 ```sh
 make dev
@@ -116,10 +116,11 @@ docs/             Architecture, roadmap, context, validation and Codex prompt
 - [Validation record](docs/VALIDATION.md)
 - [Contribution workflow](CONTRIBUTING.md)
 
-## Your first commit and push
+## Review, commit and push
 
-The setup agent created a private GitHub repository and a local `main` branch with
-`origin` configured. It did **not** commit, stage, or push these project files.
+The active local Codex project is `/Users/danny/Documents/ChatGPT/CodeImpact`.
+The existing starter commit is `0d5c06f` on `main`; remote `main` was verified at
+the same commit on November 5, 2026. Agent changes remain unstaged and uncommitted.
 Review them and use your own Git identity:
 
 ```sh
@@ -130,13 +131,13 @@ make check
 git add .
 git diff --cached --stat
 git diff --cached
-git commit -m "Build CodeImpact analysis MVP"
+git commit -m "Harden empty-module change detection"
 git push -u origin main
 ```
 
 Remote: [danielpan01/codeimpact](https://github.com/danielpan01/codeimpact).
-The repository remains empty on GitHub until you push. No automatic file sync was
-configured. After your first push, the cloud chat can attempt to read it through your
-connected GitHub account; connector access to this new private repo was verified.
+No automatic file sync was configured. Push reviewed changes yourself before another
+checkout or cloud chat can retrieve them from GitHub. GitHub connector access to this
+private repository was verified; cloud checkout access is environment-dependent.
 Choose an open-source license and change visibility when you are ready to publish.
 

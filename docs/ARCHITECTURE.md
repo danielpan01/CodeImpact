@@ -24,7 +24,8 @@ module, class, function or test. Tests are functions named `test_*` inside `test
 or `*_test.py` files, including class methods. This is a discovery heuristic, not
 pytest collection. Parametrization and fixture injection are not modeled.
 
-`ast.dump(..., include_attributes=False)` is SHA-256 hashed to compare semantics
+`ast.dump(..., include_attributes=False)` is SHA-256 hashed for every successfully
+parsed module, including empty and comment-only modules, to compare semantics
 without source locations. Comments, whitespace and moved lines do not count. A
 function body, signature, decorator or annotation change can count. Modules include
 the whole AST, so a function change also changes its module. Classes include methods;
@@ -32,8 +33,12 @@ nested functions also affect their enclosing function. This deliberately favors 
 
 The collector recursively visits direct function/class bodies; definitions inside
 conditional/loop/try blocks are not currently indexed. Duplicate module paths such
-as `a.py` and `src/a.py` are rejected. Syntax failures are visible warnings and remain
-as changed modules. Renames are represented as removal and addition.
+as `a.py` and `src/a.py` are rejected. Parse failures remain indexed as modules with
+visible warnings and raw-source fingerprints. Distinct invalid revisions and
+valid/invalid transitions count as changes; identical invalid source keeps its
+warning without inventing a change. Report warnings include both revisions, so a
+repaired file can still carry its base-revision parse warning. Renames are represented
+as removal and addition.
 
 ## Graph semantics
 

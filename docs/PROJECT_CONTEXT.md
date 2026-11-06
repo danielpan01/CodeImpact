@@ -8,12 +8,22 @@ explorer: changed functions, potential downstream effects and relevant tests.
 
 ## Locations and ownership
 
-- GitHub: https://github.com/danielpan01/codeimpact — created private, initially empty.
-- Local working tree created by setup:
+- GitHub: https://github.com/danielpan01/CodeImpact — private. On November 5, 2026,
+  local `main` and remote `main` were verified at
+  `0d5c06fbf7f168bac27eada6f4d2f56a67414c7f` (`Initialize CodeImpact starter`).
+- Active local Codex project: **CodeImpact**, attached to
+  `/Users/danny/Documents/ChatGPT/CodeImpact`.
+- Original local working tree created by setup, retained unchanged:
   `/Users/danny/Documents/Codex/2026-11-05/referenced-chatgpt-conversation-this-is-an/outputs/codeimpact`
 - ChatGPT project: **CodeImpact** (`g-p-6aed253d2ef88191b129b52d050ea7b7`).
 - Cloud Work chat: **CodeImpact Project Orientation**:
   https://chatgpt.com/c/6aed2816-95c0-83e8-9ff8-682f88b76275
+
+The local Codex project initially pointed at an empty folder. The existing clean
+checkout and its Git history were copied there on November 5, 2026, and pinned
+dependencies were installed in that folder. Continue local work in the active Codex
+project; the original checkout is a separate copy and does not receive these edits.
+No repository was created on GitHub during this milestone.
 
 The cloud chat was created inside the existing project and its context reply was
 verified. Phone access itself was not tested. Open the same ChatGPT account on web

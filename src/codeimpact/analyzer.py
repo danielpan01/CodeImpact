@@ -91,8 +91,12 @@ def build_index(snapshot: Snapshot) -> Index:
             tree = ast.parse(source, filename=path)
         except (SyntaxError, ValueError, RecursionError) as exc:
             index.warnings.append(f"Cannot parse {path}: {type(exc).__name__}")
-            # A failed file remains a changed module so its importers are still considered.
+            # Keep failed modules in the graph and distinguish invalid source revisions.
             tree = ast.Module(body=[], type_ignores=[])
+            fingerprint = hashlib.sha256(source.encode()).hexdigest()
+        else:
+            # Successful parses use AST semantics, even for empty/comment-only modules.
+            fingerprint = digest(tree)
         trees[path] = tree
         mod = module_name(path)
         if mod in modules:
@@ -108,7 +112,7 @@ def build_index(snapshot: Snapshot) -> Index:
             line=1,
             end_line=max(1, len(source.splitlines())),
             kind="module",
-            fingerprint=digest(tree) if tree.body else hashlib.sha256(source.encode()).hexdigest(),
+            fingerprint=fingerprint,
         )
         names[mod] = sid
         collect(path, tree.body)
