@@ -1,0 +1,16 @@
+.PHONY: setup dev check demo
+setup:
+	python3 -m venv .venv
+	.venv/bin/python -m pip install -r requirements-dev.lock
+	.venv/bin/python -m pip install --no-deps -e .
+	cd web && npm ci
+dev:
+	.venv/bin/python scripts/dev.py
+check:
+	.venv/bin/ruff check src tests scripts
+	.venv/bin/ruff format --check src tests scripts
+	.venv/bin/mypy src
+	.venv/bin/pytest
+	cd web && npm run build
+demo:
+	.venv/bin/codeimpact --demo

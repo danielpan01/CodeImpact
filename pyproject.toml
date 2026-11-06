@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codeimpact"
+version = "0.1.0"
+description = "Explainable Python change-impact analysis"
+requires-python = ">=3.12"
+dependencies = ["fastapi>=0.162,<0.163", "uvicorn>=0.41,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10", "pytest-cov>=7,<8", "httpx>=0.28,<1", "ruff>=0.14,<1", "mypy>=1.19,<2"]
+
+[project.scripts]
+codeimpact = "codeimpact.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=codeimpact --cov-report=term-missing"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
