@@ -1,0 +1,31 @@
+{
+  "project": "CodeImpact",
+  "files": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "pyproject.toml",
+    "requirements-dev.lock",
+    "web/package.json",
+    "web/package-lock.json",
+    "docs/ARCHITECTURE.md",
+    "docs/VALIDATION.md",
+    "docs/media/desktop.png",
+    "docs/media/mobile.png"
+  ],
+  "markdown": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VALIDATION.md"
+  ],
+  "python": [
+    "src/codeimpact/__init__.py",
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/api.py",
+    "src/codeimpact/cli.py",
+    "src/codeimpact/demo.py",
+    "src/codeimpact/models.py"
+  ],
+  "requirements": "requirements-dev.lock",
+  "scope": "Checks required repository files, documentation targets, Python source syntax, and live PyPI metadata for the pinned development environment. Does not execute analyzed repositories, change analyzer code or report schemas, modify dependencies, or claim full application or browser test coverage. Feature work remains separate from this generated maintenance report."
+}
