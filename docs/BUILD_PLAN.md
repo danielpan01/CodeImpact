@@ -17,13 +17,20 @@ Review all generated files, then make your own first commit and push.
 
 ## 2. Harden analysis (2–4 days)
 
-Add a labeled fixture corpus for imports/re-exports, fixture injection, conditional
-definitions, nested scopes, class dispatch and module rebinding. Start by recording
-unsupported cases explicitly. Improve one resolution rule at a time with regression
-tests. Source revision provenance and changed-code inspection are implemented locally
-in the November 10, 2026 milestone: report 2.0 retains per-revision evidence and exact
-typed paths, labels mixed paths, and shows bounded before/after code. See VALIDATION.md.
-Add worker-level resource budgets for adversarial ASTs and performance measurements.
+A 25-case authored dependency corpus is implemented locally in the November 10,
+2026 corpus milestone. It covers imports/re-exports, fixture injection, conditional
+definitions, nested scopes, class dispatch and module rebinding, retaining exact
+known discrepancies and all difficult cases in overall metrics. See [CORPUS.md](CORPUS.md)
+and VALIDATION.md. These small authored labels are not real-repository accuracy.
+
+Next: add focused failing tests for function-local import aliases and shadowing,
+then implement that one resolution rule and deliberately update the `local_import`
+known-miss baseline while preserving its affected label. Keep other limitations
+visible. Source revision provenance and changed-code inspection are already in
+starting commit `546ee8e`: report 2.0 retains per-revision evidence and exact typed
+paths, labels mixed paths, and shows bounded before/after code.
+Worker-level budgets for adversarial ASTs and performance measurement remain future
+work, separate from this corpus milestone.
 
 Acceptance: no recommendation lacks a valid edge-by-edge path. Publish supported
 and unsupported case tables. Compare conservative module-only selection against
@@ -67,8 +74,10 @@ and a fresh user can complete the workflow on desktop and phone.
 
 ## 5. Measure and present (2–3 days)
 
-Evaluate a fixed, documented set of Python changes with human labels and, where
-practical, mutation tests. Run trusted fixture code only in a separate controlled
+The local authored corpus supplies a reproducible first step (25 cases, no live
+test execution); it does not complete this real-repository evaluation stage.
+Evaluate a fixed, documented set of Python changes with independently reviewed
+labels and, where practical, mutation tests. Run trusted fixture code only in a separate controlled
 evaluation environment—not in the analyzer. Report repository counts, source sizes,
 revisions, machine specs and repeat counts. Measure median/p95 runtime, selection
 size, recall against known affected/failing tests, and false positives.

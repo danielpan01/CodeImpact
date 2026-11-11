@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "id": "module_rebinding",
+  "description": "A module-level assignment replaces an imported callable before a wrapper uses it.",
+  "category": "known_limitation",
+  "features": [
+    "module_rebinding",
+    "false_positive",
+    "stale_alias"
+  ],
+  "request": {
+    "label": "module_rebinding",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "from core import price\nprice = lambda: 42\n\ndef read():\n    return price()\n",
+        "tests/test_worker.py": "from worker import read\n\ndef test_read():\n    assert read() == 42\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "from core import price\nprice = lambda: 42\n\ndef read():\n    return price()\n",
+        "tests/test_worker.py": "from worker import read\n\ndef test_read():\n    assert read() == 42\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "Calls core.price directly and reads its changed return."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem.",
+    "tests/test_worker.py::test_read": "worker replaces price with a constant-return lambda; the wrapper no longer calls core.price."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {
+      "tests/test_worker.py::test_read": "Module assignment is not tracked, so the stale import alias produces a spurious resolved-call path."
+    },
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Module-level rebinding can leave stale import aliases. Even evidence labeled resolved is static inference, not proof of runtime dispatch."
+  ]
+}

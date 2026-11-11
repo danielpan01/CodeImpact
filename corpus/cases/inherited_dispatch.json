@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "id": "inherited_dispatch",
+  "description": "Inherited instance methods share a class import path without precise method dispatch.",
+  "category": "known_limitation",
+  "features": [
+    "classes",
+    "inheritance",
+    "dynamic_dispatch",
+    "false_positive"
+  ],
+  "request": {
+    "label": "inherited_dispatch",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "base.py": "class Base:\n    def price(self):\n        return 1\n\n    def healthy(self):\n        return True\n",
+        "child.py": "from base import Base\n\nclass Child(Base):\n    pass\n",
+        "tests/test_child.py": "from child import Child\n\ndef test_price():\n    assert Child().price() == 1\n\ndef test_health():\n    assert Child().healthy()\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "base.py": "class Base:\n    def price(self):\n        return 2\n\n    def healthy(self):\n        return True\n",
+        "child.py": "from base import Base\n\nclass Child(Base):\n    pass\n",
+        "tests/test_child.py": "from child import Child\n\ndef test_price():\n    assert Child().price() == 1\n\ndef test_health():\n    assert Child().healthy()\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_child.py::test_price": "Child inherits Base.price; its returned value changes."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem.",
+    "tests/test_child.py::test_health": "Child inherits the unchanged healthy method, which does not call price."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {
+      "tests/test_child.py::test_health": "Module/import fallback reaches base.py for both instance methods."
+    },
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Instance/inherited method dispatch is unresolved. Module fallback selects the affected method test but also the independent inherited method test."
+  ]
+}

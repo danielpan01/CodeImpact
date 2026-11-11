@@ -491,3 +491,123 @@ on the latest PR commit, inspect Files changed, and resolve any conflicts before
 merging. The local validation is complete; approval, authoring commits, publishing
 the branch and merging remain the owner's actions.
 
+## Bounded analyzer correctness corpus — November 10, 2026
+
+This is a separate milestone from the changed-code dashboard work above. The
+active local checkout was `/Users/danny/Documents/ChatGPT/CodeImpact`, initially
+clean on `main` at `546ee8e295c513d3137c4446c7ddde0b63e3075a`, with origin
+`https://github.com/danielpan01/codeimpact.git`. The prior milestone was already
+present in that commit. No existing uncommitted work needed preservation. Work was
+performed on the Mac checkout, not in a cloud environment; no cross-environment
+sync or downloadable cloud patch is claimed.
+
+### Implemented scope
+
+- 25 small, complete JSON base/head snapshot cases in `corpus/cases`, with authored
+  affected/unaffected labels and rationales, explicit unclassified tests, feature
+  tags, categories and exact explained known discrepancies.
+- `src/codeimpact/corpus.py`: bounded data-only loading, duplicate JSON/case-ID
+  checks, snapshot validation and independent AST test-discovery/label validation.
+- `src/codeimpact/evaluate.py`: deterministic readable/JSON evaluation schema 1.0,
+  per-case and aggregate metrics, separate supported/known-limitation groups,
+  null zero-denominator ratios, exact discrepancy drift failures and validation of
+  every recommendation's typed path and revision evidence.
+- `tests/test_corpus.py` and `tests/test_evaluation.py`: positive and malformed-input
+  controls, all-case baseline checks, intentional report corruption, exact-drift
+  checks in both directions, no-execution sentinel, CLI failures and deterministic
+  reports. Evidence examples also require reviewed explanations when resolution
+  changes without changing the selected test set.
+- `make evaluate`, a corpus guide, updated architecture/roadmap/context and an
+  owner-only review/commit/push/merge handoff in README.
+
+Labels were authored from source relationships before running the evaluator. A
+one-off authoring helper wrote literal strings and labels without importing the
+analyzer; all stored cases contain complete snapshots, not patches. They are
+authored expectations, not external ground truth or independently reviewed labels.
+No fixture source or fixture test was executed/imported/installed/checked out.
+There are no skips or xfails for difficult cases. No analyzer bug blocked this
+evaluation, so `analyzer.py`, existing analysis models, API/CLI and dashboard were
+left unchanged. Scoring, IDs, graph direction/union, deletion handling, limits,
+cycle traversal and the empty-module fix retain their existing regression tests.
+
+The initial focused run, before implementing the new modules, failed collection
+with two `ModuleNotFoundError: No module named 'codeimpact.corpus'` errors. This was
+the expected missing implementation for the new tests, not a pre-existing analyzer
+failure. After implementation and additional failure-mode checks, all 81 focused
+tests passed. The independently authored fixture labels needed no changes to agree
+with the deliberately recorded discrepancy baseline.
+
+### Observed evaluation
+
+| Population | Cases | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| All cases | 25 | 22 | 3 | 6 | 26 | 2 | 22/28 (78.6%) | 22/25 (88.0%) |
+| Supported demonstrations | 14 | 15 | 0 | 0 | 15 | 0 | 15/15 (100%) | 15/15 (100%) |
+| Known limitations | 11 | 7 | 3 | 6 | 11 | 2 | 7/13 (53.8%) | 7/10 (70.0%) |
+
+There are 57 labeled case/test pairs, plus two unclassified pairs. All 30 returned
+recommendations pass the typed-path/revision checks; two are unclassified, leaving
+28 labeled recommendations for the precision denominator. All 25 cases match their
+explicit baseline. This is not a claim that the 6 FPs or 3 FNs were fixed.
+
+Observed false positives: unchanged sibling module function (1), shadowed
+parameter/local callable (2), stale imported alias after module rebinding (1),
+conditional-definition module fallback (1), and independent inherited method (1).
+The module-rebinding false positive has a resolved-call explanation; that static
+resolution is still semantically wrong for the reassigned name.
+
+Observed misses: function-local import (1), pytest fixture injection (1), and
+runtime import/reflective call (1). Re-export fallback selects the affected test
+without a precise call edge, so its limitation has no selection error. Unclassified
+selections are the invalid-to-invalid syntax case and the mixed-revision path case;
+their explicit rationales remain in the case files and outside precision/recall.
+All difficult cases and their labeled controls are included in overall totals.
+
+### Commands and actual results
+
+| Command / check | Observed result |
+| --- | --- |
+| `.venv/bin/pytest tests/test_corpus.py tests/test_evaluation.py --no-cov --tb=short` | 81 passed |
+| `make evaluate` | Exit 0; all 25 cases matched the exact baseline; readable summary and JSON produced |
+| `.venv/bin/python -m codeimpact.evaluate --corpus corpus/cases --output reports/corpus-repeat.json > reports/corpus-repeat.txt` | Exit 0; second independent CLI run |
+| `cmp reports/corpus-evaluation.json reports/corpus-repeat.json` | Exit 0; byte-identical reports |
+| `make check` | Passed: 208 application tests, Ruff lint/format, strict mypy for 9 source files, TypeScript and Vite build |
+| `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py' -v` | 8 maintenance tests passed |
+| `git diff --check` | Passed |
+| Frontend formatting and desktop/mobile browser tests | Not rerun: no dashboard files or behavior changed; the previous milestone's 24-case run is historical, not a new result |
+| Hosted CI, human review and remote publishing | Not performed for these uncommitted changes |
+
+Used the existing `.venv` and installed pinned dependencies; no dependency or lockfile
+changes. The one existing Starlette/httpx deprecation warning remains non-failing.
+Statement coverage: 91% overall (972 statements, 83 missed); analyzer 99% (214
+statements, 1 missed). CLI subprocess checks run successfully but are not counted
+in this in-process coverage report. Coverage measures executed lines, not correctness.
+Passing regressions do not establish general analyzer accuracy; tiny authored
+fixtures do not represent every repository. Dependency relevance is different from
+whether a test actually fails, and the full suite remains the merge gate.
+
+The ignored full JSON report is 493,947 bytes. Its SHA-256 is
+`ff6d0154ad216dd50ca988bec37a4d6a1b2f050341acd1d18bb369b6854d21fc`.
+Its canonical corpus digest is
+`8d081ec3364683fb4a9e5a5e379427c61f8299c80ec628e274938d3802695d03`.
+The report omits elapsed timing and includes complete fixture inputs, labels,
+annotations and analyzer evidence. The digest identifies corpus data, not analyzer
+code; retain the checkout version and pinned environment when reproducing it.
+No performance benchmark was added. Repeated runs and reordered case/snapshot
+inputs are also covered by automated checks.
+
+### Handoff and remaining work
+
+All milestone changes remain unstaged/uncommitted. The owner reviews the files and
+report, creates `codex/analyzer-corpus`, stages the explicit README file list,
+commits, rebases on current `origin/main`, rechecks, pushes and opens/merges the PR.
+No agent stage, commit, push, identity change, PR, deployment or repository-visibility
+change occurred. README provides exact commands and a proposed PR description.
+
+[CORPUS.md](CORPUS.md) contains the full schema, case inventory, adding/reviewing
+workflow and an interview walkthrough: transitive call → module false positive →
+local-import miss. The next bounded development step is function-local import
+resolution with alias/scope/shadowing regressions. Preserve authored labels and
+deliberately update the recorded miss only after that separate fix is verified.
+Other known limitations remain visible rather than being bundled into this milestone.
+

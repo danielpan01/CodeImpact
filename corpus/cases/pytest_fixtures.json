@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "id": "pytest_fixtures",
+  "description": "Pytest injects a fixture value without a Python call from the test to the fixture.",
+  "category": "known_limitation",
+  "features": [
+    "pytest_fixtures",
+    "missed_dependency"
+  ],
+  "request": {
+    "label": "pytest_fixtures",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/conftest.py": "import pytest\nfrom core import price\n\n@pytest.fixture\ndef quoted():\n    return price()\n",
+        "tests/test_fixture.py": "def test_quote(quoted):\n    assert quoted == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "tests/conftest.py": "import pytest\nfrom core import price\n\n@pytest.fixture\ndef quoted():\n    return price()\n",
+        "tests/test_fixture.py": "def test_quote(quoted):\n    assert quoted == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_fixture.py::test_quote": "Under intended pytest fixture injection, quoted is produced by the fixture calling changed core.price."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {
+      "tests/test_fixture.py::test_quote": "Fixture-name injection supplies no indexed call/import edge from the test to conftest.quoted."
+    }
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Pytest fixture discovery/injection is not modeled. These sources are never collected or executed by the corpus runner."
+  ]
+}

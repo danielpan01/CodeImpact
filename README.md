@@ -28,6 +28,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
 | **Inspectable reports** | Connects Map, Tests, and Changes views with exportable JSON and exact analyzed revision metadata for GitHub PRs. |
+| **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
 
@@ -62,6 +63,34 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 
 You can also paste a public GitHub PR URL or upload snapshot pairs. See the [usage guide](docs/USAGE.md) for CLI examples, a deleted-function fixture, API requests, configuration, and troubleshooting.
 
+## Evaluate the analyzer
+
+The [authored correctness corpus](docs/CORPUS.md) contains 25 small, complete
+base/head examples with explicit affected, unaffected and unclassified test labels.
+Run it from the repository root with the pinned environment:
+
+```sh
+make evaluate
+# Full results, labels, snapshots and typed paths: reports/corpus-evaluation.json
+.venv/bin/python -m codeimpact.evaluate --case local_import \
+  --output reports/local-import.json
+```
+
+Observed overall agreement with these authored dependency labels: **22 true
+positives, 3 false negatives, 6 false positives, 26 true negatives**. Precision is
+**22/28 (78.6%)**; recall is **22/25 (88.0%)**. Two unclassified recommendations are
+reported separately. All 14 supported and 11 known-limitation cases enter the overall
+results. Known discrepancies fail tests if they change, including improvements that
+need deliberate review. A passing evaluation means the baseline matches, not that
+the analyzer has no mistakes.
+
+For concrete examples, module fallback overselects an unchanged sibling function
+in `module_overselection`, while `local_import` misses a wrapper's local import.
+These are small authored fixtures, not externally validated ground truth,
+production accuracy or proof that a test fails. Fixture code is never executed.
+Statement coverage measures executed lines, not correctness; passing regression
+tests does not establish general accuracy. Keep the full test suite as the merge gate.
+
 ## Quality checks
 
 ```sh
@@ -79,12 +108,15 @@ CodeImpact is a developer review tool. Static Python analysis is incomplete for 
 
 Next steps include real-repository accuracy evaluation, stronger resolution coverage, worker isolation, and hosted deployment. GitHub App authorization for private repositories, persisted jobs, and cross-request caching are not implemented. See the [build plan](docs/BUILD_PLAN.md).
 
+The next bounded analysis milestone is function-local import resolution, starting with alias/scope/shadowing regressions and the corpus's recorded `local_import` miss.
+
 Exports contain the full before/after source of changed files, including content outside bounded on-screen previews.
 
 ## Project guide
 
 - [Analyzer and API](src/codeimpact/) · [Dashboard](web/) · [Tests](tests/)
 - [Usage](docs/USAGE.md) · [Architecture](docs/ARCHITECTURE.md) · [Validation](docs/VALIDATION.md)
+- [Corpus guide and measured results](docs/CORPUS.md) · [Authored cases](corpus/cases/)
 - [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Roadmap](docs/BUILD_PLAN.md)
 
 Built by [Daniel Pan](https://github.com/danielpan01).

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "id": "reexports",
+  "description": "A package re-export is reached through imports even though its call alias is unresolved.",
+  "category": "known_limitation",
+  "features": [
+    "reexports",
+    "module_fallback"
+  ],
+  "request": {
+    "label": "reexports",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "shop/core.py": "def price():\n    return 1\n",
+        "shop/__init__.py": "from .core import price\n",
+        "tests/test_export.py": "from shop import price\n\ndef test_export():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "shop/core.py": "def price():\n    return 2\n",
+        "shop/__init__.py": "from .core import price\n",
+        "tests/test_export.py": "from shop import price\n\ndef test_export():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_export.py::test_export": "shop.price re-exports shop.core.price, so the test reads the changed return."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "The re-export chain is not resolved into a precise test-to-function call. Module/import fallback selects the affected test in this case, so there is no selection discrepancy."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "id": "cycles",
+  "description": "A finite recursive call cycle propagates a changed base return to its caller.",
+  "category": "supported",
+  "features": [
+    "cycles",
+    "transitive_calls"
+  ],
+  "request": {
+    "label": "cycles",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "cycle.py": "def first(n):\n    return second(n - 1) if n else 1\n\ndef second(n):\n    return first(n - 1) if n else 1\n",
+        "tests/test_cycle.py": "from cycle import second\n\ndef test_cycle():\n    assert second(1) == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "cycle.py": "def first(n):\n    return second(n - 1) if n else 2\n\ndef second(n):\n    return first(n - 1) if n else 1\n",
+        "tests/test_cycle.py": "from cycle import second\n\ndef test_cycle():\n    assert second(1) == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_cycle.py::test_cycle": "second(1) reaches first(0), whose base return changes; recursion terminates at zero."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

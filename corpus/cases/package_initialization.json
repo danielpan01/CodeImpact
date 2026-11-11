@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "id": "package_initialization",
+  "description": "Changing a package constant affects a wrapper reading package initialization.",
+  "category": "supported",
+  "features": [
+    "package_initialization",
+    "module_fallback"
+  ],
+  "request": {
+    "label": "package_initialization",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "shop/__init__.py": "RATE = 1\n",
+        "service.py": "import shop\n\ndef rate():\n    return shop.RATE\n",
+        "tests/test_rate.py": "from service import rate\n\ndef test_rate():\n    assert rate() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "shop/__init__.py": "RATE = 2\n",
+        "service.py": "import shop\n\ndef rate():\n    return shop.RATE\n",
+        "tests/test_rate.py": "from service import rate\n\ndef test_rate():\n    assert rate() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_rate.py::test_rate": "Reads shop.RATE through service.rate; the package initialization value changes."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

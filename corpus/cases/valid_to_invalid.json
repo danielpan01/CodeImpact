@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "id": "valid_to_invalid",
+  "description": "Breaking syntax removes indexed definitions but preserves previous call evidence.",
+  "category": "supported",
+  "features": [
+    "invalid_syntax",
+    "valid_to_invalid",
+    "before_evidence"
+  ],
+  "request": {
+    "label": "valid_to_invalid",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price(:\n    return 2\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "The imported module becomes unparseable, affecting availability of its required function."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "id": "shadowed_names",
+  "description": "Parameter and local assignment shadowing suppress precise calls but not broad imports.",
+  "category": "known_limitation",
+  "features": [
+    "shadowing",
+    "module_fallback",
+    "false_positive"
+  ],
+  "request": {
+    "label": "shadowed_names",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "from core import price\n\ndef parameter(price):\n    return price()\n\ndef local():\n    price = lambda: 42\n    return price()\n",
+        "tests/test_shadow.py": "from worker import parameter, local\n\ndef test_parameter():\n    assert parameter(lambda: 42) == 42\n\ndef test_local():\n    assert local() == 42\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "from core import price\n\ndef parameter(price):\n    return price()\n\ndef local():\n    price = lambda: 42\n    return price()\n",
+        "tests/test_shadow.py": "from worker import parameter, local\n\ndef test_parameter():\n    assert parameter(lambda: 42) == 42\n\ndef test_local():\n    assert local() == 42\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "Calls the actual changed core.price function."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem.",
+    "tests/test_shadow.py::test_parameter": "Supplies a separate lambda; the parameter shadows the imported price.",
+    "tests/test_shadow.py::test_local": "Calls a local lambda assigned to price; it never calls core.price."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {
+      "tests/test_shadow.py::test_parameter": "worker imports core, retaining a conservative path despite parameter shadowing.",
+      "tests/test_shadow.py::test_local": "worker imports core, retaining a conservative path despite assignment shadowing."
+    },
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Precise call resolution respects function parameter/local-store shadowing, but module fallback can still overselect both tests."
+  ]
+}

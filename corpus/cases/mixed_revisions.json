@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "id": "mixed_revisions",
+  "description": "A union path can combine an old bridge dependency with a new test dependency.",
+  "category": "known_limitation",
+  "features": [
+    "mixed_revisions",
+    "graph_union",
+    "unclassified"
+  ],
+  "request": {
+    "label": "mixed_revisions",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "a.py": "def f():\n    return 1\n",
+        "b.py": "def f():\n    return 2\n",
+        "bridge.py": "from a import f\n\ndef g():\n    return f()\n",
+        "tests/test_bridge.py": "from b import f as g\n\ndef test_g():\n    assert g() == 2\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "a.py": "",
+        "b.py": "def f():\n    return 2\n",
+        "bridge.py": "from b import f\n\ndef g():\n    return f()\n",
+        "tests/test_bridge.py": "from bridge import g\n\ndef test_g():\n    assert g() == 2\n"
+      }
+    }
+  },
+  "expected_affected": {},
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {
+    "tests/test_bridge.py::test_g": "Dependency topology changes while both complete revisions return the same literal. No affected/unaffected label is asserted for this union-only path; this case checks provenance."
+  },
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [
+    "tests/test_bridge.py::test_g"
+  ],
+  "limitations": [
+    "A path through the base/head union need not exist in either complete revision. Mixed evidence must stay explicit and this unclassified selection is outside label metrics."
+  ]
+}
