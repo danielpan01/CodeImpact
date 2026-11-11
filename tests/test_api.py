@@ -12,9 +12,15 @@ def test_health_and_demo_schema():
     response = client.get("/api/demo")
     assert response.status_code == 200
     body = response.json()
-    assert body["schema_version"] == "1.0"
+    assert body["schema_version"] == "2.0"
     assert len(body["recommendations"]) == 3
     assert "fingerprint" not in body["nodes"][0]
+    assert body["source_files"][0]["before"]["text"] == demo_request().base.files["shop/pricing.py"]
+    assert body["source_files"][0]["after"]["text"] == demo_request().head.files["shop/pricing.py"]
+    assert body["changes"][1]["status"] == "modified"
+    assert body["recommendations"][0]["path_revision"] == "both"
+    edge_ids = {e["id"] for e in body["edges"]}
+    assert set(body["recommendations"][0]["evidence_edges"]) <= edge_ids
 
 
 def test_snapshot_round_trip():

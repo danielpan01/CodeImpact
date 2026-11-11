@@ -20,7 +20,9 @@ Review all generated files, then make your own first commit and push.
 Add a labeled fixture corpus for imports/re-exports, fixture injection, conditional
 definitions, nested scopes, class dispatch and module rebinding. Start by recording
 unsupported cases explicitly. Improve one resolution rule at a time with regression
-tests. Add source revision provenance to edges so the UI can distinguish base/head.
+tests. Source revision provenance and changed-code inspection are implemented locally
+in the November 10, 2026 milestone: report 2.0 retains per-revision evidence and exact
+typed paths, labels mixed paths, and shows bounded before/after code. See VALIDATION.md.
 Add worker-level resource budgets for adversarial ASTs and performance measurements.
 
 Acceptance: no recommendation lacks a valid edge-by-edge path. Publish supported
@@ -29,7 +31,8 @@ symbol-level selection instead of assuming finer graphs are always better.
 
 ## 3. Real GitHub PR input (2–3 days)
 
-Implemented locally November 8, 2026; awaiting the owner's review and commit.
+Implemented locally November 8, 2026; present in starting commit `2604fd7` for the
+November 10 milestone.
 See VALIDATION.md for observed mocked/live results. Complete supported Python trees
 are read from exact merge-base/head revisions; truncated listings fail explicitly.
 This completes the public, stateless slice below, not private authorization or hosting.

@@ -25,7 +25,9 @@ This local server is not a phone-accessible deployment.
 
 If another app uses port 8000, run `CODEIMPACT_API_PORT=8001 make dev` instead.
 `CODEIMPACT_WEB_PORT` changes the website port. The website's API reference link and
-proxy follow these settings. Restart `make dev` after backend changes. Browser tests
+proxy follow these settings. Restart `make dev` after backend changes. If refreshed
+pages still show old controls, restart the frontend too; a running Vite process can
+retain old compiled modules in this local environment. Browser tests
 start their own servers on ports 8002 and 5174; those two ports must be free.
 
 For a fresh checkout, install the pinned dependencies first:
@@ -48,8 +50,31 @@ Use `python3.12 -m venv .venv` first if your `python3` is older than 3.12.
 2. The changed function turns coral. Dependent callers and tests turn amber.
 3. Click a test and follow the evidence chain. The API test depends on
    `create_order → checkout → discount`; the health test has no path to the change.
-4. Toggle **Module dependencies** to inspect the broader fallback graph.
-5. Export the report, or upload a JSON snapshot pair to analyze your own code.
+4. Click **Open changed code**. **Changes** shows `discount` before and after with
+   source line numbers; the test explanation stays beside it (below on mobile).
+   Each dependency identifies **Before only**, **After only**, or **Both revisions**.
+   Expand its **Before**/**After** evidence to inspect call/import locations.
+5. Switch between **Map**, **Tests**, and **Changes**. Changes are grouped by file and
+   labeled added, modified or removed. Module entries include module-level statements.
+6. Toggle **Module dependencies** in Map to inspect the broader fallback graph.
+7. Export the report, or upload a JSON snapshot pair to analyze your own code.
+
+To inspect a deleted function and a mixed path, use **Analyze snapshots** to upload
+[`tests/fixtures/mixed-revisions.json`](tests/fixtures/mixed-revisions.json). Select
+**Tests → test_g → Open changed code**. The before panel shows `a.py::f`; the after
+panel identifies the present but empty file. The explanation says **Mixed revisions**:
+`test_g → g` exists only after, while `g → f` exists only before. Neither revision
+contains that entire shown path. This is a conservative estimate, not an executable
+call sequence from one revision. **Load demo** restores the original example.
+
+**Report schema 2.0 exports contain complete before/after source for files with
+semantic changes**, including content beyond the displayed preview. Source is stored
+once per file per revision, never once per symbol. Previews show at most 120 lines,
+12,000 characters and 500 characters per line, with visible truncation notices.
+Only the exact analyzed snapshots are used. Definitions include decorators; absent
+files, empty files and parse failures have distinct displays. Source renders as text.
+Old 1.0 reports require re-analysis from snapshots; update API and dashboard together.
+Snapshot upload input is unchanged. See [the report contract](docs/ARCHITECTURE.md#report-20-contract).
 
 The displayed timing is measured for that request. It is not a benchmark claim.
 
@@ -61,9 +86,11 @@ The displayed timing is measured for that request. It is not a benchmark claim.
    public PR checked for this milestone. It changes `escape` in Python source.
 3. Expand **Exact analyzed revisions**. The before snapshot is the merge base;
    the after snapshot is the pinned PR head. The target branch SHA is also recorded.
-4. Use **Tests** to inspect recommendations and their evidence. Use search to find
-   `escape` in the map. The graph may be large; zoom or filter it to read individual nodes.
-5. Export the JSON report to retain the revision metadata. A later submission reads
+4. Use **Tests → Open changed code** to inspect a recommendation's changed endpoint
+   and its before/after source. **Changes** also lists changed symbols by file.
+   Use search to find `escape` in the map. The graph may be large; zoom or filter it.
+5. Export the JSON report to retain the revision metadata, source and typed evidence.
+   A later submission reads
    the PR's current revisions again, so it may legitimately produce a different report.
 
 The server downloads complete Python snapshots within the supported scope, including
@@ -129,6 +156,8 @@ Snapshot input:
 - Base/head graph union that retains deleted dependencies; renames as remove+add.
 - Cycle-safe reverse traversal, deterministic ranking and inspectable evidence paths.
 - Distinct resolved-call evidence and conservative module/import estimates.
+- Before/after changed-code previews with decorators, deleted source and parse status.
+- Revision-specific dependency evidence, exact typed path edges and mixed-path labels.
 - Stateless FastAPI API, Git CLI, responsive React/TypeScript graph, JSON upload/export.
 - Public GitHub PR input with pinned merge-base/head snapshots, fork support and provenance.
 - Backend, API and temporary Git-repository tests; desktop/mobile browser tests; CI.
@@ -165,28 +194,81 @@ docs/             Architecture, roadmap, context, validation and Codex prompt
 ## Review, commit and push
 
 The active local Codex project is `/Users/danny/Documents/ChatGPT/CodeImpact`.
-This milestone started from local commit `34eb6b0` on `main` (the empty-module fix).
+This milestone started from clean local commit `2604fd7` on `main`.
 Agent changes remain unstaged and uncommitted; no remote update is claimed.
-Review them and use your own Git identity:
+Review them and use your own Git identity. Use a feature branch to open a PR into
+`main`; the commands below are for you to run personally. No branch, commit, push or
+PR has been created by the agent. Run commands in order and stop if one reports an
+error. Review the staged diff before running the commit command:
 
 ```sh
 git status
 git config --get user.name
 git config --get user.email
 make check
+.venv/bin/python -m unittest discover -s scripts -p 'test_*.py' -v
+cd web && npm run format:check && npm run test:e2e && cd ..
 git diff --check
 git diff
 # Also review new files shown by git status before staging.
+git switch -c codex/inspectable-changes
 git add README.md docs/ARCHITECTURE.md docs/BUILD_PLAN.md docs/PROJECT_CONTEXT.md \
-  docs/VALIDATION.md pyproject.toml scripts/dev.py src/codeimpact/api.py \
-  src/codeimpact/models.py src/codeimpact/github.py tests/test_github.py \
-  tests/browser_api.py web/src/main.tsx web/src/types.ts web/src/style.css \
-  web/tests/app.spec.ts web/vite.config.ts web/playwright.config.ts
+  docs/VALIDATION.md src/codeimpact/analyzer.py src/codeimpact/models.py \
+  tests/test_analyzer.py tests/test_api.py tests/test_cli.py tests/test_github.py \
+  tests/test_revision_evidence.py tests/fixtures/mixed-revisions.json \
+  web/src/main.tsx web/src/types.ts web/src/style.css web/src/ChangesView.tsx \
+  web/src/Evidence.tsx web/tests/app.spec.ts web/tests/changes.spec.ts
 git diff --cached --stat
 git diff --cached
-git commit -m "Add bounded public GitHub PR analysis"
-git push -u origin main
+git commit -m "Add changed-code review and revision-aware evidence"
+git fetch origin
+git rebase origin/main
+git push -u origin codex/inspectable-changes
 ```
+
+If the rebase reports conflicts, resolve them and run `git rebase --continue`, or
+use `git rebase --abort` to return to your pre-rebase commit. Re-run the checks above
+if rebasing changes the code. Do not force-push `main`.
+
+After the push, open [the branch comparison](https://github.com/danielpan01/codeimpact/compare/main...codex%2Finspectable-changes).
+Confirm **base: main**, **compare: codex/inspectable-changes**, then click
+**Create pull request**. Suggested title: **Add changed-code review and revision-aware evidence**.
+Paste this description:
+
+```text
+Reports previously hid changed source and overwrote shared dependency evidence with
+the head revision. Schema 2.0 now includes shared before/after source, decorator-aware
+symbol ranges, revision-specific evidence, exact typed path edges and mixed-path labels.
+The Changes view opens from a recommended test while retaining its explanation.
+
+Example: discount(total) changes from total * 0.10 to total * 0.15. The unchanged
+test_create_order recommendation follows create_order → checkout → discount, with
+every hop identified and supported in both revisions. The mixed-revisions fixture
+shows an after-only test_g → g hop followed by a before-only g → removed f hop.
+
+Validation: make check passed (127 application tests, Ruff, mypy, TypeScript/build);
+8 maintenance tests passed; frontend formatting passed; 24 desktop/mobile browser
+cases passed. A real MarkupSafe PR #469 was analyzed through the running UI and its
+export's 23 typed recommendation paths were validated. A preview newline-budget
+regression failed on both viewports before its fix and now passes.
+
+Compatibility: report schema 1.0 consumers must upgrade; snapshot input is unchanged.
+Exports include full changed-file source. Previews are bounded and escaped. Static
+analysis remains conservative; keep the full test suite as the merge gate.
+```
+
+On the PR, review **Files changed** and wait for **Quality checks / check** to pass
+on the latest commit. Hosted CI results cannot exist for these edits until you push.
+When the PR has no conflicts and checks pass, click **Squash and merge**, then
+**Confirm squash and merge** (if that method is enabled). Afterwards:
+
+```sh
+git switch main
+git pull --ff-only origin main
+```
+
+Leave the feature branch in place until you have verified the merged result. If a
+GitHub check fails or merging is blocked, inspect that result before proceeding.
 
 Remote: [danielpan01/codeimpact](https://github.com/danielpan01/codeimpact).
 No automatic file sync was configured. Push reviewed changes yourself before another

@@ -11,7 +11,11 @@ from codeimpact.cli import read_snapshot, revision
 
 def test_cli_demo_json_and_snapshots():
     output = subprocess.check_output([sys.executable, "-m", "codeimpact.cli", "--demo"])
-    assert len(json.loads(output)["recommendations"]) == 3
+    report = json.loads(output)
+    assert len(report["recommendations"]) == 3
+    assert report["schema_version"] == "2.0"
+    assert "0.10" in report["source_files"][0]["before"]["text"]
+    assert "0.15" in report["source_files"][0]["after"]["text"]
     output = subprocess.check_output(
         [sys.executable, "-m", "codeimpact.cli", "--demo", "--snapshots"]
     )
@@ -64,6 +68,9 @@ def test_real_git_comparison_uses_merge_base_and_skips_symlinks(tmp_path: Path):
     report = json.loads(output)
     assert report["changed"] == ["a.py::<module>", "a.py::f"]
     assert report["recommendations"][0]["symbol"] == "test_a.py::test_f"
+    assert [f["path"] for f in report["source_files"]] == ["a.py"]
+    assert report["source_files"][0]["before"]["text"] == "def f(): return 1\n"
+    assert report["source_files"][0]["after"]["text"] == "def f(): return 2\n"
     assert git("branch", "--show-current") == "main"
     with pytest.raises(subprocess.CalledProcessError):
         revision(tmp_path, "--help")

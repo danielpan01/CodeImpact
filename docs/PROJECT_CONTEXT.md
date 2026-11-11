@@ -50,8 +50,18 @@ from `34eb6b05d193468df3903f8cccaf056ec688b8f5` on `main`. It uses pinned merge-
 snapshots, supports public forks, preserves evidence paths and reports explicit input
 and network failures. It has a PR URL form and exportable revision provenance. A live
 MarkupSafe PR and deterministic HTTP/browser tests are recorded in VALIDATION.md.
-The existing analyzer and empty-module fix were preserved. This milestone's changes
-are unstaged and uncommitted; only the user may commit and push them.
+The existing analyzer and empty-module fix were preserved. The November 10 milestone
+started with this work present in clean local commit `2604fd7` on `main`.
+
+Inspectable changes and revision-aware evidence were implemented locally November
+10, 2026. Report schema 2.0 adds shared source files, per-symbol before/after ranges,
+per-revision dependency evidence, exact typed recommendation edges and mixed-path
+labels. The Changes view opens directly from a test recommendation while preserving
+its explanation. Map, Tests, demo, uploads and public PR analysis remain available.
+Exports contain full source for changed files; previews are bounded and escaped.
+Snapshot input is unchanged; old reports must be re-analyzed. See ARCHITECTURE.md
+for the contract and VALIDATION.md for observed regression-first and final results.
+These new task edits remain unstaged and uncommitted; only the user may commit/push.
 
 Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy

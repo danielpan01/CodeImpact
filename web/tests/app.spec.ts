@@ -121,6 +121,27 @@ test("public PR uses real ingestion, pinned revisions and valid exported evidenc
     }
   }
   expect(report.impacted).not.toContain("test_health.py::test_health");
+  await page.getByRole("button", { name: "Open changed code" }).click();
+  await expect(
+    page.getByRole("region", { name: "Before source" }),
+  ).toContainText("return 10");
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("return 20");
+  await expect(page.locator(".detail-content")).toContainText(
+    "Path exists in both revisions",
+  );
+  expect(report.schema_version).toBe("2.0");
+  expect(report.source_files[0].path).toBe("core.py");
+  const typedEdges = new Map(report.edges.map((edge) => [edge.id, edge]));
+  for (const item of report.recommendations) {
+    expect(item.evidence_edges).toHaveLength(item.evidence_path.length - 1);
+    item.evidence_edges.forEach((id, i) => {
+      expect(typedEdges.get(id)?.source).toBe(item.evidence_path[i]);
+      expect(typedEdges.get(id)?.target).toBe(item.evidence_path[i + 1]);
+      expect(typedEdges.get(id)?.kind).toBe("call");
+    });
+  }
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export report" }).click();
   const download = await downloadPromise;
@@ -142,6 +163,9 @@ test("public PR uses real ingestion, pinned revisions and valid exported evidenc
     "Checkout service",
   );
   await expect(page.locator(".pr-source")).toHaveCount(0);
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("0.15");
 });
 
 test("PR rate-limit failure clears old results and retries the same URL", async ({

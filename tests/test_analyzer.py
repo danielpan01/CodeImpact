@@ -24,6 +24,7 @@ def test_demo_selects_only_relevant_tests_and_explains_path():
     ]
     assert "tests/test_health.py::test_health" not in report.impacted
     assert all(r.reason == "Resolved call path" for r in report.recommendations)
+    assert [r.score for r in report.recommendations] == [82, 72, 62]
 
 
 def test_whitespace_comments_and_line_moves_do_not_change_semantics():
