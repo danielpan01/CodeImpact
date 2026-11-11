@@ -23,10 +23,19 @@ definitions, nested scopes, class dispatch and module rebinding, retaining exact
 known discrepancies and all difficult cases in overall metrics. See [CORPUS.md](CORPUS.md)
 and VALIDATION.md. These small authored labels are not real-repository accuracy.
 
-Next: add focused failing tests for function-local import aliases and shadowing,
-then implement that one resolution rule and deliberately update the `local_import`
-known-miss baseline while preserving its affected label. Keep other limitations
-visible. Source revision provenance and changed-code inspection are already in
+The bounded function-local import extension is now implemented locally: direct
+local aliases resolve after their import, ambiguous bindings suppress precision,
+and fallback imports belong to their function. The existing `local_import` case
+moves from FN to TP with its authored labels unchanged; the other 24 case reports
+are identical. See CORPUS.md and the separate VALIDATION.md entry for the boundary
+and observed checks. Overall precision is 23/29 and recall 23/25 on these authored
+labels, not production accuracy.
+
+Next candidate: module-level rebinding. First capture the misleading resolved call
+in `module_rebinding`, then invalidate stale imported aliases after assignment.
+Module fallback may still overselect the test, so report evidence improvements and
+selection metrics separately. Keep other limitations visible.
+Source revision provenance and changed-code inspection are already in
 starting commit `546ee8e`: report 2.0 retains per-revision evidence and exact typed
 paths, labels mixed paths, and shows bounded before/after code.
 Worker-level budgets for adversarial ASTs and performance measurement remain future

@@ -73,6 +73,76 @@ test("report downloads with analysis data", async ({ page }) => {
   expect((await promise).suggestedFilename()).toBe("codeimpact-report.json");
 });
 
+test("local import corpus upload shows resolved evidence and exports scoped imports", async ({
+  page,
+}) => {
+  // Snapshot Python remains JSON string data; only CodeImpact analyzes it.
+  const fixture = JSON.parse(
+    await readFile(
+      new URL("../../corpus/cases/local_import.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  await expect(page.locator(".detail-content")).toContainText("test_discount");
+  const responsePromise = page.waitForResponse("**/api/analyze");
+  await page.getByLabel("Upload snapshot JSON").setInputFiles({
+    name: "local-import.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(fixture.request)),
+  });
+  const response = await responsePromise;
+  expect(response.status()).toBe(200);
+  const report: Report = await response.json();
+  await expect(page.locator(".analysis-label")).toContainText("local_import");
+  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  await page.getByRole("button", { name: /test_read/ }).click();
+  await expect(page.locator(".detail-content")).toContainText(
+    "Resolved call path",
+  );
+  await expect(page.locator(".evidence-path li")).toHaveCount(3);
+  expect(report.recommendations.map((item) => item.symbol)).toEqual([
+    "tests/test_worker.py::test_read",
+  ]);
+  expect(report.recommendations[0].evidence_path).toEqual([
+    "tests/test_worker.py::test_read",
+    "worker.py::read",
+    "core.py::price",
+  ]);
+  expect(report.edges).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        source: "worker.py::read",
+        target: "core.py::<module>",
+        kind: "import",
+        revision: "both",
+      }),
+    ]),
+  );
+  expect(
+    report.edges.some(
+      (edge) => edge.source === "worker.py::<module>" && edge.kind === "import",
+    ),
+  ).toBe(false);
+  await page.getByRole("button", { name: "Open changed code" }).click();
+  await expect(
+    page.getByRole("region", { name: "Before source" }),
+  ).toContainText("return 1");
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("return 2");
+  await expect(page.locator(".detail-content")).toContainText(
+    "Path exists in both revisions",
+  );
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export report" }).click();
+  const download = await downloadPromise;
+  expect(JSON.parse(await readFile((await download.path())!, "utf8"))).toEqual(
+    report,
+  );
+});
+
 test("public PR uses real ingestion, pinned revisions and valid exported evidence", async ({
   page,
 }, testInfo) => {

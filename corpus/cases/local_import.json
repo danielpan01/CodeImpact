@@ -1,11 +1,12 @@
 {
   "schema_version": "1.0",
   "id": "local_import",
-  "description": "A function-local import hides a transitive dependency from the module-level index.",
-  "category": "known_limitation",
+  "description": "A direct function-local import connects an unchanged wrapper to its changed dependency.",
+  "category": "supported",
   "features": [
     "local_imports",
-    "missed_dependency"
+    "direct_calls",
+    "function_scopes"
   ],
   "request": {
     "label": "local_import",
@@ -37,12 +38,8 @@
   "unclassified": {},
   "known_discrepancies": {
     "false_positives": {},
-    "false_negatives": {
-      "tests/test_worker.py::test_read": "No module import or resolved call edge connects worker.read to core because the import is local."
-    }
+    "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
-  "limitations": [
-    "Function-local imports are not indexed as bindings or module imports; the affected caller test is missed."
-  ]
+  "limitations": []
 }

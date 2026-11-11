@@ -611,3 +611,216 @@ resolution with alias/scope/shadowing regressions. Preserve authored labels and
 deliberately update the recorded miss only after that separate fix is verified.
 Other known limitations remain visible rather than being bundled into this milestone.
 
+## Bounded function-local import resolution — November 10, 2026
+
+This section records the initial implementation checks. The pre-commit verification
+below supersedes its test counts and adds desktop/mobile coverage.
+
+Started from clean local `main` at merged corpus commit
+`4b50d9fd58d28809def15e753032595a66ba76ea` in
+`/Users/danny/Documents/ChatGPT/CodeImpact`. Origin remained
+`https://github.com/danielpan01/codeimpact.git`. Read AGENTS.md, README, architecture,
+the actual analyzer, existing regression tests, and the corpus before editing.
+All work below is local and unstaged/uncommitted. No branch, stage, commit, push,
+identity change or PR was performed by the agent.
+
+### Regression-first evidence
+
+Added `tests/test_local_imports.py` before changing `analyzer.py`. The initial
+58 checks reported **40 failed, 18 passed** with:
+
+```sh
+.venv/bin/pytest tests/test_local_imports.py --no-cov --tb=no -rN
+```
+
+Failures demonstrated the existing missed local import, unresolved module/function
+aliases and relative/src imports, and incorrect fallback to a same-named module
+alias before or instead of a local binding. Additional controls covered separate
+functions, nested/async method scopes, shadowing, assignments/deletions, repeated
+imports, exception/pattern captures, conditional imports, nonlocal mutation,
+same-line ordering, wildcard/overdeep relative imports, scoped module fallback,
+deletion/revision evidence, and a source-as-data sentinel. Source strings in those
+checks were never executed or imported. Some negative controls are intentionally
+parseable AST input whose full Python runtime validity is not asserted.
+
+After implementation, those checks passed. A further local-import cycle regression
+brings the file to **59 passing tests** and verifies finite deterministic evidence
+paths. Existing analyzer, revision-evidence, corpus and evaluator tests remain
+active; no skips or xfails were added.
+
+The first full evaluation after the code fix, before annotation updates, exited
+**1** with exactly this expected baseline drift:
+
+```text
+local_import: false negatives: expected ['tests/test_worker.py::test_read'], observed []
+```
+
+After inspecting that improvement, only `local_import` metadata changed: category
+to `supported`, updated description/features, empty known-FN map and empty
+limitation notes. Its complete snapshots and all authored label maps/rationales
+were preserved. The evaluator guard test now uses the still-missed pytest fixture
+case for unexpected misses and deliberately reinstates the old local-import FN
+to verify that stale expectations still fail on an improvement.
+
+### Implementation and preserved contracts
+
+- Shared import-syntax decoding supports module/function aliases, relative package
+  imports and `src/` layouts without importing source.
+- Each function/async function gets its own local import bindings; separately
+  indexed nested functions and methods can resolve their own imports. Calls must
+  follow the import's end line/column, including statements sharing one line.
+- Ambiguous or unsupported local import names reserve their scope and cannot
+  incorrectly fall through to module-level aliases. Parameters, competing stores,
+  deletions, duplicate imports, definitions, exception/pattern captures,
+  global/nonlocal declarations and alias mutation conservatively suppress precise
+  resolution. Nested assignments do not pollute the outer local alias, while a
+  potential nested nonlocal/attribute write invalidates it.
+- Direct local imports add conservative function-to-module import edges, using
+  that statement's location. Module-constant changes can reach the importing
+  function's callers without adding an import edge for unrelated sibling functions.
+- Existing edge IDs, caller-to-dependency direction, base/head union, source ranges,
+  deleted-test exclusion, cycle traversal, ordering and score formula are retained.
+  Analysis/evaluation schemas remain 2.0/1.0; input limits, API, CLI entry point,
+  dependency pins and dashboard files are unchanged.
+
+The implementation is intentionally not a control-flow or runtime binding
+interpreter. Any competing binding in the function can suppress the alias even
+if unreachable or after a call. Imports nested under conditionals/loops/try,
+class-body import bindings, closure propagation, and precise local-alias calls in
+lambda/comprehension scopes remain unsupported. Rebinding can leave a conservative
+import fallback, so lack of a precise call does not imply no recommendation. The
+broader module-level rebinding, fixture injection, re-export and dynamic/runtime
+dispatch limitations remain. See ARCHITECTURE.md for the exact boundary.
+
+### Measured corpus comparison
+
+The same 25 snapshots and 57 labeled case/test pairs were used before and after.
+No new authored cases were added for this milestone. Two additional unclassified
+case/test pairs remain separate from label ratios.
+
+| Population | Cases | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| Original overall | 25 | 22 | 3 | 6 | 26 | 2 | 22/28 (78.6%) | 22/25 (88.0%) |
+| Updated overall | 25 | 23 | 2 | 6 | 26 | 2 | 23/29 (79.3%) | 23/25 (92.0%) |
+| Updated supported | 15 | 16 | 0 | 0 | 16 | 0 | 16/16 (100%) | 16/16 (100%) |
+| Updated known limitations | 10 | 7 | 2 | 6 | 10 | 2 | 7/13 (53.8%) | 7/9 (77.8%) |
+
+`tests/test_worker.py::test_read` now follows the exact resolved path
+`test_read → worker.read → core.price`, present in both revisions. Its independent
+control remains unselected. All other **24 case reports**, including recommendations,
+scores, graph edges, source evidence, warnings and classifications, are identical
+to the saved pre-change evaluation (elapsed timing is already omitted). All **31**
+current recommendations pass the evaluator's typed-path/revision checks.
+
+These figures measure agreement with authored dependency labels, not production
+accuracy or runtime failures. Statement coverage measures executed lines, not
+correctness; the complete test suite remains the merge gate.
+
+### Actual checks and artifacts
+
+| Command / check | Observed result |
+| --- | --- |
+| `.venv/bin/pytest tests/test_local_imports.py tests/test_analyzer.py tests/test_revision_evidence.py tests/test_corpus.py tests/test_evaluation.py --no-cov --tb=short` | 180 passed, including all 59 local-import checks |
+| `make check` | Passed: 267 application tests, Ruff lint/format, strict mypy, TypeScript and Vite production build |
+| `make evaluate` | Exit 0; all 25 explicit baselines match |
+| `.venv/bin/python -m codeimpact.evaluate --output reports/local-import-repeat.json > reports/local-import-repeat.txt` | Exit 0 |
+| `cmp reports/corpus-evaluation.json reports/local-import-repeat.json` | Exit 0; byte-identical JSON |
+| Snapshot/label comparison to saved pre-change evaluation | All 25 complete inputs and authored affected/unaffected/unclassified maps unchanged |
+| Stable comparison of the other 24 case results | Identical |
+| `git diff --check` | Passed |
+| Dashboard formatting/browser tests | Not rerun; no dashboard behavior or files changed |
+| Hosted CI for these edits | Not run; changes remain local and uncommitted |
+
+The existing non-failing Starlette/httpx deprecation warning remains. Coverage was
+92% overall (1,059 statements, 86 missed), with analyzer coverage 99% (301
+statements, 4 missed). CLI subprocess execution is not included in this in-process
+statement coverage. No performance claims or benchmarks were introduced.
+
+Ignored reproducibility artifacts:
+
+- `reports/local-import-milestone-before.json`: original analyzer/corpus evaluation.
+- `reports/local-import-before-baseline-update.json`: improved selection with the
+  intentionally stale known-miss annotation and its exit-1 discrepancy.
+- `reports/corpus-evaluation.json`: final current report.
+- `reports/local-import-repeat.json`: independent CLI repeat.
+
+Final corpus digest:
+`af41e279db16a3c6baa52dd0ce45d9e12d2e8166d4803bc4f7864aac05da68e8`.
+Final JSON report SHA-256:
+`610fdc3077e42d1c157ccad1d45ca63cadffc7612b41ce5919642852e38abe4d`.
+The corpus digest includes the deliberately updated annotations; it does not
+identify the analyzer code. Retain the eventual owner-created commit and pinned
+environment when reproducing results.
+
+### Owner handoff
+
+Review `src/codeimpact/analyzer.py`, the new `tests/test_local_imports.py`, the
+evaluator guard adjustment and the small metadata-only corpus diff. README,
+ARCHITECTURE, CORPUS, BUILD_PLAN, PROJECT_CONTEXT and this record describe the new
+boundary and actual results. The owner creates a feature branch, stages reviewed
+files, commits, pushes and opens the PR. No publication has been performed here.
+
+A separate next candidate is module-level rebinding: remove stale resolved-call
+evidence in `module_rebinding`, then measure any remaining conservative fallback.
+That evidence correction need not remove the recorded false positive, so do not
+promise improved precision or weaken its unaffected label in advance.
+
+## Pre-commit verification of function-local imports
+
+A follow-up review found one additional defect in the new binding scan: a nested
+definition's default value, decorator or class base can rebind the enclosing
+function's import alias with an assignment expression. Skipping those headers
+incorrectly retained a resolved call to the original imported function.
+
+Added five regression cases for positional defaults, keyword-only defaults,
+decorators, class bases and lambda defaults. All **five failed before the fix**
+with `pytest -k nested_definition_headers`. The scan now examines definition
+headers in the enclosing scope while preserving separate nested body bindings.
+All **64 local-import tests** then passed. No regression was skipped or marked
+as an expected failure.
+
+Added one browser scenario, run on both desktop and mobile, which uploads the
+unchanged `local_import` corpus input through the real API. It verifies the sole
+selected test, the resolved three-node evidence path, the function-scoped import
+edge, before/after changed-code previews, shared revision evidence and an exported
+report identical to the API response. Snapshot Python remains JSON string data.
+The dashboard's application code and report schemas are unchanged.
+
+| Command / check | Observed result |
+| --- | --- |
+| `.venv/bin/pytest tests/test_local_imports.py --no-cov --tb=short` | 64 passed |
+| `make check` | Passed: **272 application tests**, Ruff lint/format, strict mypy, TypeScript and Vite production build |
+| `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py' -v` | **8 maintenance tests passed** |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e` | **26 passed**, including the new upload/evidence/preview/export scenario on desktop and mobile |
+| `.venv/bin/python -m pip check` | No broken requirements found |
+| `make evaluate` | Exit 0; all 25 explicit baselines match |
+| `.venv/bin/python -m codeimpact.evaluate --output reports/local-import-prepush-repeat.json > reports/local-import-prepush-repeat.txt` | Exit 0 |
+| `cmp reports/corpus-evaluation.json reports/local-import-prepush-repeat.json` | Exit 0; byte-identical JSON |
+| Comparison against `reports/local-import-milestone-before.json` | All 25 snapshots and authored label maps unchanged; the other 24 complete case reports remain identical |
+| `git diff --check` | Passed |
+| Git index and publication | No staged changes; no commits, pushes or PR created by the agent |
+| Hosted CI for these edits | Pending the owner's commit and push |
+
+The first browser attempt failed to launch Chromium under the local sandbox
+(`EPERM` / `SIGABRT`), before browser assertions could execute. The existing
+24-test suite passed with the required browser-launch permission; after adding
+the new scenario, the full 26-test suite passed with the same permission. This
+was an execution-environment restriction, not a failing application assertion.
+
+The existing Starlette/httpx deprecation warning and browser environment warnings
+were non-failing. Current application coverage is **92%** (1,069 statements,
+86 missed); analyzer coverage is **99%** (311 statements, 4 missed). Coverage does
+not establish correctness or production accuracy.
+
+The corpus results and digests above remain unchanged after the header fix:
+**23 TP, 2 FN, 6 FP, 26 TN**, plus two unclassified recommendations. All 31
+recommendations pass the evaluator's evidence-path checks. Fixture injection and
+runtime imports remain the two measured misses; the recorded conservative false
+positives also remain outside this milestone. These are explicit analyzer limits,
+not failing regression tests. The complete test suite remains the merge gate.
+
+The milestone is ready for owner review and commit based on these local checks.
+Review the added browser test along with the analyzer, regressions and documentation.
+All requested changes remain unstaged and uncommitted.
+

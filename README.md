@@ -24,6 +24,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | :--- | :--- |
 | **Semantic change detection** | Compares Python ASTs, ignoring comments, whitespace, and source-line movement. |
 | **Dependency analysis** | Indexes symbols and supported calls/imports; preserves removed dependencies across revisions. |
+| **Function-local imports** | Resolves direct local import aliases after their binding statement; keeps ambiguous bindings unresolved and import fallback scoped to the function. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
@@ -76,16 +77,19 @@ make evaluate
   --output reports/local-import.json
 ```
 
-Observed overall agreement with these authored dependency labels: **22 true
-positives, 3 false negatives, 6 false positives, 26 true negatives**. Precision is
-**22/28 (78.6%)**; recall is **22/25 (88.0%)**. Two unclassified recommendations are
-reported separately. All 14 supported and 11 known-limitation cases enter the overall
+Observed overall agreement with these authored dependency labels: **23 true
+positives, 2 false negatives, 6 false positives, 26 true negatives**. Precision is
+**23/29 (79.3%)**; recall is **23/25 (92.0%)**. Two unclassified recommendations are
+reported separately. All 15 supported and 10 known-limitation cases enter the overall
 results. Known discrepancies fail tests if they change, including improvements that
 need deliberate review. A passing evaluation means the baseline matches, not that
 the analyzer has no mistakes.
 
-For concrete examples, module fallback overselects an unchanged sibling function
-in `module_overselection`, while `local_import` misses a wrapper's local import.
+The function-local import milestone fixes the previous `local_import` miss without
+changing its authored labels: `test_read → read → price` now has a resolved path.
+The other 24 case reports remain unchanged. Module fallback still overselects an
+unchanged sibling function in `module_overselection`; fixture injection and runtime
+imports remain the two measured misses.
 These are small authored fixtures, not externally validated ground truth,
 production accuracy or proof that a test fails. Fixture code is never executed.
 Statement coverage measures executed lines, not correctness; passing regression
@@ -108,7 +112,7 @@ CodeImpact is a developer review tool. Static Python analysis is incomplete for 
 
 Next steps include real-repository accuracy evaluation, stronger resolution coverage, worker isolation, and hosted deployment. GitHub App authorization for private repositories, persisted jobs, and cross-request caching are not implemented. See the [build plan](docs/BUILD_PLAN.md).
 
-The next bounded analysis milestone is function-local import resolution, starting with alias/scope/shadowing regressions and the corpus's recorded `local_import` miss.
+Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). Conditional imports, competing bindings and closure propagation remain conservative. A next bounded milestone is module-level rebinding: stop stale aliases producing misleading resolved-call evidence, while measuring any remaining module fallback separately.
 
 Exports contain the full before/after source of changed files, including content outside bounded on-screen previews.
 

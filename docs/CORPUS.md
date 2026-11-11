@@ -34,6 +34,8 @@ regenerated. The explicit equivalent is:
   --output reports/module-overselection.json
 
 .venv/bin/pytest tests/test_corpus.py tests/test_evaluation.py --no-cov
+# Scope, ordering and ambiguity regressions for the local-import extension:
+.venv/bin/pytest tests/test_local_imports.py --no-cov
 make check
 ```
 
@@ -112,16 +114,25 @@ workflow, not adversarial parsing isolation or a performance benchmark.
 
 ## Results and metric definitions
 
-Observed November 10, 2026, using the unchanged analyzer from starting commit
-`546ee8e`. All 25 checked-in cases match their explicitly recorded discrepancies.
+Observed November 10, 2026, after the bounded function-local import extension,
+starting from merged corpus commit `4b50d9f`. All 25 checked-in cases match their
+explicitly recorded discrepancies. The original baseline is preserved in
+[VALIDATION.md](VALIDATION.md#bounded-analyzer-correctness-corpus--november-10-2026).
 Counts are **case/test pairs**: reused test IDs in different cases are distinct
 observations, and repeated controls are not independent real-world samples.
 
 | Population | Cases | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Overall | 25 | 22 | 3 | 6 | 26 | 2 | 22/28 = 78.6% | 22/25 = 88.0% |
-| Supported demonstrations | 14 | 15 | 0 | 0 | 15 | 0 | 15/15 = 100% | 15/15 = 100% |
-| Known limitations | 11 | 7 | 3 | 6 | 11 | 2 | 7/13 = 53.8% | 7/10 = 70.0% |
+| Overall | 25 | 23 | 2 | 6 | 26 | 2 | 23/29 = 79.3% | 23/25 = 92.0% |
+| Supported demonstrations | 15 | 16 | 0 | 0 | 16 | 0 | 16/16 = 100% | 16/16 = 100% |
+| Known limitations | 10 | 7 | 2 | 6 | 10 | 2 | 7/13 = 53.8% | 7/9 = 77.8% |
+
+The original corpus run had TP 22 and FN 3, precision 22/28 and recall 22/25.
+`local_import` now selects its one affected test through a resolved call path,
+reducing FN by one and increasing TP by one. All snapshots and authored
+affected/unaffected/unclassified labels are identical to the original corpus;
+only that case's category, feature tags, description and known-miss annotation
+changed. The other 24 per-case analysis reports and classifications are identical.
 
 - **TP:** labeled affected and selected.
 - **FN:** labeled affected and missed.
@@ -168,7 +179,7 @@ against these labels, not complete language support.
 | `invalid_to_valid` | supported | Repaired syntax creates after-only evidence |
 | `invalid_revisions` | known_limitation | 1 unclassified selection; unavailable function semantics |
 | `reexports` | known_limitation | No selection discrepancy; fallback rescues unresolved alias |
-| `local_import` | known_limitation | 1 FN: function-local import is missing from graph |
+| `local_import` | supported | Previous FN fixed: direct local import resolves `test_read → read → price` |
 | `module_rebinding` | known_limitation | 1 FP: stale module alias produces a spurious resolved path |
 | `conditional_definitions` | known_limitation | 1 FP: unindexed conditional definition and broad fallback |
 | `pytest_fixtures` | known_limitation | 1 FN: injected fixture has no test-to-fixture edge |
@@ -184,10 +195,29 @@ recommendation follows `test_health → core.healthy → core.<module>`. The fin
 is a conservative module edge. A module fingerprint includes changes to all its
 definitions, so the import/module approximation overselects this sibling test.
 
-In `local_import`, `worker.read` contains `from core import price` and returns
-`price()`. `test_read` calls `worker.read` and is labeled affected. The index only
-collects module-level import aliases, so neither a call edge nor an import edge
-connects the wrapper to `core`. No recommendation is returned for that test.
+In `pytest_fixtures`, `test_quote` receives `quoted` through pytest injection. The
+fixture in `conftest.py` calls changed `core.price`, but no Python call or import in
+the test links it to that fixture. The unchanged affected label remains a recorded
+FN. `runtime_import` remains another FN because its string-based import and
+reflective call do not create a static edge to the changed target.
+
+The former `local_import` miss is now fixed: `worker.read` contains
+`from core import price` and returns `price()`. Its test has the resolved path
+`test_read → worker.read → core.price` with evidence in both revisions. The
+independent control stays unselected. Before the old miss annotation was removed,
+evaluation deliberately exited 1 because expected FN `[test_read]` became `[]`.
+The regression suite still rejects reinstating that stale annotation and uses
+the remaining fixture-injection miss to check the opposite drift direction.
+
+Local-import support is bounded to direct statements in function/async-function
+bodies, including methods and separately indexed nested functions. Aliases are
+usable only after the import's end position. Rebinding, duplicate/conditional
+imports and conflicting parameters/captures suppress precise resolution rather
+than falling through to globals. Closure propagation and calls through local
+aliases in lambda/comprehension scopes remain unsupported. A conservative import
+edge belongs to the importing function, so module-constant changes do not
+automatically select unrelated sibling functions. See the
+[exact resolution boundary](ARCHITECTURE.md#bounded-function-local-imports).
 
 In `module_rebinding`, `worker` imports `price`, then overwrites it with a lambda
 returning 42. The wrapper calls that lambda, but the import-alias table still
@@ -196,8 +226,8 @@ call** explanation. “Resolved” is a classification of the static inference, 
 guarantee of actual runtime dispatch. This is distinct from fallback over-selection.
 
 Fixture injection, runtime imports, conditional definitions, re-export aliases,
-instance/inherited dispatch and module rebinding remain unresolved. No analyzer
-change or blanket skip/xfail hides these limitations.
+instance/inherited dispatch and module rebinding remain unresolved. These
+limitations remain in the aggregate results without skips or xfails.
 
 ## Evaluation report 1.0
 
@@ -233,7 +263,9 @@ Re-indexing is a structural consistency check, not an independent semantic oracl
 an index bug could occur in both runs. Authored labels, independent discovery,
 negative tests that corrupt reports, targeted evidence examples and existing engine
 regressions provide separate checks. Existing scoring and stable-ID regressions
-remain in the full suite. The analyzer and analysis schema were not modified.
+remain in the full suite. The local-import extension changes resolution and adds
+function-to-module import edges, using the existing schema, IDs and evidence types.
+The analyzer report and evaluation schema versions remain 2.0 and 1.0.
 
 ## Add a case or review a changed baseline
 
@@ -268,13 +300,14 @@ test actually fails; even the assertion examples here have not been executed.
 2. **False positive:** open `module_overselection.json`. Show that `healthy` never
    calls `price`, then inspect its conservative module hop. Explain why the full
    result includes this mistake rather than silently dropping it from metrics.
-3. **Miss:** open `local_import.json`. Point to the import inside `read` and explain
-   why the module-level alias index cannot connect it to `core.price`. Show the
-   explicit affected label, recorded FN and recall `0/1`. Passing the baseline
-   means this known miss is visible, not fixed.
+3. **Measured fix:** open `local_import.json`. Show how the unchanged affected label
+   moved from FN to TP after adding scope-aware local aliases. Then contrast it
+   with the still-missed `pytest_fixtures` case; passing the baseline does not mean
+   every dependency is resolved.
 
-The next concrete development step is a separate bounded milestone for
-**function-local import resolution**. Add failing regressions for local aliases and
-scope/shadowing first; then implement that one rule, keep the authored labels,
-review the newly passing `local_import` case and update its baseline and metrics.
-Do not combine this with fixture injection, dynamic dispatch or infrastructure.
+A next bounded milestone is **module-level rebinding**. Add a failing regression
+for the spurious resolved call in `module_rebinding`, then suppress stale imported
+aliases after reassignment. The conservative import fallback may still select
+that unaffected test, so correcting evidence need not improve precision. Measure
+that outcome and update its explanation deliberately; do not remove its unaffected
+label or promise elimination of its FP in advance.

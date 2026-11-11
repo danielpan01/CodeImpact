@@ -48,15 +48,60 @@ as removal and addition.
 Edges point **from dependent to dependency**:
 
 - `call`: a supported lexical/imported call resolves to a known symbol.
-- `import`: a module imports a known module.
+- `import`: a module, or a function with a supported direct local import, imports a known module.
 - `module`: a symbol depends conservatively on its own module's initialization.
 
 No runtime import takes place. Selected `import`, `from ... import`, aliases,
 relative imports and a conventional leading `src/` directory are supported.
 Parameters and local assignments that shadow a callable suppress that precise edge.
-Re-exports, inherited methods, local imports, module-level rebinding, closures with
-complex assignments and dynamic dispatch are incomplete. Even a resolved edge is a
+Direct function-local imports have the bounded support described below. Re-exports,
+inherited methods, module-level rebinding, closures with complex assignments and
+dynamic dispatch are incomplete. Even a resolved edge is a
 static inference, not proof that a call executes.
+
+### Bounded function-local imports
+
+An `import` or `from ... import` statement directly in a function/async-function
+body can bind a local alias. This includes methods and separately indexed nested
+functions, absolute/module aliases, relative imports based on the containing
+package, and conventional `src/` layouts. Import syntax is decoded as data using
+the same helper as module imports; no imported source is executed or installed.
+
+A local call resolves only after the import's end position, using line and column
+offsets so same-line calls before and after an import differ. All local import
+names reserve their scope even when unsupported: a call before the import or an
+ambiguous binding cannot fall through to a same-named module alias. Aliases never
+leak into sibling functions or overwrite the module's alias table.
+
+Support deliberately requires one import binding per name and no competing
+parameter, assignment/deletion, definition, exception/pattern capture, `global` or
+`nonlocal` declaration. Repeated imports, imports under conditionals/loops/try, and
+overdeep relative imports are unresolved. Attribute/subscript mutation through an
+alias and possible nested nonlocal/attribute writes also suppress its precise call.
+Assignments in nested definition headers (defaults, decorators and class bases),
+including lambda defaults, are checked in the enclosing scope. Ordinary nested
+body assignments retain their separate scope.
+Competing bindings are checked across the whole function rather than interpreted
+statement by statement; even a later or unreachable rebind can suppress an earlier
+call. This conservative boundary can miss dependencies and is not control-flow
+analysis. Unsupported/ambiguous import bindings emit warnings.
+
+Nested functions resolve their own imports but do not inherit precise outer local
+aliases; those outer names block incorrect fallback to module globals. Local
+aliases are not resolved inside lambda/comprehension/generator-expression scopes.
+Comprehension targets with the same name can conservatively suppress resolution
+elsewhere in the function. Class-body imports, wildcard binding semantics,
+reflection, runtime imports and object-alias mutation tracking remain outside this
+milestone. Direct syntax does not establish that a statement executes at runtime.
+
+Every supported direct import also adds a conservative `import` edge from its
+**owning function** to the imported module, with the import statement's source
+range. It is not promoted to an edge from the entire containing module. This lets
+a changed module constant reach its caller without contaminating unrelated sibling
+functions. Such an import edge can remain when rebinding suppresses a precise call;
+it describes the conservative dependency on importing the module. Conditional
+imports do not get these new fallback edges. Resolved call paths retain preference
+over fallback paths under the unchanged traversal and scoring rules.
 
 Both revisions contribute nodes and edges. Removed functions stay visible and old
 callers still propagate impact. A union path may combine edges from different
@@ -193,8 +238,10 @@ reported, with null for zero denominators. The measurement is agreement with
 authored dependency labels, not production accuracy or runtime failure prediction.
 Re-indexed evidence checks establish structural consistency, not independent proof
 of Python semantics. See [the corpus guide](CORPUS.md) for limits, schema, all 25
-cases, observed mistakes and the workflow for adding a case. The analyzer, scoring,
-stable IDs, input contract and dashboard are unchanged by this milestone.
+cases, observed mistakes and the workflow for adding a case. The corpus milestone
+left the analyzer unchanged; the later local-import milestone extends resolution
+within the bounds above. Scoring rules, stable IDs, report versions, input contract
+and dashboard remain unchanged.
 
 ## Public GitHub ingestion
 

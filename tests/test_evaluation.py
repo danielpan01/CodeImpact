@@ -69,13 +69,14 @@ def test_case_order_input_order_and_repeated_evaluation_are_deterministic():
 
 
 def test_known_discrepancy_changes_fail_including_improvements():
-    case = next(c for c in load_corpus(CASES) if c.id == "local_import")
+    case = next(c for c in load_corpus(CASES) if c.id == "pytest_fixtures")
     data = case.model_dump()
     data["known_discrepancies"]["false_negatives"] = {}
     result = evaluate_case(CorpusCase.model_validate(data))
     assert result.regressions
     # The comparison works both ways: claiming a known miss on a selected test fails too.
-    direct = next(c for c in load_corpus(CASES) if c.id == "direct_call").model_dump()
+    # Reintroducing the former local-import miss must fail after its resolution fix.
+    direct = next(c for c in load_corpus(CASES) if c.id == "local_import").model_dump()
     direct["category"] = "known_limitation"
     direct["limitations"] = ["Simulates a stale record after an analyzer improvement."]
     direct["known_discrepancies"]["false_negatives"] = direct["expected_affected"].copy()
