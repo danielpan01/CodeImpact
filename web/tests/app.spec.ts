@@ -143,6 +143,66 @@ test("local import corpus upload shows resolved evidence and exports scoped impo
   );
 });
 
+test("rebound module import shows conservative evidence and exports the remaining false positive", async ({
+  page,
+}) => {
+  const fixture = JSON.parse(
+    await readFile(
+      new URL("../../corpus/cases/module_rebinding.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  await expect(page.locator(".detail-content")).toContainText("test_discount");
+  const responsePromise = page.waitForResponse("**/api/analyze");
+  await page.getByLabel("Upload snapshot JSON").setInputFiles({
+    name: "module-rebinding.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(fixture.request)),
+  });
+  const response = await responsePromise;
+  expect(response.status()).toBe(200);
+  const report: Report = await response.json();
+  await expect(page.locator(".analysis-label")).toContainText(
+    "module_rebinding",
+  );
+  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await expect(page.locator(".test-row")).toHaveCount(2);
+  await page.getByRole("button", { name: /test_read/ }).click();
+  await expect(page.locator(".detail-content")).toContainText(
+    "Conservative module/import dependency",
+  );
+  await expect(page.locator(".risk-score")).toContainText("23");
+  await expect(page.locator(".evidence-path li")).toHaveCount(4);
+  const recommendation = report.recommendations.find((item) =>
+    item.symbol.endsWith("::test_read"),
+  );
+  expect(recommendation?.evidence_path).toEqual([
+    "tests/test_worker.py::test_read",
+    "tests/test_worker.py::<module>",
+    "worker.py::<module>",
+    "core.py::<module>",
+  ]);
+  expect(
+    report.edges.some(
+      (edge) => edge.source === "worker.py::read" && edge.kind === "call",
+    ),
+  ).toBe(false);
+  await page.getByRole("button", { name: "Open changed code" }).click();
+  await expect(page.locator(".detail-content")).toContainText(
+    "Path exists in both revisions",
+  );
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("return 2");
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export report" }).click();
+  const download = await downloadPromise;
+  expect(JSON.parse(await readFile((await download.path())!, "utf8"))).toEqual(
+    report,
+  );
+});
+
 test("public PR uses real ingestion, pinned revisions and valid exported evidence", async ({
   page,
 }, testInfo) => {

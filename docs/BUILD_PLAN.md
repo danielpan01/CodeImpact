@@ -31,10 +31,12 @@ are identical. See CORPUS.md and the separate VALIDATION.md entry for the bounda
 and observed checks. Overall precision is 23/29 and recall 23/25 on these authored
 labels, not production accuracy.
 
-Next candidate: module-level rebinding. First capture the misleading resolved call
-in `module_rebinding`, then invalidate stale imported aliases after assignment.
-Module fallback may still overselect the test, so report evidence improvements and
-selection metrics separately. Keep other limitations visible.
+Bounded module-level rebinding is now implemented locally. The misleading call in
+`module_rebinding` is removed, while the same test remains a recorded FP through
+module/import fallback. All selected IDs and aggregate counts are unchanged; its
+priority changes from 72 to 23 using the existing formula. See CORPUS.md and the
+separate validation record for evidence and scope. A next step is independently
+reviewed evaluation of module fallback before attempting to narrow recommendations.
 Source revision provenance and changed-code inspection are already in
 starting commit `546ee8e`: report 2.0 retains per-revision evidence and exact typed
 paths, labels mixed paths, and shows bounded before/after code.

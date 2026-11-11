@@ -81,9 +81,18 @@ fallback belongs to the function. The former `local_import` FN becomes a TP with
 changing any authored label or snapshot. Current counts: TP 23, FN 2, FP 6, TN 26,
 plus two unclassified recommendations; precision 23/29, recall 23/25. The other 24
 case reports are unchanged. Schema versions, scoring, dashboard and input limits
-remain unchanged. These latest edits are unstaged/uncommitted; only the user may
-commit/push. No hosted CI result is claimed for these edits. See ARCHITECTURE.md,
-CORPUS.md and the separate VALIDATION.md entry for supported scope and actual checks.
+remain unchanged. See ARCHITECTURE.md, CORPUS.md and the separate VALIDATION.md
+entry for supported scope and actual checks.
+
+That local-import work was merged as `68ae852` (PR #3). The next module-level
+rebinding milestone starts from that commit on `codex/module-level-rebinding`.
+Its local implementation suppresses ambiguous module import names without removing
+conservative import edges. The `module_rebinding` FP remains selected, now with a
+fallback path and priority 23 rather than a misleading resolved path and priority 72.
+The directly affected test remains resolved with priority 81 instead of 82 after
+removing one incorrect incoming edge. Selected IDs, all authored labels/snapshots
+and overall metrics are unchanged; the other 24 case reports remain identical.
+These module-rebinding edits remain unstaged/uncommitted, with no hosted CI claim.
 
 Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy
@@ -109,10 +118,9 @@ Sources checked during setup:
 
 Use Codex to implement bounded slices. Review and understand each before making your
 own commit. Engine, public PR ingestion, revision evidence and the authored corpus
-are present locally, with a bounded function-local import fix. Next candidate:
-correct stale resolved-call evidence after module-level rebinding, while measuring
-fallback selection separately; then plan independently reviewed real-repository
-evaluation. Durable jobs, private
+are present locally, with bounded function-local imports and module import rebinding.
+Next, plan independently reviewed real-repository evaluation of conservative module
+fallback before attempting to narrow recommendations. Durable jobs, private
 authorization and deployment need their own demonstrated requirements.
 
 Most impressive evidence: show a real change, traverse its dependency path to a test,
