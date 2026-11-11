@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-10** (America/New_York).
+Checked on **2026-11-11** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -19,12 +19,22 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/media/desktop.png | PASS | Required file exists and is nonempty |
 | docs/media/mobile.png | PASS | Required file exists and is nonempty |
 | README.md: CONTRIBUTING.md | PASS | Local target exists; fragment not checked |
+| README.md: SECURITY.md | PASS | Local target exists; fragment not checked |
+| README.md: corpus/cases/ | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/ARCHITECTURE.md#bounded-function-local-imports | PASS | Local target exists; fragment not checked |
 | README.md: docs/BUILD_PLAN.md | PASS | Local target exists; fragment not checked |
-| README.md: docs/CODEX_PROMPT.md | PASS | Local target exists; fragment not checked |
-| README.md: docs/PROJECT_CONTEXT.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/CORPUS.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/desktop.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/portfolio-banner.svg | PASS | Local target exists; fragment not checked |
+| README.md: src/codeimpact/ | PASS | Local target exists; fragment not checked |
+| README.md: tests/ | PASS | Local target exists; fragment not checked |
+| README.md: web/ | PASS | Local target exists; fragment not checked |
+| CONTRIBUTING.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
 | Python syntax: src/codeimpact/__init__.py | PASS | Parsed without importing or executing the application |
 | Python syntax: src/codeimpact/analyzer.py | PASS | Parsed without importing or executing the application |
 | Python syntax: src/codeimpact/api.py | PASS | Parsed without importing or executing the application |
