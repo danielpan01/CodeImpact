@@ -67,12 +67,23 @@ The bounded analyzer correctness corpus was implemented locally November 10, 202
 starting on `main` at `546ee8e295c513d3137c4446c7ddde0b63e3075a`. It adds 25 complete
 JSON cases (14 supported demonstrations, 11 known-limitation cases), strict label
 validation, typed-path checks, exact discrepancy baselines and a deterministic
-`make evaluate` workflow. Overall authored-label agreement: TP 22, FN 3, FP 6, TN 26;
+`make evaluate` workflow. Its initial authored-label agreement: TP 22, FN 3, FP 6, TN 26;
 two unclassified recommendations remain separate. Precision 22/28, recall 22/25.
 The analyzer and dashboard were not changed. See CORPUS.md and the separate
-VALIDATION.md milestone for interpretation and observed checks. These corpus edits
-remain unstaged and uncommitted; only the user may commit/push. No new hosted result,
-human label review, deployment or cross-environment synchronization is claimed.
+VALIDATION.md milestone for interpretation and observed checks. That corpus was
+merged as `4b50d9f` before the local-import milestone.
+
+Bounded function-local import resolution was implemented locally November 10, 2026,
+starting on clean `main` at `4b50d9fd58d28809def15e753032595a66ba76ea`. Direct aliases
+are scoped to a function and resolved only after the import. Competing bindings and
+unsupported control-flow/closure cases suppress precise calls; direct import
+fallback belongs to the function. The former `local_import` FN becomes a TP without
+changing any authored label or snapshot. Current counts: TP 23, FN 2, FP 6, TN 26,
+plus two unclassified recommendations; precision 23/29, recall 23/25. The other 24
+case reports are unchanged. Schema versions, scoring, dashboard and input limits
+remain unchanged. These latest edits are unstaged/uncommitted; only the user may
+commit/push. No hosted CI result is claimed for these edits. See ARCHITECTURE.md,
+CORPUS.md and the separate VALIDATION.md entry for supported scope and actual checks.
 
 Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy
@@ -98,8 +109,10 @@ Sources checked during setup:
 
 Use Codex to implement bounded slices. Review and understand each before making your
 own commit. Engine, public PR ingestion, revision evidence and the authored corpus
-are present locally. Next: improve one measured miss (function-local imports), then
-plan independently reviewed real-repository evaluation. Durable jobs, private
+are present locally, with a bounded function-local import fix. Next candidate:
+correct stale resolved-call evidence after module-level rebinding, while measuring
+fallback selection separately; then plan independently reviewed real-repository
+evaluation. Durable jobs, private
 authorization and deployment need their own demonstrated requirements.
 
 Most impressive evidence: show a real change, traverse its dependency path to a test,

@@ -54,6 +54,143 @@ def dotted(node: ast.AST) -> str | None:
     return None
 
 
+def import_targets(
+    node: ast.Import | ast.ImportFrom, path: str, modules: dict[str, str]
+) -> tuple[list[tuple[str, str]], list[str]]:
+    """Decode syntax only; returned targets never trigger a Python import."""
+    if isinstance(node, ast.Import):
+        return (
+            [
+                (
+                    alias.asname or alias.name.split(".")[0],
+                    alias.name if alias.asname else alias.name.split(".")[0],
+                )
+                for alias in node.names
+            ],
+            [alias.name for alias in node.names],
+        )
+    mod = module_name(path)
+    parent = mod.split(".") if path.endswith("__init__.py") else mod.split(".")[:-1]
+    base = node.module or ""
+    if node.level:
+        base = ".".join(parent[: len(parent) - node.level + 1] + ([base] if base else []))
+    bindings = [
+        (alias.asname or alias.name, f"{base}.{alias.name}".lstrip("."))
+        for alias in node.names
+        if alias.name != "*"
+    ]
+    imported = [
+        base,
+        *(
+            f"{base}.{a.name}"
+            for a in node.names
+            if a.name != "*" and f"{base}.{a.name}" in modules
+        ),
+    ]
+    return bindings, imported
+
+
+@dataclass
+class LocalImports:
+    # bound includes unsupported imports, so they cannot fall through to globals.
+    bound: set[str] = field(default_factory=set)
+    aliases: dict[str, tuple[str, ast.Import | ast.ImportFrom]] = field(default_factory=dict)
+    imports: list[tuple[str, ast.Import | ast.ImportFrom]] = field(default_factory=list)
+    wildcard: bool = False
+
+
+def local_imports(node: ast.AST, path: str, modules: dict[str, str]) -> LocalImports:
+    """Recognize one direct, unambiguous binding per name within a function.
+
+    Rebinding is deliberately flow-insensitive: any competing binding suppresses
+    that alias throughout this scope. Closures and branch-dependent imports are
+    not resolved. Nested functions are indexed separately.
+    """
+    result = LocalImports()
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return result
+    args = node.args
+    blocked = {a.arg for a in [*args.posonlyargs, *args.args, *args.kwonlyargs]}
+    blocked.update(a.arg for a in (args.vararg, args.kwarg) if a)
+    candidates: dict[str, list[tuple[str, ast.Import | ast.ImportFrom]]] = defaultdict(list)
+    direct = set(node.body)
+
+    def mutation_root(current: ast.AST) -> str | None:
+        while isinstance(current, (ast.Attribute, ast.Subscript)):
+            current = current.value
+        return current.id if isinstance(current, ast.Name) else None
+
+    def scan(current: ast.AST) -> None:
+        if isinstance(current, DEFINITIONS):
+            blocked.add(current.name)
+            # Defaults/decorators/bases execute in this enclosing scope. Do not
+            # confuse their stores with ordinary assignments in the nested body.
+            for field_name, value in ast.iter_fields(current):
+                if field_name == "body":
+                    continue
+                if isinstance(value, ast.AST):
+                    scan(value)
+                elif isinstance(value, list):
+                    for child in value:
+                        if isinstance(child, ast.AST):
+                            scan(child)
+            # An inner nonlocal declaration or attribute mutation can invalidate
+            # the outer alias. Ordinary inner name assignments cannot.
+            for child in ast.walk(current):
+                if isinstance(child, ast.Nonlocal):
+                    blocked.update(child.names)
+                elif isinstance(child, (ast.Attribute, ast.Subscript)) and isinstance(
+                    child.ctx, (ast.Store, ast.Del)
+                ):
+                    if root := mutation_root(child):
+                        blocked.add(root)
+            return
+        if isinstance(current, ast.Lambda):
+            # Lambda defaults also run now; the lambda body has its own bindings.
+            scan(current.args)
+            return
+        if isinstance(current, (ast.Import, ast.ImportFrom)):
+            bindings, imported = import_targets(current, path, modules)
+            parent = module_name(path).split(".")
+            if not path.endswith("__init__.py"):
+                parent = parent[:-1]
+            valid_relative = not isinstance(current, ast.ImportFrom) or current.level <= len(parent)
+            eligible = current in direct and valid_relative
+            for binding, target in bindings:
+                result.bound.add(binding)
+                candidates[binding].append((target, current))
+                if not eligible:
+                    blocked.add(binding)
+            result.wildcard |= any(alias.name == "*" for alias in current.names)
+            if eligible:
+                result.imports.extend((target, current) for target in imported)
+            return
+        if isinstance(current, ast.Name) and isinstance(current.ctx, (ast.Store, ast.Del)):
+            blocked.add(current.id)
+        elif isinstance(current, (ast.Attribute, ast.Subscript)) and isinstance(
+            current.ctx, (ast.Store, ast.Del)
+        ):
+            if root := mutation_root(current):
+                blocked.add(root)
+        elif isinstance(current, (ast.Global, ast.Nonlocal)):
+            blocked.update(current.names)
+        elif isinstance(current, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and current.name:
+            blocked.add(current.name)
+        elif isinstance(current, ast.MatchMapping) and current.rest:
+            blocked.add(current.rest)
+        for child in ast.iter_child_nodes(current):
+            scan(child)
+
+    for statement in node.body:
+        scan(statement)
+    result.aliases = {
+        binding: values[0]
+        for binding, values in candidates.items()
+        if len(values) == 1 and binding not in blocked and not result.wildcard
+    }
+    return result
+
+
 @dataclass
 class IndexedEdge:
     source: str
@@ -185,32 +322,18 @@ def build_index(snapshot: Snapshot) -> Index:
         module_id = f"{path}::<module>"
         aliases: dict[str, str] = {}
         imports: list[tuple[str, ast.Import | ast.ImportFrom]] = []
-        # Only module-level imports are treated as bindings. Function-local imports
-        # and reassignments are reported as limitations rather than guessed globally.
+        # Module aliases retain their existing behavior. Local aliases and fallback
+        # imports are attached to their owning function below, never this module.
         for node in tree.body:
-            if isinstance(node, ast.Import):
-                for alias in node.names:
-                    aliases[alias.asname or alias.name.split(".")[0]] = (
-                        alias.name if alias.asname else alias.name.split(".")[0]
-                    )
-                    imports.append((alias.name, node))
-            elif isinstance(node, ast.ImportFrom):
-                parent = mod.split(".") if path.endswith("__init__.py") else mod.split(".")[:-1]
-                base = node.module or ""
-                if node.level:
-                    base = ".".join(
-                        parent[: len(parent) - node.level + 1] + ([base] if base else [])
-                    )
-                imports.append((base, node))
+            if isinstance(node, (ast.Import, ast.ImportFrom)):
+                bindings, imported_modules = import_targets(node, path, modules)
+                aliases.update(bindings)
+                imports.extend((target, node) for target in imported_modules)
                 for alias in node.names:
                     if alias.name == "*":
                         index.warnings.append(
                             f"Wildcard import is unresolved: {path}:{node.lineno}"
                         )
-                    else:
-                        aliases[alias.asname or alias.name] = f"{base}.{alias.name}".lstrip(".")
-                        if f"{base}.{alias.name}" in modules:
-                            imports.append((f"{base}.{alias.name}", node))
         for imported, statement in imports:
             if imported in modules:
                 target = f"{modules[imported]}::<module>"
@@ -226,6 +349,10 @@ def build_index(snapshot: Snapshot) -> Index:
                     ),
                 )
 
+        scopes = {
+            name: local_imports(definition, path, modules)
+            for _, definition, name in definitions[path]
+        }
         for sid, definition, name in definitions[path]:
             index.add_edge(
                 sid,
@@ -234,7 +361,36 @@ def build_index(snapshot: Snapshot) -> Index:
                 "Conservative dependency on module initialization",
                 SourceLocation(path=path, **index.ranges[sid].model_dump()),
             )
-            connect_calls(index, definition, sid, name, path, mod, aliases, names)
+            local = scopes[name]
+            for imported, statement in local.imports:
+                if imported in modules:
+                    index.add_edge(
+                        sid,
+                        f"{modules[imported]}::<module>",
+                        "import",
+                        f"{path}:{statement.lineno} imports {imported}",
+                        SourceLocation(
+                            path=path,
+                            line=statement.lineno,
+                            end_line=statement.end_lineno or statement.lineno,
+                        ),
+                    )
+            if local.wildcard:
+                index.warnings.append(f"Wildcard local import is unresolved: {sid}")
+            if unresolved := local.bound - local.aliases.keys():
+                index.warnings.append(
+                    f"Ambiguous or unsupported local import binding: {sid}: "
+                    f"{', '.join(sorted(unresolved))}"
+                )
+            parents = name.split(".")[:-1]
+            enclosing = set().union(
+                *(
+                    scopes[".".join(parents[:i])].bound
+                    for i in range(1, len(parents) + 1)
+                    if ".".join(parents[:i]) in scopes
+                )
+            )
+            connect_calls(index, definition, sid, name, path, mod, aliases, names, local, enclosing)
     return index
 
 
@@ -247,21 +403,39 @@ def connect_calls(
     mod: str,
     aliases: dict[str, str],
     names: dict[str, str],
+    local: LocalImports,
+    enclosing_imports: set[str],
 ) -> None:
     args = getattr(node, "args", None)
     shadowed = {a.arg for a in (args.posonlyargs + args.args + args.kwonlyargs)} if args else set()
     if args:
         shadowed.update(a.arg for a in (args.vararg, args.kwarg) if a)
 
-    def visit(current: ast.AST) -> None:
+    def visit(current: ast.AST, allow_local: bool = True) -> None:
         if current is not node and isinstance(current, DEFINITIONS):
             return
+        if isinstance(
+            current, (ast.Lambda, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
+        ):
+            allow_local = False
         if isinstance(current, ast.Call):
             call = dotted(current.func)
             target: str | None = None
             if call:
                 root, _, tail = call.partition(".")
-                if root in shadowed:
+                if local.wildcard:
+                    pass
+                elif root in local.bound:
+                    binding = local.aliases.get(root)
+                    if allow_local and binding:
+                        target_name, statement = binding
+                        # Source positions include columns for imports/calls on one line.
+                        if (current.lineno, current.col_offset) > (
+                            statement.end_lineno or statement.lineno,
+                            statement.end_col_offset or 0,
+                        ):
+                            target = names.get(target_name + (f".{tail}" if tail else ""))
+                elif root in shadowed or root in enclosing_imports:
                     pass
                 elif root in aliases:
                     target = names.get(aliases[root] + (f".{tail}" if tail else ""))
@@ -306,7 +480,7 @@ def connect_calls(
             else:
                 index.warnings.append(f"Dynamic call: {path}:{current.lineno}")
         for child in ast.iter_child_nodes(current):
-            visit(child)
+            visit(child, allow_local)
 
     # Assignments can rebind a global/imported callable. Avoid claiming a
     # precise edge in this case (module fallback can still select tests).
