@@ -12,6 +12,8 @@ import {
 import "@xyflow/react/dist/style.css";
 import "./style.css";
 import type { Report } from "./types";
+import { ChangesView } from "./ChangesView";
+import { EdgeEvidence, PathRevision } from "./Evidence";
 
 async function getReport(url: string, body?: unknown): Promise<Report> {
   const response = await fetch(
@@ -38,18 +40,26 @@ async function getReport(url: string, body?: unknown): Promise<Report> {
           : `Analysis rejected (${response.status}). Check your snapshot format and limits.`,
     );
   }
-  return response.json();
+  const report = await response.json();
+  if (report.schema_version !== "2.0") {
+    throw new Error(
+      "Unsupported report version. Restart the API and refresh the dashboard together (schema 2.0 required).",
+    );
+  }
+  return report;
 }
 
 function App() {
   const [report, setReport] = useState<Report | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedChange, setSelectedChange] = useState<string | null>(null);
   const [showModules, setShowModules] = useState(false);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(true);
   const [revision, setRevision] = useState(0);
-  const [view, setView] = useState<"graph" | "tests">("graph");
+  const [view, setView] = useState<"graph" | "tests" | "changes">("graph");
+  const explorer = useRef<HTMLElement>(null);
   const [prUrl, setPrUrl] = useState("");
   const [retryPR, setRetryPR] = useState<string | null>(null);
   const requestVersion = useRef(0);
@@ -60,6 +70,7 @@ function App() {
     setError("");
     setReport(null);
     setSelected(null);
+    setSelectedChange(null);
     setRetryPR(githubUrl ?? null);
     try {
       const next = await getReport(
@@ -73,6 +84,11 @@ function App() {
       if (version !== requestVersion.current) return;
       setReport(next);
       setSelected(next.recommendations[0]?.symbol ?? null);
+      setSelectedChange(
+        next.recommendations[0]?.evidence_path.at(-1) ??
+          next.changed[0] ??
+          null,
+      );
       setQuery("");
       setRevision((n) => n + 1);
     } catch (e) {
@@ -107,7 +123,7 @@ function App() {
     const rows = new Map<number, number>();
     const evidence =
       report.recommendations.find((r) => r.symbol === selected)
-        ?.evidence_path ?? [];
+        ?.evidence_edges ?? [];
     const nodes: Node[] = visible.map((n) => {
       const column = changed.has(n.id) ? 0 : (ranks[n.id] ?? 4);
       const row = rows.get(column) ?? 0;
@@ -143,11 +159,10 @@ function App() {
     });
     const edges: Edge[] = report.edges
       .filter((e) => ids.has(e.source) && ids.has(e.target))
-      .map((e, i) => {
-        const a = evidence.indexOf(e.source),
-          highlighted = a >= 0 && evidence[a + 1] === e.target;
+      .map((e) => {
+        const highlighted = evidence.includes(e.id);
         return {
-          id: `${i}-${e.kind}`,
+          id: e.id,
           source: e.source,
           target: e.target,
           animated: highlighted,
@@ -166,6 +181,17 @@ function App() {
   const recommendation = report?.recommendations.find(
     (r) => r.symbol === selected,
   );
+  const edgesById = useMemo(
+    () => new Map(report?.edges.map((e) => [e.id, e])),
+    [report],
+  );
+
+  function openCode(id: string) {
+    setSelectedChange(id);
+    setView("changes");
+    // Move keyboard focus with the view, including when the details stack below on mobile.
+    requestAnimationFrame(() => explorer.current?.focus());
+  }
   const changedCount =
     report?.nodes.filter(
       (n) => n.kind !== "module" && report.changed.includes(n.id),
@@ -232,9 +258,17 @@ function App() {
               Trace a code change to the functions and tests that depend on it.
             </p>
           </div>
-          <button className="secondary" onClick={download} disabled={!report}>
-            ↓ Export report
-          </button>
+          <div className="export-action">
+            <button
+              className="secondary"
+              onClick={download}
+              disabled={!report}
+              aria-describedby="export-notice"
+            >
+              ↓ Export report
+            </button>
+            <small id="export-notice">Export includes source code</small>
+          </div>
         </section>
         <form
           className="pr-form"
@@ -301,6 +335,7 @@ function App() {
                   } catch (e) {
                     setReport(null);
                     setSelected(null);
+                    setSelectedChange(null);
                     setRetryPR(null);
                     setError(e instanceof Error ? e.message : "Invalid JSON");
                   }
@@ -387,16 +422,27 @@ function App() {
           </div>
         </section>
         <div className="explorer-layout">
-          <section className="graph-panel">
+          <section
+            className="graph-panel"
+            ref={explorer}
+            tabIndex={-1}
+            aria-label="Change explorer"
+          >
             <div className="panel-heading">
               <div>
                 <h2>
-                  {view === "graph" ? "Dependency map" : "Recommended tests"}
+                  {view === "graph"
+                    ? "Dependency map"
+                    : view === "tests"
+                      ? "Recommended tests"
+                      : "Changed code"}
                 </h2>
                 <span>
                   {view === "graph"
                     ? "Select a test to reveal its evidence path"
-                    : "Priority scores are heuristics, not failure probabilities"}
+                    : view === "tests"
+                      ? "Priority scores are heuristics, not failure probabilities"
+                      : "Before and after · exact analyzed source"}
                 </span>
               </div>
               <div className="view-toggle" aria-label="Explorer view">
@@ -411,6 +457,12 @@ function App() {
                   onClick={() => setView("tests")}
                 >
                   Tests
+                </button>
+                <button
+                  aria-pressed={view === "changes"}
+                  onClick={() => setView("changes")}
+                >
+                  Changes
                 </button>
               </div>
             </div>
@@ -469,6 +521,21 @@ function App() {
                   </small>
                 </div>
               </>
+            ) : view === "changes" ? (
+              report ? (
+                <ChangesView
+                  report={report}
+                  selected={selectedChange}
+                  onSelect={(id) => {
+                    setSelectedChange(id);
+                    setSelected(id);
+                  }}
+                />
+              ) : (
+                <p className="detail-content">
+                  Load an analysis to inspect changed code.
+                </p>
+              )
             ) : (
               <div className="test-list">
                 {report?.recommendations.length ? (
@@ -517,6 +584,15 @@ function App() {
                       </span>
                     </div>
                     <p>{recommendation.reason}</p>
+                    <PathRevision recommendation={recommendation} />
+                    <button
+                      className="primary"
+                      onClick={() =>
+                        openCode(recommendation.evidence_path.at(-1)!)
+                      }
+                    >
+                      Open changed code
+                    </button>
                     <ol className="evidence-path">
                       {recommendation.evidence_path.map((id, i) => (
                         <li key={id}>
@@ -529,6 +605,13 @@ function App() {
                           </span>
                           <strong>{id.split("::")[1]}</strong>
                           <small>{id.split("::")[0]}</small>
+                          {edgesById.get(recommendation.evidence_edges[i]) && (
+                            <EdgeEvidence
+                              edge={edgesById.get(
+                                recommendation.evidence_edges[i],
+                              )!}
+                            />
+                          )}
                         </li>
                       ))}
                     </ol>
@@ -542,13 +625,19 @@ function App() {
                           ? "A dependency path reaches a changed symbol."
                           : "No path to a changed symbol was found in this static graph."}
                     </p>
+                    {report?.changed.includes(symbol.id) && (
+                      <button
+                        className="primary"
+                        onClick={() => openCode(symbol.id)}
+                      >
+                        Open changed code
+                      </button>
+                    )}
                     <h4>Outgoing evidence</h4>
                     {report?.edges
                       .filter((e) => e.source === symbol.id)
-                      .map((e, i) => (
-                        <p className="edge-evidence" key={i}>
-                          {e.evidence}
-                        </p>
+                      .map((e) => (
+                        <EdgeEvidence edge={e} key={e.id} />
                       ))}
                   </>
                 )}

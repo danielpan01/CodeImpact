@@ -54,11 +54,54 @@ class Symbol(BaseModel):
     fingerprint: str = Field(exclude=True)
 
 
+class SourceRange(BaseModel):
+    """Inclusive, one-based lines; definitions start at their first decorator."""
+
+    line: int
+    end_line: int
+
+
+class SourceLocation(SourceRange):
+    path: str
+
+
+class SourceRevision(BaseModel):
+    text: str
+    parse_status: Literal["parsed", "unparseable"]
+
+
+class SourceFile(BaseModel):
+    path: str
+    before: SourceRevision | None
+    after: SourceRevision | None
+
+
+class SymbolChange(BaseModel):
+    symbol: str
+    path: str
+    status: Literal["added", "modified", "removed"]
+    before: SourceRange | None
+    after: SourceRange | None
+
+
+class DependencyEvidence(BaseModel):
+    text: str
+    location: SourceLocation
+    target_location: SourceLocation
+
+
+EdgeKind = Literal["call", "import", "module"]
+RevisionPresence = Literal["before", "after", "both"]
+
+
 class Edge(BaseModel):
+    id: str
     source: str
     target: str
-    kind: Literal["call", "import", "module"]
-    evidence: str
+    kind: EdgeKind
+    revision: RevisionPresence
+    before: list[DependencyEvidence]
+    after: list[DependencyEvidence]
 
 
 class Recommendation(BaseModel):
@@ -67,14 +110,18 @@ class Recommendation(BaseModel):
     distance: int
     reason: str
     evidence_path: list[str]
+    evidence_edges: list[str]
+    path_revision: Literal["before", "after", "both", "mixed"]
 
 
 class Report(BaseModel):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["2.0"] = "2.0"
     label: str
     nodes: list[Symbol]
     edges: list[Edge]
     changed: list[str]
+    changes: list[SymbolChange]
+    source_files: list[SourceFile]
     removed: list[str]
     impacted: list[str]
     recommendations: list[Recommendation]
@@ -101,6 +148,6 @@ class GitHubSource(BaseModel):
 
 
 class GitHubPRReport(Report):
-    """Additive provenance for PR reports; existing 1.0 snapshot reports stay unchanged."""
+    """The same versioned report as demo/upload/CLI, with pinned GitHub provenance."""
 
     source: GitHubSource

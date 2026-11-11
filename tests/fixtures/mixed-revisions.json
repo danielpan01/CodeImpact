@@ -1,0 +1,19 @@
+{
+  "label": "Mixed revisions and a removed function",
+  "base": {
+    "files": {
+      "a.py": "def f(): return 1\n",
+      "b.py": "def f(): return 2\n",
+      "bridge.py": "from a import f\ndef g(): return f()\n",
+      "test_bridge.py": "from b import f as g\ndef test_g(): return g()\n"
+    }
+  },
+  "head": {
+    "files": {
+      "a.py": "",
+      "b.py": "def f(): return 2\n",
+      "bridge.py": "from b import f\ndef g(): return f()\n",
+      "test_bridge.py": "from bridge import g\ndef test_g(): return g()\n"
+    }
+  }
+}

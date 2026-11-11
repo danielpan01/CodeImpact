@@ -125,11 +125,18 @@ def serve():
 
 def assert_paths(report):
     edges = {(e["source"], e["target"]) for e in report["edges"]}
+    by_id = {e["id"]: e for e in report["edges"]}
     for item in report["recommendations"]:
         assert item["evidence_path"][0] == item["symbol"]
         assert item["evidence_path"][-1] in report["changed"]
         assert all(edge in edges for edge in pairwise(item["evidence_path"]))
         assert item["symbol"] not in report["removed"]
+        assert len(item["evidence_edges"]) == len(item["evidence_path"]) - 1
+        for edge_id, (source, target) in zip(
+            item["evidence_edges"], pairwise(item["evidence_path"]), strict=True
+        ):
+            assert (by_id[edge_id]["source"], by_id[edge_id]["target"]) == (source, target)
+            assert by_id[edge_id]["kind"] in {"call", "import", "module"}
 
 
 @pytest.mark.parametrize("fork", [False, True])
@@ -138,6 +145,14 @@ def test_real_route_uses_complete_pinned_snapshots_and_matches_local_analysis(se
     response = serve(server).post("/api/github/pr", json={"url": URL})
     assert response.status_code == 200, response.text
     body = response.json()
+    assert body["schema_version"] == "2.0"
+    assert body["source_files"] == [
+        {
+            "path": "core.py",
+            "before": {"text": server.before["core.py"], "parse_status": "parsed"},
+            "after": {"text": server.after["core.py"], "parse_status": "parsed"},
+        }
+    ]
     local = analyze(
         AnalysisRequest(
             base=Snapshot(files=server.before),
