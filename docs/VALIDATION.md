@@ -167,3 +167,125 @@ performance benchmark, hosted CI result, model setting or cross-device sync resu
 is claimed. Static-analysis limitations and the full-suite merge gate remain as
 documented in ARCHITECTURE.md.
 
+## Public GitHub PR analysis milestone — November 8, 2026
+
+Implemented and verified in `/Users/danny/Documents/ChatGPT/CodeImpact` on macOS,
+Python 3.12.0, Node 24.2.0, npm 11.3.0. Starting branch was `main`, commit
+`34eb6b05d193468df3903f8cccaf056ec688b8f5` (`Harden empty-module change detection`),
+with a clean working tree and origin `https://github.com/danielpan01/codeimpact.git`.
+The analyzer and its 11 empty-module regression cases were left unchanged. Existing
+dependency lockfiles were retained; already-pinned httpx 0.28.1 is now declared as a
+runtime dependency. No downloaded repository code was executed or installed.
+
+### Automated results
+
+| Command | Observed result |
+| --- | --- |
+| `.venv/bin/pytest tests/test_github.py --no-cov` | 63 passed |
+| `make check` | Passed: Ruff lint/format, strict mypy, 107 Python tests, TypeScript check and Vite build |
+| Coverage measured by `make check` | 94% overall (600 statements, 39 missed); importer 95% (214 statements, 10 missed); analyzer 100% (172 statements, none missed) |
+| `.venv/bin/python -m pip check` | No broken requirements found; pip disabled its unwritable shared cache |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e` with authorized Chromium execution | 12 passed: six scenarios each on desktop and Pixel 7 emulation |
+| `git diff --check` | Passed |
+| Hosted GitHub CI / deployment | Not run / not deployed |
+
+The first sandboxed `cd web && npm run test:e2e` exited 1 with all 12 cases unable
+to launch Chromium: `browserType.launch: Target page, context or browser has been
+closed`, `signal=SIGABRT`, and `Error: kill EPERM`. No page assertions ran in that
+attempt. Running the same command with authorized browser execution passed all 12;
+the final run after remaining changes also passed all 12. No assertions were removed
+or weakened. The checked-in configuration now starts isolated test servers on
+8002/5174 with reuse disabled, so it cannot silently validate an old dev server.
+
+HTTP contract cases cover normal and fork PRs, merge-base scope, unchanged callers
+and an unaffected control, deleted symbols/tests, rename-as-remove/add, comment-only
+empty modules, branch movement after metadata retrieval, response identity checks,
+URL rejection before network access, private/unavailable/404 repositories, redirects,
+rate limits, upstream failures, timeouts, invalid encoding/content integrity, unsafe
+paths, incomplete trees, source/tree/response/request budgets, skip warnings and an
+empty Python scope. Download tests exercise four-way concurrency and cancellation
+with no surviving tasks after failure. Fake optional credentials are asserted to
+stay in server request headers and out of responses/logs. A source-file sentinel
+test proves that fetched source is not executed. Real route reports match direct
+analysis of the same complete snapshot pairs, excluding variable analysis timings.
+
+The browser test server overrides only the GitHub HTTP transport, using a fresh
+deterministic fixture per import; the actual importer, analyzer and API serialization
+run. Browser cases verify keyboard PR submission, full SHA metadata, valid exported
+evidence paths, an unaffected test, loading/disabled controls, clearing stale results,
+rate-limit retry, correcting an invalid URL, and switching back to the demo. Existing
+demo, snapshot upload/error recovery and export cases remain. Mobile checks assert no
+horizontal page overflow. Success/error screenshots are generated under ignored
+`web/test-results/`; desktop and mobile success images were visually inspected.
+These are Chromium viewport tests, not physical-device or Safari validation.
+
+The existing Starlette/httpx TestClient deprecation warning remains. Node logs that
+`NO_COLOR` is ignored when `FORCE_COLOR` is set. An earlier successful browser run
+logged React Flow's parent-size warning twice during report transitions; the final
+passing run did not reproduce it. No claim of a fully warning-free browser is made.
+Coverage is executed-statement coverage, not accuracy or safe test-skipping evidence.
+
+### Live public PR smoke test
+
+Anonymous GitHub access succeeded for
+[pallets/markupsafe PR #469, “fix exact str check”](https://github.com/pallets/markupsafe/pull/469).
+The real dev API, reached through Vite at `POST http://127.0.0.1:5173/api/github/pr`,
+returned HTTP 200. No mocked provider was used in this smoke test.
+
+| Recorded provenance / result | Observed value |
+| --- | --- |
+| Target base SHA | `b5291646cbabf945069db07c34b08fb1f623134d` |
+| Merge-base SHA (analyzed before) | `b5291646cbabf945069db07c34b08fb1f623134d` |
+| Head SHA (analyzed after) | `7add29c77b088299841e1017a7cd2f96133a6659` |
+| Base and head repository | `pallets/markupsafe` |
+| Analyzer version | `0.1.0` |
+| Python files | 11 before, 11 after |
+| Graph | 119 nodes, 164 edges |
+| Changed | `src/markupsafe/__init__.py::escape` and its module node |
+| Recommendations | 23: seven resolved-call paths, 16 conservative module/import paths |
+| Warnings | 349, including dynamic/unresolved calls; retained in the report |
+| Measured second import | 18 GitHub requests, 127,548 decoded response bytes |
+
+A second live import produced the same source metadata. Its validated snapshots
+were submitted to the existing `POST /api/analyze` route. All stable report fields
+matched the PR response, with ingestion warnings combined and timing/provenance
+excluded from the comparison. All 23 recommendations began at their test, ended at
+a changed node and followed existing consecutive graph edges; none was a removed
+test. For example, `tests/test_escape.py::test_escape` directly reaches the changed
+`escape` function. These observations verify ingestion and contract parity, not that
+all 23 tests would fail or that all affected tests were discovered. No source tests
+from MarkupSafe were run.
+
+Local ignored artifacts: `reports/github-smoke-report.json` and
+`reports/github-smoke-snapshots.json`. The latter can be uploaded with **Analyze
+snapshots** to reproduce the stored input without GitHub access. It is input data;
+the report itself is not snapshot-upload input. To repeat the live request:
+
+```sh
+# Use this port override on this Mac because an unrelated app occupies 8000.
+CODEIMPACT_API_PORT=8001 make dev
+# In another terminal at the repository root:
+curl --fail-with-body http://127.0.0.1:5173/api/github/pr \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://github.com/pallets/markupsafe/pull/469"}'
+```
+
+A later live request may see different metadata or GitHub rate limits; inspect its
+returned SHAs. The previous CodeImpact dev pair was stopped and the updated app was
+started on 8001/5173. The unrelated service on 8000 was left alone.
+
+### Remaining limits and ownership
+
+Public repositories only; complete regular Python files within documented bounds
+and exclusions only. Large/truncated listings and unsupported encodings fail rather
+than return partial analysis. Anonymous quotas may prevent otherwise valid imports.
+Per-import network limits do not provide global request quotas, parser process
+isolation or a hard analysis CPU deadline. Private auth, background jobs, durable
+storage, cross-request caching and deployment remain future milestones. Existing
+static-analysis blind spots and the full-test-suite merge gate still apply.
+
+All task edits remain local, unstaged and uncommitted. No Git identity, visibility,
+project history or remote content was changed. No hosted CI result, accuracy metric,
+performance benchmark, active model setting or Mac/cloud synchronization is claimed.
+

@@ -29,6 +29,11 @@ symbol-level selection instead of assuming finer graphs are always better.
 
 ## 3. Real GitHub PR input (2–3 days)
 
+Implemented locally November 8, 2026; awaiting the owner's review and commit.
+See VALIDATION.md for observed mocked/live results. Complete supported Python trees
+are read from exact merge-base/head revisions; truncated listings fail explicitly.
+This completes the public, stateless slice below, not private authorization or hosting.
+
 Implement read-only public PR ingestion first. Validate an exact GitHub PR URL;
 fetch metadata, pin base/head SHAs, compute/read the correct merge base, retrieve
 bounded source blobs from both revisions, and feed the existing engine. Support

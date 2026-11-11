@@ -80,3 +80,27 @@ class Report(BaseModel):
     recommendations: list[Recommendation]
     warnings: list[str]
     stats: dict[str, int | float]
+
+
+class GitHubPRRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    url: str = Field(min_length=1, max_length=300)
+
+
+class GitHubSource(BaseModel):
+    kind: Literal["github_pr"] = "github_pr"
+    repository: str
+    head_repository: str
+    pr_number: int
+    pr_url: str
+    title: str
+    base_sha: str
+    head_sha: str
+    merge_base_sha: str
+    analyzer_version: str
+
+
+class GitHubPRReport(Report):
+    """Additive provenance for PR reports; existing 1.0 snapshot reports stay unchanged."""
+
+    source: GitHubSource

@@ -45,7 +45,15 @@ preservation, conservative impact traversal, ranked evidence paths, Git CLI,
 FastAPI, responsive React graph, demo, upload/export, pinned dependencies, tests,
 lint/type checking and CI configuration. Consult VALIDATION.md for actual results.
 
-Not implemented: live PR URL ingestion, GitHub App auth, durable jobs, source caching,
+Public GitHub PR ingestion was implemented locally on November 8, 2026, starting
+from `34eb6b05d193468df3903f8cccaf056ec688b8f5` on `main`. It uses pinned merge-base/head
+snapshots, supports public forks, preserves evidence paths and reports explicit input
+and network failures. It has a PR URL form and exportable revision provenance. A live
+MarkupSafe PR and deterministic HTTP/browser tests are recorded in VALIDATION.md.
+The existing analyzer and empty-module fix were preserved. This milestone's changes
+are unstaged and uncommitted; only the user may commit and push them.
+
+Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy
 benchmark. Do not present those as existing features.
 

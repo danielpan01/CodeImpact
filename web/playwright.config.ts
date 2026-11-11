@@ -1,24 +1,31 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// Isolated servers ensure tests exercise this checkout, not stale user processes.
+const apiPort = 8002;
+const webPort = 5174;
+
 export default defineConfig({
   testDir: "./tests",
   use: {
-    baseURL: "http://127.0.0.1:5173",
+    baseURL: `http://127.0.0.1:${webPort}`,
     channel: "chromium",
     launchOptions: { args: ["--disable-gpu"] },
     trace: "retain-on-failure",
   },
   webServer: [
     {
-      command:
-        "../.venv/bin/python -m uvicorn codeimpact.api:app --host 127.0.0.1 --port 8000",
-      url: "http://127.0.0.1:8000/health",
-      reuseExistingServer: !process.env.CI,
+      command: `../.venv/bin/python -m uvicorn browser_api:app --app-dir ../tests --host 127.0.0.1 --port ${apiPort}`,
+      url: `http://127.0.0.1:${apiPort}/health`,
+      reuseExistingServer: false,
     },
     {
       command: "npm run dev",
-      url: "http://127.0.0.1:5173",
-      reuseExistingServer: !process.env.CI,
+      env: {
+        CODEIMPACT_API_PORT: String(apiPort),
+        CODEIMPACT_WEB_PORT: String(webPort),
+      },
+      url: `http://127.0.0.1:${webPort}`,
+      reuseExistingServer: false,
     },
   ],
   projects: [

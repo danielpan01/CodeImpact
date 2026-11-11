@@ -8,6 +8,10 @@ import time
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
+api_port = int(os.environ.get("CODEIMPACT_API_PORT", "8000"))
+web_port = int(os.environ.get("CODEIMPACT_WEB_PORT", "5173"))
+if not all(1 <= port <= 65535 for port in (api_port, web_port)):
+    sys.exit("CodeImpact ports must be between 1 and 65535.")
 processes: list[subprocess.Popen[bytes]] = []
 exit_code = 0
 try:
@@ -21,7 +25,7 @@ try:
                 "--host",
                 "127.0.0.1",
                 "--port",
-                "8000",
+                str(api_port),
             ],
             cwd=root,
             start_new_session=True,
@@ -30,7 +34,10 @@ try:
     processes.append(
         subprocess.Popen(["npm", "run", "dev"], cwd=root / "web", start_new_session=True)
     )
-    print("CodeImpact: http://127.0.0.1:5173 | API: http://127.0.0.1:8000/docs", flush=True)
+    print(
+        f"CodeImpact: http://127.0.0.1:{web_port} | API: http://127.0.0.1:{api_port}/docs",
+        flush=True,
+    )
     while all(process.poll() is None for process in processes):
         time.sleep(0.5)
     exit_code = next((p.returncode for p in processes if p.returncode), 1)

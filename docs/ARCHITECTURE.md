@@ -1,12 +1,15 @@
 # Architecture
 
 CodeImpact answers: **Which tests deserve attention after this Python change, and why?**
-The starter is a stateless vertical slice. Its value lies in an explainable analysis
+The application is a stateless vertical slice. Its value lies in an explainable analysis
 engine; the API and graph are ways to inspect the engine's evidence.
 
 ```mermaid
 flowchart LR
     A[Git base/head refs] --> B[Resolve merge base and immutable blobs]
+    P[Public GitHub PR URL] --> Q[Validate URL and pin revisions]
+    Q --> R[Bounded complete Python trees and verified blobs]
+    R --> C
     B --> C[Validated Python snapshot pair]
     U[Uploaded JSON or demo] --> C
     C --> D[AST symbol and dependency indexes]
@@ -92,8 +95,8 @@ measurable optimization once correctness is stable.
 
 ## Interfaces and UI
 
-`GET /health`, `GET /api/demo`, `GET /api/demo/snapshots` and `POST /api/analyze`
-are implemented. OpenAPI is at `/docs`. The 1.0 JSON report includes nodes, typed
+`GET /health`, `GET /api/demo`, `GET /api/demo/snapshots`, `POST /api/analyze` and
+`POST /api/github/pr` are implemented. OpenAPI is at `/docs`. The 1.0 JSON report includes nodes, typed
 edges/evidence, changed/removed/impacted IDs, recommendations, warnings and timings.
 
 React Flow displays dependency arrows, search, module filtering, selection and
@@ -102,10 +105,85 @@ Metrics include module nodes where labeled. Search filters the visible graph onl
 it does not recompute recommendations. The UI exports a report; its upload expects
 the separate snapshot-pair input schema.
 
-No database, queue or credentials are required for this phase. Durable jobs, GitHub
-ingestion, access control, caching and deployment should be separate modules when
-introduced. A commit-SHA cache must also include analyzer version and settings in
-its key; commit identity alone is insufficient when analysis behavior changes.
+## Public GitHub ingestion
+
+`github.py` owns URL validation, provider models, immutable-object reads and network
+bounds. It returns validated `AnalysisRequest` snapshots, source metadata and input
+warnings. `api.py` owns the HTTP client and optional server credential, invokes this
+reader, and runs the unchanged analyzer in a thread pool. The frontend only posts
+`{"url":"https://github.com/owner/repo/pull/number"}` and renders the returned report.
+
+Only exact HTTPS github.com PR URLs are accepted: no credentials, ports, queries,
+fragments, suffixes or alternative hosts. Requests go to fixed `https://api.github.com`
+paths constructed from validated repository names and full 40-character SHAs. Provider
+download URLs are never followed; redirects fail with an instruction to use the
+current PR URL. Both base and head repositories must be public, even with a token.
+
+The reader fetches PR metadata once and pins target base and head SHAs. It requests
+the comparison of those SHAs, using `head-owner:head-sha` for fork support, and uses
+only its merge-base metadata. The comparison's paginated commits and limited diff
+files are **not** input to the graph. Instead, each pinned commit's complete recursive
+tree supplies all ordinary `.py` blobs in scope, including unchanged tests/callers.
+Truncated listings fail rather than produce a partial report. There is no pagination
+fallback or archive extraction. Renames remain removal plus addition.
+
+Commit/tree identities are checked. Blob base64 is decoded strictly; the content's
+Git object hash and sizes must match the requested object and tree entry. UTF-8 is
+required. Blobs are deduplicated by SHA within one import, not cached across requests.
+Downloaded Python stays in memory as strings and is only parsed as data. Symlinks,
+submodules and Python files under `.venv`, `venv`, `node_modules`, `vendor` and `.git`
+are skipped with counts and example paths in warnings. Thus "complete" means all
+regular Python source in this explicitly supported scope, not all repository content.
+
+| Bound | Limit |
+| --- | --- |
+| Incoming HTTP body | Existing 6,000,000 bytes |
+| Python source per revision | Existing 300 files, 200,000 bytes/file, 2,000,000 total bytes |
+| Entries in each recursive tree | 20,000, counting all file types and directories |
+| Decoded response body | 4,000,000 bytes; blob JSON 400,000 bytes |
+| Total decoded response bytes per import | 20,000,000 bytes |
+| Requests per import | 650 maximum, no automatic retries |
+| Concurrent upstream requests per import | 4 maximum |
+| HTTP timeouts | 5 seconds connecting, 10 seconds read/write/pool inactivity |
+| Whole network import deadline | 60 seconds, including queued blob requests |
+
+Pending blob downloads are cancelled and awaited when one fails. Bounds are per
+import; they are not global multi-user quotas or process isolation. The 60-second
+deadline covers ingestion, not analyzer CPU time. Timings in report stats continue to
+measure analysis, excluding network retrieval. Public hosting still needs worker
+isolation and service-wide admission/resource controls.
+
+The PR response is an additive `GitHubPRReport`: existing schema 1.0 report fields
+plus a required `source` object (`kind`, repository/head repository, PR number/URL,
+title, `base_sha`, `head_sha`, `merge_base_sha`, `analyzer_version`). Demo and upload
+responses remain unchanged. `base_sha` records the target revision; the actual before
+input is `merge_base_sha`. A new submission may observe a new head; an in-flight
+analysis never switches to branch names. Export preserves all this metadata.
+
+Errors contain `detail: {code, message, retryable}`. Invalid URLs, unsupported/large
+input, private repositories and incomplete trees return 422; missing PRs/revisions
+404; rate limits 429; upstream/network failures 502/503; timeouts 504. The existing
+body-size middleware still returns 413 with a string detail. Error messages do not
+echo upstream bodies, credential-bearing URLs or validation input. Optional
+`CODEIMPACT_GITHUB_TOKEN` is read only on the server and sent as a GitHub API header.
+No auth UI, secret persistence or automatic token discovery is implemented.
+
+The form disables duplicate submissions, announces loading, clears stale results on
+failure and offers retry of the same PR. Revisions expand without changing the graph;
+keyboard submission, mobile wrapping, JSON export and recovery have browser coverage.
+Browser tests use a test-only API dependency override for GitHub transport; the real
+reader, validation, analyzer and serialization still run. Development uses live GitHub.
+
+No database, queue or credentials are required. A future job layer can wrap
+ingestion and analysis without altering either module's data contracts. Durable jobs,
+access control and deployment remain separate future work. Any cross-request cache
+must include repository, pinned analyzed revisions, analyzer version and settings.
+
+Provider references: [PR metadata](https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request),
+[comparison and merge base](https://docs.github.com/en/rest/commits/commits#compare-two-commits),
+[recursive trees and truncation](https://docs.github.com/en/rest/git/trees#get-a-tree),
+[Git blobs](https://docs.github.com/en/rest/git/blobs#get-a-blob),
+[HTTPX timeouts](https://www.python-httpx.org/advanced/timeouts/).
 
 References: [Python AST](https://docs.python.org/3/library/ast.html),
 [FastAPI testing](https://fastapi.tiangolo.com/tutorial/testing/),

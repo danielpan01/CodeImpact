@@ -1,11 +1,21 @@
 """Local API. Snapshot sources are parsed as data and never executed."""
 
-from fastapi import FastAPI, HTTPException
+import os
+from collections.abc import AsyncIterator
+from typing import Annotated
+
+import httpx
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.concurrency import run_in_threadpool
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from codeimpact.analyzer import analyze
 from codeimpact.demo import demo_request
-from codeimpact.models import AnalysisRequest, Report
+from codeimpact.github import CONCURRENCY, GitHubError, GitHubReader
+from codeimpact.models import AnalysisRequest, GitHubPRReport, GitHubPRRequest, Report
 
 
 class BodyLimit:
@@ -78,3 +88,55 @@ def compare(request: AnalysisRequest) -> Report:
         return analyze(request)
     except (ValueError, RecursionError) as exc:
         raise HTTPException(status_code=422, detail="Unsupported or overly complex source") from exc
+
+
+async def github_reader() -> AsyncIterator[GitHubReader]:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "CodeImpact/0.1",
+    }
+    if token := os.environ.get("CODEIMPACT_GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {token}"
+    async with httpx.AsyncClient(
+        headers=headers, follow_redirects=False, limits=httpx.Limits(max_connections=CONCURRENCY)
+    ) as client:
+        yield GitHubReader(client)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+    if request.url.path == "/api/github/pr":
+        return JSONResponse(
+            status_code=422,
+            content={
+                "detail": {
+                    "code": "invalid_request",
+                    "message": "Provide one public GitHub PR URL in the url field.",
+                    "retryable": False,
+                }
+            },
+        )
+    return await request_validation_exception_handler(request, exc)
+
+
+@app.post("/api/github/pr", response_model=GitHubPRReport)
+async def compare_github(
+    request: GitHubPRRequest, reader: Annotated[GitHubReader, Depends(github_reader)]
+) -> GitHubPRReport:
+    try:
+        imported = await reader.read(request.url)
+        report = await run_in_threadpool(analyze, imported.request)
+        report.warnings = sorted(set(report.warnings + imported.warnings))
+        return GitHubPRReport(**dict(report), source=imported.source)
+    except GitHubError as exc:
+        raise HTTPException(status_code=exc.status, detail=exc.detail()) from exc
+    except (ValueError, RecursionError) as exc:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": "unsupported_source",
+                "message": "Unsupported or overly complex Python source.",
+                "retryable": False,
+            },
+        ) from exc

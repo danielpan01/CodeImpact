@@ -37,6 +37,88 @@ label:focus-within {
   outline: 2px solid #51e0b2;
   outline-offset: 4px;
 }
+summary:focus-visible {
+  outline: 2px solid #51e0b2;
+  outline-offset: 4px;
+}
+.pr-form,
+.pr-source {
+  border: 1px solid #314b39;
+  border-radius: 7px;
+  padding: 18px;
+  margin-bottom: 16px;
+  background: #142019;
+}
+.pr-form label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.pr-form p {
+  margin: 6px 0 14px;
+}
+.pr-input-row {
+  display: flex;
+  gap: 12px;
+}
+.pr-input-row input {
+  min-width: 0;
+  flex: 1;
+  background: #0f1913;
+  border: 1px solid #3e5d49;
+  color: #e8f0ec;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 14px;
+}
+.pr-input-row input::placeholder {
+  color: #90aa9b;
+}
+.analysis-label,
+.pr-source {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.pr-source {
+  margin: 16px 0 0;
+  font-size: 12px;
+}
+.pr-source a {
+  color: #b5f5cf;
+  text-decoration: underline;
+}
+.pr-source summary {
+  cursor: pointer;
+  padding-block: 6px;
+}
+.pr-source dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px 20px;
+}
+.pr-source dt {
+  color: #90aa9b;
+}
+.pr-source dd {
+  margin: 0;
+}
+.analysis-status {
+  color: #b5f5cf;
+}
+@media (max-width: 700px) {
+  .pr-input-row {
+    flex-direction: column;
+  }
+  .pr-input-row input {
+    font-size: 16px;
+  }
+  .pr-source dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .pr-source dd {
+    margin-bottom: 8px;
+  }
+}
 a {
   color: inherit;
   text-decoration: none;

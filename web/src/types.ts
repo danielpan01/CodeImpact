@@ -14,6 +14,18 @@ export interface Recommendation {
   evidence_path: string[];
 }
 export interface Report {
+  source?: {
+    kind: "github_pr";
+    repository: string;
+    head_repository: string;
+    pr_number: number;
+    pr_url: string;
+    title: string;
+    base_sha: string;
+    head_sha: string;
+    merge_base_sha: string;
+    analyzer_version: string;
+  };
   schema_version: string;
   label: string;
   nodes: SymbolNode[];

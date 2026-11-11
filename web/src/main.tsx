@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo, useState } from "react";
+import { StrictMode, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Background,
@@ -16,20 +16,26 @@ import type { Report } from "./types";
 async function getReport(url: string, body?: unknown): Promise<Report> {
   const response = await fetch(
     url,
-    body
+    body !== undefined
       ? {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         }
       : {},
-  );
+  ).catch(() => {
+    throw new Error(
+      "Cannot reach CodeImpact. Start the local servers, then retry.",
+    );
+  });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
     throw new Error(
       typeof data.detail === "string"
         ? data.detail
-        : `Analysis rejected (${response.status}). Check your snapshot format and limits.`,
+        : typeof data.detail?.message === "string"
+          ? data.detail.message
+          : `Analysis rejected (${response.status}). Check your snapshot format and limits.`,
     );
   }
   return response.json();
@@ -44,19 +50,36 @@ function App() {
   const [busy, setBusy] = useState(true);
   const [revision, setRevision] = useState(0);
   const [view, setView] = useState<"graph" | "tests">("graph");
+  const [prUrl, setPrUrl] = useState("");
+  const [retryPR, setRetryPR] = useState<string | null>(null);
+  const requestVersion = useRef(0);
 
-  async function load(body?: unknown) {
+  async function load(body?: unknown, githubUrl?: string) {
+    const version = ++requestVersion.current;
     setBusy(true);
     setError("");
+    setReport(null);
+    setSelected(null);
+    setRetryPR(githubUrl ?? null);
     try {
-      const next = await getReport(body ? "/api/analyze" : "/api/demo", body);
+      const next = await getReport(
+        githubUrl
+          ? "/api/github/pr"
+          : body !== undefined
+            ? "/api/analyze"
+            : "/api/demo",
+        githubUrl ? { url: githubUrl } : body,
+      );
+      if (version !== requestVersion.current) return;
       setReport(next);
       setSelected(next.recommendations[0]?.symbol ?? null);
+      setQuery("");
       setRevision((n) => n + 1);
     } catch (e) {
+      if (version !== requestVersion.current) return;
       setError(e instanceof Error ? e.message : "Could not load analysis");
     } finally {
-      setBusy(false);
+      if (version === requestVersion.current) setBusy(false);
     }
   }
   useEffect(() => {
@@ -213,12 +236,42 @@ function App() {
             ↓ Export report
           </button>
         </section>
+        <form
+          className="pr-form"
+          aria-label="Analyze a public GitHub pull request"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void load(undefined, prUrl.trim());
+          }}
+        >
+          <label htmlFor="pr-url">Analyze a GitHub pull request</label>
+          <p id="pr-help">Public Python repositories · Read-only access</p>
+          <div className="pr-input-row">
+            <input
+              id="pr-url"
+              type="url"
+              required
+              maxLength={300}
+              placeholder="https://github.com/owner/repo/pull/123"
+              aria-describedby="pr-help"
+              value={prUrl}
+              onChange={(event) => setPrUrl(event.target.value)}
+              disabled={busy}
+              spellCheck={false}
+            />
+            <button className="primary" type="submit" disabled={busy}>
+              Analyze PR
+            </button>
+          </div>
+        </form>
         <section className="analysis-bar">
           <div>
             <span className="repo-icon">⌘</span>
             <span className="analysis-label">
               {busy
-                ? "Analyzing Python snapshots…"
+                ? retryPR
+                  ? "Reading GitHub revisions…"
+                  : "Analyzing Python snapshots…"
                 : (report?.label ?? "Ready for analysis")}
               <small>AST comparison · base + head dependency graph</small>
             </span>
@@ -246,6 +299,9 @@ function App() {
                       throw new Error("Snapshot file exceeds 6 MB.");
                     await load(JSON.parse(await file.text()));
                   } catch (e) {
+                    setReport(null);
+                    setSelected(null);
+                    setRetryPR(null);
                     setError(e instanceof Error ? e.message : "Invalid JSON");
                   }
                   event.target.value = "";
@@ -254,9 +310,51 @@ function App() {
             </label>
           </div>
         </section>
+        {busy && (
+          <p role="status" className="analysis-status">
+            {retryPR
+              ? "Fetching complete Python snapshots and analyzing dependencies…"
+              : "Loading analysis…"}
+          </p>
+        )}
+        {report?.source && (
+          <section className="pr-source" aria-label="GitHub analysis source">
+            <a href={report.source.pr_url} target="_blank" rel="noreferrer">
+              {report.source.repository} #{report.source.pr_number} ↗
+            </a>
+            <p>{report.source.title}</p>
+            <details>
+              <summary>Exact analyzed revisions</summary>
+              <dl>
+                <dt>Before (merge base)</dt>
+                <dd>
+                  <code>{report.source.merge_base_sha}</code>
+                </dd>
+                <dt>After (PR head)</dt>
+                <dd>
+                  <code>{report.source.head_sha}</code>
+                </dd>
+                <dt>Target branch at retrieval</dt>
+                <dd>
+                  <code>{report.source.base_sha}</code>
+                </dd>
+                <dt>Head repository</dt>
+                <dd>{report.source.head_repository}</dd>
+                <dt>Analyzer version</dt>
+                <dd>{report.source.analyzer_version}</dd>
+              </dl>
+            </details>
+          </section>
+        )}
         {error && (
           <div className="error" role="alert">
-            {error} <button onClick={() => void load()}>Retry demo</button>
+            {error}{" "}
+            <button
+              disabled={busy}
+              onClick={() => void load(undefined, retryPR ?? undefined)}
+            >
+              {retryPR ? "Retry GitHub PR" : "Retry demo"}
+            </button>
           </div>
         )}
         <section className="metrics">
@@ -477,7 +575,7 @@ function App() {
         </details>
         <footer>
           CODEIMPACT <span>Understand the change. Make a better review.</span>
-          <a href="http://127.0.0.1:8000/docs" target="_blank" rel="noreferrer">
+          <a href="/docs" target="_blank" rel="noreferrer">
             API reference ↗
           </a>
         </footer>
