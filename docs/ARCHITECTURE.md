@@ -54,10 +54,57 @@ Edges point **from dependent to dependency**:
 No runtime import takes place. Selected `import`, `from ... import`, aliases,
 relative imports and a conventional leading `src/` directory are supported.
 Parameters and local assignments that shadow a callable suppress that precise edge.
-Direct function-local imports have the bounded support described below. Re-exports,
-inherited methods, module-level rebinding, closures with complex assignments and
+Function-local imports and module import rebinding have the bounded support described
+below. Re-exports, inherited methods, runtime mutation, closures with complex assignments and
 dynamic dispatch are incomplete. Even a resolved edge is a
 static inference, not proof that a call executes.
+
+### Bounded module-level rebinding
+
+Module import aliases are audited before connecting calls. A precise imported target
+requires **one direct import binding and no competing binding in the module's own
+scope**. Assignments or deletions invalidate that imported name; duplicate imports
+(even identical ones), imports under compound statements and wildcard competition
+are treated as ambiguous. The existing absolute/relative imports, aliases and `src/`
+layouts remain supported when this check passes.
+
+The syntax-only scan recognizes:
+
+- Plain, chained, tuple/list/starred and annotated assignments with a value;
+  augmented assignments, assignment expressions and deletion targets.
+- Function, async-function, class and Python 3.12 type-alias definition names.
+- Bindings under module-level `if`, loops, `with`, `try`/`except`/`finally` and
+  `match`, including iteration targets, context-manager targets, exception names
+  and pattern captures. Branches are not evaluated.
+
+`name: Type` without a value does not assign a module name. Attribute/subscript
+stores do not rebind their root object name. A function/class/lambda body has a
+separate scope and is not scanned for ordinary module bindings. Their definition
+headers (defaults, decorators, bases and annotation expressions) are scanned for
+enclosing-scope stores. Comprehension iteration targets remain separate; assignment
+expressions in result/iterable/filter expressions conservatively count as possible
+enclosing-scope bindings. Type-parameter and deferred-annotation execution semantics
+are not interpreted.
+
+This is flow-insensitive: a competing binding anywhere in the module suppresses
+that import name, even if unreachable or followed by an import that could restore
+it. Source order is not used to guess when a function will execute. An ambiguous
+imported root cannot fall through to a same-named definition or another guessed
+replacement. Supported function-local imports retain their own resolution and
+can override an ambiguous module name. Ambiguous module names and unresolved calls
+produce diagnostics.
+
+Existing direct module-to-module import edges remain, with their original locations.
+No new conditional-import fallback edges are added. A caller can therefore still be
+recommended by conservative module/import evidence after its precise call is removed.
+The ranking formula is unchanged, but the new path or changed incoming-edge count
+can change a priority score. Each revision is audited independently before the
+unchanged graph union: a justified before-only call must survive a head rebind.
+
+Global writes executed inside separate function/class bodies, mutations of callable
+attributes/shared objects, reflective namespace changes, re-export propagation,
+runtime imports and general control-flow analysis are outside this correction.
+The scan does not infer which replacement object is callable or execute source.
 
 ### Bounded function-local imports
 

@@ -25,6 +25,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Semantic change detection** | Compares Python ASTs, ignoring comments, whitespace, and source-line movement. |
 | **Dependency analysis** | Indexes symbols and supported calls/imports; preserves removed dependencies across revisions. |
 | **Function-local imports** | Resolves direct local import aliases after their binding statement; keeps ambiguous bindings unresolved and import fallback scoped to the function. |
+| **Module import rebinding** | Suppresses misleading resolved calls when a module import name has competing bindings; preserves conservative import evidence. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
@@ -87,9 +88,15 @@ the analyzer has no mistakes.
 
 The function-local import milestone fixes the previous `local_import` miss without
 changing its authored labels: `test_read → read → price` now has a resolved path.
-The other 24 case reports remain unchanged. Module fallback still overselects an
-unchanged sibling function in `module_overselection`; fixture injection and runtime
-imports remain the two measured misses.
+At that milestone, the other 24 case reports remained unchanged. The subsequent
+module-rebinding fix removes the stale `worker.read → core.price` call edge in
+`module_rebinding`. Its unaffected wrapper test remains selected through module/import
+fallback, with priority 23 instead of 72. The directly affected test remains resolved,
+with priority 81 instead of 82 after the incorrect incoming edge is removed. The
+scoring formula, selected test IDs and overall counts above are unchanged; the other
+24 case reports are identical to the pre-rebinding baseline. Module fallback still
+overselects an unchanged sibling function in `module_overselection`; fixture injection
+and runtime imports remain the two measured misses.
 These are small authored fixtures, not externally validated ground truth,
 production accuracy or proof that a test fails. Fixture code is never executed.
 Statement coverage measures executed lines, not correctness; passing regression
@@ -112,7 +119,7 @@ CodeImpact is a developer review tool. Static Python analysis is incomplete for 
 
 Next steps include real-repository accuracy evaluation, stronger resolution coverage, worker isolation, and hosted deployment. GitHub App authorization for private repositories, persisted jobs, and cross-request caching are not implemented. See the [build plan](docs/BUILD_PLAN.md).
 
-Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). Conditional imports, competing bindings and closure propagation remain conservative. A next bounded milestone is module-level rebinding: stop stale aliases producing misleading resolved-call evidence, while measuring any remaining module fallback separately.
+Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. A next step is to measure module fallback against independently reviewed changes before attempting to narrow its recommendations.
 
 Exports contain the full before/after source of changed files, including content outside bounded on-screen previews.
 

@@ -218,7 +218,12 @@ def test_cli_invalid_corpus_output_error_and_input_preservation(tmp_path):
             "Conservative module/import dependency",
             "both",
         ),
-        ("module_rebinding", "tests/test_worker.py::test_read", "Resolved call path", "both"),
+        (
+            "module_rebinding",
+            "tests/test_worker.py::test_read",
+            "Conservative module/import dependency",
+            "both",
+        ),
     ],
 )
 def test_recorded_evidence_examples_require_deliberate_updates(case_id, symbol, reason, revision):

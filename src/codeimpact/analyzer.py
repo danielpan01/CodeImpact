@@ -90,6 +90,76 @@ def import_targets(
     return bindings, imported
 
 
+def ambiguous_module_imports(tree: ast.Module) -> set[str]:
+    """Suppress import names with competing module-scope bindings.
+
+    This is flow-insensitive, not execution-order analysis: require exactly one
+    direct import and no competing binding anywhere in the module's own scope.
+    Function/class/lambda bodies and comprehension targets have separate scopes.
+    """
+    imported: dict[str, int] = defaultdict(int)
+    rebound: set[str] = set()
+    direct = set(tree.body)
+    wildcard = False
+
+    def scan(node: ast.AST) -> None:
+        nonlocal wildcard
+        if isinstance(node, DEFINITIONS):
+            rebound.add(node.name)
+            # Headers execute outside the body: defaults, decorators, bases and
+            # annotations may contain assignments in the enclosing scope.
+            for field_name, value in ast.iter_fields(node):
+                if field_name == "body":
+                    continue
+                if isinstance(value, ast.AST):
+                    scan(value)
+                elif isinstance(value, list):
+                    for child in value:
+                        if isinstance(child, ast.AST):
+                            scan(child)
+            return
+        if isinstance(node, ast.Lambda):
+            scan(node.args)
+            return
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                if alias.name == "*":
+                    wildcard = True
+                    continue
+                binding = alias.asname or (
+                    alias.name.split(".")[0] if isinstance(node, ast.Import) else alias.name
+                )
+                imported[binding] += 1
+                if node not in direct:
+                    rebound.add(binding)
+            return
+        if isinstance(node, ast.AnnAssign) and node.value is None:
+            # `name: Type` does not assign to name at module scope.
+            scan(node.annotation)
+            if not isinstance(node.target, ast.Name):
+                scan(node.target)
+            return
+        if isinstance(node, ast.comprehension):
+            # Iteration targets do not leak; named expressions in the iter/ifs
+            # or result expression can bind in the enclosing scope.
+            scan(node.iter)
+            for condition in node.ifs:
+                scan(condition)
+            return
+        if isinstance(node, ast.Name) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            # Attribute/subscript stores leave their root Name in Load context.
+            rebound.add(node.id)
+        elif isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and node.name:
+            rebound.add(node.name)
+        elif isinstance(node, ast.MatchMapping) and node.rest:
+            rebound.add(node.rest)
+        for child in ast.iter_child_nodes(node):
+            scan(child)
+
+    scan(tree)
+    return {name for name, count in imported.items() if count != 1 or name in rebound or wildcard}
+
+
 @dataclass
 class LocalImports:
     # bound includes unsupported imports, so they cannot fall through to globals.
@@ -322,8 +392,8 @@ def build_index(snapshot: Snapshot) -> Index:
         module_id = f"{path}::<module>"
         aliases: dict[str, str] = {}
         imports: list[tuple[str, ast.Import | ast.ImportFrom]] = []
-        # Module aliases retain their existing behavior. Local aliases and fallback
-        # imports are attached to their owning function below, never this module.
+        # Retain conservative direct-import edges even when a name is rebound.
+        # Only precise calls are suppressed by the module binding audit below.
         for node in tree.body:
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 bindings, imported_modules = import_targets(node, path, modules)
@@ -349,6 +419,11 @@ def build_index(snapshot: Snapshot) -> Index:
                     ),
                 )
 
+        ambiguous = ambiguous_module_imports(tree)
+        if ambiguous:
+            index.warnings.append(
+                f"Ambiguous module import binding: {module_id}: {', '.join(sorted(ambiguous))}"
+            )
         scopes = {
             name: local_imports(definition, path, modules)
             for _, definition, name in definitions[path]
@@ -390,7 +465,9 @@ def build_index(snapshot: Snapshot) -> Index:
                     if ".".join(parents[:i]) in scopes
                 )
             )
-            connect_calls(index, definition, sid, name, path, mod, aliases, names, local, enclosing)
+            connect_calls(
+                index, definition, sid, name, path, mod, aliases, names, local, enclosing, ambiguous
+            )
     return index
 
 
@@ -405,6 +482,7 @@ def connect_calls(
     names: dict[str, str],
     local: LocalImports,
     enclosing_imports: set[str],
+    ambiguous_imports: set[str],
 ) -> None:
     args = getattr(node, "args", None)
     shadowed = {a.arg for a in (args.posonlyargs + args.args + args.kwonlyargs)} if args else set()
@@ -435,7 +513,7 @@ def connect_calls(
                             statement.end_col_offset or 0,
                         ):
                             target = names.get(target_name + (f".{tail}" if tail else ""))
-                elif root in shadowed or root in enclosing_imports:
+                elif root in shadowed or root in enclosing_imports or root in ambiguous_imports:
                     pass
                 elif root in aliases:
                     target = names.get(aliases[root] + (f".{tail}" if tail else ""))

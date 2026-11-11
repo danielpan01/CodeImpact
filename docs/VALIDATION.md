@@ -824,3 +824,176 @@ The milestone is ready for owner review and commit based on these local checks.
 Review the added browser test along with the analyzer, regressions and documentation.
 All requested changes remain unstaged and uncommitted.
 
+## Bounded module-level rebinding — November 11, 2026
+
+Started in `/Users/danny/Documents/ChatGPT/CodeImpact` on clean branch
+`codex/module-level-rebinding` at `68ae852fdc47a76da960c59caba03afb90252907`,
+the owner's merged function-local import milestone. Origin remained
+`https://github.com/danielpan01/codeimpact.git`. Read AGENTS.md, README,
+ARCHITECTURE, CORPUS, this validation history, the analyzer/models/evaluator,
+existing regressions and `module_rebinding.json` before editing. No pre-existing
+uncommitted work was present. No Git branch, index, commit, remote or identity
+mutation was performed by the agent.
+
+### Defect, failing tests and correction
+
+The previous module alias table remembered imports but never invalidated a name
+when module code reassigned, deleted or shadowed it. In the corpus example,
+`from core import price` followed by `price = lambda: 42` still produced a precise
+`worker.read → core.price` edge, despite the replacement binding.
+
+Saved the original 25-case evaluation to `reports/module-rebinding-before.json`
+and its console output to `reports/module-rebinding-before.txt`, before edits to
+analyzer or corpus annotations. Then added `tests/test_module_rebinding.py` and ran:
+
+```sh
+.venv/bin/pytest tests/test_module_rebinding.py --no-cov --tb=short
+```
+
+**Before the analyzer change: 59 failed, 28 passed (87 tests).** Failures exposed
+stale imported function/module call targets, competing imports/definitions,
+module-scope compound bindings, relative/src variants, and incorrect revision
+presence for invalidated calls. Passing controls included ordinary imports,
+separate scopes, bare annotations and deterministic source-as-data handling.
+The original 64 function-local import regressions were not edited.
+
+The correction adds a module-scope binding audit requiring one direct import per
+name and no competing binding in that scope. It traverses compound statements but
+does not enter separate function/class/lambda bodies. Definition headers and lambda
+defaults can bind in the enclosing scope; comprehension iteration targets do not.
+Plain/chained/unpacked/annotated/augmented assignments, assignment expressions,
+deletions, definition names, loop/with targets, exception names and pattern captures
+are accounted for. An annotation without a value does not assign a module name.
+Attribute/subscript stores do not rebind their root object name.
+
+Ambiguous imported roots cannot resolve via the stale alias or fall through to a
+guessed replacement definition. Their directly relevant diagnostics are visible.
+The prior direct import edges remain conservative dependencies. Supported local
+imports retain precedence within their own function. No scoring, traversal, model,
+schema, stable-ID, source-safety or resource-limit changes were made.
+
+The first corrected run passed **151 tests** (87 new plus 64 function-local).
+The broader regression run then reported **271 passed, 1 failed**: the existing
+evidence-specific `module_rebinding` assertion deliberately still expected
+`Resolved call path`. Inspection confirmed the intended switch to fallback, after
+which that expected reason was updated. The case-specific new regression also
+asserts the exact fallback path, edge kinds, revision and both resulting scores.
+No assertions were skipped or weakened to hide the remaining FP.
+
+### Selection versus evidence measurements
+
+All 25 original snapshots and authored affected/unaffected/unclassified maps and
+rationales are unchanged. Every case keeps the same selected test IDs and order,
+classifications and metrics. Overall counts remain **TP 23, FN 2, FP 6, TN 26**,
+with two selected unclassified pairs. Precision remains **23/29 (79.3%)** and recall
+**23/25 (92.0%)**. Categories remain 15 supported and 10 known limitations.
+
+For `module_rebinding`, before and after selection is exactly:
+
+- `tests/test_price.py::test_price` — TP.
+- `tests/test_worker.py::test_read` — FP.
+
+The independent `tests/test_control.py::test_control` remains unselected (TN).
+Thus the case remains TP 1, FN 0, FP 1, TN 1.
+
+| Evidence | Before | After |
+| --- | --- | --- |
+| `worker.py::read → core.py::price` call | Present in both revisions | Removed in both revisions |
+| Wrapper recommendation | `test_read → worker.read → core.price` | `test_read → tests/test_worker.<module> → worker.<module> → core.<module>` |
+| Wrapper reason / distance / priority | Resolved call path / 2 / 72 | Conservative module/import dependency / 3 / 23 |
+| Direct affected test | Resolved `test_price → core.price`, priority 82 | Same path, priority 81 |
+| Both recommendation path revisions | Both | Both |
+
+No edge is added. Every retained edge, stable ID and per-revision evidence item
+is identical to the original case report. The direct test loses one priority point
+because the changed target has one fewer incoming dependent. The wrapper's changed
+path uses the existing fallback starting score and distance term. These are effects
+of graph correction under the **unchanged formula**, not recalibration or failure
+probabilities. Warnings now identify the ambiguous module name and unresolved call.
+
+The other **24 complete case reports are identical**, including their scores,
+warnings and evidence. All **31** returned recommendations pass validation of
+head-test membership, non-removed status, start/end, consecutive typed edges,
+direction, revision intersection, deterministic order and resolved/fallback reason.
+Separate regressions preserve a valid before-only/after-only call when only the
+other revision rebinds, and retain deleted-symbol handling and stable edge IDs.
+
+The existing FP ID and `known_limitation` category are retained. Only its FP
+explanation, limitation text and feature tag change to describe the remaining
+module/import fallback. No discrepancy membership or category is changed because
+selection did not improve. `make evaluate` therefore passed even before those
+annotation edits; the separate evidence assertion caught the explanation drift.
+
+### Validation and reproducibility
+
+| Command / check | Observed result |
+| --- | --- |
+| `.venv/bin/pytest tests/test_module_rebinding.py tests/test_local_imports.py tests/test_analyzer.py tests/test_revision_evidence.py tests/test_corpus.py tests/test_evaluation.py --no-cov --tb=short` | **272 passed**, including all 87 rebinding and 64 local-import tests |
+| `make check` | **359 passed**; Ruff lint/format, strict mypy, TypeScript and Vite production build passed |
+| `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py' -v` | **8 maintenance tests passed** |
+| `.venv/bin/python -m pip check` | No broken requirements found |
+| `make evaluate` | Exit 0; all 25 explicit baselines match |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e` | **28 passed**, desktop and mobile |
+| Repeated evaluation JSON and console output | Byte-identical across repeated runs using the same output path; JSON also identical to `make evaluate` output |
+| Snapshot file-order and repeated analyzer-report regression | Identical after excluding only `stats.elapsed_ms` |
+| Before/after comparison | All 25 snapshot/label/classification/selected-ID sets unchanged; other 24 complete case reports identical |
+| `git diff --check` | Passed |
+| Hosted CI for this milestone | Not run; edits remain local and uncommitted |
+
+The added browser scenario uploads the existing rebinding case through the real
+local API and checks two selected tests, the wrapper's conservative explanation,
+priority 23, four-node module path, absent stale call edge, shared revision evidence,
+changed-code preview and an exported report equal to the API response. The dashboard
+application code is unchanged. Browser execution used the Chromium launch permission
+already established as necessary in this environment; all 28 tests passed. These
+browser checks exercise stored snapshot strings, not execution of their Python.
+
+Coverage was **92% overall** (1,123 statements, 88 missed) and **98% analyzer**
+(365 statements, 6 missed). The existing Starlette/httpx deprecation and browser
+environment warnings were non-failing. Coverage measures executed lines, not
+accuracy. No runtime accuracy, performance or hosted-CI claim is made for these edits.
+
+Ignored local artifacts:
+
+- `reports/module-rebinding-before.json` / `.txt`: original evaluation.
+- `reports/module-rebinding-red.txt`: 59 failing / 28 passing checks before the fix.
+- `reports/module-rebinding-after-code.json` / `.txt`: corrected analysis before
+  metadata and evidence-expectation updates.
+- `reports/module-rebinding-comparison.json`: before/after evidence and unchanged
+  selection counts, with full copies of the changed case result.
+- `reports/module-rebinding-focused-final.txt`, `module-rebinding-check.txt` and
+  `module-rebinding-browser.txt`: final check output under `reports/`.
+- `reports/corpus-evaluation.json`: final `make evaluate` result.
+- `reports/module-rebinding-repeat-first.json` and `module-rebinding-repeat.json`:
+  repeat reports, with identical `module-rebinding-repeat-first.txt` and
+  `module-rebinding-repeat-second.txt` console output.
+
+Final corpus SHA-256:
+`41f8992ec96f473cb9bd1d0f8bd89614a42f5c49833c264f9e9f8713f09e0c94`.
+Final JSON report SHA-256:
+`cb04cff672f0f8cce1f80ca1ad84c3226242de8409ee7d767389a69d755d8a9c`.
+The corpus hash changes because annotations changed, not because labels or sources
+changed. Reproduction also needs the analyzer code and pinned environment.
+
+### Boundaries and owner handoff
+
+The audit is deliberately flow-insensitive: even unreachable, earlier or identical
+repeated bindings can suppress a precise import. Conditional imports remain
+unsupported for precise resolution. Global writes inside separate bodies,
+attribute/shared-object mutations, reflective changes, runtime imports, dispatch,
+re-export/closure propagation and full Python control flow remain outside this
+milestone. Conservative module fallback still produces the six recorded FPs;
+fixture injection and runtime imports remain the two measured misses.
+
+For an interview: “The analyzer remembered an import even after the code replaced
+it. I added a scope-aware binding check, proved the old call edge was wrong with
+failing tests, and removed it. The test still appears through conservative module
+fallback, so I reported better evidence without claiming better selection accuracy.”
+
+Review analyzer.py, the new module-binding tests, the evidence assertion, the
+metadata-only corpus diff and the new browser regression. README, ARCHITECTURE,
+CORPUS, BUILD_PLAN, PROJECT_CONTEXT and this record describe the bounded correction.
+All changes remain unstaged and uncommitted; the owner handles commit, push, PR and
+merge. Reports are ignored reproducibility artifacts, not files to stage.
+

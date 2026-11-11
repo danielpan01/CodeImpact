@@ -36,6 +36,7 @@ regenerated. The explicit equivalent is:
 .venv/bin/pytest tests/test_corpus.py tests/test_evaluation.py --no-cov
 # Scope, ordering and ambiguity regressions for the local-import extension:
 .venv/bin/pytest tests/test_local_imports.py --no-cov
+.venv/bin/pytest tests/test_module_rebinding.py --no-cov
 make check
 ```
 
@@ -114,8 +115,8 @@ workflow, not adversarial parsing isolation or a performance benchmark.
 
 ## Results and metric definitions
 
-Observed November 10, 2026, after the bounded function-local import extension,
-starting from merged corpus commit `4b50d9f`. All 25 checked-in cases match their
+Observed November 11, 2026, after bounded module-level rebinding,
+starting from merged local-import commit `68ae852`. All 25 checked-in cases match their
 explicitly recorded discrepancies. The original baseline is preserved in
 [VALIDATION.md](VALIDATION.md#bounded-analyzer-correctness-corpus--november-10-2026).
 Counts are **case/test pairs**: reused test IDs in different cases are distinct
@@ -132,7 +133,11 @@ The original corpus run had TP 22 and FN 3, precision 22/28 and recall 22/25.
 reducing FN by one and increasing TP by one. All snapshots and authored
 affected/unaffected/unclassified labels are identical to the original corpus;
 only that case's category, feature tags, description and known-miss annotation
-changed. The other 24 per-case analysis reports and classifications are identical.
+changed. At that milestone the other 24 per-case analysis reports and classifications
+were identical. The subsequent module-rebinding correction changes evidence and
+priority in one case, with **no changes to selected test IDs/order, classifications
+or aggregate metrics**. Its other 24 complete case reports remain identical to the
+pre-rebinding evaluation.
 
 - **TP:** labeled affected and selected.
 - **FN:** labeled affected and missed.
@@ -180,7 +185,7 @@ against these labels, not complete language support.
 | `invalid_revisions` | known_limitation | 1 unclassified selection; unavailable function semantics |
 | `reexports` | known_limitation | No selection discrepancy; fallback rescues unresolved alias |
 | `local_import` | supported | Previous FN fixed: direct local import resolves `test_read → read → price` |
-| `module_rebinding` | known_limitation | 1 FP: stale module alias produces a spurious resolved path |
+| `module_rebinding` | known_limitation | 1 FP remains via module/import fallback; stale resolved-call edge removed |
 | `conditional_definitions` | known_limitation | 1 FP: unindexed conditional definition and broad fallback |
 | `pytest_fixtures` | known_limitation | 1 FN: injected fixture has no test-to-fixture edge |
 | `inherited_dispatch` | known_limitation | 1 FP: fallback cannot separate inherited methods |
@@ -220,14 +225,46 @@ automatically select unrelated sibling functions. See the
 [exact resolution boundary](ARCHITECTURE.md#bounded-function-local-imports).
 
 In `module_rebinding`, `worker` imports `price`, then overwrites it with a lambda
-returning 42. The wrapper calls that lambda, but the import-alias table still
-points to `core.price`. The unaffected wrapper test is selected with a **resolved
-call** explanation. “Resolved” is a classification of the static inference, not a
-guarantee of actual runtime dispatch. This is distinct from fallback over-selection.
+returning 42. The wrapper calls that replacement. Before the correction, the
+stale import-alias table produced a misleading **resolved call** to `core.price`.
+The module-scope binding scan now removes that edge in both revisions and reports
+the ambiguity. It retains the direct import dependency, so the unaffected wrapper
+test is still a false positive, now explicitly explained as conservative fallback.
+
+| Measurement | Before module-rebinding fix | After |
+| --- | --- | --- |
+| Selected IDs | `tests/test_price.py::test_price`, `tests/test_worker.py::test_read` | Same IDs and order |
+| Classification | TP 1, FN 0, FP 1, TN 1 | Unchanged |
+| Wrapper test path | `test_read → worker.read → core.price` | `test_read → tests/test_worker.<module> → worker.<module> → core.<module>` |
+| Wrapper explanation | Resolved call path | Conservative module/import dependency |
+| Wrapper priority | 72 | 23 |
+| Directly affected test | Resolved path to `core.price`, priority 82 | Same resolved path, priority 81 |
+| Path revision | Both | Both |
+
+One call edge is removed: `worker.py::read → core.py::price`. No edge is added and
+every retained edge, ID and per-revision evidence item is unchanged. The directly
+affected test's priority decreases by one because the changed target has one fewer
+incoming dependent. The wrapper uses a longer fallback path with the existing
+lower fallback starting score. Neither change alters the ranking formula or measures
+a failure probability.
+
+The case stays `known_limitation`, and its exact FP ID remains recorded. Only the
+FP explanation, limitation text and feature tag were updated to describe fallback
+instead of stale resolved evidence. Existing snapshots, label maps and rationales
+are unchanged. The evidence-specific regression deliberately changed its expected
+reason after first failing on the corrected result; selection baselines were not
+weakened. All 31 recommendations still pass structural evidence validation.
+
+The correction requires a single direct module import with no competing binding.
+It handles assignments/deletions, definitions and compound-statement bindings while
+excluding separate function/class bodies and comprehension iteration targets.
+Bare annotations do not reassign a module name. See the
+[exact boundary](ARCHITECTURE.md#bounded-module-level-rebinding), including unsupported
+runtime/global/object mutations and deliberately conservative repeated imports.
 
 Fixture injection, runtime imports, conditional definitions, re-export aliases,
-instance/inherited dispatch and module rebinding remain unresolved. These
-limitations remain in the aggregate results without skips or xfails.
+instance/inherited dispatch and conservative module over-selection remain limitations
+in the aggregate results without skips or xfails.
 
 ## Evaluation report 1.0
 
@@ -266,6 +303,8 @@ regressions provide separate checks. Existing scoring and stable-ID regressions
 remain in the full suite. The local-import extension changes resolution and adds
 function-to-module import edges, using the existing schema, IDs and evidence types.
 The analyzer report and evaluation schema versions remain 2.0 and 1.0.
+The subsequent module-rebinding correction only suppresses unjustified call edges;
+it preserves the existing import edges and report contracts.
 
 ## Add a case or review a changed baseline
 
@@ -305,9 +344,12 @@ test actually fails; even the assertion examples here have not been executed.
    with the still-missed `pytest_fixtures` case; passing the baseline does not mean
    every dependency is resolved.
 
-A next bounded milestone is **module-level rebinding**. Add a failing regression
-for the spurious resolved call in `module_rebinding`, then suppress stale imported
-aliases after reassignment. The conservative import fallback may still select
-that unaffected test, so correcting evidence need not improve precision. Measure
-that outcome and update its explanation deliberately; do not remove its unaffected
-label or promise elimination of its FP in advance.
+4. **Evidence correction:** open `module_rebinding.json`. Explain why replacing an
+   imported callable invalidates the old resolved edge. Compare the corrected
+   fallback path and priority against the prior resolved path, while keeping the
+   test labeled unaffected and retaining the FP. This improves evidence without
+   claiming an improvement in selection accuracy.
+
+A next step is independently reviewed evaluation of conservative module fallback
+before attempting to narrow it. Keep labeled controls and any misses in the
+measurements; reducing recommendations alone does not establish better correctness.

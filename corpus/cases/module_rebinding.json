@@ -6,7 +6,7 @@
   "features": [
     "module_rebinding",
     "false_positive",
-    "stale_alias"
+    "module_fallback"
   ],
   "request": {
     "label": "module_rebinding",
@@ -41,12 +41,12 @@
   "unclassified": {},
   "known_discrepancies": {
     "false_positives": {
-      "tests/test_worker.py::test_read": "Module assignment is not tracked, so the stale import alias produces a spurious resolved-call path."
+      "tests/test_worker.py::test_read": "The stale imported call is suppressed after rebinding, but conservative module/import fallback still reaches the changed core module and selects this unaffected wrapper test."
     },
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
   "limitations": [
-    "Module-level rebinding can leave stale import aliases. Even evidence labeled resolved is static inference, not proof of runtime dispatch."
+    "Bounded module-level rebinding removes the misleading resolved-call edge, but retained module/import fallback still overselects the unaffected wrapper test."
   ]
 }
