@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "id": "module_overselection",
+  "description": "A constant-return sibling function does not depend on the changed function.",
+  "category": "known_limitation",
+  "features": [
+    "module_fallback",
+    "false_positive"
+  ],
+  "request": {
+    "label": "module_overselection",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n\ndef healthy():\n    return True\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "tests/test_health.py": "from core import healthy\n\ndef test_health():\n    assert healthy()\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n\ndef healthy():\n    return True\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "tests/test_health.py": "from core import healthy\n\ndef test_health():\n    assert healthy()\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "Calls the changed core.price function."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem.",
+    "tests/test_health.py::test_health": "Only calls core.healthy, whose body and dependencies are unchanged; price has no side effects."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {
+      "tests/test_health.py::test_health": "The test module imports core, so module-level fallback reaches the changed core module."
+    },
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Module fallback treats an import as dependency on all semantic changes in that module, overselecting an independent sibling test."
+  ]
+}

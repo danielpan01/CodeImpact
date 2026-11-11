@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "id": "nested_functions",
+  "description": "A changed nested function changes the enclosing function fingerprint too.",
+  "category": "supported",
+  "features": [
+    "nested_functions",
+    "lexical_calls"
+  ],
+  "request": {
+    "label": "nested_functions",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    def inner():\n        return 1\n    return inner()\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    def inner():\n        return 2\n    return inner()\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "price calls its nested inner function, whose returned value changes."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

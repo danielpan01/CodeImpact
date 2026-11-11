@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "id": "module_constant",
+  "description": "A module-level value changes while the dependent function body stays identical.",
+  "category": "supported",
+  "features": [
+    "module_fallback",
+    "module_constants"
+  ],
+  "request": {
+    "label": "module_constant",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "VALUE = 1\n\ndef price():\n    return VALUE\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "VALUE = 2\n\ndef price():\n    return VALUE\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "core.price reads changed VALUE even though its function AST is unchanged."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

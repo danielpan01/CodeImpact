@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "id": "deleted_function",
+  "description": "Deleting a function preserves old call evidence, while a removed test is excluded.",
+  "category": "supported",
+  "features": [
+    "deleted_symbols",
+    "removed_tests",
+    "before_evidence"
+  ],
+  "request": {
+    "label": "deleted_function",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "tests/test_removed.py": "from core import price\n\ndef test_removed():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "Survives in head but still imports the deleted core.price; removal affects its dependency availability."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

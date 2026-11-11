@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "id": "conditional_definitions",
+  "description": "A function defined under a condition is visible only through its module fallback.",
+  "category": "known_limitation",
+  "features": [
+    "conditional_definitions",
+    "module_fallback",
+    "false_positive"
+  ],
+  "request": {
+    "label": "conditional_definitions",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "if True:\n    def price():\n        return 1\n\ndef healthy():\n    return True\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "tests/test_health.py": "from core import healthy\n\ndef test_health():\n    assert healthy()\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "if True:\n    def price():\n        return 2\n\ndef healthy():\n    return True\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "tests/test_health.py": "from core import healthy\n\ndef test_health():\n    assert healthy()\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "The literal true branch defines price, whose returned value changes."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem.",
+    "tests/test_health.py::test_health": "Only calls the unchanged healthy function; the conditional function has no side effects."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {
+      "tests/test_health.py::test_health": "Both imports reach the changed module despite healthy being independent."
+    },
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Definitions under conditionals are not individually indexed. Module fallback rescues the affected test but overselects the sibling test."
+  ]
+}

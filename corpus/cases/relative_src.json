@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "id": "relative_src",
+  "description": "A src-layout package uses a relative import alias through an unchanged wrapper.",
+  "category": "supported",
+  "features": [
+    "relative_imports",
+    "src_layout",
+    "import_aliases"
+  ],
+  "request": {
+    "label": "relative_src",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "src/shop/__init__.py": "",
+        "src/shop/core.py": "def price():\n    return 1\n",
+        "src/shop/service.py": "from .core import price as quoted\n\ndef total():\n    return quoted()\n",
+        "tests/test_shop.py": "from shop.service import total\n\ndef test_total():\n    assert total() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "src/shop/__init__.py": "",
+        "src/shop/core.py": "def price():\n    return 2\n",
+        "src/shop/service.py": "from .core import price as quoted\n\ndef total():\n    return quoted()\n",
+        "tests/test_shop.py": "from shop.service import total\n\ndef test_total():\n    assert total() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_shop.py::test_total": "Calls shop.service.total, which uses the relative alias of shop.core.price."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

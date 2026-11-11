@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "id": "import_aliases",
+  "description": "Module and function import aliases both reach the changed definition.",
+  "category": "supported",
+  "features": [
+    "import_aliases",
+    "absolute_imports"
+  ],
+  "request": {
+    "label": "import_aliases",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_alias.py": "import core as pricing\nfrom core import price as quoted\n\ndef test_module_alias():\n    assert pricing.price() == 1\n\ndef test_function_alias():\n    assert quoted() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "tests/test_alias.py": "import core as pricing\nfrom core import price as quoted\n\ndef test_module_alias():\n    assert pricing.price() == 1\n\ndef test_function_alias():\n    assert quoted() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_alias.py::test_module_alias": "pricing is an alias for core; pricing.price reads the changed return.",
+    "tests/test_alias.py::test_function_alias": "quoted is an alias for the changed core.price function."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

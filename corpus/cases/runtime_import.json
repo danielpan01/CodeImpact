@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "id": "runtime_import",
+  "description": "An importlib string and getattr call hide the target from static resolution.",
+  "category": "known_limitation",
+  "features": [
+    "runtime_imports",
+    "dynamic_calls",
+    "missed_dependency"
+  ],
+  "request": {
+    "label": "runtime_import",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "import importlib\n\ndef read():\n    module = importlib.import_module(\"core\")\n    return getattr(module, \"price\")()\n",
+        "tests/test_worker.py": "from worker import read\n\ndef test_read():\n    assert read() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n",
+        "worker.py": "import importlib\n\ndef read():\n    module = importlib.import_module(\"core\")\n    return getattr(module, \"price\")()\n",
+        "tests/test_worker.py": "from worker import read\n\ndef test_read():\n    assert read() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_price.py::test_price": "Directly calls the changed core.price function.",
+    "tests/test_worker.py::test_read": "The literal runtime module/name pair selects core.price, whose result changes."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {
+      "tests/test_worker.py::test_read": "The string-based import and getattr call create no static edge to core.price."
+    }
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": [
+    "Runtime imports and reflective calls are not resolved; the dynamic caller test is missed even with a direct positive control."
+  ]
+}

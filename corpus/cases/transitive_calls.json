@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "id": "transitive_calls",
+  "description": "An unchanged wrapper passes through the changed return value.",
+  "category": "supported",
+  "features": [
+    "transitive_calls",
+    "absolute_imports"
+  ],
+  "request": {
+    "label": "transitive_calls",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 1\n",
+        "service.py": "from core import price\n\ndef total():\n    return price() * 2\n",
+        "tests/test_service.py": "from service import total\n\ndef test_total():\n    assert total() == 2\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price():\n    return 2\n",
+        "service.py": "from core import price\n\ndef total():\n    return price() * 2\n",
+        "tests/test_service.py": "from service import total\n\ndef test_total():\n    assert total() == 2\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_service.py::test_total": "Calls service.total, which calls the changed core.price."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

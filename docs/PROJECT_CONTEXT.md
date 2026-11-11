@@ -61,7 +61,18 @@ its explanation. Map, Tests, demo, uploads and public PR analysis remain availab
 Exports contain full source for changed files; previews are bounded and escaped.
 Snapshot input is unchanged; old reports must be re-analyzed. See ARCHITECTURE.md
 for the contract and VALIDATION.md for observed regression-first and final results.
-These new task edits remain unstaged and uncommitted; only the user may commit/push.
+That work is present in clean starting commit `546ee8e` for the corpus milestone.
+
+The bounded analyzer correctness corpus was implemented locally November 10, 2026,
+starting on `main` at `546ee8e295c513d3137c4446c7ddde0b63e3075a`. It adds 25 complete
+JSON cases (14 supported demonstrations, 11 known-limitation cases), strict label
+validation, typed-path checks, exact discrepancy baselines and a deterministic
+`make evaluate` workflow. Overall authored-label agreement: TP 22, FN 3, FP 6, TN 26;
+two unclassified recommendations remain separate. Precision 22/28, recall 22/25.
+The analyzer and dashboard were not changed. See CORPUS.md and the separate
+VALIDATION.md milestone for interpretation and observed checks. These corpus edits
+remain unstaged and uncommitted; only the user may commit/push. No new hosted result,
+human label review, deployment or cross-environment synchronization is claimed.
 
 Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy
@@ -86,8 +97,10 @@ Sources checked during setup:
 ## Build strategy
 
 Use Codex to implement bounded slices. Review and understand each before making your
-own commit. Sequence: own the engine → labeled correctness corpus → real public PR
-ingestion → durable jobs/private authorization/deployment → measured evaluation.
+own commit. Engine, public PR ingestion, revision evidence and the authored corpus
+are present locally. Next: improve one measured miss (function-local imports), then
+plan independently reviewed real-repository evaluation. Durable jobs, private
+authorization and deployment need their own demonstrated requirements.
 
 Most impressive evidence: show a real change, traverse its dependency path to a test,
 retain deleted dependencies, label uncertainty, compare against known affected tests,

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "id": "renamed_module",
+  "description": "Moving a function to another module is represented as removal plus addition.",
+  "category": "supported",
+  "features": [
+    "rename_remove_add",
+    "deleted_symbols",
+    "before_evidence"
+  ],
+  "request": {
+    "label": "renamed_module",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "old.py": "def price():\n    return 1\n",
+        "tests/test_old.py": "from old import price\n\ndef test_old():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "tests/test_old.py": "from old import price\n\ndef test_old():\n    assert price() == 1\n",
+        "new.py": "def price():\n    return 1\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_old.py::test_old": "Still imports old.price, which is removed; the added new.price does not repair that import."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

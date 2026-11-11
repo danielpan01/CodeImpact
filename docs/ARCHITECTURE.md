@@ -173,6 +173,29 @@ code, and no current branch content is substituted. PR before means merge base;
 after means pinned head. Upload/demo/local-Git source comes from the exact request
 already analyzed. Network and snapshot ingestion limits below are unchanged.
 
+## Authored correctness corpus
+
+`corpus/cases/*.json` contains complete base/head source strings and independently
+authored dependency labels. `corpus.py` validates bounded inputs, disjoint complete
+head-test classifications and explicit discrepancy annotations. Its AST discovery
+check is separate from analyzer recommendation generation; neither executes source.
+
+`python -m codeimpact.evaluate` invokes the existing analyzer, validates typed paths
+and revision evidence, compares selections to labels, and emits readable results
+plus a separate evaluation schema **1.0**. It preserves analysis report **2.0** and
+removes only elapsed timing from the embedded report. JSON is deterministic; cases
+are sorted and no timestamps are added. Known limitations remain in overall totals
+as well as their own group. Exact FP/FN and unclassified-selection baselines fail
+on any change, including an improvement requiring reviewed annotations.
+
+Precision/recall use labeled case/test pairs only; all counts and denominators are
+reported, with null for zero denominators. The measurement is agreement with
+authored dependency labels, not production accuracy or runtime failure prediction.
+Re-indexed evidence checks establish structural consistency, not independent proof
+of Python semantics. See [the corpus guide](CORPUS.md) for limits, schema, all 25
+cases, observed mistakes and the workflow for adding a case. The analyzer, scoring,
+stable IDs, input contract and dashboard are unchanged by this milestone.
+
 ## Public GitHub ingestion
 
 `github.py` owns URL validation, provider models, immutable-object reads and network

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "id": "changed_test",
+  "description": "Directly modified and newly added tests are relevant themselves.",
+  "category": "supported",
+  "features": [
+    "changed_tests",
+    "added_tests",
+    "singleton_paths"
+  ],
+  "request": {
+    "label": "changed_test",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "tests/test_changed.py": "def test_changed():\n    assert 1 == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "tests/test_changed.py": "def test_changed():\n    assert 2 == 2\n",
+        "tests/test_new.py": "def test_new():\n    assert True\n"
+      }
+    }
+  },
+  "expected_affected": {
+    "tests/test_changed.py::test_changed": "Its own assertion AST changes, so it requires direct review.",
+    "tests/test_new.py::test_new": "A new test requires review even without a production dependency change."
+  },
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {},
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [],
+  "limitations": []
+}

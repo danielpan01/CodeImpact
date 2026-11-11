@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "id": "invalid_revisions",
+  "description": "Two unparseable revisions are distinguishable without inventing function semantics.",
+  "category": "known_limitation",
+  "features": [
+    "invalid_syntax",
+    "unclassified"
+  ],
+  "request": {
+    "label": "invalid_revisions",
+    "base": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price(:\n    return 1\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    },
+    "head": {
+      "files": {
+        "control.py": "def healthy():\n    return True\n",
+        "tests/test_control.py": "from control import healthy\n\ndef test_control():\n    assert healthy()\n",
+        "core.py": "def price(:\n    return 2\n",
+        "tests/test_price.py": "from core import price\n\ndef test_price():\n    assert price() == 1\n"
+      }
+    }
+  },
+  "expected_affected": {},
+  "expected_unaffected": {
+    "tests/test_control.py::test_control": "Calls only unchanged control.healthy in an independent subsystem."
+  },
+  "unclassified": {
+    "tests/test_price.py::test_price": "Both revisions are invalid; the intended runtime dependency change cannot be classified from these broken definitions."
+  },
+  "known_discrepancies": {
+    "false_positives": {},
+    "false_negatives": {}
+  },
+  "expected_unclassified_recommendations": [
+    "tests/test_price.py::test_price"
+  ],
+  "limitations": [
+    "Raw-source fingerprints distinguish invalid revisions, but function-level dependency semantics remain unavailable. The selected importing test is reported outside precision/recall."
+  ]
+}
