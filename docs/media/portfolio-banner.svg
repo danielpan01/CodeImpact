@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="340" viewBox="0 0 1280 340" role="img" aria-labelledby="title desc">
+  <title id="title">CodeImpact</title>
+  <desc id="desc">Understand the change. Trace what follows. Python change-impact analysis, actively in development.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0d1714"/><stop offset="1" stop-color="#192e24"/></linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#b7f2cf" opacity=".08"/></pattern>
+  </defs>
+  <rect width="1280" height="340" rx="18" fill="url(#bg)"/>
+  <rect width="1280" height="340" rx="18" fill="url(#grid)"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="48" y="40" width="44" height="44" rx="12" fill="#b0f1ce"/>
+    <text x="70" y="71" text-anchor="middle" font-size="27" font-weight="700" fill="#163527">ci</text>
+    <text x="110" y="68" font-size="14" font-weight="700" fill="#a2bfae" letter-spacing="2">DEVELOPER TOOLS</text>
+    <rect x="992" y="44" width="240" height="33" rx="16" fill="#263b2f" stroke="#46614c"/>
+    <circle cx="1012" cy="60" r="4" fill="#e9c77a"/>
+    <text x="1030" y="65" font-size="12" font-weight="700" fill="#e6d7b0" letter-spacing="1.4">IN DEVELOPMENT</text>
+    <text x="48" y="168" font-size="76" font-weight="700" letter-spacing="-3" fill="#eef6f0">CodeImpact</text>
+    <text x="50" y="214" font-size="24" fill="#b4d7c3">Understand the change. Trace what follows.</text>
+    <path d="M48 259 H1232" stroke="#3a5043"/>
+    <text x="50" y="302" font-size="14" font-weight="700" letter-spacing="1.2" fill="#a8d8bb">AST ANALYSIS</text>
+    <text x="249" y="302" font-size="14" font-weight="700" letter-spacing="1.2" fill="#a8d8bb">REVISION EVIDENCE</text>
+    <text x="506" y="302" font-size="14" font-weight="700" letter-spacing="1.2" fill="#a8d8bb">TEST PRIORITIZATION</text>
+    <text x="1230" y="302" text-anchor="end" font-size="14" fill="#8eac9c">DANIEL PAN</text>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M825 142 H930 V118 H1045 M930 142 V202 H1045 M1069 118 H1140 V158 H1200 M1069 202 H1140 V158" stroke="#70977e" stroke-width="2"/>
+    <rect x="801" y="118" width="48" height="48" rx="12" fill="#3f302a" stroke="#f5a38c" stroke-width="2"/>
+    <rect x="1021" y="94" width="48" height="48" rx="12" fill="#253e30" stroke="#b0f1ce" stroke-width="2"/>
+    <rect x="1021" y="178" width="48" height="48" rx="12" fill="#253e30" stroke="#b0f1ce" stroke-width="2"/>
+    <circle cx="1200" cy="158" r="13" fill="#b0f1ce" stroke="#b0f1ce"/>
+    <path d="M817 142 H833 M825 134 V150" stroke="#f5a38c" stroke-width="2"/>
+    <path d="M1036 118 L1042 124 L1054 111 M1036 202 L1042 208 L1054 195" stroke="#b0f1ce" stroke-width="2"/>
+  </g>
+</svg>

@@ -21,5 +21,7 @@ pyproject.toml. The lock is a version-pinned development environment, not a
 cryptographically hashed supply-chain lock. Update intentionally and verify on a
 fresh environment. npm uses package-lock.json and `npm ci`.
 
-CI is included but its hosted result is unavailable until the first user push.
+Hosted validation runs through [Quality checks](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml).
+Check the run for the exact commit you are reviewing. Detailed setup and analysis
+examples are in the [usage guide](docs/USAGE.md).
 
