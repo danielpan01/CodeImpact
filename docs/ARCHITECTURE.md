@@ -408,6 +408,22 @@ Metrics include module nodes where labeled. Search filters the visible graph onl
 it does not recompute recommendations. The UI exports a report; its upload expects
 the separate snapshot-pair input schema.
 
+Test review controls live in the application shell, so query/category/sort survive
+view changes. Pure presentation helpers filter a new array and use locale-independent
+code-point ordering with full-symbol tie breakers. Default analysis order, original
+row ranks, scores and the exported report remain unchanged. Unknown explanation
+strings get an explicit Other category. Hidden selections retain their inspector.
+New analyses reset both test and map controls.
+
+Focused maps use the recommendation's exact `evidence_path` and `evidence_edges`,
+including module nodes regardless of the overview toggle. No edges are synthesized.
+Focus stays pinned while inspecting a dependency. Wider screens lay paths left to
+right; narrow screens stack them. A symbol picker frames individual steps, while
+Fit view frames all visible measured cards. Reset clears graph controls and fits the
+overview. Measured node bounds and a saved viewport remain presentation state;
+neither enters report data. The overview layout algorithm is unchanged. Large
+reports retain all rows/nodes; no virtualization or layout dependency was added.
+
 The Changes view groups added/modified/removed symbols by file. Open changed code
 from a recommendation preserves the selected test's explanation and opens the last
 node in its path. Selecting another change directly shows that symbol's own details.
@@ -416,7 +432,10 @@ and multiline parentheses. Module ranges use Python physical newlines (LF, CRLF,
 not Unicode separators embedded in string literals. Existing node `line` still points
 to the definition; changed-code ranges may begin earlier at its decorators.
 
-Source is passed only as React text children, never HTML or executable source. Each
+A display-only lexical scanner colors keywords, numbers, comments and quoted strings
+in the already-bounded preview. Token spans remain React text children; concatenated
+source content is unchanged. This is approximate coloring, not Python parsing or
+validation. Source is never HTML or executable code. Each
 pane displays at most 120 lines, 12,000 UTF-16 source code units including rendered
 newlines, and 500 code units of source per line (excluding its newline). Generated
 line numbers and truncation labels are outside that source-character budget.

@@ -1915,3 +1915,112 @@ private-repository support or hosting were added. Remote CI has not run for thes
 Ignored local evidence: `reports/frontend-before/`, `reports/frontend-after/`,
 `reports/frontend-preservation.json`, `reports/frontend-{check,browser,focused-final}.log`
 and the three `frontend-evaluate*.log` files. All changes remain unstaged/uncommitted.
+
+## Frontend milestone 2 — November 12, 2026
+
+At the owner's explicit request to push and merge first, the completed milestone 1
+work was committed as `567e19b13457b8be93cb544550d9effcd8ce8388`, pushed and opened as
+[PR #7](https://github.com/danielpan01/CodeImpact/pull/7). Its
+[Quality checks run](https://github.com/danielpan01/CodeImpact/actions/runs/43298739605)
+passed `make check`, all three offline evaluations and the browser suite before
+squash merge at `37781e658fc6c2c8f527e87cf196f985818edaa0`.
+Milestone 2 started from that merged tree on local branch
+`codex/frontend-interactions`. Only milestone 1 was published. Milestone 2 changes
+remain unstaged/uncommitted, with no milestone 2 PR or remote CI claim.
+
+### Delivered interactions
+
+Tests supports case-insensitive literal search over test/file names, explanation
+categories with full-report counts, deterministic analysis/name/file/ascending-priority
+ordering, filtered/total counts and reset. Multiple query words must all match.
+Sorting copies the filtered array and uses code-point ordering with full-symbol tie
+breakers. Original row ranks and scores remain visible. Unknown explanation strings
+have an Other category. Filtering out a selected test keeps its evidence and offers
+Show selected test, which restores the list and focuses that row. Controls persist
+across views and reset on new analysis. Exports retain the exact original report.
+
+Map highlights the selected evidence nodes and edges and mutes the surrounding
+context. Focus uses only the report's recorded path/edge IDs, including module nodes
+regardless of the overview toggle. It stays pinned while inspecting a dependency.
+Paths run left to right on wider screens and top to bottom on narrow screens.
+Jump to path symbol centers an individual step at readable scale; Fit view frames
+all visible measured cards. Reset clears map search/module/focus settings and fits
+the overview. Pan/zoom persists across view changes. Calls stay solid, fallback
+edges dashed, direction remains caller → dependency, and mixed/deleted revision
+context remains explicit. The inspector numbers trail steps and opens focused Map
+without discarding expanded source evidence or the route to changed code.
+
+Changes retains file/symbol navigation, added/modified/removed status and all source
+states. Lightweight lexical coloring uses escaped React text spans over the existing
+bounded preview. Concatenating the spans preserves source text, including malformed
+Python and HTML-like strings. It is approximate coloring, not parsing or execution.
+The 120-line / 12,000-code-unit / 500-code-unit-per-line bounds are unchanged.
+
+### Observed verification
+
+| Check | Observed result |
+| --- | --- |
+| Focused review regressions | 54 passed across desktop and Pixel 7 projects |
+| `make check` | Passed: Ruff lint/format, strict mypy, 653 Python tests, TypeScript and Vite build |
+| `make evaluate` | Passed; authored output byte-identical to the pre-milestone copy |
+| `make evaluate-real` | Passed; v1 output byte-identical to the pre-milestone copy |
+| `make evaluate-real-v2` | Passed; v2 output byte-identical to the pre-milestone copy |
+| `cd web && npm run test:e2e` | 74 passed: all 50 existing checks plus 24 new checks |
+| `cd web && npm run format:check` | Passed |
+| Preservation | All 107 protected files retained their hashes: 104 existing files under `src`, `tests`, `corpus`, plus report types, package manifest and lockfile |
+| Visual/browser diagnostics | No page overflow or console/page errors in the five-size demo and six real-case/device captures |
+
+New checks cover literal/combined searches, category classification including unknown
+reasons, deterministic sort ties, non-mutation, zero matches, keyboard reveal/reset,
+selection/expanded-evidence retention, complete exports after filtering, exact path
+node/edge identities and direction, fallback module visibility/dashes, full fit/reset,
+an eleven-symbol path, viewport restoration, deleted/mixed focus, new-analysis reset,
+source escaping/coloring and exact preview character budgets. The pinned Slugify
+ASCII/boundary and Cachetools LFU cases exercise 100/108/150 recommendations with the
+real local ingestion/analyzer. Existing PR provenance, loading/error/retry, bounds,
+empty/absent/parse-error and revision workflows remain covered.
+
+Development regressions exposed accessible-label lookup and graph framing issues.
+The final graph waits for measured controlled nodes and the position commit before
+reading bounds; its viewport restoration waits for the viewport to initialize.
+The original fit-containment assertions remain intact. Browser runs required the
+existing macOS sandbox exception. Non-failing Starlette/httpx deprecation and Node
+color-environment warnings remain. No new dependency was installed or added.
+
+All three evaluation SHA-256 values match the milestone 1 table above. Authored
+counts remain 23 TP / 0 FP / 2 FN / 32 TN; v1 remains 45 TP / 0 FP / 0 FN / 123 TN;
+v2 remains 109 TP / 284 FP / 0 FN / 166 TN, including 13/22 uncertain selections.
+All three v2 baseline receipts, labels, source, provenance and review metadata remain
+unchanged. No analyzer improvement or independent accuracy validation is claimed.
+
+### Rendering observations and visual review
+
+Before adding controls, a local Chromium/Playwright observation of LFU measured
+151.4 ms from API response completion to the observed 150-row list, and 323.7 ms from
+Map click to the observed 585 non-module nodes. The same script after implementation
+observed 143.1 ms and 300.2 ms respectively. Whole-document DOM counts were 5,267 →
+5,290 in Tests and 8,522 → 8,529 in Map. These are single local observations including
+automation overhead, not a benchmark, performance regression gate or speedup claim.
+They did not demonstrate a need for virtualization or a graph-layout dependency;
+all original rows/nodes remain available. Large overview graphs still require
+search/pan/zoom; focused paths and individual-step navigation provide readable detail.
+
+Inspected the demo at 1440×900, 1280×800, 768×1024, 390×844 and 360×844, and both
+Slugify cases plus LFU on desktop and phone. Screenshots use actual API results.
+Graph fitting was refined after the first captures; the final wide path uses the
+available horizontal space. Filters and selectors wrap within phone width. Source
+coloring retains the before/after hierarchy and line numbers.
+
+- [Tests](media/milestone2-tests.png), [focused Map](media/milestone2-map.png), [changed code](media/milestone2-changes.png).
+- [Phone Tests](media/milestone2-mobile-tests.png), [phone evidence](media/milestone2-mobile-evidence.png), [phone fallback path](media/milestone2-mobile-map.png), [phone code](media/milestone2-mobile-changes.png).
+- Milestone 1 screenshots remain at their original paths for comparison.
+
+This is agent visual/keyboard verification in Chromium, not a complete accessibility
+audit, physical-phone/Safari check, usability study or independent developer review.
+Dark theme and broader device/accessibility polish remain milestone 3. No hosting,
+accounts, jobs, storage, private-repository support or live GitHub ingestion changes
+were introduced.
+
+Ignored local evidence: `reports/milestone2-before/`, `reports/milestone2-after/`,
+`reports/milestone2-preservation.json`, `reports/milestone2-{check,browser,focused}.log`,
+the three `milestone2-evaluate*.log` files and the local capture/measurement scripts.

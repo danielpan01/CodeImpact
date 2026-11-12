@@ -10,7 +10,10 @@ below are historical records, not descriptions of uncommitted work today.
 The owner has prioritized a substantial frontend redesign next. Follow the active
 sequence in [BUILD_PLAN.md](BUILD_PLAN.md) and the detailed [frontend roadmap](FRONTEND_ROADMAP.md):
 visual foundation/complete workspace, graph/test/code interaction refinement, then
-responsive/accessibility/theme polish. These are planned features. Keep the analyzer,
+responsive/accessibility/theme polish. Milestone 1 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7),
+commit `37781e658fc6c2c8f527e87cf196f985818edaa0`, after its CI passed. Milestone 2 is
+implemented locally on `codex/frontend-interactions` and remains unstaged/uncommitted;
+milestone 3 is next. See VALIDATION.md for actual checks. Keep the analyzer,
 report contracts and all evaluation baselines fixed during this work. Human label
 review and bounded Cachetools fallback improvements remain subsequent work; hosting
 and infrastructure follow a demonstrated pilot need.

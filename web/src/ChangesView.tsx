@@ -1,4 +1,5 @@
 import { Icon } from "./Icon";
+import { colorSource } from "./source-tokens";
 import type {
   Report,
   SourceRange,
@@ -41,6 +42,7 @@ function SourcePane({
     truncated ||= clipped;
     preview.push({ number: start + i, text: shown, clipped });
   }
+  const colored = colorSource(preview.map((line) => line.text));
   return (
     <section className="source-pane" aria-label={`${label} source`}>
       <h4>
@@ -61,7 +63,7 @@ function SourcePane({
           {!canShow && <p>Symbol absent in this parsed revision.</p>}
           {preview.length > 0 && (
             <pre tabIndex={0} aria-label={`${label} code, scroll to read`}>
-              {preview.map((line) => (
+              {preview.map((line, index) => (
                 <span
                   className="source-line"
                   data-line={line.number}
@@ -71,7 +73,15 @@ function SourcePane({
                     {line.number}
                   </span>
                   <code>
-                    {line.text}
+                    {colored[index].map((token, i) =>
+                      token.kind === "plain" ? (
+                        token.text
+                      ) : (
+                        <span className={`syntax-${token.kind}`} key={i}>
+                          {token.text}
+                        </span>
+                      ),
+                    )}
                     {line.clipped && (
                       <span className="clipped"> … [line truncated]</span>
                     )}

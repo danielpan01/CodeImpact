@@ -11,6 +11,8 @@ import { TestsView } from "./TestsView";
 import { DependencyMap } from "./DependencyMap";
 import { ChangesView } from "./ChangesView";
 import { EvidenceInspector } from "./EvidenceInspector";
+import { defaultTestControls } from "./test-review";
+import type { Viewport } from "@xyflow/react";
 
 type View = "tests" | "graph" | "changes";
 function App() {
@@ -20,6 +22,9 @@ function App() {
   const [selectedChange, setSelectedChange] = useState<string | null>(null);
   const [showModules, setShowModules] = useState(false);
   const [query, setQuery] = useState("");
+  const [testControls, setTestControls] = useState(defaultTestControls);
+  const [focusedPath, setFocusedPath] = useState<string | null>(null);
+  const mapViewport = useRef<Viewport | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [view, setView] = useState<View>("tests");
@@ -106,6 +111,10 @@ function App() {
           null,
       );
       setQuery("");
+      setShowModules(false);
+      setTestControls(defaultTestControls);
+      setFocusedPath(null);
+      mapViewport.current = null;
       setView("tests");
       setInputOpen(false);
       setFocusRequest({ target: "loaded" });
@@ -359,6 +368,8 @@ function App() {
                 </div>
                 {view === "tests" ? (
                   <TestsView
+                    controls={testControls}
+                    setControls={setTestControls}
                     report={report}
                     selected={selected}
                     onSelect={showEvidence}
@@ -368,6 +379,9 @@ function App() {
                   />
                 ) : view === "graph" ? (
                   <DependencyMap
+                    focusedPath={focusedPath}
+                    setFocusedPath={setFocusedPath}
+                    viewport={mapViewport}
                     report={report}
                     selected={selected}
                     onSelect={showEvidence}
@@ -388,6 +402,12 @@ function App() {
                 )}
               </section>
               <EvidenceInspector
+                focusPath={(id) => {
+                  setFocusedPath(id);
+                  mapViewport.current = null;
+                  changeView("graph");
+                  setFocusRequest({ target: "explorer" });
+                }}
                 report={report}
                 selected={selected}
                 openCode={openCode}

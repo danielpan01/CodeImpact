@@ -12,9 +12,9 @@ CodeImpact turns a code change into an inspectable dependency graph and a priori
 
 ## See the impact
 
-![CodeImpact Tests workspace and evidence inspector](docs/media/desktop.png)
+![CodeImpact Tests workspace and evidence inspector](docs/media/milestone2-tests.png)
 
-*The light analysis workspace opens in Tests, with a coordinated evidence inspector. [Phone evidence](docs/media/mobile.png) · [Changed code](docs/media/changes.png) · [Before the redesign](docs/media/before-desktop.png).*
+*The light analysis workspace opens in Tests, with a coordinated evidence inspector. [Phone evidence](docs/media/milestone2-mobile-evidence.png) · [Changed code](docs/media/milestone2-changes.png) · [Before the redesign](docs/media/before-desktop.png).*
 
 A change to `discount(total)` can affect an unchanged API test through `test_create_order → create_order → checkout → discount`. CodeImpact makes that relationship visible, then lets you inspect each dependency and the changed code.
 
@@ -33,7 +33,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
-| **Review workspace** | Light theme, compact report context, complete Tests list, Map, before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
+| **Review workspace** | Light theme, compact report context, searchable/filterable Tests with deterministic sorting, focused evidence paths in Map, syntax-colored before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
 | **Inspectable reports** | Exportable JSON, source-export disclosure, exact analyzed GitHub revisions, and expandable before/after/mixed evidence. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
@@ -67,8 +67,8 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 
 1. Choose **Load demo** on the input screen; it analyzes a discount change from 10% to 15% and opens **Tests**.
 2. Select `test_create_order` and follow its dependency path. On phones/tablets, use **Back to results** to return from evidence.
-3. Choose **Open changed code** to inspect the before/after implementation.
-4. Explore the **Map**, inspect each edge's evidence, and export the report. **New analysis** reopens PR input, snapshot upload, and the demo.
+3. Choose **Focus path in Map**, jump to a dependency, or use **Fit view** to see the entire path.
+4. Choose **Open changed code** to inspect the before/after implementation. Search or filter **Tests**, then export the complete report. **New analysis** reopens PR input, snapshot upload, and the demo.
 
 You can also paste a public GitHub PR URL or upload snapshot pairs. See the [usage guide](docs/USAGE.md) for CLI examples, a deleted-function fixture, API requests, configuration, and troubleshooting.
 
@@ -187,14 +187,13 @@ npm run test:e2e
 
 CodeImpact is a developer review tool. Static Python analysis is incomplete for dynamic dispatch, runtime imports, inheritance, re-exports, and pytest fixtures. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
 
-[Frontend milestone 1](docs/FRONTEND_ROADMAP.md) is implemented locally: a warm light
-workspace, dark navigation, shared controls, a Tests-first review flow, redesigned
-Map/Changes/source panes, and an evidence panel with phone/tablet back navigation.
-The screenshots show the running application with real analysis results. Analyzer
-behavior and all evaluation baselines are unchanged.
+[Frontend milestone 1](docs/FRONTEND_ROADMAP.md) merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7).
+Milestone 2 is implemented locally: test/file search, explanation filters, deterministic
+sorting, selected-path focus and symbol navigation, saved map pan/zoom, and safe source
+coloring. Filtering changes only the display; exports retain the complete report.
+Analyzer behavior and all evaluation baselines are unchanged.
 
-Next is interaction refinement: test search/filter/sort, graph path focus and large-report
-navigation, then dark theme and further accessibility/device polish. No independent
+Next is milestone 3: dark theme and further accessibility/device polish. No independent
 usability study or accessibility certification is claimed.
 
 Independent review of both real-source datasets and bounded protocol-aware fallback
