@@ -272,7 +272,14 @@ test("long focused paths can jump to their endpoint and preserve viewport across
     .poll(async () => {
       const r = await last.boundingBox();
       const c = await page.getByTestId("dependency-graph").boundingBox();
-      return !!r && !!c && r.y >= c.y && r.y + r.height <= c.y + c.height;
+      return (
+        !!r &&
+        !!c &&
+        r.x >= c.x &&
+        r.x + r.width <= c.x + c.width &&
+        r.y >= c.y &&
+        r.y + r.height <= c.y + c.height
+      );
     })
     .toBe(true);
   const transform = await page

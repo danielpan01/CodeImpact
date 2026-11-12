@@ -2024,3 +2024,113 @@ were introduced.
 Ignored local evidence: `reports/milestone2-before/`, `reports/milestone2-after/`,
 `reports/milestone2-preservation.json`, `reports/milestone2-{check,browser,focused}.log`,
 the three `milestone2-evaluate*.log` files and the local capture/measurement scripts.
+
+## Frontend milestone 3 — November 12, 2026
+
+At the owner's explicit request, completed milestone 2 was committed as
+`1e5d37ee0394c0c32c2ba670890a01900751be89`, pushed and opened as
+[PR #8](https://github.com/danielpan01/CodeImpact/pull/8). Its
+[Quality checks run](https://github.com/danielpan01/CodeImpact/actions/runs/43303869032)
+passed `make check`, all three evaluations and the browser suite before squash merge
+at `01dc2eacac3880277f229a256265dc128b2f0224`. Milestone 3 started from that merged
+tree on `codex/frontend-polish`. Only milestone 2 was published; the new milestone 3
+changes remain unstaged/uncommitted. No remote milestone 3 CI or deployment is claimed.
+
+### Delivered behavior
+
+Shared light and graphite dark tokens cover input, Tests, Map, source coloring,
+revision evidence and recovery states. Appearance follows the OS until chosen, then
+saves only `light`/`dark` under `codeimpact.theme` and synchronizes open tabs. Blocked
+storage falls back to an in-memory choice. The first paint applies the preference;
+switching themes preserves the report, export, selection, filters, expanded evidence
+and map viewport. No new dependency or report persistence was added.
+
+Compact review controls have larger touch targets, keyboard focus remains visible,
+and returning from evidence keeps the selected row below the sticky navigation.
+Escape dismisses evidence or reopened input and restores focus. A desktop inspector
+that becomes hidden during resize opens as the compact evidence pane. Tracking the
+last real focus target handles engines that blur hidden elements first; listening to
+resize as well as media-query events handles WebKit's coalesced breakpoint changes.
+Resizing an already visible inspector retains focus within its content. Symbol jumps
+take priority over pending graph framing, preventing an initial-frame WebKit race.
+
+Input, rate-limit, network and unreadable-response failures have distinct headings,
+preserve API explanations and focus recovery actions. Retry resends the same PR URL
+or parsed snapshot; snapshot input is held only in memory and cleared on success.
+Invalid JSON directs users to choose a valid snapshot pair. Loading announces the
+operation without invented completion percentages. Empty filtered maps offer Show
+all symbols; empty recommendations retain the existing safety caveat and code route.
+
+### Observed verification
+
+| Check | Observed result |
+| --- | --- |
+| Focused release regressions | 60 passed across Chromium desktop/Pixel 7, Firefox desktop, WebKit desktop/iPhone 13 |
+| WebKit compact focus regression after final fix | 10 consecutive repetitions passed, including focus retention within an already open inspector |
+| `make check` | Passed: Ruff lint/format, strict mypy, 653 Python tests, TypeScript and Vite build |
+| Final frontend build and formatting | Passed; HTML bootstrap formatting checked separately |
+| `make evaluate` | Passed; authored output byte-identical to merged milestone 2 |
+| `make evaluate-real` | Passed; v1 output byte-identical to merged milestone 2 |
+| `make evaluate-real-v2` | Passed; v2 output byte-identical to merged milestone 2 |
+| `cd web && npm run test:e2e -- --workers=3` | 134 passed: all 74 existing checks plus 60 release checks |
+| Preservation | 106 of 107 protected files byte-identical; the only difference is the package script installing Firefox/WebKit alongside Chromium; dependency versions and lockfile unchanged |
+| Visual diagnostics | No page overflow or console/page errors in the ten demo size/theme captures; no overflow or page errors in the real-case and edge-state captures |
+
+The 12 new release scenarios run in five browser configurations, preserving all 74
+existing desktop/phone checks. They cover OS/saved/cross-tab/blocked-storage themes,
+unchanged full exports, retained review state, graph viewport and edge colors,
+keyboard/Escape navigation, compact touch targets, breakpoint focus recovery,
+same-snapshot network retry, invalid JSON/PR, rate limits, unreadable responses,
+reduced motion, empty results, real large reports and mixed/deleted source evidence.
+The existing long-path check now verifies horizontal as well as vertical centering.
+Both the local browser-install script and CI configuration include all three engines.
+WebKit with Safari/iPhone emulation is not a physical Safari or iPhone test.
+
+Checks verify 18 semantic text/background pairs at a contrast ratio of at least 4.5
+in both themes and input borders at least 3 against panels. Visible focus, sampled
+44-pixel compact targets, reduced-motion styles and keyboard dismissal are asserted.
+A separate keyboard pass verified the skip link and header → report actions → view
+navigation → search tab order at desktop/phone sizes in both themes. These are bounded
+checks, not an accessibility certification or exhaustive assistive-technology audit.
+
+Development checks exposed and resolved the WebKit framing/focus issues above.
+One intermediate run was invalidated by editing the application entry point during
+Vite's live reload; the final full run uses frozen application files. Browser launch
+required the existing macOS sandbox exception. Non-failing Starlette/httpx deprecation
+and Node color-environment warnings remain.
+
+### Baseline preservation and visual review
+
+All 104 existing files under `src`, `tests` and `corpus`, plus the TypeScript report
+contract and dependency lockfile, retain their pre-milestone SHA-256 values. The
+package manifest changed only its browser-install command. Evaluation outputs retain
+the exact SHA-256 values recorded for milestones 1 and 2 above: authored
+`4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b`, v1
+`258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae`, v2
+`fc33aede311104cd63bdef021484f8be81471a588c9d9cd486230937be491fb9`.
+Counts remain 23 TP / 0 FP / 2 FN / 32 TN authored; 45 TP / 0 FP / 0 FN / 123 TN v1;
+109 TP / 284 FP / 0 FN / 166 TN v2, plus 13/22 uncertain selections. Scores, IDs,
+edge directions, revision evidence, input/preview bounds, labels, provenance and all
+three v2 measurement receipts are unchanged. No analyzer accuracy improvement is claimed.
+
+Reviewed the running demo at 1440×900, 1280×800, 768×1024, 390×844 and 360×844 in both
+themes, including reduced motion at tablet size. Both Slugify cases and Cachetools
+LFU were captured on desktop and phone in both themes, retaining 100/108/150
+recommendations. Additional captures cover empty recommendations, deleted symbols,
+mixed revisions, long file/test names, loading and invalid input. Source fixtures go
+through the real API; loading captures hold an actual request, and no source is executed.
+The screenshots are inspected captures, not pixel-golden tests; no UI content is masked.
+
+- [Light Tests](media/milestone3-light-tests.png), [dark Tests](media/milestone3-dark-tests.png).
+- [Dark focused Map](media/milestone3-dark-map.png), [changed code](media/milestone3-dark-changes.png).
+- [Phone Tests](media/milestone3-mobile-tests.png), [evidence](media/milestone3-mobile-evidence.png), [code](media/milestone3-mobile-changes.png).
+
+The README and usage walkthrough now describe these controls. Historical screenshots
+remain available. The owner explicitly waived the requested separate developer
+walkthrough; it was not performed. This is agent verification, not independent review
+or a usability study. Independent source-label review and bounded Cachetools fallback
+work remain next; hosting, accounts, jobs and private-repository support were not added.
+
+Ignored local evidence: `reports/milestone3-before/`, `reports/milestone3-after/`,
+`reports/milestone3-preservation.json`, `reports/milestone3-{check,focused,browser,resize}.log`,
+the three `milestone3-evaluate*.log` files, and local visual/keyboard/debug scripts.

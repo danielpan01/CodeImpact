@@ -71,6 +71,10 @@ Ensure `python3` selects Python 3.12 or newer before running `make setup`. The c
 7. Export the report. The disclosure beside **Export report** reminds you that it
    contains source. If no tests are recommended, **Review changed code** opens Changes;
    an empty list does not establish that omitted tests are safe.
+8. Switch light/dark appearance with the sun/moon header control. It follows your
+   device until you choose a theme, then saves that preference locally and synchronizes
+   it across open tabs. If storage is unavailable, switching still works for the
+   current page. Reports, filters, expanded evidence and graph position stay intact.
 
 Tests initially retains the analyzer's order and scores. **Search tests** matches test
 and file names, ignoring case and surrounding spaces; multiple words must all match.
@@ -85,8 +89,24 @@ when a new analysis loads. Exports always contain every original recommendation.
 
 Changed code uses lightweight Python syntax coloring over the bounded, escaped
 preview; malformed source stays visible. It does not execute or parse source in the
-browser. The current theme is light with local system fonts; there is no theme
-switcher or saved report history.
+browser. Both themes use local system fonts, labeled revision colors and visible
+keyboard focus. Reduced-motion preferences disable transitions. On phones/tablets,
+primary review controls have at least 44-pixel touch targets. Escape dismisses a
+reopened analysis form or evidence pane and restores focus to the relevant control.
+Only appearance is saved; there is no saved report history.
+
+Loading announces the active operation without estimating completion. A failure
+clears stale results and focuses a message with recovery actions. **Edit PR URL** or
+**Choose a snapshot** returns focus to the input. **Retry GitHub PR** repeats the
+submitted URL; **Retry snapshots** resends the same parsed input held in memory;
+**Retry demo** reloads the demo. Invalid JSON requires choosing a valid snapshot
+pair. Rate-limit responses retain the API's explanation; follow that guidance before
+retrying. No automatic retry or browser persistence of uploaded source is added.
+
+Current captures: [light Tests](media/milestone3-light-tests.png),
+[dark Tests](media/milestone3-dark-tests.png), [focused Map](media/milestone3-dark-map.png),
+[changed code](media/milestone3-dark-changes.png),
+[phone evidence](media/milestone3-mobile-evidence.png).
 
 To inspect a deleted function and a mixed path, choose **New analysis → Analyze snapshots** to upload
 [`tests/fixtures/mixed-revisions.json`](../tests/fixtures/mixed-revisions.json). Select

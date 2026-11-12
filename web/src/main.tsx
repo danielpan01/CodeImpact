@@ -1,9 +1,15 @@
-import { StrictMode, useLayoutEffect, useRef, useState } from "react";
+import {
+  StrictMode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { createRoot } from "react-dom/client";
 import "@xyflow/react/dist/style.css";
 import "./style.css";
 import type { Report } from "./types";
-import { getReport } from "./api";
+import { AnalysisError, getReport } from "./api";
 import { Icon } from "./Icon";
 import { AnalysisInput } from "./AnalysisInput";
 import { ReportContext } from "./ReportContext";
@@ -13,9 +19,11 @@ import { ChangesView } from "./ChangesView";
 import { EvidenceInspector } from "./EvidenceInspector";
 import { defaultTestControls } from "./test-review";
 import type { Viewport } from "@xyflow/react";
+import { useTheme } from "./theme";
 
 type View = "tests" | "graph" | "changes";
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [report, setReport] = useState<Report | null>(null);
   const [kind, setKind] = useState<"demo" | "snapshots" | "github">("demo");
   const [selected, setSelected] = useState<string | null>(null);
@@ -26,6 +34,9 @@ function App() {
   const [focusedPath, setFocusedPath] = useState<string | null>(null);
   const mapViewport = useRef<Viewport | null>(null);
   const [error, setError] = useState("");
+  const [errorKind, setErrorKind] = useState<AnalysisError["kind"]>("response");
+  const [retrySnapshot, setRetrySnapshot] = useState<unknown>(undefined);
+  const [snapshotError, setSnapshotError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [view, setView] = useState<View>("tests");
   const [inputOpen, setInputOpen] = useState(true);
@@ -35,6 +46,7 @@ function App() {
   const explorer = useRef<HTMLElement>(null);
   const evidenceHeading = useRef<HTMLHeadingElement>(null);
   const prInput = useRef<HTMLInputElement>(null);
+  const snapshotButton = useRef<HTMLButtonElement>(null);
   const errorMessage = useRef<HTMLDivElement>(null);
   const newAnalysis = useRef<HTMLButtonElement>(null);
   const evidenceTrigger = useRef<HTMLElement | null>(null);
@@ -42,7 +54,14 @@ function App() {
 
   // Move focus after React commits the destination, never before it is mounted.
   const [focusRequest, setFocusRequest] = useState<{
-    target: "loaded" | "input" | "evidence" | "explorer" | "back" | "error";
+    target:
+      | "loaded"
+      | "input"
+      | "snapshot"
+      | "evidence"
+      | "explorer"
+      | "back"
+      | "error";
   } | null>(null);
   useLayoutEffect(() => {
     const compact = window.matchMedia("(max-width: 1100px)").matches;
@@ -53,6 +72,9 @@ function App() {
         break;
       case "input":
         prInput.current?.focus();
+        break;
+      case "snapshot":
+        snapshotButton.current?.focus();
         break;
       case "error":
         errorMessage.current?.focus();
@@ -81,11 +103,48 @@ function App() {
       }
     }
   }, [focusRequest]);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1100px)");
+    let inspectorHadFocus = false;
+    const trackFocus = (event: FocusEvent) => {
+      // Some engines blur a focused element as soon as its pane becomes hidden,
+      // before the media-query event arrives. Retain the last real focus target.
+      if (event.target !== document.body)
+        inspectorHadFocus = !!evidenceHeading.current
+          ?.closest("aside")
+          ?.contains(event.target as Node);
+    };
+    const retainFocus = () => {
+      const inspector = evidenceHeading.current?.closest("aside");
+      if (
+        media.matches &&
+        inspectorHadFocus &&
+        inspector &&
+        !inspector.getClientRects().length
+      ) {
+        setEvidenceOpen(true);
+        setFocusRequest({ target: "evidence" });
+      }
+    };
+    document.addEventListener("focusin", trackFocus);
+    media.addEventListener("change", retainFocus);
+    // WebKit can coalesce rapid breakpoint changes into one resize without a
+    // media-query change event. Recover only when the focused pane became hidden.
+    window.addEventListener("resize", retainFocus);
+    return () => {
+      document.removeEventListener("focusin", trackFocus);
+      media.removeEventListener("change", retainFocus);
+      window.removeEventListener("resize", retainFocus);
+    };
+  }, []);
 
   async function load(body?: unknown, githubUrl?: string) {
     const version = ++requestVersion.current;
     setBusy(true);
     setError("");
+    setErrorKind("response");
+    setSnapshotError(body !== undefined);
+    setRetrySnapshot(body);
     setReport(null);
     setSelected(null);
     setSelectedChange(null);
@@ -117,10 +176,12 @@ function App() {
       mapViewport.current = null;
       setView("tests");
       setInputOpen(false);
+      setRetrySnapshot(undefined);
       setFocusRequest({ target: "loaded" });
     } catch (e) {
       if (version !== requestVersion.current) return;
       setError(e instanceof Error ? e.message : "Could not load analysis");
+      setErrorKind(e instanceof AnalysisError ? e.kind : "response");
       setFocusRequest({ target: "error" });
     } finally {
       if (version === requestVersion.current) setBusy(false);
@@ -131,9 +192,19 @@ function App() {
     const version = ++requestVersion.current;
     setBusy(true);
     setError("");
+    setInputOpen(true);
+    setRetrySnapshot(undefined);
+    setSnapshotError(true);
     try {
       if (file.size > 6_000_000) throw new Error("Snapshot file exceeds 6 MB.");
-      const body: unknown = JSON.parse(await file.text());
+      let body: unknown;
+      try {
+        body = JSON.parse(await file.text());
+      } catch {
+        throw new Error(
+          "This file is not valid JSON. Choose a snapshot pair with base.files and head.files objects.",
+        );
+      }
       if (version === requestVersion.current) await load(body);
     } catch (e) {
       if (version !== requestVersion.current) return;
@@ -143,6 +214,7 @@ function App() {
       setRetryPR(null);
       setEvidenceOpen(false);
       setError(e instanceof Error ? e.message : "Invalid JSON");
+      setErrorKind("input");
       setFocusRequest({ target: "error" });
     } finally {
       if (version === requestVersion.current) setBusy(false);
@@ -197,8 +269,23 @@ function App() {
           <span className="local-status">
             <i /> Local analysis
           </span>
-          <a href="/docs" target="_blank" rel="noreferrer">
-            API reference <Icon name="external" />
+          <button
+            className="theme-toggle"
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+            title="Switch light or dark appearance"
+            onClick={toggleTheme}
+          >
+            <Icon name={theme === "light" ? "moon" : "sun"} />
+            <span>{theme === "light" ? "Dark" : "Light"}</span>
+          </button>
+          <a
+            href="/docs"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="API reference"
+          >
+            <span className="top-link-label">API reference</span>{" "}
+            <Icon name="external" />
           </a>
         </div>
       </header>
@@ -236,7 +323,12 @@ function App() {
           </div>
         </div>
         {busy && (
-          <div role="status" className="analysis-status">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="analysis-status"
+          >
             <Icon name="clock" />
             <div>
               <strong>
@@ -253,19 +345,55 @@ function App() {
         {error && (
           <div className="error" role="alert" tabIndex={-1} ref={errorMessage}>
             <div>
-              <strong>Analysis could not complete</strong>
+              <strong>
+                {
+                  {
+                    network: "Connection unavailable",
+                    limited: "Request temporarily limited",
+                    input: "Check your analysis input",
+                    response: "Analysis could not complete",
+                  }[errorKind]
+                }
+              </strong>
               <p>{error}</p>
             </div>
-            <button
-              className="secondary"
-              disabled={busy}
-              onClick={() => void load(undefined, retryPR ?? undefined)}
-            >
-              {retryPR ? "Retry GitHub PR" : "Retry demo"}
-            </button>
+            <div className="recovery-actions">
+              <button
+                className="secondary"
+                onClick={() => {
+                  setInputOpen(true);
+                  setFocusRequest({
+                    target: snapshotError ? "snapshot" : "input",
+                  });
+                }}
+              >
+                {snapshotError ? "Choose a snapshot" : "Edit PR URL"}
+              </button>
+              <button
+                className="secondary"
+                disabled={busy}
+                onClick={() => void load(retrySnapshot, retryPR ?? undefined)}
+              >
+                {retryPR
+                  ? "Retry GitHub PR"
+                  : retrySnapshot !== undefined
+                    ? "Retry snapshots"
+                    : "Retry demo"}
+              </button>
+            </div>
           </div>
         )}
-        <div id="analysis-entry" hidden={!inputOpen}>
+        <div
+          id="analysis-entry"
+          hidden={!inputOpen}
+          aria-busy={busy}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && report && !busy) {
+              setInputOpen(false);
+              newAnalysis.current?.focus();
+            }
+          }}
+        >
           <AnalysisInput
             busy={busy}
             prUrl={prUrl}
@@ -274,6 +402,8 @@ function App() {
             onDemo={() => void load()}
             onUpload={(file) => void upload(file)}
             inputRef={prInput}
+            snapshotButtonRef={snapshotButton}
+            invalidPR={!!error && !snapshotError && errorKind === "input"}
             onClose={
               report
                 ? () => {
@@ -379,6 +509,7 @@ function App() {
                   />
                 ) : view === "graph" ? (
                   <DependencyMap
+                    theme={theme}
                     focusedPath={focusedPath}
                     setFocusedPath={setFocusedPath}
                     viewport={mapViewport}

@@ -12,9 +12,9 @@ CodeImpact turns a code change into an inspectable dependency graph and a priori
 
 ## See the impact
 
-![CodeImpact Tests workspace and evidence inspector](docs/media/milestone2-tests.png)
+![CodeImpact Tests workspace and evidence inspector](docs/media/milestone3-light-tests.png)
 
-*The light analysis workspace opens in Tests, with a coordinated evidence inspector. [Phone evidence](docs/media/milestone2-mobile-evidence.png) · [Changed code](docs/media/milestone2-changes.png) · [Before the redesign](docs/media/before-desktop.png).*
+*The workspace opens in Tests, with a coordinated evidence inspector and a saved light/dark preference. [Dark theme](docs/media/milestone3-dark-tests.png) · [Focused map](docs/media/milestone3-dark-map.png) · [Phone evidence](docs/media/milestone3-mobile-evidence.png) · [Changed code](docs/media/milestone3-dark-changes.png) · [Before the redesign](docs/media/before-desktop.png).*
 
 A change to `discount(total)` can affect an unchanged API test through `test_create_order → create_order → checkout → discount`. CodeImpact makes that relationship visible, then lets you inspect each dependency and the changed code.
 
@@ -33,7 +33,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
-| **Review workspace** | Light theme, compact report context, searchable/filterable Tests with deterministic sorting, focused evidence paths in Map, syntax-colored before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
+| **Review workspace** | Light/dark themes, compact report context, searchable/filterable Tests with deterministic sorting, focused evidence paths in Map, syntax-colored before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
 | **Inspectable reports** | Exportable JSON, source-export disclosure, exact analyzed GitHub revisions, and expandable before/after/mixed evidence. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
@@ -69,6 +69,7 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 2. Select `test_create_order` and follow its dependency path. On phones/tablets, use **Back to results** to return from evidence.
 3. Choose **Focus path in Map**, jump to a dependency, or use **Fit view** to see the entire path.
 4. Choose **Open changed code** to inspect the before/after implementation. Search or filter **Tests**, then export the complete report. **New analysis** reopens PR input, snapshot upload, and the demo.
+5. Use the sun/moon control in the header to switch themes. The initial theme follows your device; a chosen preference is saved locally when browser storage is available. Theme changes preserve your selection and report.
 
 You can also paste a public GitHub PR URL or upload snapshot pairs. See the [usage guide](docs/USAGE.md) for CLI examples, a deleted-function fixture, API requests, configuration, and troubleshooting.
 
@@ -181,20 +182,22 @@ npm run install:browsers
 npm run test:e2e
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The [validation record](docs/VALIDATION.md) preserves observed local results and distinguishes them from remote CI runs.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The local milestone 3 configuration adds Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) preserves observed local results and distinguishes them from remote CI runs.
 
 ## Scope & next steps
 
 CodeImpact is a developer review tool. Static Python analysis is incomplete for dynamic dispatch, runtime imports, inheritance, re-exports, and pytest fixtures. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
 
-[Frontend milestone 1](docs/FRONTEND_ROADMAP.md) merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7).
-Milestone 2 is implemented locally: test/file search, explanation filters, deterministic
-sorting, selected-path focus and symbol navigation, saved map pan/zoom, and safe source
-coloring. Filtering changes only the display; exports retain the complete report.
-Analyzer behavior and all evaluation baselines are unchanged.
-
-Next is milestone 3: dark theme and further accessibility/device polish. No independent
-usability study or accessibility certification is claimed.
+[Frontend milestones 1 and 2](docs/FRONTEND_ROADMAP.md) merged in
+[PR #7](https://github.com/danielpan01/CodeImpact/pull/7) and
+[PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after CI passed.
+Milestone 3 is implemented locally: shared light/dark themes, saved appearance,
+touch/focus refinements, clearer error recovery and same-snapshot retry, plus
+cross-browser release checks and refreshed screenshots. The new changes remain
+unstaged/uncommitted. Filtering and themes change only the display; exports retain
+the complete report. Analyzer behavior and all evaluation baselines are unchanged.
+The owner waived the separate developer walkthrough; no independent usability study
+or accessibility certification is claimed.
 
 Independent review of both real-source datasets and bounded protocol-aware fallback
 narrowing remain on the roadmap, motivated by the Cachetools mistakes. General

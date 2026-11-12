@@ -11,9 +11,13 @@ The owner has prioritized a substantial frontend redesign next. Follow the activ
 sequence in [BUILD_PLAN.md](BUILD_PLAN.md) and the detailed [frontend roadmap](FRONTEND_ROADMAP.md):
 visual foundation/complete workspace, graph/test/code interaction refinement, then
 responsive/accessibility/theme polish. Milestone 1 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7),
-commit `37781e658fc6c2c8f527e87cf196f985818edaa0`, after its CI passed. Milestone 2 is
-implemented locally on `codex/frontend-interactions` and remains unstaged/uncommitted;
-milestone 3 is next. See VALIDATION.md for actual checks. Keep the analyzer,
+commit `37781e658fc6c2c8f527e87cf196f985818edaa0`, after its CI passed. Milestone 2 merged
+in [PR #8](https://github.com/danielpan01/CodeImpact/pull/8), commit
+`01dc2eacac3880277f229a256265dc128b2f0224`, after its CI passed. Milestone 3 is
+implemented locally on `codex/frontend-polish` and remains unstaged/uncommitted:
+light/dark appearance, responsive focus/touch polish, recovery and cross-browser
+checks. The owner waived the separate developer walkthrough; it was not performed.
+See VALIDATION.md for actual checks. Keep the analyzer,
 report contracts and all evaluation baselines fixed during this work. Human label
 review and bounded Cachetools fallback improvements remain subsequent work; hosting
 and infrastructure follow a demonstrated pilot need.

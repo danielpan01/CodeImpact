@@ -10,6 +10,8 @@ export function AnalysisInput({
   onUpload,
   onClose,
   inputRef,
+  snapshotButtonRef,
+  invalidPR,
 }: {
   busy: boolean;
   prUrl: string;
@@ -19,6 +21,8 @@ export function AnalysisInput({
   onUpload: (file: File) => void;
   onClose?: () => void;
   inputRef: RefObject<HTMLInputElement | null>;
+  snapshotButtonRef: RefObject<HTMLButtonElement | null>;
+  invalidPR: boolean;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
   return (
@@ -63,6 +67,7 @@ export function AnalysisInput({
             maxLength={300}
             placeholder="https://github.com/owner/repo/pull/123"
             aria-describedby="pr-help"
+            aria-invalid={invalidPR || undefined}
             value={prUrl}
             onChange={(event) => setPrUrl(event.target.value)}
             disabled={busy}
@@ -81,6 +86,7 @@ export function AnalysisInput({
             <p>Upload before / after Python files as JSON.</p>
           </div>
           <button
+            ref={snapshotButtonRef}
             className="secondary"
             disabled={busy}
             onClick={() => fileInput.current?.click()}

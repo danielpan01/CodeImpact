@@ -14,6 +14,7 @@ import {
   type Viewport,
 } from "@xyflow/react";
 import type { Report } from "./types";
+import type { Theme } from "./theme";
 
 function frameNodes(
   flow: ReactFlowInstance,
@@ -45,12 +46,14 @@ function MapFrame({
   focused,
   viewport,
   fitAll,
+  jumpTo,
   canvas,
 }: {
   frameKey: string;
   focused: string | null;
   viewport: RefObject<Viewport | null>;
   fitAll: RefObject<boolean>;
+  jumpTo: RefObject<string | null>;
   canvas: RefObject<HTMLDivElement | null>;
 }) {
   // These cards are controlled by report data. Read measured dimensions from
@@ -76,7 +79,10 @@ function MapFrame({
     const frame = requestAnimationFrame(() => {
       const restore = previous.current === null ? saved.current : null;
       previous.current = frameKey;
-      if (fitAll.current) {
+      if (jumpTo.current) {
+        frameNodes(flow, canvas.current, jumpTo.current, 0.85);
+        jumpTo.current = null;
+      } else if (fitAll.current) {
         fitAll.current = false;
         frameNodes(flow, canvas.current);
       } else if (restore) void flow.setViewport(restore);
@@ -84,11 +90,12 @@ function MapFrame({
       else frameNodes(flow, canvas.current, undefined, 0.8);
     });
     return () => cancelAnimationFrame(frame);
-  }, [initialized, frameKey, focused, flow, fitAll, canvas]);
+  }, [initialized, frameKey, focused, flow, fitAll, jumpTo, canvas]);
   return null;
 }
 
 export function DependencyMap({
+  theme,
   report,
   selected,
   onSelect,
@@ -100,6 +107,7 @@ export function DependencyMap({
   setFocusedPath,
   viewport,
 }: {
+  theme: Theme;
   report: Report;
   selected: string | null;
   onSelect: (id: string) => void;
@@ -111,9 +119,9 @@ export function DependencyMap({
   setFocusedPath: (id: string | null) => void;
   viewport: RefObject<Viewport | null>;
 }) {
-  const instance = useRef<ReactFlowInstance | null>(null);
   const canvas = useRef<HTMLDivElement>(null);
   const fitAll = useRef(false);
+  const jumpTo = useRef<string | null>(null);
   const [frameVersion, setFrameVersion] = useState(0);
   const [horizontal, setHorizontal] = useState(
     () => window.matchMedia("(min-width: 701px)").matches,
@@ -223,10 +231,10 @@ export function DependencyMap({
           ariaLabel: `${e.kind === "call" ? "Resolved call" : `Conservative ${e.kind} dependency`}: ${e.source} → ${e.target}, ${e.revision} revisions`,
           markerEnd: {
             type: MarkerType.ArrowClosed,
-            color: highlighted ? "#365bd6" : "#9ba4b4",
+            color: highlighted ? "var(--graph-evidence)" : "var(--graph-edge)",
           },
           style: {
-            stroke: highlighted ? "#365bd6" : "#9ba4b4",
+            stroke: highlighted ? "var(--graph-evidence)" : "var(--graph-edge)",
             strokeWidth: highlighted ? 3 : 1.5,
             strokeDasharray: e.kind === "call" ? undefined : "5 4",
           },
@@ -244,6 +252,7 @@ export function DependencyMap({
   ]);
   const frameKey = `${focusedPath ?? "overview"}:${showModules}:${query}:${frameVersion}:${horizontal}`;
   function fit() {
+    jumpTo.current = null;
     fitAll.current = true;
     setFrameVersion((version) => version + 1);
   }
@@ -332,13 +341,11 @@ export function DependencyMap({
               defaultValue=""
               key={focused.symbol}
               onChange={(e) => {
-                if (e.target.value && instance.current)
-                  frameNodes(
-                    instance.current,
-                    canvas.current,
-                    e.target.value,
-                    0.85,
-                  );
+                if (e.target.value) {
+                  jumpTo.current = e.target.value;
+                  fitAll.current = false;
+                  setFrameVersion((version) => version + 1);
+                }
               }}
             >
               <option value="" disabled>
@@ -384,9 +391,6 @@ export function DependencyMap({
         <ReactFlow
           nodes={graph.nodes}
           edges={graph.edges}
-          onInit={(flow) => {
-            instance.current = flow;
-          }}
           onMoveEnd={(_, next) => {
             viewport.current = next;
           }}
@@ -395,7 +399,7 @@ export function DependencyMap({
           nodesDraggable={false}
           nodesConnectable={false}
           onNodeClick={(_, n) => onSelect(n.id)}
-          colorMode="light"
+          colorMode={theme}
         >
           <MapFrame
             canvas={canvas}
@@ -403,12 +407,31 @@ export function DependencyMap({
             focused={focused?.symbol ?? null}
             viewport={viewport}
             fitAll={fitAll}
+            jumpTo={jumpTo}
           />
-          <Background color="#d6d9e0" gap={22} />
+          <Background color="var(--graph-grid)" gap={22} />
           <Controls showInteractive={false} showFitView={false} />
         </ReactFlow>
         {!graph.nodes.length && (
-          <div className="empty-graph">No symbols match this view.</div>
+          <div className="empty-graph">
+            <strong>No symbols match this view.</strong>
+            <p>
+              {report.nodes.length
+                ? "Try a different name or include module dependencies."
+                : "These snapshots contain no indexed Python symbols."}
+            </p>
+            {report.nodes.length > 0 && (
+              <button
+                className="secondary"
+                onClick={() => {
+                  setQuery("");
+                  setShowModules(true);
+                }}
+              >
+                Show all symbols
+              </button>
+            )}
+          </div>
         )}
       </div>
       <div className="legend">

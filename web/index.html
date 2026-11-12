@@ -1,2 +1,26 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="theme-color" content="#172236"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><title>CodeImpact · Analysis workspace</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#172236" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>CodeImpact · Analysis workspace</title>
+    <script>
+      // Apply the device preference before the application paints.
+      let initialTheme = matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+      try {
+        const saved = localStorage.getItem("codeimpact.theme");
+        if (saved === "light" || saved === "dark") initialTheme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = initialTheme;
+      document.documentElement.style.colorScheme = initialTheme;
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -23,7 +23,7 @@ jobs:
         run: make evaluate-real
       - name: Offline fresh-source v2 evaluation
         run: make evaluate-real-v2
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
         working-directory: web
         env:
           PLAYWRIGHT_BROWSERS_PATH: '0'
