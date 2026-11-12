@@ -1,3 +1,9 @@
+import {
+  loadDemo,
+  openAnalysis,
+  showEvidence,
+  openChangedCode,
+} from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import type { Report } from "../src/types";
@@ -7,10 +13,12 @@ async function upload(
   base: Record<string, string>,
   head: Record<string, string>,
 ) {
-  await page.goto("/");
+  await loadDemo(page);
+  await openAnalysis(page);
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeEnabled();
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "changes.json",
     mimeType: "application/json",
@@ -30,8 +38,9 @@ async function upload(
 test("changes open from a recommendation and keep its explanation", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await loadDemo(page);
   await expect(page.locator(".detail-content")).toContainText("test_discount");
+  await showEvidence(page);
   const open = page.getByRole("button", { name: "Open changed code" });
   await open.focus();
   await page.keyboard.press("Enter");
@@ -70,10 +79,11 @@ test("changes open from a recommendation and keep its explanation", async ({
   await expect(page.locator(".test-row")).toHaveCount(3);
   await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByTestId("dependency-graph")).toBeVisible();
-  await page.keyboard.press("Tab");
+  await page.keyboard.press("Shift+Tab");
   await expect(
     page.getByRole("button", { name: "Tests", exact: true }),
   ).toBeFocused();
+  await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("button", { name: "Changes", exact: true }),
@@ -99,7 +109,7 @@ test("deleted source, decorators, safe text, added files and export", async ({
     "new.py": "def added(): return 3\n",
   };
   await upload(page, base, head);
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   const before = page.getByRole("region", { name: "Before source" });
   const after = page.getByRole("region", { name: "After source" });
   await expect(before).toContainText("@decorate");
@@ -165,7 +175,7 @@ test("mixed revision path is visible while reviewing deleted code", async ({
   await expect(page.locator(".detail-content")).toContainText(
     "Mixed revisions — no single revision contains this entire shown path",
   );
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "Before source" }),
   ).toContainText("def f()");
@@ -225,13 +235,14 @@ test("module fallback, comment controls and report-version recovery", async ({
   await expect(page.locator(".detail-content")).toContainText(
     "Conservative module/import dependency",
   );
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("VALUE = 2");
   await expect(page.locator(".detail-content")).toContainText(
     "Conservative import dependency",
   );
+  await showEvidence(page);
   await page.locator(".revision-evidence summary").first().click();
   await expect(page.locator(".revision-evidence").first()).toContainText(
     "test_a.py:2",
@@ -247,6 +258,7 @@ test("module fallback, comment controls and report-version recovery", async ({
       body: JSON.stringify({ schema_version: "1.0" }),
     }),
   );
+  await openAnalysis(page);
   await page.getByRole("button", { name: "Load demo" }).click();
   await expect(page.getByRole("alert")).toContainText(
     "Unsupported report version",
@@ -256,6 +268,7 @@ test("module fallback, comment controls and report-version recovery", async ({
   ).toBeDisabled();
   await page.unroute("**/api/demo");
   await page.getByRole("button", { name: "Retry demo" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("0.15");

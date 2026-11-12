@@ -13,12 +13,22 @@ export function PathRevision({
       "Mixed revisions — no single revision contains this entire shown path",
   };
   return (
-    <p
-      className={`path-revision ${recommendation.path_revision === "mixed" ? "source-warning" : ""}`}
-    >
-      {labels[recommendation.path_revision]}
-      {recommendation.path_revision === "mixed" &&
-        ". This combined path is a conservative estimate."}
+    <p className="path-revision">
+      <span className={`revision-badge ${recommendation.path_revision}`}>
+        {
+          {
+            before: "Before only",
+            after: "After only",
+            both: "Both revisions",
+            mixed: "Mixed revisions",
+          }[recommendation.path_revision]
+        }
+      </span>
+      <span>
+        {labels[recommendation.path_revision]}
+        {recommendation.path_revision === "mixed" &&
+          ". This combined path is a conservative estimate."}
+      </span>
     </p>
   );
 }
@@ -37,7 +47,9 @@ export function EdgeEvidence({ edge }: { edge: DependencyEdge }) {
             ? "Resolved call"
             : `Conservative ${edge.kind} dependency`}
         </b>{" "}
-        · {presence[edge.revision]}
+        <span className={`revision-badge ${edge.revision}`}>
+          {presence[edge.revision]}
+        </span>
       </p>
       {(["before", "after"] as const).map(
         (revision) =>
