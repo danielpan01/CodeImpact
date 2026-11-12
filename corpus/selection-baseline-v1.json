@@ -1,0 +1,2719 @@
+{
+  "authored": {
+    "cases": [
+      {
+        "category": "supported",
+        "description": "Directly modified and newly added tests are relevant themselves.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "changed_tests",
+          "added_tests",
+          "singleton_paths"
+        ],
+        "id": "changed_test",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 2,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 2,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 2,
+              "numerator": 2,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_changed.py::test_changed",
+            "tests/test_new.py::test_new"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_changed.py::test_changed",
+          "tests/test_new.py::test_new"
+        ],
+        "sources_and_labels_sha256": "27c3107457bcffcb2753bb3bad64238c3cc3ea5f1f50177b43ec0c3be85d0224"
+      },
+      {
+        "category": "known_limitation",
+        "description": "A function defined under a condition is visible only through its module fallback.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "conditional_definitions",
+          "module_fallback",
+          "false_positive"
+        ],
+        "id": "conditional_definitions",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_health.py::test_health": "Both imports reach the changed module despite healthy being independent."
+          }
+        },
+        "limitations": [
+          "Definitions under conditionals are not individually indexed. Module fallback rescues the affected test but overselects the sibling test."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_health.py::test_health"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 1,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 1,
+              "value": 0.5
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_health.py::test_health",
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "e4f31fa080290acfe257e0e22f1f13d429794976199fe933b8546aca082c6ff8"
+      },
+      {
+        "category": "supported",
+        "description": "A finite recursive call cycle propagates a changed base return to its caller.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "cycles",
+          "transitive_calls"
+        ],
+        "id": "cycles",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_cycle.py::test_cycle"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_cycle.py::test_cycle"
+        ],
+        "sources_and_labels_sha256": "59e88697a451b01dc786d702e8a6ddd84b917c9a9c83d13a7f67f53df0e84c36"
+      },
+      {
+        "category": "supported",
+        "description": "Deleting a function preserves old call evidence, while a removed test is excluded.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "deleted_symbols",
+          "removed_tests",
+          "before_evidence"
+        ],
+        "id": "deleted_function",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "ec412de43bc8e3c04cf38a5538e3c0f62e7de57930cdec66910ca9612d0f2f02"
+      },
+      {
+        "category": "supported",
+        "description": "A direct call reaches a changed function; the control is independent.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "direct_calls",
+          "unrelated_control",
+          "absolute_imports"
+        ],
+        "id": "direct_call",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "327f073a29086033bab49bee27e2ca480821fa609418f6f3f0e55bd53fbc4a11"
+      },
+      {
+        "category": "supported",
+        "description": "Empty files, comment edits and line movement leave parsed semantics unchanged.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "empty_modules",
+          "comments",
+          "whitespace",
+          "line_movement"
+        ],
+        "id": "empty_comments_movement",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "tp": 0,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            },
+            "recall": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control",
+            "tests/test_format.py::test_format"
+          ],
+          "true_positives": [],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [],
+        "sources_and_labels_sha256": "e39271ca0f32527a0b3603db63de564366d71b84013dd713732d4fd7ce68847d"
+      },
+      {
+        "category": "supported",
+        "description": "Module and function import aliases both reach the changed definition.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "import_aliases",
+          "absolute_imports"
+        ],
+        "id": "import_aliases",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 2,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 2,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 2,
+              "numerator": 2,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_alias.py::test_function_alias",
+            "tests/test_alias.py::test_module_alias"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_alias.py::test_function_alias",
+          "tests/test_alias.py::test_module_alias"
+        ],
+        "sources_and_labels_sha256": "266bb2802e82adb014b5101487b5c59a279c8f88c88893ba1217027c3b3c7aab"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Inherited instance methods share a class import path without precise method dispatch.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "classes",
+          "inheritance",
+          "dynamic_dispatch",
+          "false_positive"
+        ],
+        "id": "inherited_dispatch",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_child.py::test_health": "Module/import fallback reaches base.py for both instance methods."
+          }
+        },
+        "limitations": [
+          "Instance/inherited method dispatch is unresolved. Module fallback selects the affected method test but also the independent inherited method test."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_child.py::test_health"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 1,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 1,
+              "value": 0.5
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_child.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_child.py::test_health",
+          "tests/test_child.py::test_price"
+        ],
+        "sources_and_labels_sha256": "2724f6e53bfbae5454d865d3bb76a537dbe753e7742b019447158e5067e3a04d"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Two unparseable revisions are distinguishable without inventing function semantics.",
+        "expected_unclassified_recommendations": [
+          "tests/test_price.py::test_price"
+        ],
+        "features": [
+          "invalid_syntax",
+          "unclassified"
+        ],
+        "id": "invalid_revisions",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Raw-source fingerprints distinguish invalid revisions, but function-level dependency semantics remain unavailable. The selected importing test is reported outside precision/recall."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 0,
+              "unclassified_recommendations": 1
+            },
+            "precision": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            },
+            "recall": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [],
+          "unclassified_recommendations": [
+            "tests/test_price.py::test_price"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "80f57ef8be93c3adc1472ef27940b2895d8fa718b5dc2abbbc5bc1367b42269c"
+      },
+      {
+        "category": "supported",
+        "description": "Repairing syntax restores the definition required by a surviving test.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "invalid_syntax",
+          "invalid_to_valid",
+          "after_evidence"
+        ],
+        "id": "invalid_to_valid",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "3e72e52e352427a60111cb364d10bb1a3988f020a6912f4e9d12d174b79ab4e7"
+      },
+      {
+        "category": "supported",
+        "description": "A direct function-local import connects an unchanged wrapper to its changed dependency.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "local_imports",
+          "direct_calls",
+          "function_scopes"
+        ],
+        "id": "local_import",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_worker.py::test_read"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_worker.py::test_read"
+        ],
+        "sources_and_labels_sha256": "b14ac4deca0022f4d137a256ddc495ff4cd0964874a412f5b14a946040cbdb0b"
+      },
+      {
+        "category": "known_limitation",
+        "description": "A union path can combine an old bridge dependency with a new test dependency.",
+        "expected_unclassified_recommendations": [
+          "tests/test_bridge.py::test_g"
+        ],
+        "features": [
+          "mixed_revisions",
+          "graph_union",
+          "unclassified"
+        ],
+        "id": "mixed_revisions",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "A path through the base/head union need not exist in either complete revision. Mixed evidence must stay explicit and this unclassified selection is outside label metrics."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 0,
+              "unclassified_recommendations": 1
+            },
+            "precision": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            },
+            "recall": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [],
+          "unclassified_recommendations": [
+            "tests/test_bridge.py::test_g"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_bridge.py::test_g"
+        ],
+        "sources_and_labels_sha256": "a27588ec791cd11c782001ca43eb08141746541a11b013d3198ae64860630771"
+      },
+      {
+        "category": "supported",
+        "description": "A module-level value changes while the dependent function body stays identical.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "module_fallback",
+          "module_constants"
+        ],
+        "id": "module_constant",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "d692407814df68955a2bd3f0c2bdadae851b8ec3145166d6ee50183aea6cb09f"
+      },
+      {
+        "category": "known_limitation",
+        "description": "A constant-return sibling function does not depend on the changed function.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "module_fallback",
+          "false_positive"
+        ],
+        "id": "module_overselection",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_health.py::test_health": "The test module imports core, so module-level fallback reaches the changed core module."
+          }
+        },
+        "limitations": [
+          "Module fallback treats an import as dependency on all semantic changes in that module, overselecting an independent sibling test."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_health.py::test_health"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 1,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 1,
+              "value": 0.5
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price",
+          "tests/test_health.py::test_health"
+        ],
+        "sources_and_labels_sha256": "6d5cd7d14c6d660130c2f9a061adde421a14fe4566b4aa34c7edb0ce31d9f843"
+      },
+      {
+        "category": "known_limitation",
+        "description": "A module-level assignment replaces an imported callable before a wrapper uses it.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "module_rebinding",
+          "false_positive",
+          "module_fallback"
+        ],
+        "id": "module_rebinding",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_worker.py::test_read": "The stale imported call is suppressed after rebinding, but conservative module/import fallback still reaches the changed core module and selects this unaffected wrapper test."
+          }
+        },
+        "limitations": [
+          "Bounded module-level rebinding removes the misleading resolved-call edge, but retained module/import fallback still overselects the unaffected wrapper test."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_worker.py::test_read"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 1,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 2,
+              "numerator": 1,
+              "value": 0.5
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price",
+          "tests/test_worker.py::test_read"
+        ],
+        "sources_and_labels_sha256": "f5da6361a95d85374380e110b39c8cce41f9edfdb68b90db00bf6879bea58882"
+      },
+      {
+        "category": "supported",
+        "description": "A changed nested function changes the enclosing function fingerprint too.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "nested_functions",
+          "lexical_calls"
+        ],
+        "id": "nested_functions",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "52432ef0e112e8df6704b3c10b62745eb88b5d329fca4c813578f0575940de33"
+      },
+      {
+        "category": "supported",
+        "description": "Changing a package constant affects a wrapper reading package initialization.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "package_initialization",
+          "module_fallback"
+        ],
+        "id": "package_initialization",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_rate.py::test_rate"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_rate.py::test_rate"
+        ],
+        "sources_and_labels_sha256": "68d609e7dfaed4b9392bd2ad7ef1f338ecc7b662d2e4efbcc7923e3b656ed51d"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Pytest injects a fixture value without a Python call from the test to the fixture.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "pytest_fixtures",
+          "missed_dependency"
+        ],
+        "id": "pytest_fixtures",
+        "known_discrepancies": {
+          "false_negatives": {
+            "tests/test_fixture.py::test_quote": "Fixture-name injection supplies no indexed call/import edge from the test to conftest.quoted."
+          },
+          "false_positives": {}
+        },
+        "limitations": [
+          "Pytest fixture discovery/injection is not modeled. These sources are never collected or executed by the corpus runner."
+        ],
+        "results": {
+          "false_negatives": [
+            "tests/test_fixture.py::test_quote"
+          ],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 1,
+              "fp": 0,
+              "tn": 1,
+              "tp": 0,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 0,
+              "numerator": 0,
+              "value": null
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 0,
+              "value": 0.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [],
+        "sources_and_labels_sha256": "45263e3418376f177a687a26d41917f524506626923d40e0c7b6f7ff3ea0f3e6"
+      },
+      {
+        "category": "known_limitation",
+        "description": "A package re-export is reached through imports even though its call alias is unresolved.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "reexports",
+          "module_fallback"
+        ],
+        "id": "reexports",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "The re-export chain is not resolved into a precise test-to-function call. Module/import fallback selects the affected test in this case, so there is no selection discrepancy."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_export.py::test_export"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_export.py::test_export"
+        ],
+        "sources_and_labels_sha256": "a7e351ebecf53df2ad617b5c4880d7081372dc7bb2523987c0632fa4721fa6ef"
+      },
+      {
+        "category": "supported",
+        "description": "A src-layout package uses a relative import alias through an unchanged wrapper.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "relative_imports",
+          "src_layout",
+          "import_aliases"
+        ],
+        "id": "relative_src",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_shop.py::test_total"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_shop.py::test_total"
+        ],
+        "sources_and_labels_sha256": "d2e3c396e7983099529944f3cad9f95dc7b1e0959371c1feacbf40544e267c02"
+      },
+      {
+        "category": "supported",
+        "description": "Moving a function to another module is represented as removal plus addition.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "rename_remove_add",
+          "deleted_symbols",
+          "before_evidence"
+        ],
+        "id": "renamed_module",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_old.py::test_old"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_old.py::test_old"
+        ],
+        "sources_and_labels_sha256": "944b36ae271bce3e614e16dc52314a5116dd98a90cf8ad6cf32d6e11caf8a74d"
+      },
+      {
+        "category": "known_limitation",
+        "description": "An importlib string and getattr call hide the target from static resolution.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "runtime_imports",
+          "dynamic_calls",
+          "missed_dependency"
+        ],
+        "id": "runtime_import",
+        "known_discrepancies": {
+          "false_negatives": {
+            "tests/test_worker.py::test_read": "The string-based import and getattr call create no static edge to core.price."
+          },
+          "false_positives": {}
+        },
+        "limitations": [
+          "Runtime imports and reflective calls are not resolved; the dynamic caller test is missed even with a direct positive control."
+        ],
+        "results": {
+          "false_negatives": [
+            "tests/test_worker.py::test_read"
+          ],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 1,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 2,
+              "numerator": 1,
+              "value": 0.5
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "9f1e9fddbf06d4949eae852ae409e77cf82973b42234c1eb7440d8648d5af129"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Parameter and local assignment shadowing suppress precise calls but not broad imports.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "shadowing",
+          "module_fallback",
+          "false_positive"
+        ],
+        "id": "shadowed_names",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_shadow.py::test_local": "worker imports core, retaining a conservative path despite assignment shadowing.",
+            "tests/test_shadow.py::test_parameter": "worker imports core, retaining a conservative path despite parameter shadowing."
+          }
+        },
+        "limitations": [
+          "Precise call resolution respects function parameter/local-store shadowing, but module fallback can still overselect both tests."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_shadow.py::test_local",
+            "tests/test_shadow.py::test_parameter"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 2,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 3,
+              "numerator": 1,
+              "value": 0.3333333333333333
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price",
+          "tests/test_shadow.py::test_local",
+          "tests/test_shadow.py::test_parameter"
+        ],
+        "sources_and_labels_sha256": "f3a1513b938625c8ab7b1f6a060e5ffd0b2e64ff8bf8c330b8ad4be166b4596a"
+      },
+      {
+        "category": "supported",
+        "description": "An unchanged wrapper passes through the changed return value.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "transitive_calls",
+          "absolute_imports"
+        ],
+        "id": "transitive_calls",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_service.py::test_total"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_service.py::test_total"
+        ],
+        "sources_and_labels_sha256": "9e3682b4dc43ca738e35aba8582e131a23158c344ea40c17c276369c7034b609"
+      },
+      {
+        "category": "supported",
+        "description": "Breaking syntax removes indexed definitions but preserves previous call evidence.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "invalid_syntax",
+          "valid_to_invalid",
+          "before_evidence"
+        ],
+        "id": "valid_to_invalid",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 1,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_control.py::test_control"
+          ],
+          "true_positives": [
+            "tests/test_price.py::test_price"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_price.py::test_price"
+        ],
+        "sources_and_labels_sha256": "2400e9e4f47e3edba2e4c863693e6e60f59a5bf417c4bd49ae1b60af90e101b8"
+      }
+    ],
+    "corpus_sha256": "41f8992ec96f473cb9bd1d0f8bd89614a42f5c49833c264f9e9f8713f09e0c94",
+    "totals": {
+      "counts": {
+        "fn": 2,
+        "fp": 6,
+        "tn": 26,
+        "tp": 23,
+        "unclassified_recommendations": 2
+      },
+      "precision": {
+        "denominator": 29,
+        "numerator": 23,
+        "value": 0.7931034482758621
+      },
+      "recall": {
+        "denominator": 25,
+        "numerator": 23,
+        "value": 0.92
+      }
+    }
+  },
+  "before_argument_tracking": {
+    "cases": [
+      {
+        "category": "known_limitation",
+        "description": "Deferred default digest lookup crosses class defaults, signer construction and serializer fixtures; no FIPS runtime claim.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "itsdangerous_fips",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers -> tests/test_itsdangerous/test_serializer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method -> tests/test_itsdangerous/test_signer.py::<module> -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator -> tests/test_itsdangerous/test_signer.py::<module> -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::test_abstract_algorithm -> src/itsdangerous/signer.py::SigningAlgorithm -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Four false positives remain from real module/class initialization changes. Excluding explicit digest overrides, early constructor exceptions and abstract algorithm use needs argument-sensitive constructor/factory flow; no such precision is claimed."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 4,
+              "tn": 4,
+              "tp": 29,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 33,
+              "numerator": 29,
+              "value": 0.8787878787878788
+            },
+            "recall": {
+              "denominator": 29,
+              "numerator": 29,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_itsdangerous/test_encoding.py::test_base64",
+            "tests/test_itsdangerous/test_encoding.py::test_base64_bad",
+            "tests/test_itsdangerous/test_encoding.py::test_int_bytes",
+            "tests/test_itsdangerous/test_encoding.py::test_want_bytes"
+          ],
+          "true_positives": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::test_digests",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_algorithm",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_broken_signature",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_changed_value",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_no_separator",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_secret_keys",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_signer",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_future_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_sig_error_date_signed",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_secret_keys",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_algorithm",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::test_digests",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_broken_signature",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_changed_value",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_key_derivation",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_no_separator",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_signer",
+          "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_future_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_sig_error_date_signed"
+        ]
+      },
+      {
+        "category": "known_limitation",
+        "description": "Negative signature-age rejection in timestamp verification, including inherited and fixture-driven tests.",
+        "expected_unclassified_recommendations": [
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs"
+        ],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "itsdangerous_future",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "The unrelated serializer recommendations are removed. Eighteen inherited-definition labels remain uncertain; eleven are conservatively selected. Fixture contexts and runtime timestamp behavior are not modeled."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 19,
+              "tp": 7,
+              "unclassified_recommendations": 11
+            },
+            "precision": {
+              "denominator": 7,
+              "numerator": 7,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 7,
+              "numerator": 7,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_itsdangerous/test_encoding.py::test_base64",
+            "tests/test_itsdangerous/test_encoding.py::test_base64_bad",
+            "tests/test_itsdangerous/test_encoding.py::test_int_bytes",
+            "tests/test_itsdangerous/test_encoding.py::test_want_bytes",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_algorithm",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_algorithm_mismatch",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_invalid_algorithm",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_load_payload_exceptions",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_default_expires_in",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_invalid_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_invalid_iat",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_missing_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_return_header",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+            "tests/test_itsdangerous/test_serializer.py::test_digests",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm"
+          ],
+          "true_positives": [
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing"
+          ],
+          "unclassified_recommendations": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs"
+        ]
+      },
+      {
+        "category": "known_limitation",
+        "description": "New escaping-aware mapping-format method, contrasting API addition with the whitespace fix.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "markupsafe_format_map",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Class aggregation no longer selects unrelated Markup methods. Eight C/native-variant labels remain uncertain and unselected; this is not evidence they are safe to skip."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 14,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_markupsafe.py::test_complex_custom_formatting",
+            "tests/test_markupsafe.py::test_custom_formatting",
+            "tests/test_markupsafe.py::test_dict_interpol",
+            "tests/test_markupsafe.py::test_format",
+            "tests/test_markupsafe.py::test_formatting_empty",
+            "tests/test_markupsafe.py::test_formatting_with_objects",
+            "tests/test_markupsafe.py::test_html_interop",
+            "tests/test_markupsafe.py::test_missing_interpol",
+            "tests/test_markupsafe.py::test_mul",
+            "tests/test_markupsafe.py::test_splitting",
+            "tests/test_markupsafe.py::test_string_interpolation",
+            "tests/test_markupsafe.py::test_tuple_interpol",
+            "tests/test_markupsafe.py::test_type_behavior",
+            "tests/test_markupsafe.py::test_unescape"
+          ],
+          "true_positives": [
+            "tests/test_markupsafe.py::test_format_map"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_markupsafe.py::test_format_map"
+        ]
+      },
+      {
+        "category": "known_limitation",
+        "description": "Whitespace handling bug in an HTML/string method; includes its real test edit and the unchanged tests.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "markupsafe_striptags",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Class aggregation no longer selects unrelated Markup methods. Seven C/native-variant labels remain uncertain and unselected; this is not evidence they are safe to skip."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 15,
+              "tp": 1,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_markupsafe.py::test_complex_custom_formatting",
+            "tests/test_markupsafe.py::test_custom_formatting",
+            "tests/test_markupsafe.py::test_dict_interpol",
+            "tests/test_markupsafe.py::test_format",
+            "tests/test_markupsafe.py::test_format_map",
+            "tests/test_markupsafe.py::test_formatting_empty",
+            "tests/test_markupsafe.py::test_formatting_with_objects",
+            "tests/test_markupsafe.py::test_html_interop",
+            "tests/test_markupsafe.py::test_missing_interpol",
+            "tests/test_markupsafe.py::test_mul",
+            "tests/test_markupsafe.py::test_splitting",
+            "tests/test_markupsafe.py::test_string_interpolation",
+            "tests/test_markupsafe.py::test_tuple_interpol",
+            "tests/test_markupsafe.py::test_type_behavior",
+            "tests/test_markupsafe.py::test_unescape"
+          ],
+          "true_positives": [
+            "tests/test_markupsafe.py::test_escaping"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_markupsafe.py::test_escaping"
+        ]
+      },
+      {
+        "category": "known_limitation",
+        "description": "Partially configured job representation fix exercises special-method dispatch and unrelated scheduling controls.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "schedule_repr",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Constructor and unrelated test-module fallback selections are removed. Receiver/protocol checks retain conservative explanations and do not establish arbitrary Python dispatch."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 35,
+              "tp": 3,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 3,
+              "numerator": 3,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 3,
+              "numerator": 3,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "test_schedule.py::SchedulerTests.test_at_time",
+            "test_schedule.py::SchedulerTests.test_at_time_hour",
+            "test_schedule.py::SchedulerTests.test_at_time_minute",
+            "test_schedule.py::SchedulerTests.test_at_timezone",
+            "test_schedule.py::SchedulerTests.test_cancel_job",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag",
+            "test_schedule.py::SchedulerTests.test_daylight_saving_time",
+            "test_schedule.py::SchedulerTests.test_get_by_tag",
+            "test_schedule.py::SchedulerTests.test_idle_seconds",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+            "test_schedule.py::SchedulerTests.test_next_run_property",
+            "test_schedule.py::SchedulerTests.test_next_run_time",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+            "test_schedule.py::SchedulerTests.test_next_run_with_tag",
+            "test_schedule.py::SchedulerTests.test_run_all",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+            "test_schedule.py::SchedulerTests.test_run_pending",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+            "test_schedule.py::SchedulerTests.test_time_range",
+            "test_schedule.py::SchedulerTests.test_time_units",
+            "test_schedule.py::SchedulerTests.test_to_string",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+            "test_schedule.py::SchedulerTests.test_until_time",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+          ],
+          "true_positives": [
+            "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_time_range_repr",
+            "test_schedule.py::SchedulerTests.test_to_repr"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "test_schedule.py::SchedulerTests.test_to_repr",
+          "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+          "test_schedule.py::SchedulerTests.test_time_range_repr"
+        ]
+      },
+      {
+        "category": "known_limitation",
+        "description": "Tagged next-run API adds a method and changes a property/wrapper while preserving unrelated job operations.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "schedule_tags",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {}
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Stored Job.next_run fields are separated from Scheduler.next_run property use within bounded receiver checks. General field mutation, descriptors and factory flow remain incomplete."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 0,
+              "tn": 32,
+              "tp": 4,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 4,
+              "numerator": 4,
+              "value": 1.0
+            },
+            "recall": {
+              "denominator": 4,
+              "numerator": 4,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "test_schedule.py::SchedulerTests.test_at_time",
+            "test_schedule.py::SchedulerTests.test_at_time_hour",
+            "test_schedule.py::SchedulerTests.test_at_time_minute",
+            "test_schedule.py::SchedulerTests.test_cancel_job",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag",
+            "test_schedule.py::SchedulerTests.test_get_by_tag",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+            "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_run_all",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+            "test_schedule.py::SchedulerTests.test_run_pending",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+            "test_schedule.py::SchedulerTests.test_time_range",
+            "test_schedule.py::SchedulerTests.test_time_range_repr",
+            "test_schedule.py::SchedulerTests.test_time_units",
+            "test_schedule.py::SchedulerTests.test_to_repr",
+            "test_schedule.py::SchedulerTests.test_to_string",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+            "test_schedule.py::SchedulerTests.test_until_time",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+          ],
+          "true_positives": [
+            "test_schedule.py::SchedulerTests.test_idle_seconds",
+            "test_schedule.py::SchedulerTests.test_next_run_property",
+            "test_schedule.py::SchedulerTests.test_next_run_time",
+            "test_schedule.py::SchedulerTests.test_next_run_with_tag"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "test_schedule.py::SchedulerTests.test_idle_seconds",
+          "test_schedule.py::SchedulerTests.test_next_run_with_tag",
+          "test_schedule.py::SchedulerTests.test_next_run_property",
+          "test_schedule.py::SchedulerTests.test_next_run_time"
+        ]
+      }
+    ],
+    "corpus_sha256": "ed5d8ae64a1d372792408baab537bc347bb7e80ede86766974400f4e7bcb1f72",
+    "dataset_sha256": "fafaf7e886d99f2fc0c47378314c86865b8b8843f9138af032c8fe2daa89882a",
+    "description": "Selection refinement before bounded constructor/factory argument tracking, November 12 2026. Sources and labels remain frozen.",
+    "totals": {
+      "counts": {
+        "fn": 0,
+        "fp": 4,
+        "tn": 119,
+        "tp": 45,
+        "unclassified_recommendations": 11
+      },
+      "precision": {
+        "denominator": 49,
+        "numerator": 45,
+        "value": 0.9183673469387755
+      },
+      "recall": {
+        "denominator": 45,
+        "numerator": 45,
+        "value": 1.0
+      }
+    }
+  },
+  "description": "Pre-selection-refinement baseline, November 11 2026. Sources and dependency labels remain in the case files unchanged. Historical annotations and selected IDs are retained here; this is not an active evaluation input.",
+  "real": {
+    "cases": [
+      {
+        "category": "known_limitation",
+        "description": "Deferred default digest lookup crosses class defaults, signer construction and serializer fixtures; no FIPS runtime claim.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "itsdangerous_fips",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers -> tests/test_itsdangerous/test_serializer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method -> tests/test_itsdangerous/test_signer.py::<module> -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator -> tests/test_itsdangerous/test_signer.py::<module> -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes.",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_signer.py::test_abstract_algorithm -> src/itsdangerous/signer.py::SigningAlgorithm -> src/itsdangerous/signer.py::<module>. Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Four unaffected controls are selected despite explicit digest overrides, early separator rejection, or the abstract algorithm. Module/import fallback cannot distinguish which digest default a test consumes."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 4,
+              "tn": 4,
+              "tp": 29,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 33,
+              "numerator": 29,
+              "value": 0.8787878787878788
+            },
+            "recall": {
+              "denominator": 29,
+              "numerator": 29,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_itsdangerous/test_encoding.py::test_base64",
+            "tests/test_itsdangerous/test_encoding.py::test_base64_bad",
+            "tests/test_itsdangerous/test_encoding.py::test_int_bytes",
+            "tests/test_itsdangerous/test_encoding.py::test_want_bytes"
+          ],
+          "true_positives": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::test_digests",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_algorithm",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_broken_signature",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_changed_value",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_no_separator",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_secret_keys",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_signer",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_future_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_sig_error_date_signed",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_secret_keys",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_algorithm",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::test_digests",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_broken_signature",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_changed_value",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_digest_method",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_key_derivation",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_no_separator",
+          "tests/test_itsdangerous/test_signer.py::TestSigner.test_signer",
+          "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_future_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_sig_error_date_signed"
+        ],
+        "sources_and_labels_sha256": "b8f98e9c1dedba176857083d1057ef3aba8d049eb7e9f109617c47a15070821e"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Negative signature-age rejection in timestamp verification, including inherited and fixture-driven tests.",
+        "expected_unclassified_recommendations": [
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs"
+        ],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "itsdangerous_future",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners -> tests/test_itsdangerous/test_serializer.py::<module> -> src/itsdangerous/__init__.py::<module> -> src/itsdangerous/timed.py::<module>. The changed test module and imports from inherited test modules propagate selection to ordinary serializer controls. Eighteen inherited-definition IDs remain uncertain; discovery does not model separate subclass test executions.",
+            "tests/test_itsdangerous/test_serializer.py::test_digests": "Observed Conservative module/import dependency: tests/test_itsdangerous/test_serializer.py::test_digests -> tests/test_itsdangerous/test_serializer.py::<module> -> src/itsdangerous/__init__.py::<module> -> src/itsdangerous/timed.py::<module>. The changed test module and imports from inherited test modules propagate selection to ordinary serializer controls. Eighteen inherited-definition IDs remain uncertain; discovery does not model separate subclass test executions."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "The changed test module and imports from inherited test modules propagate selection to ordinary serializer controls. Eighteen inherited-definition IDs remain uncertain; discovery does not model separate subclass test executions."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+            "tests/test_itsdangerous/test_serializer.py::test_digests"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 2,
+              "tn": 17,
+              "tp": 7,
+              "unclassified_recommendations": 11
+            },
+            "precision": {
+              "denominator": 9,
+              "numerator": 7,
+              "value": 0.7777777777777778
+            },
+            "recall": {
+              "denominator": 7,
+              "numerator": 7,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [
+            "tests/test_itsdangerous/test_encoding.py::test_base64",
+            "tests/test_itsdangerous/test_encoding.py::test_base64_bad",
+            "tests/test_itsdangerous/test_encoding.py::test_int_bytes",
+            "tests/test_itsdangerous/test_encoding.py::test_want_bytes",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_algorithm",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_algorithm_mismatch",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_invalid_algorithm",
+            "tests/test_itsdangerous/test_jws.py::TestJWSSerializer.test_load_payload_exceptions",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_default_expires_in",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_invalid_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_invalid_iat",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_missing_exp",
+            "tests/test_itsdangerous/test_jws.py::TestTimedJWSSerializer.test_return_header",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_key_derivation",
+            "tests/test_itsdangerous/test_signer.py::TestSigner.test_invalid_separator",
+            "tests/test_itsdangerous/test_signer.py::test_abstract_algorithm"
+          ],
+          "true_positives": [
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+            "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing"
+          ],
+          "unclassified_recommendations": [
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+            "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_future_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimedSerializer.test_return_payload",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_malformed_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_max_age",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_return_timestamp",
+          "tests/test_itsdangerous/test_timed.py::TestTimestampSigner.test_timestamp_missing",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_alt_salt",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_payload_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_bad_signature_exception",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_changed_value",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_fallback_signers",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_file",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_iter_unsigners",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_loads_unsafe",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_serializer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_cls",
+          "tests/test_itsdangerous/test_serializer.py::TestSerializer.test_signer_kwargs",
+          "tests/test_itsdangerous/test_serializer.py::test_digests"
+        ],
+        "sources_and_labels_sha256": "f62672895eadb45c6fa29589f9ec9004c13fbf4e9eb36f81e86029aca6a069d1"
+      },
+      {
+        "category": "known_limitation",
+        "description": "New escaping-aware mapping-format method, contrasting API addition with the whitespace fix.",
+        "expected_unclassified_recommendations": [
+          "tests/test_escape.py::test_escape",
+          "tests/test_leak.py::test_markup_leaks",
+          "tests/test_markupsafe.py::test_adding",
+          "tests/test_markupsafe.py::test_escape_return_type",
+          "tests/test_markupsafe.py::test_escape_silent",
+          "tests/test_markupsafe.py::test_escaping",
+          "tests/test_markupsafe.py::test_soft_str"
+        ],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "markupsafe_format_map",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_markupsafe.py::test_complex_custom_formatting": "Observed Resolved call path: tests/test_markupsafe.py::test_complex_custom_formatting -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_custom_formatting": "Observed Resolved call path: tests/test_markupsafe.py::test_custom_formatting -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_dict_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_dict_interpol -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_format": "Observed Resolved call path: tests/test_markupsafe.py::test_format -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_formatting_empty": "Observed Resolved call path: tests/test_markupsafe.py::test_formatting_empty -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_formatting_with_objects": "Observed Resolved call path: tests/test_markupsafe.py::test_formatting_with_objects -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_html_interop": "Observed Resolved call path: tests/test_markupsafe.py::test_html_interop -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_missing_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_missing_interpol -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_mul": "Observed Resolved call path: tests/test_markupsafe.py::test_mul -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_splitting": "Observed Resolved call path: tests/test_markupsafe.py::test_splitting -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_string_interpolation": "Observed Resolved call path: tests/test_markupsafe.py::test_string_interpolation -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_tuple_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_tuple_interpol -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_type_behavior": "Observed Resolved call path: tests/test_markupsafe.py::test_type_behavior -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain.",
+            "tests/test_markupsafe.py::test_unescape": "Observed Resolved call path: tests/test_markupsafe.py::test_unescape -> src/markupsafe/__init__.py::Markup. Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Changing a method changes the enclosing Markup class fingerprint. Constructor calls to Markup are labeled resolved but select unrelated operators and formatting methods. C-extension fixture variants remain uncertain."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_markupsafe.py::test_complex_custom_formatting",
+            "tests/test_markupsafe.py::test_custom_formatting",
+            "tests/test_markupsafe.py::test_dict_interpol",
+            "tests/test_markupsafe.py::test_format",
+            "tests/test_markupsafe.py::test_formatting_empty",
+            "tests/test_markupsafe.py::test_formatting_with_objects",
+            "tests/test_markupsafe.py::test_html_interop",
+            "tests/test_markupsafe.py::test_missing_interpol",
+            "tests/test_markupsafe.py::test_mul",
+            "tests/test_markupsafe.py::test_splitting",
+            "tests/test_markupsafe.py::test_string_interpolation",
+            "tests/test_markupsafe.py::test_tuple_interpol",
+            "tests/test_markupsafe.py::test_type_behavior",
+            "tests/test_markupsafe.py::test_unescape"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 14,
+              "tn": 0,
+              "tp": 1,
+              "unclassified_recommendations": 7
+            },
+            "precision": {
+              "denominator": 15,
+              "numerator": 1,
+              "value": 0.06666666666666667
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [],
+          "true_positives": [
+            "tests/test_markupsafe.py::test_format_map"
+          ],
+          "unclassified_recommendations": [
+            "tests/test_escape.py::test_escape",
+            "tests/test_leak.py::test_markup_leaks",
+            "tests/test_markupsafe.py::test_adding",
+            "tests/test_markupsafe.py::test_escape_return_type",
+            "tests/test_markupsafe.py::test_escape_silent",
+            "tests/test_markupsafe.py::test_escaping",
+            "tests/test_markupsafe.py::test_soft_str"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_escape.py::test_escape",
+          "tests/test_markupsafe.py::test_adding",
+          "tests/test_markupsafe.py::test_complex_custom_formatting",
+          "tests/test_markupsafe.py::test_custom_formatting",
+          "tests/test_markupsafe.py::test_dict_interpol",
+          "tests/test_markupsafe.py::test_escape_return_type",
+          "tests/test_markupsafe.py::test_escape_silent",
+          "tests/test_markupsafe.py::test_escaping",
+          "tests/test_markupsafe.py::test_format",
+          "tests/test_markupsafe.py::test_format_map",
+          "tests/test_markupsafe.py::test_formatting_empty",
+          "tests/test_markupsafe.py::test_formatting_with_objects",
+          "tests/test_markupsafe.py::test_html_interop",
+          "tests/test_markupsafe.py::test_missing_interpol",
+          "tests/test_markupsafe.py::test_mul",
+          "tests/test_markupsafe.py::test_soft_str",
+          "tests/test_markupsafe.py::test_splitting",
+          "tests/test_markupsafe.py::test_string_interpolation",
+          "tests/test_markupsafe.py::test_tuple_interpol",
+          "tests/test_markupsafe.py::test_type_behavior",
+          "tests/test_markupsafe.py::test_unescape",
+          "tests/test_leak.py::test_markup_leaks"
+        ],
+        "sources_and_labels_sha256": "b1ba2feb9d85b65bd08654efb8e7856157b57a960e34a3e74ac5f2e1c38bba12"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Whitespace handling bug in an HTML/string method; includes its real test edit and the unchanged tests.",
+        "expected_unclassified_recommendations": [
+          "tests/test_escape.py::test_escape",
+          "tests/test_leak.py::test_markup_leaks",
+          "tests/test_markupsafe.py::test_adding",
+          "tests/test_markupsafe.py::test_escape_return_type",
+          "tests/test_markupsafe.py::test_escape_silent",
+          "tests/test_markupsafe.py::test_soft_str"
+        ],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "markupsafe_striptags",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "tests/test_markupsafe.py::test_complex_custom_formatting": "Observed Resolved call path: tests/test_markupsafe.py::test_complex_custom_formatting -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_custom_formatting": "Observed Resolved call path: tests/test_markupsafe.py::test_custom_formatting -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_dict_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_dict_interpol -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_format": "Observed Resolved call path: tests/test_markupsafe.py::test_format -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_format_map": "Observed Resolved call path: tests/test_markupsafe.py::test_format_map -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_formatting_empty": "Observed Resolved call path: tests/test_markupsafe.py::test_formatting_empty -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_formatting_with_objects": "Observed Resolved call path: tests/test_markupsafe.py::test_formatting_with_objects -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_html_interop": "Observed Resolved call path: tests/test_markupsafe.py::test_html_interop -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_missing_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_missing_interpol -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_mul": "Observed Resolved call path: tests/test_markupsafe.py::test_mul -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_splitting": "Observed Resolved call path: tests/test_markupsafe.py::test_splitting -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_string_interpolation": "Observed Resolved call path: tests/test_markupsafe.py::test_string_interpolation -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_tuple_interpol": "Observed Resolved call path: tests/test_markupsafe.py::test_tuple_interpol -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_type_behavior": "Observed Resolved call path: tests/test_markupsafe.py::test_type_behavior -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain.",
+            "tests/test_markupsafe.py::test_unescape": "Observed Resolved call path: tests/test_markupsafe.py::test_unescape -> src/markupsafe/__init__.py::Markup. Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "Changing striptags changes the enclosing Markup class fingerprint. Constructor calls to Markup select unrelated methods, including format_map. Resolved call evidence does not guarantee feature-level relevance; C-extension variants remain uncertain."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "tests/test_markupsafe.py::test_complex_custom_formatting",
+            "tests/test_markupsafe.py::test_custom_formatting",
+            "tests/test_markupsafe.py::test_dict_interpol",
+            "tests/test_markupsafe.py::test_format",
+            "tests/test_markupsafe.py::test_format_map",
+            "tests/test_markupsafe.py::test_formatting_empty",
+            "tests/test_markupsafe.py::test_formatting_with_objects",
+            "tests/test_markupsafe.py::test_html_interop",
+            "tests/test_markupsafe.py::test_missing_interpol",
+            "tests/test_markupsafe.py::test_mul",
+            "tests/test_markupsafe.py::test_splitting",
+            "tests/test_markupsafe.py::test_string_interpolation",
+            "tests/test_markupsafe.py::test_tuple_interpol",
+            "tests/test_markupsafe.py::test_type_behavior",
+            "tests/test_markupsafe.py::test_unescape"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 15,
+              "tn": 0,
+              "tp": 1,
+              "unclassified_recommendations": 6
+            },
+            "precision": {
+              "denominator": 16,
+              "numerator": 1,
+              "value": 0.0625
+            },
+            "recall": {
+              "denominator": 1,
+              "numerator": 1,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [],
+          "true_positives": [
+            "tests/test_markupsafe.py::test_escaping"
+          ],
+          "unclassified_recommendations": [
+            "tests/test_escape.py::test_escape",
+            "tests/test_leak.py::test_markup_leaks",
+            "tests/test_markupsafe.py::test_adding",
+            "tests/test_markupsafe.py::test_escape_return_type",
+            "tests/test_markupsafe.py::test_escape_silent",
+            "tests/test_markupsafe.py::test_soft_str"
+          ]
+        },
+        "selected_ids": [
+          "tests/test_escape.py::test_escape",
+          "tests/test_markupsafe.py::test_adding",
+          "tests/test_markupsafe.py::test_complex_custom_formatting",
+          "tests/test_markupsafe.py::test_custom_formatting",
+          "tests/test_markupsafe.py::test_dict_interpol",
+          "tests/test_markupsafe.py::test_escape_return_type",
+          "tests/test_markupsafe.py::test_escape_silent",
+          "tests/test_markupsafe.py::test_escaping",
+          "tests/test_markupsafe.py::test_format",
+          "tests/test_markupsafe.py::test_format_map",
+          "tests/test_markupsafe.py::test_formatting_empty",
+          "tests/test_markupsafe.py::test_formatting_with_objects",
+          "tests/test_markupsafe.py::test_html_interop",
+          "tests/test_markupsafe.py::test_missing_interpol",
+          "tests/test_markupsafe.py::test_mul",
+          "tests/test_markupsafe.py::test_soft_str",
+          "tests/test_markupsafe.py::test_splitting",
+          "tests/test_markupsafe.py::test_string_interpolation",
+          "tests/test_markupsafe.py::test_tuple_interpol",
+          "tests/test_markupsafe.py::test_type_behavior",
+          "tests/test_markupsafe.py::test_unescape",
+          "tests/test_leak.py::test_markup_leaks"
+        ],
+        "sources_and_labels_sha256": "2c7c84d80a4677abecde18152fa8b6b83fc65425813caafbd70c633632ea12b2"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Partially configured job representation fix exercises special-method dispatch and unrelated scheduling controls.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "schedule_repr",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "test_schedule.py::SchedulerTests.test_at_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_at_time_hour": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time_hour -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_at_time_minute": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time_minute -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_at_timezone": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_timezone -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_cancel_job": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_cancel_job -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_cancel_jobs -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_clear_by_tag -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_daylight_saving_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_daylight_saving_time -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_get_by_tag": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_get_by_tag -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_idle_seconds": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_idle_seconds -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_property": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_property -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_day_end -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_hour_end -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_minute_end -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_next_run_with_tag": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_with_tag -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_all": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator_args -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_run_pending": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_pending -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_tag_type_enforcement -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_time_range": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_time_range -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_time_units": "Observed Resolved call path: test_schedule.py::SchedulerTests.test_time_units -> schedule/__init__.py::Job. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_to_string": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string_lambda_job_func -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_until_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_until_time -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred.",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_weekday_at_todady -> test_schedule.py::<module>. All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "All discovered tests are selected: the edited test module supplies broad fallback, and a direct Job constructor call reaches the changed class fingerprint. Special-method dispatch is not precisely inferred."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "test_schedule.py::SchedulerTests.test_at_time",
+            "test_schedule.py::SchedulerTests.test_at_time_hour",
+            "test_schedule.py::SchedulerTests.test_at_time_minute",
+            "test_schedule.py::SchedulerTests.test_at_timezone",
+            "test_schedule.py::SchedulerTests.test_cancel_job",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag",
+            "test_schedule.py::SchedulerTests.test_daylight_saving_time",
+            "test_schedule.py::SchedulerTests.test_get_by_tag",
+            "test_schedule.py::SchedulerTests.test_idle_seconds",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+            "test_schedule.py::SchedulerTests.test_next_run_property",
+            "test_schedule.py::SchedulerTests.test_next_run_time",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+            "test_schedule.py::SchedulerTests.test_next_run_with_tag",
+            "test_schedule.py::SchedulerTests.test_run_all",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+            "test_schedule.py::SchedulerTests.test_run_pending",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+            "test_schedule.py::SchedulerTests.test_time_range",
+            "test_schedule.py::SchedulerTests.test_time_units",
+            "test_schedule.py::SchedulerTests.test_to_string",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+            "test_schedule.py::SchedulerTests.test_until_time",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 35,
+              "tn": 0,
+              "tp": 3,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 38,
+              "numerator": 3,
+              "value": 0.07894736842105263
+            },
+            "recall": {
+              "denominator": 3,
+              "numerator": 3,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [],
+          "true_positives": [
+            "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_time_range_repr",
+            "test_schedule.py::SchedulerTests.test_to_repr"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "test_schedule.py::SchedulerTests.test_to_repr",
+          "test_schedule.py::SchedulerTests.test_time_units",
+          "test_schedule.py::SchedulerTests.test_at_time",
+          "test_schedule.py::SchedulerTests.test_at_time_hour",
+          "test_schedule.py::SchedulerTests.test_at_time_minute",
+          "test_schedule.py::SchedulerTests.test_at_timezone",
+          "test_schedule.py::SchedulerTests.test_cancel_job",
+          "test_schedule.py::SchedulerTests.test_cancel_jobs",
+          "test_schedule.py::SchedulerTests.test_clear_by_tag",
+          "test_schedule.py::SchedulerTests.test_daylight_saving_time",
+          "test_schedule.py::SchedulerTests.test_get_by_tag",
+          "test_schedule.py::SchedulerTests.test_idle_seconds",
+          "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+          "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+          "test_schedule.py::SchedulerTests.test_next_run_property",
+          "test_schedule.py::SchedulerTests.test_next_run_time",
+          "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+          "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+          "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+          "test_schedule.py::SchedulerTests.test_next_run_with_tag",
+          "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+          "test_schedule.py::SchedulerTests.test_run_all",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+          "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+          "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+          "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+          "test_schedule.py::SchedulerTests.test_run_pending",
+          "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+          "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+          "test_schedule.py::SchedulerTests.test_time_range",
+          "test_schedule.py::SchedulerTests.test_time_range_repr",
+          "test_schedule.py::SchedulerTests.test_to_string",
+          "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+          "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+          "test_schedule.py::SchedulerTests.test_until_time",
+          "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+        ],
+        "sources_and_labels_sha256": "4b5b93588404b7cf1fd324b1b522504c224720bce3b13f107ed242d7da5cebe3"
+      },
+      {
+        "category": "known_limitation",
+        "description": "Tagged next-run API adds a method and changes a property/wrapper while preserving unrelated job operations.",
+        "expected_unclassified_recommendations": [],
+        "features": [
+          "real_repository",
+          "agent_drafted_labels"
+        ],
+        "id": "schedule_tags",
+        "known_discrepancies": {
+          "false_negatives": {},
+          "false_positives": {
+            "test_schedule.py::SchedulerTests.test_at_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_at_time_hour": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time_hour -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_at_time_minute": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_at_time_minute -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_cancel_job": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_cancel_job -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_cancel_jobs -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_clear_by_tag -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_get_by_tag": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_get_by_tag -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler": "Observed Resolved call path: test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler -> schedule/__init__.py::Scheduler. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_day_end -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_hour_end -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_next_run_time_minute_end -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_all": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator_args -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_run_pending": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_run_pending -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_tag_type_enforcement -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_time_range": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_time_range -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_time_range_repr": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_time_range_repr -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_time_units": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_time_units -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_to_repr": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_repr -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_to_string": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_to_string_lambda_job_func -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_until_time": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_until_time -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete.",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady": "Observed Conservative module/import dependency: test_schedule.py::SchedulerTests.test_weekday_at_todady -> test_schedule.py::<module>. All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete."
+          }
+        },
+        "limitations": [
+          "Agent-drafted source dependency labels, not independently reviewed or runtime failure evidence. Discovery counts definitions, not parametrized/inherited pytest executions.",
+          "All discovered tests are selected. Changed test-module fallback and module imports select unrelated scheduling operations. Direct next_run wrapper calls are resolved, but property and receiver dispatch are incomplete."
+        ],
+        "results": {
+          "false_negatives": [],
+          "false_positives": [
+            "test_schedule.py::SchedulerTests.test_at_time",
+            "test_schedule.py::SchedulerTests.test_at_time_hour",
+            "test_schedule.py::SchedulerTests.test_at_time_minute",
+            "test_schedule.py::SchedulerTests.test_cancel_job",
+            "test_schedule.py::SchedulerTests.test_cancel_jobs",
+            "test_schedule.py::SchedulerTests.test_clear_by_tag",
+            "test_schedule.py::SchedulerTests.test_get_by_tag",
+            "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+            "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+            "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+            "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+            "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_run_all",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+            "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+            "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+            "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+            "test_schedule.py::SchedulerTests.test_run_pending",
+            "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+            "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+            "test_schedule.py::SchedulerTests.test_time_range",
+            "test_schedule.py::SchedulerTests.test_time_range_repr",
+            "test_schedule.py::SchedulerTests.test_time_units",
+            "test_schedule.py::SchedulerTests.test_to_repr",
+            "test_schedule.py::SchedulerTests.test_to_string",
+            "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+            "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+            "test_schedule.py::SchedulerTests.test_until_time",
+            "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+          ],
+          "metrics": {
+            "counts": {
+              "fn": 0,
+              "fp": 32,
+              "tn": 0,
+              "tp": 4,
+              "unclassified_recommendations": 0
+            },
+            "precision": {
+              "denominator": 36,
+              "numerator": 4,
+              "value": 0.1111111111111111
+            },
+            "recall": {
+              "denominator": 4,
+              "numerator": 4,
+              "value": 1.0
+            }
+          },
+          "true_negatives": [],
+          "true_positives": [
+            "test_schedule.py::SchedulerTests.test_idle_seconds",
+            "test_schedule.py::SchedulerTests.test_next_run_property",
+            "test_schedule.py::SchedulerTests.test_next_run_time",
+            "test_schedule.py::SchedulerTests.test_next_run_with_tag"
+          ],
+          "unclassified_recommendations": []
+        },
+        "selected_ids": [
+          "test_schedule.py::SchedulerTests.test_idle_seconds",
+          "test_schedule.py::SchedulerTests.test_next_run_with_tag",
+          "test_schedule.py::SchedulerTests.test_next_run_property",
+          "test_schedule.py::SchedulerTests.test_next_run_time",
+          "test_schedule.py::SchedulerTests.test_misconfigured_job_wont_break_scheduler",
+          "test_schedule.py::SchedulerTests.test_at_time",
+          "test_schedule.py::SchedulerTests.test_at_time_hour",
+          "test_schedule.py::SchedulerTests.test_at_time_minute",
+          "test_schedule.py::SchedulerTests.test_cancel_job",
+          "test_schedule.py::SchedulerTests.test_cancel_jobs",
+          "test_schedule.py::SchedulerTests.test_clear_by_tag",
+          "test_schedule.py::SchedulerTests.test_get_by_tag",
+          "test_schedule.py::SchedulerTests.test_job_func_args_are_passed_on",
+          "test_schedule.py::SchedulerTests.test_next_run_time_day_end",
+          "test_schedule.py::SchedulerTests.test_next_run_time_hour_end",
+          "test_schedule.py::SchedulerTests.test_next_run_time_minute_end",
+          "test_schedule.py::SchedulerTests.test_repr_functools_partial_job_func",
+          "test_schedule.py::SchedulerTests.test_run_all",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator_args",
+          "test_schedule.py::SchedulerTests.test_run_all_with_decorator_defaultargs",
+          "test_schedule.py::SchedulerTests.test_run_every_n_days_at_specific_time",
+          "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_past_today",
+          "test_schedule.py::SchedulerTests.test_run_every_weekday_at_specific_time_today",
+          "test_schedule.py::SchedulerTests.test_run_pending",
+          "test_schedule.py::SchedulerTests.test_singular_time_units_match_plural_units",
+          "test_schedule.py::SchedulerTests.test_tag_type_enforcement",
+          "test_schedule.py::SchedulerTests.test_time_range",
+          "test_schedule.py::SchedulerTests.test_time_range_repr",
+          "test_schedule.py::SchedulerTests.test_time_units",
+          "test_schedule.py::SchedulerTests.test_to_repr",
+          "test_schedule.py::SchedulerTests.test_to_string",
+          "test_schedule.py::SchedulerTests.test_to_string_functools_partial_job_func",
+          "test_schedule.py::SchedulerTests.test_to_string_lambda_job_func",
+          "test_schedule.py::SchedulerTests.test_until_time",
+          "test_schedule.py::SchedulerTests.test_weekday_at_todady"
+        ],
+        "sources_and_labels_sha256": "47a8114473ba0e0880937302e0327176956ba6a7886482125daebf1711db73e3"
+      }
+    ],
+    "corpus_sha256": "94776d2b16538e5bc837773f4dc4259e84dd804329f4e7be61092ba9fd4ad836",
+    "totals": {
+      "counts": {
+        "fn": 0,
+        "fp": 102,
+        "tn": 21,
+        "tp": 45,
+        "unclassified_recommendations": 24
+      },
+      "precision": {
+        "denominator": 147,
+        "numerator": 45,
+        "value": 0.30612244897959184
+      },
+      "recall": {
+        "denominator": 45,
+        "numerator": 45,
+        "value": 1.0
+      }
+    }
+  }
+}

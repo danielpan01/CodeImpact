@@ -36,7 +36,7 @@ regenerated. The explicit equivalent is:
 .venv/bin/pytest tests/test_corpus.py tests/test_evaluation.py --no-cov
 # Scope, ordering and ambiguity regressions for the local-import extension:
 .venv/bin/pytest tests/test_local_imports.py --no-cov
-.venv/bin/pytest tests/test_module_rebinding.py --no-cov
+.venv/bin/pytest tests/test_module_rebinding.py tests/test_selection_precision.py --no-cov
 make check
 ```
 
@@ -115,29 +115,28 @@ workflow, not adversarial parsing isolation or a performance benchmark.
 
 ## Results and metric definitions
 
-Observed November 11, 2026, after bounded module-level rebinding,
-starting from merged local-import commit `68ae852`. All 25 checked-in cases match their
-explicitly recorded discrepancies. The original baseline is preserved in
-[VALIDATION.md](VALIDATION.md#bounded-analyzer-correctness-corpus--november-10-2026).
-Counts are **case/test pairs**: reused test IDs in different cases are distinct
-observations, and repeated controls are not independent real-world samples.
+Observed November 11, 2026, after scoped aggregate-fallback selection. All 25
+cases match their deliberately updated discrepancy annotations. All source
+snapshots and authored affected/unaffected/unclassified labels are unchanged.
+The [pre-refinement baseline](../corpus/selection-baseline-v1.json) preserves original
+annotations, selected IDs, counts and source/label hashes. Earlier milestone
+results also remain in [VALIDATION.md](VALIDATION.md).
+Counts are **case/test pairs**, not independent real-world observations.
 
 | Population | Cases | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Overall | 25 | 23 | 2 | 6 | 26 | 2 | 23/29 = 79.3% | 23/25 = 92.0% |
-| Supported demonstrations | 15 | 16 | 0 | 0 | 16 | 0 | 16/16 = 100% | 16/16 = 100% |
-| Known limitations | 10 | 7 | 2 | 6 | 10 | 2 | 7/13 = 53.8% | 7/9 = 77.8% |
+| Overall | 25 | 23 | 2 | 0 | 32 | 2 | 23/23 = 100% | 23/25 = 92.0% |
+| Supported demonstrations | 18 | 19 | 0 | 0 | 23 | 0 | 19/19 = 100% | 19/19 = 100% |
+| Known limitations | 7 | 4 | 2 | 0 | 9 | 2 | 4/4 = 100% | 4/6 = 66.7% |
 
-The original corpus run had TP 22 and FN 3, precision 22/28 and recall 22/25.
-`local_import` now selects its one affected test through a resolved call path,
-reducing FN by one and increasing TP by one. All snapshots and authored
-affected/unaffected/unclassified labels are identical to the original corpus;
-only that case's category, feature tags, description and known-miss annotation
-changed. At that milestone the other 24 per-case analysis reports and classifications
-were identical. The subsequent module-rebinding correction changes evidence and
-priority in one case, with **no changes to selected test IDs/order, classifications
-or aggregate metrics**. Its other 24 complete case reports remain identical to the
-pre-rebinding evaluation.
+The initial corpus had TP 22 / FN 3 / FP 6 / TN 26. Local imports fixed one miss;
+module rebinding removed a misleading resolved edge without changing selections.
+The current refinement removes all six recorded false positives while preserving
+TP 23, FN 2 and both uncertain selections. `module_overselection`, `module_rebinding`
+and `shadowed_names` become supported demonstrations. Conditional definitions and
+inherited dispatch remain limitation cases because their retained evidence is
+conservative, not newly resolved calls. This is agreement with these fixtures,
+not general language support or a safe test-skipping guarantee.
 
 - **TP:** labeled affected and selected.
 - **FN:** labeled affected and missed.
@@ -172,12 +171,12 @@ against these labels, not complete language support.
 | `relative_src` | supported | Relative alias inside a `src/` package |
 | `package_initialization` | supported | Package initialization value reached by fallback |
 | `module_constant` | supported | Changed global value reached by fallback |
-| `module_overselection` | known_limitation | 1 FP: unchanged sibling function in an imported module |
+| `module_overselection` | supported | Former sibling-function FP removed |
 | `deleted_function` | supported | Before-only call retained; removed test excluded |
 | `renamed_module` | supported | Removal plus addition; old importer remains affected |
 | `cycles` | supported | Finite recursive cycle; traversal terminates |
 | `nested_functions` | supported | Nested call; enclosing fingerprint also changes |
-| `shadowed_names` | known_limitation | 2 FPs via fallback despite precise shadowing suppression |
+| `shadowed_names` | supported | Both shadowed-call FPs removed; graph suppression preserved |
 | `changed_test` | supported | Modified/new tests have singleton paths |
 | `empty_comments_movement` | supported | Empty/comment-only and moved code cause no semantic changes |
 | `valid_to_invalid` | supported | Broken syntax retains old dependency evidence |
@@ -185,86 +184,48 @@ against these labels, not complete language support.
 | `invalid_revisions` | known_limitation | 1 unclassified selection; unavailable function semantics |
 | `reexports` | known_limitation | No selection discrepancy; fallback rescues unresolved alias |
 | `local_import` | supported | Previous FN fixed: direct local import resolves `test_read → read → price` |
-| `module_rebinding` | known_limitation | 1 FP remains via module/import fallback; stale resolved-call edge removed |
-| `conditional_definitions` | known_limitation | 1 FP: unindexed conditional definition and broad fallback |
+| `module_rebinding` | supported | Stale call remains suppressed; unrelated fallback selection removed |
+| `conditional_definitions` | known_limitation | No selection discrepancy; affected conditional name still uses fallback |
 | `pytest_fixtures` | known_limitation | 1 FN: injected fixture has no test-to-fixture edge |
-| `inherited_dispatch` | known_limitation | 1 FP: fallback cannot separate inherited methods |
+| `inherited_dispatch` | known_limitation | No selection discrepancy; bounded inherited-member references remain conservative |
 | `runtime_import` | known_limitation | 1 FN: string import and `getattr` hide a call target |
 | `mixed_revisions` | known_limitation | 1 unclassified selection with mixed path provenance |
 
-### Concrete mistakes
+### Fixed selections and remaining mistakes
 
-In `module_overselection`, only `core.price` changes. `test_health` calls the
-unchanged, constant-return `core.healthy`. It is labeled unaffected, but the
-recommendation follows `test_health → core.healthy → core.<module>`. The final hop
-is a conservative module edge. A module fingerprint includes changes to all its
-definitions, so the import/module approximation overselects this sibling test.
+In `module_overselection`, only `core.price` changes. The unchanged constant-return
+`core.healthy` no longer selects `test_health` through the aggregate module. The
+module/class AST change remains visible; graph edges and their revision evidence
+are preserved. Filtering changes propagation, not the graph's factual inventory.
 
-In `pytest_fixtures`, `test_quote` receives `quoted` through pytest injection. The
-fixture in `conftest.py` calls changed `core.price`, but no Python call or import in
-the test links it to that fixture. The unchanged affected label remains a recorded
-FN. `runtime_import` remains another FN because its string-based import and
-reflective call do not create a static edge to the changed target.
+In `module_rebinding`, `worker` imports `price` then replaces it with a lambda.
+The earlier binding scan removed the false `worker.read → core.price` resolved call,
+but still selected `test_read` by fallback (priority 23). The current filter removes
+that unrelated recommendation entirely. The affected direct `test_price` remains
+resolved with priority 81. Neither the graph nor the scoring formula changed in
+this refinement. The historical baseline records both the FP and its explanation.
 
-The former `local_import` miss is now fixed: `worker.read` contains
-`from core import price` and returns `price()`. Its test has the resolved path
-`test_read → worker.read → core.price` with evidence in both revisions. The
-independent control stays unselected. Before the old miss annotation was removed,
-evaluation deliberately exited 1 because expected FN `[test_read]` became `[]`.
-The regression suite still rejects reinstating that stale annotation and uses
-the remaining fixture-injection miss to check the opposite drift direction.
+`shadowed_names` loses two fallback FPs; `conditional_definitions` and
+`inherited_dispatch` each lose one. Their affected selections remain. Possible
+method/name references justify conservative module paths only: no new precise
+dispatch edge is invented. Every resulting recommendation passes typed path and
+before/head evidence validation. Tests reject stale baseline annotations rather
+than silently accepting improvements.
 
-Local-import support is bounded to direct statements in function/async-function
-bodies, including methods and separately indexed nested functions. Aliases are
-usable only after the import's end position. Rebinding, duplicate/conditional
-imports and conflicting parameters/captures suppress precise resolution rather
-than falling through to globals. Closure propagation and calls through local
-aliases in lambda/comprehension scopes remain unsupported. A conservative import
-edge belongs to the importing function, so module-constant changes do not
-automatically select unrelated sibling functions. See the
-[exact resolution boundary](ARCHITECTURE.md#bounded-function-local-imports).
+Two misses remain. In `pytest_fixtures`, `test_quote` receives `quoted` through
+pytest injection; the test has no explicit call/import to that fixture. In
+`runtime_import`, a string import and reflective call hide the dependency.
+Their affected labels and exact FN IDs remain unchanged. Fixture injection and
+runtime-import analysis are outside this change. The earlier local-import miss
+stays fixed with `test_read → worker.read → price` resolved in both revisions.
 
-In `module_rebinding`, `worker` imports `price`, then overwrites it with a lambda
-returning 42. The wrapper calls that replacement. Before the correction, the
-stale import-alias table produced a misleading **resolved call** to `core.price`.
-The module-scope binding scan now removes that edge in both revisions and reports
-the ambiguity. It retains the direct import dependency, so the unaffected wrapper
-test is still a false positive, now explicitly explained as conservative fallback.
-
-| Measurement | Before module-rebinding fix | After |
-| --- | --- | --- |
-| Selected IDs | `tests/test_price.py::test_price`, `tests/test_worker.py::test_read` | Same IDs and order |
-| Classification | TP 1, FN 0, FP 1, TN 1 | Unchanged |
-| Wrapper test path | `test_read → worker.read → core.price` | `test_read → tests/test_worker.<module> → worker.<module> → core.<module>` |
-| Wrapper explanation | Resolved call path | Conservative module/import dependency |
-| Wrapper priority | 72 | 23 |
-| Directly affected test | Resolved path to `core.price`, priority 82 | Same resolved path, priority 81 |
-| Path revision | Both | Both |
-
-One call edge is removed: `worker.py::read → core.py::price`. No edge is added and
-every retained edge, ID and per-revision evidence item is unchanged. The directly
-affected test's priority decreases by one because the changed target has one fewer
-incoming dependent. The wrapper uses a longer fallback path with the existing
-lower fallback starting score. Neither change alters the ranking formula or measures
-a failure probability.
-
-The case stays `known_limitation`, and its exact FP ID remains recorded. Only the
-FP explanation, limitation text and feature tag were updated to describe fallback
-instead of stale resolved evidence. Existing snapshots, label maps and rationales
-are unchanged. The evidence-specific regression deliberately changed its expected
-reason after first failing on the corrected result; selection baselines were not
-weakened. All 31 recommendations still pass structural evidence validation.
-
-The correction requires a single direct module import with no competing binding.
-It handles assignments/deletions, definitions and compound-statement bindings while
-excluding separate function/class bodies and comprehension iteration targets.
-Bare annotations do not reassign a module name. See the
-[exact boundary](ARCHITECTURE.md#bounded-module-level-rebinding), including unsupported
-runtime/global/object mutations and deliberately conservative repeated imports.
-
-Fixture injection, runtime imports, conditional definitions, re-export aliases,
-instance/inherited dispatch and conservative module over-selection remain limitations
-in the aggregate results without skips or xfails.
+Initialization changes still propagate conservatively. The separate real-source
+pilot previously recorded four default-digest initialization FPs. Bounded
+constructor/factory argument and early-exit tracking now removes those four. Unmodeled special
+methods and exhausted reference budgets retain broad fallback with a warning.
+See [the implementation boundary](ARCHITECTURE.md#scoped-aggregate-fallback) and
+[real-source results](REAL_EVALUATION.md). All limitations remain in reported
+totals without skips, xfails or relabeling controls to make results look better.
 
 ## Evaluation report 1.0
 
@@ -303,8 +264,9 @@ regressions provide separate checks. Existing scoring and stable-ID regressions
 remain in the full suite. The local-import extension changes resolution and adds
 function-to-module import edges, using the existing schema, IDs and evidence types.
 The analyzer report and evaluation schema versions remain 2.0 and 1.0.
-The subsequent module-rebinding correction only suppresses unjustified call edges;
-it preserves the existing import edges and report contracts.
+The subsequent module-rebinding correction suppresses unjustified call edges.
+The selection refinement filters propagation while preserving all graph edges,
+source/label data and report contracts; only discrepancy metadata is updated.
 
 ## Add a case or review a changed baseline
 
@@ -336,20 +298,43 @@ test actually fails; even the assertion examples here have not been executed.
 1. **Strength:** open `transitive_calls.json`. Predict `test_total → total → price`
    and explain why caller-to-dependency edges are traversed in reverse. Evaluate
    this case and inspect the resolved path and the unselected control.
-2. **False positive:** open `module_overselection.json`. Show that `healthy` never
-   calls `price`, then inspect its conservative module hop. Explain why the full
-   result includes this mistake rather than silently dropping it from metrics.
-3. **Measured fix:** open `local_import.json`. Show how the unchanged affected label
-   moved from FN to TP after adding scope-aware local aliases. Then contrast it
-   with the still-missed `pytest_fixtures` case; passing the baseline does not mean
-   every dependency is resolved.
+2. **False positive and fix:** open `module_overselection.json` and the archived
+   baseline. `healthy` never calls `price`; the old conservative module hop selected
+   its test. The current body-change filter removes that FP while retaining the
+   direct affected test and all graph evidence.
+3. **Miss and fix:** open `local_import.json`. Its unchanged affected label moved
+   from FN to TP after adding scoped aliases. Contrast it with the still-missed
+   `pytest_fixtures` case; passing a baseline is not complete dependency coverage.
+4. **Evidence, then selection:** `module_rebinding` first lost a false resolved
+   edge but retained an FP through fallback. This follow-up removes the unrelated
+   selection; the unaffected label and source stay fixed. The affected direct
+   caller remains resolved with priority 81.
 
-4. **Evidence correction:** open `module_rebinding.json`. Explain why replacing an
-   imported callable invalidates the old resolved edge. Compare the corrected
-   fallback path and priority against the prior resolved path, while keeping the
-   test labeled unaffected and retaining the FP. This improves evidence without
-   claiming an improvement in selection accuracy.
+Next: independently review real-source labels and reserve fresh changes for an
+unseen evaluation set. Keep controls, uncertain tests and misses in the reports;
+reducing recommendation counts alone does not establish correctness.
 
-A next step is independently reviewed evaluation of conservative module fallback
-before attempting to narrow it. Keep labeled controls and any misses in the
-measurements; reducing recommendations alone does not establish better correctness.
+## Separate real-repository pilot
+
+`corpus/real` contains six pinned changes across MarkupSafe, ItsDangerous and
+Schedule. Run `make evaluate-real` offline. It reuses this evaluator and evidence
+checks, adding complete-tree/source/license integrity and label review status.
+The two datasets stay separate. All original snapshots and labels are preserved;
+the selection refinement deliberately updates discrepancy baselines and archives
+the previous annotations in `corpus/selection-baseline-v1.json`.
+
+The real labels were drafted before initial analysis: 45 affected, 123 unaffected,
+33 uncertain definitions. All remain agent drafted, with no independent review or
+upstream execution. Initial selection was 171/201, with 102 FPs. Current selection
+is 56/201: TP 45, FP 0, FN 0, TN 123, plus 11 selected uncertain tests. Precision and
+recall are both 45/45, conditional on the drafts. All six cases retain limitation
+status. Class/module fixes removed 98 FPs and bounded argument tracking removed the
+remaining four, without modifying the source or labels. These cases informed the fix and are regression data,
+not an unseen benchmark. Edited tests also make selection easier.
+
+The [protocol](../corpus/real/README.md) explains sampling, exclusions, complete
+supported Python scope, limits, provenance trust, label semantics, uncertainties
+and deliberate baseline updates. The [review pack](../corpus/real/REVIEW.md)
+contains every label/rationale with pinned source links and full Python diffs.
+[REAL_EVALUATION.md](REAL_EVALUATION.md) records per-case/aggregate measurements,
+selected IDs, concrete false positives and reproducible report hashes.

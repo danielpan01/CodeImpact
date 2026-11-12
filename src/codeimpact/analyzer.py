@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import PurePosixPath
 from typing import Literal
 
+from codeimpact.arguments import ArgumentFallback
 from codeimpact.models import (
     AnalysisRequest,
     DependencyEvidence,
@@ -28,6 +29,7 @@ from codeimpact.models import (
     Symbol,
     SymbolChange,
 )
+from codeimpact.selection import AggregateFallback, propagation_changes
 
 DEFINITIONS = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
 
@@ -277,6 +279,11 @@ class Index:
     ranges: dict[str, SourceRange] = field(default_factory=dict)
     sources: dict[str, SourceRevision] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
+    # Internal source data for bounded selection; never serialized or executed.
+    syntax: dict[str, ast.AST] = field(default_factory=dict)
+    aliases: dict[str, dict[str, str]] = field(default_factory=dict)
+    ambiguous: dict[str, set[str]] = field(default_factory=dict)
+    local_bindings: dict[str, LocalImports] = field(default_factory=dict)
 
     def add_edge(
         self,
@@ -315,6 +322,7 @@ def build_index(snapshot: Snapshot) -> Index:
             if isinstance(node, DEFINITIONS):
                 name = f"{prefix}.{node.name}" if prefix else node.name
                 sid = f"{path}::{name}"
+                index.syntax[sid] = node
                 is_test = (
                     (PurePosixPath(path).name.startswith("test_") or path.endswith("_test.py"))
                     and node.name.startswith("test_")
@@ -372,6 +380,7 @@ def build_index(snapshot: Snapshot) -> Index:
             raise ValueError(f"Ambiguous module layout: {path} and {modules[mod]}")
         modules[mod] = path
         sid = f"{path}::<module>"
+        index.syntax[sid] = tree
         # Module fingerprints include all source semantics. Module dependency edges are
         # conservative fallbacks; the UI labels them separately from resolved calls.
         index.nodes[sid] = Symbol(
@@ -420,6 +429,8 @@ def build_index(snapshot: Snapshot) -> Index:
                 )
 
         ambiguous = ambiguous_module_imports(tree)
+        index.aliases[path] = aliases
+        index.ambiguous[path] = ambiguous
         if ambiguous:
             index.warnings.append(
                 f"Ambiguous module import binding: {module_id}: {', '.join(sorted(ambiguous))}"
@@ -437,6 +448,7 @@ def build_index(snapshot: Snapshot) -> Index:
                 SourceLocation(path=path, **index.ranges[sid].model_dump()),
             )
             local = scopes[name]
+            index.local_bindings[sid] = local
             for imported, statement in local.imports:
                 if imported in modules:
                     index.add_edge(
@@ -613,10 +625,36 @@ def analyze(request: AnalysisRequest) -> Report:
         typed_pairs[(edge.source, edge.target)].append(edge)
 
     # A second traversal over call edges supplies stronger evidence when available.
-    def walk(seeds: list[str], calls_only: bool) -> dict[str, list[str]]:
+    active = propagation_changes(before, after, changed)
+    arguments = ArgumentFallback(before, after, {nodes[sid].path for sid in active})
+    active = [sid for sid in active if sid not in arguments.passive_import_modules]
+    aggregate = [sid for sid in changed if nodes[sid].kind == "module" and sid not in active]
+    fallback = AggregateFallback(before, after, {nodes[sid].path for sid in aggregate})
+
+    def walk(
+        seeds: list[str],
+        calls_only: bool,
+        aggregate_path: str | None = None,
+        initialization_path: str | None = None,
+    ) -> dict[str, list[str]]:
         adjacency: dict[str, set[str]] = defaultdict(set)
         for edge in edges.values():
             if not calls_only or edge.kind == "call":
+                if (
+                    initialization_path is not None
+                    and nodes[edge.source].kind == "test"
+                    and not arguments.allows(edge.source, initialization_path)
+                ):
+                    continue
+                if (
+                    aggregate_path is not None
+                    and (
+                        edge.kind == "module"
+                        or (edge.kind == "import" and nodes[edge.source].kind != "module")
+                    )
+                    and not fallback.allows(edge.source, aggregate_path)
+                ):
+                    continue
                 adjacency[edge.target].add(edge.source)
         paths = {sid: [sid] for sid in seeds}
         queue = deque(seeds)
@@ -628,8 +666,26 @@ def analyze(request: AnalysisRequest) -> Report:
                     queue.append(dependent)
         return paths
 
-    paths = walk(changed, False)
-    call_paths = walk([sid for sid in changed if nodes[sid].kind != "module"], True)
+    def active_paths(calls_only: bool) -> dict[str, list[str]]:
+        seeds = [sid for sid in active if not calls_only or nodes[sid].kind != "module"]
+        result = walk(
+            [sid for sid in seeds if nodes[sid].path not in arguments.changes], calls_only
+        )
+        for source_path in arguments.changes:
+            group = [sid for sid in seeds if nodes[sid].path == source_path]
+            for sid, candidate in walk(group, calls_only, initialization_path=source_path).items():
+                current = result.get(sid)
+                if current is None or (len(candidate), candidate) < (len(current), current):
+                    result[sid] = candidate
+        return result
+
+    paths = active_paths(False)
+    for module in aggregate:
+        for sid, candidate in walk([module], False, nodes[module].path).items():
+            current = paths.get(sid)
+            if current is None or (len(candidate), candidate) < (len(current), current):
+                paths[sid] = candidate
+    call_paths = active_paths(True)
     recommendations = []
     for sid in sorted(paths):
         if nodes[sid].kind != "test" or sid not in after.nodes:
@@ -643,7 +699,7 @@ def analyze(request: AnalysisRequest) -> Report:
         if distance == 0:
             reason = "Test itself changed"
         # Edges are sorted by (source, target, kind), preferring call on a tied pair.
-        # Keep the historical BFS/ranking unchanged, but identify each exact typed hop.
+        # Retain scoring and typed-edge preference while identifying each exact hop.
         used_edges = [typed_pairs[(a, b)][0] for a, b in zip(path, path[1:], strict=False)]
         in_before = sid in before.nodes and all(e.before for e in used_edges)
         in_after = sid in after.nodes and all(e.after for e in used_edges)

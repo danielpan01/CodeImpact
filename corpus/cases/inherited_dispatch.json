@@ -39,13 +39,11 @@
   },
   "unclassified": {},
   "known_discrepancies": {
-    "false_positives": {
-      "tests/test_child.py::test_health": "Module/import fallback reaches base.py for both instance methods."
-    },
+    "false_positives": {},
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
   "limitations": [
-    "Instance/inherited method dispatch is unresolved. Module fallback selects the affected method test but also the independent inherited method test."
+    "Inherited dispatch remains a possible source reference, not a resolved call edge. The bounded fallback filter separates these two methods without claiming general dynamic dispatch support."
   ]
 }

@@ -78,7 +78,7 @@ starting on clean `main` at `4b50d9fd58d28809def15e753032595a66ba76ea`. Direct a
 are scoped to a function and resolved only after the import. Competing bindings and
 unsupported control-flow/closure cases suppress precise calls; direct import
 fallback belongs to the function. The former `local_import` FN becomes a TP without
-changing any authored label or snapshot. Current counts: TP 23, FN 2, FP 6, TN 26,
+changing any authored label or snapshot. Counts at that milestone: TP 23, FN 2, FP 6, TN 26,
 plus two unclassified recommendations; precision 23/29, recall 23/25. The other 24
 case reports are unchanged. Schema versions, scoring, dashboard and input limits
 remain unchanged. See ARCHITECTURE.md, CORPUS.md and the separate VALIDATION.md
@@ -87,12 +87,30 @@ entry for supported scope and actual checks.
 That local-import work was merged as `68ae852` (PR #3). The next module-level
 rebinding milestone starts from that commit on `codex/module-level-rebinding`.
 Its local implementation suppresses ambiguous module import names without removing
-conservative import edges. The `module_rebinding` FP remains selected, now with a
+conservative import edges. At that milestone the `module_rebinding` FP remained selected, with a
 fallback path and priority 23 rather than a misleading resolved path and priority 72.
 The directly affected test remains resolved with priority 81 instead of 82 after
 removing one incorrect incoming edge. Selected IDs, all authored labels/snapshots
-and overall metrics are unchanged; the other 24 case reports remain identical.
-These module-rebinding edits remain unstaged/uncommitted, with no hosted CI claim.
+and overall metrics were unchanged at that milestone; the other 24 reports were identical.
+Module rebinding was merged as `aca764e` (PR #4).
+
+Real-repository evaluation v1 starts at `aca764e9e3205a612898e29b065230695667fc85`
+on `codex/real-repository-evaluation`. It adds six changes across MarkupSafe,
+ItsDangerous and Schedule, complete pinned Python snapshots, source/license/tree
+provenance, a source-only label review pack and offline `make evaluate-real`.
+Labels remain agent drafted: 45 affected, 123 unaffected, 33 uncertain. The initial
+run selected 171/201 (45 TP, 102 FP, 0 FN, 21 TN, 24 uncertain selected).
+The subsequent user-requested selection refinement separates aggregate body edits
+from initialization changes and filters conservative fallback by bounded source
+references. The initial selection refinement yielded 60/201 selections. Bounded constructor
+and factory argument tracking now yields 56/201 selected, 45 TP, 0 FP, 0 FN, 123 TN,
+11 uncertain selected. Authored results: 23 TP, 0 FP, 2 FN, 32 TN, 2 uncertain selected.
+All source snapshots, labels, graph evidence and report contracts are preserved;
+discrepancy annotations were deliberately updated and the original baseline archived.
+The four default-initialization FPs are fixed; the two authored misses remain. Independent
+label review and an unseen evaluation set are next; these six cases informed the fix.
+Dashboard design and scoring are unchanged. Changes remain unstaged/uncommitted;
+see REAL_EVALUATION.md and VALIDATION.md for verification.
 
 Not implemented: GitHub App auth, durable jobs, cross-request source caching,
 database, public hosted app, production abuse controls or a real-repository accuracy
@@ -119,8 +137,8 @@ Sources checked during setup:
 Use Codex to implement bounded slices. Review and understand each before making your
 own commit. Engine, public PR ingestion, revision evidence and the authored corpus
 are present locally, with bounded function-local imports and module import rebinding.
-Next, plan independently reviewed real-repository evaluation of conservative module
-fallback before attempting to narrow recommendations. Durable jobs, private
+Next, independently review the real-source labels and assess conservative module
+fallback and class fingerprint over-selection before narrowing recommendations. Durable jobs, private
 authorization and deployment need their own demonstrated requirements.
 
 Most impressive evidence: show a real change, traverse its dependency path to a test,

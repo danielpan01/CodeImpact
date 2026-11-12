@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "id": "module_overselection",
-  "description": "A constant-return sibling function does not depend on the changed function.",
-  "category": "known_limitation",
+  "description": "A function body edit selects its caller without selecting an unrelated sibling-function caller through aggregate module fallback.",
+  "category": "supported",
   "features": [
     "module_fallback",
     "false_positive"
@@ -37,13 +37,9 @@
   },
   "unclassified": {},
   "known_discrepancies": {
-    "false_positives": {
-      "tests/test_health.py::test_health": "The test module imports core, so module-level fallback reaches the changed core module."
-    },
+    "false_positives": {},
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
-  "limitations": [
-    "Module fallback treats an import as dependency on all semantic changes in that module, overselecting an independent sibling test."
-  ]
+  "limitations": []
 }

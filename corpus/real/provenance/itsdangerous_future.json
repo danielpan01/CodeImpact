@@ -1,0 +1,797 @@
+{
+  "base": {
+    "commit": {
+      "message": "Merge pull request #151 from pallets/timezone-aware\n\ndatetimes are timezone-aware utc",
+      "parents": [
+        {
+          "sha": "3703fbdedd13b2630dd9be75a3638408c193765d"
+        },
+        {
+          "sha": "910a7a94ee88b15d0677f65ed87d7ccbbd998048"
+        }
+      ],
+      "sha": "1a9b8d1f9968eb248bda69f39d373a6330b692ba",
+      "tree": {
+        "sha": "288fceb1735cf3154d363263954e08bfc87e220a"
+      }
+    },
+    "license": {
+      "path": "LICENSE.rst",
+      "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright 2011 Pallets\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n1.  Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n2.  Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions and the following disclaimer in the\n    documentation and/or other materials provided with the distribution.\n\n3.  Neither the name of the copyright holder nor the names of its\n    contributors may be used to endorse or promote products derived from\n    this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\nPARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nHOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\nTO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "49c7181d2549f41b90339a1037234051de8e07e1e21ea4be259581294cdf8e2d",
+      "setup.py": "8aa2813abd149d4452ece61db88878318dc440e5e7a9b6313d1a2d126b998a4d",
+      "src/itsdangerous/__init__.py": "09dca301d34d47df8b258f4fbbced55430ae43ca0858e7e4a23c438572a64b28",
+      "src/itsdangerous/_json.py": "5943004fb3d2c84be305a36946b1bfb371b60c6380d13ceb037655813a792bd2",
+      "src/itsdangerous/encoding.py": "3c6192ed5dd7731c8f84665ff7ccee2124f1e504d5481167155d5a7489106ac8",
+      "src/itsdangerous/exc.py": "25307d061d4fdc5856c25b86c0be7f4a6cafd79f944f8f78c7ba0b3f372cdc95",
+      "src/itsdangerous/jws.py": "03ade0da2f0447c31875c7771548b6a5d3d3d58bed74bc0652dbd860c91be22a",
+      "src/itsdangerous/serializer.py": "5549cda3779af4f6b0e1ece42975cba13006d83813d27b86781415d156b5c63a",
+      "src/itsdangerous/signer.py": "3ef671ac4f78263a537c6c2ff804e00c82a37514b635420d38a2964b10890c62",
+      "src/itsdangerous/timed.py": "f0be07c03a26203279dec588d965f6af7a00013afa3ebeb223568990a3c67290",
+      "src/itsdangerous/url_safe.py": "8b478133d0d4e12767aad41a63a2867a49a74fa5a0254a3bec3a9cce456190a3",
+      "tests/test_itsdangerous/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_itsdangerous/test_encoding.py": "af71dbee0825fc8ae947b6c789b05f2331afe60efae2aee5145727446385c3f0",
+      "tests/test_itsdangerous/test_jws.py": "ddb0bed73ff4862ed4970cb2b45cd1b2e0b9897c58191b46f622edc0b660f361",
+      "tests/test_itsdangerous/test_serializer.py": "665fcc96606fc69c3279bcbd604beb3856d357507fb3dc1c5ae750f5832be888",
+      "tests/test_itsdangerous/test_signer.py": "c13a752b11e6f4f90d281f32d57d335ae4ef2ed7141820277460cddbbb934d89",
+      "tests/test_itsdangerous/test_timed.py": "8f2ba09b7d1de7fa6b2632d621172e155eaba37c5bf8f900b0e390aedd8910f6",
+      "tests/test_itsdangerous/test_url_safe.py": "a2ff5413d767e80d0fa1a8f0b74cf6094c16faa0b866f9c56d421c9ff9fd2208"
+    },
+    "tree": {
+      "sha": "288fceb1735cf3154d363263954e08bfc87e220a",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".azure-pipelines.yaml",
+          "sha": "64a81b295b2e40855b9b4022b91afac6de318c83",
+          "size": 735,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "e32c8029d1860bf40125d8458db3bd1c4d3f4058",
+          "size": 217,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "fc5a65f293d02ccd0c8959cc1f8078c9f4e2dd9e",
+          "size": 146,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "4dd6713779f78ad883408d19f6d6025dc81f9de1",
+          "size": 768,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "feab627116ba2307f00bab1753b1bdf938952398",
+          "size": 5185,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.rst",
+          "sha": "7b190ca6712aa09eede3e6de79f68d7fa29072da",
+          "size": 1475,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "cab56636c2eed4f47f3d8e18c1590ff3fb50c8eb",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "5f79b7b3e30e23f1c3892bf2669cc33b0b4df5c5",
+          "size": 1762,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "b0fff1dcc0e9df1fbb9f39f16c4ec22c711f4a6b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "51285967a7d9722c5bdee4f6a81c154a56aa0846",
+          "size": 581,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "2d51a04de30887f1a3e1f89eb1697b793aa52a6c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo-sidebar.png",
+          "sha": "807c350a69d113d339117530889f4aebdafe2bd6",
+          "size": 6629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo.png",
+          "sha": "3879e8529a60d099ec588e785ad6fc5d39d2bc1a",
+          "size": 18971,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changes.rst",
+          "sha": "955deaf27bc821a6367e818f36c016892fed3d33",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "8986282ac8da918f86b0ed21e45be74f30ed564a",
+          "size": 1864,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/encoding.rst",
+          "sha": "0c5a0e3e77d3ed70eb5f02f1f19f3d3cd09e6389",
+          "size": 139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exceptions.rst",
+          "sha": "0d75655f42e3118ddc6fe8dedc3c5f84a28a0c86",
+          "size": 332,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "c5b16cb068ecd27110250179f261584ff4fdb1d3",
+          "size": 1981,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/jws.rst",
+          "sha": "06f5bcd01c82dee82f90e491fdbac652e750de07",
+          "size": 1482,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/license.rst",
+          "sha": "cc8c2f32baafc7148cacdcfcf76fcb2bc826c22b",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "7893348a1b7dbb588983a48e6991282eae7e1b55",
+          "size": 752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "53544004d6972a14974c9b681435fa45321772cd",
+          "size": 97,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/serializer.rst",
+          "sha": "2f08e2ae11fd40a624984c7c06c202531f686e4e",
+          "size": 4267,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/signer.rst",
+          "sha": "b25efb9e985622396207a4e3effba1acb5c00994",
+          "size": 1310,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/timed.rst",
+          "sha": "8964d175982f5ff8cc4a95136b4c16fd88688fa3",
+          "size": 679,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/url_safe.rst",
+          "sha": "bd5e2dc56aabbdfbbc52ad33658c6aaa95c67dd5",
+          "size": 615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "f5af1a1afef82320c74f9eac2e4418a114462290",
+          "size": 1642,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "779a2c0c763be8b592a892549e4b37a020bb72dc",
+          "size": 57,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "22166ab5cb584428e7bfba186672a49e493ff13c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/itsdangerous",
+          "sha": "056bf30e587483d4472babbd09ba0e45347ca65c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/__init__.py",
+          "sha": "1709a9bc44601342b017db0c408670d97f88a781",
+          "size": 712,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/_json.py",
+          "sha": "470636fd16de456f81f837fcf33362c3ac7992c9",
+          "size": 423,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/encoding.py",
+          "sha": "afcaca49cb7f1edc39884dfe6eb4ac52858ee026",
+          "size": 1185,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/exc.py",
+          "sha": "8c9021db167cb2d8379cd8542bced9a9c48c0368",
+          "size": 2829,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/jws.py",
+          "sha": "27ee1401eb8ba44d5137508ad0b846f5ea45c4d5",
+          "size": 7776,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/serializer.py",
+          "sha": "72e84a18f1963a04b165b00411962188c42681cb",
+          "size": 8624,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/signer.py",
+          "sha": "2dd4c803ed7110a1eb04c085145dc857bd301e30",
+          "size": 6300,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/timed.py",
+          "sha": "2ae026195fdad135d8c4b828b64dd39cba8523e6",
+          "size": 5977,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/url_safe.py",
+          "sha": "14aa7b9723356ee4ab96e7bb142891512ce7c3a3",
+          "size": 2219,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "4c1bedeac2935676ee311c23dbf553a5750c9689",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "tests/test_itsdangerous",
+          "sha": "9ada606ff500c1a699b26743de69a67a8dd94718",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_encoding.py",
+          "sha": "268367e6b10b33c846beb6c60eeae64ce1c3072d",
+          "size": 1004,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_jws.py",
+          "sha": "e57e5cbb9608f0dd5e6f06811645156ca948d22f",
+          "size": 4408,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_serializer.py",
+          "sha": "fcd0ab220c9d618dd8457d5ac4d09a50e0d3efd9",
+          "size": 6195,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_signer.py",
+          "sha": "17599eef3aeb7a41c42370afc59ca1f528c12eee",
+          "size": 3141,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_timed.py",
+          "sha": "68a8c7464b79d5993273ac325f802af7dcc5b4dd",
+          "size": 2810,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_url_safe.py",
+          "sha": "09a7e7cf22046433f3f3bb638ce5d58f953a80ba",
+          "size": 775,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "95386b74a7198e8a87cfee950a5422de073d5533",
+          "size": 439,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/pallets/itsdangerous/commit/c30678d19e37011890e2374cca04f7789e101793",
+  "head": {
+    "commit": {
+      "message": "don't allow timestamps from the future",
+      "parents": [
+        {
+          "sha": "1a9b8d1f9968eb248bda69f39d373a6330b692ba"
+        }
+      ],
+      "sha": "c30678d19e37011890e2374cca04f7789e101793",
+      "tree": {
+        "sha": "6b06abf80ebba42818eeeaaca9d9d59ecdf602f9"
+      }
+    },
+    "license": {
+      "path": "LICENSE.rst",
+      "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright 2011 Pallets\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n1.  Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n2.  Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions and the following disclaimer in the\n    documentation and/or other materials provided with the distribution.\n\n3.  Neither the name of the copyright holder nor the names of its\n    contributors may be used to endorse or promote products derived from\n    this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\nPARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nHOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\nTO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "49c7181d2549f41b90339a1037234051de8e07e1e21ea4be259581294cdf8e2d",
+      "setup.py": "8aa2813abd149d4452ece61db88878318dc440e5e7a9b6313d1a2d126b998a4d",
+      "src/itsdangerous/__init__.py": "09dca301d34d47df8b258f4fbbced55430ae43ca0858e7e4a23c438572a64b28",
+      "src/itsdangerous/_json.py": "5943004fb3d2c84be305a36946b1bfb371b60c6380d13ceb037655813a792bd2",
+      "src/itsdangerous/encoding.py": "3c6192ed5dd7731c8f84665ff7ccee2124f1e504d5481167155d5a7489106ac8",
+      "src/itsdangerous/exc.py": "25307d061d4fdc5856c25b86c0be7f4a6cafd79f944f8f78c7ba0b3f372cdc95",
+      "src/itsdangerous/jws.py": "03ade0da2f0447c31875c7771548b6a5d3d3d58bed74bc0652dbd860c91be22a",
+      "src/itsdangerous/serializer.py": "5549cda3779af4f6b0e1ece42975cba13006d83813d27b86781415d156b5c63a",
+      "src/itsdangerous/signer.py": "3ef671ac4f78263a537c6c2ff804e00c82a37514b635420d38a2964b10890c62",
+      "src/itsdangerous/timed.py": "13ef04d25944516cdf406c09e4d6fe52ccc5cb44b4edf6e9c8d2023d8908d52b",
+      "src/itsdangerous/url_safe.py": "8b478133d0d4e12767aad41a63a2867a49a74fa5a0254a3bec3a9cce456190a3",
+      "tests/test_itsdangerous/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_itsdangerous/test_encoding.py": "af71dbee0825fc8ae947b6c789b05f2331afe60efae2aee5145727446385c3f0",
+      "tests/test_itsdangerous/test_jws.py": "ddb0bed73ff4862ed4970cb2b45cd1b2e0b9897c58191b46f622edc0b660f361",
+      "tests/test_itsdangerous/test_serializer.py": "665fcc96606fc69c3279bcbd604beb3856d357507fb3dc1c5ae750f5832be888",
+      "tests/test_itsdangerous/test_signer.py": "c13a752b11e6f4f90d281f32d57d335ae4ef2ed7141820277460cddbbb934d89",
+      "tests/test_itsdangerous/test_timed.py": "610f8e8747f8943f9d52c8f79c2a02e76c35857a93f072aeb18411980060254a",
+      "tests/test_itsdangerous/test_url_safe.py": "a2ff5413d767e80d0fa1a8f0b74cf6094c16faa0b866f9c56d421c9ff9fd2208"
+    },
+    "tree": {
+      "sha": "6b06abf80ebba42818eeeaaca9d9d59ecdf602f9",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".azure-pipelines.yaml",
+          "sha": "64a81b295b2e40855b9b4022b91afac6de318c83",
+          "size": 735,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "e32c8029d1860bf40125d8458db3bd1c4d3f4058",
+          "size": 217,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "fc5a65f293d02ccd0c8959cc1f8078c9f4e2dd9e",
+          "size": 146,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "4dd6713779f78ad883408d19f6d6025dc81f9de1",
+          "size": 768,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "1cf41236d1530a310b2058fd70b69bc54dd0df10",
+          "size": 5365,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.rst",
+          "sha": "7b190ca6712aa09eede3e6de79f68d7fa29072da",
+          "size": 1475,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "cab56636c2eed4f47f3d8e18c1590ff3fb50c8eb",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "5f79b7b3e30e23f1c3892bf2669cc33b0b4df5c5",
+          "size": 1762,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "b0fff1dcc0e9df1fbb9f39f16c4ec22c711f4a6b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "51285967a7d9722c5bdee4f6a81c154a56aa0846",
+          "size": 581,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "2d51a04de30887f1a3e1f89eb1697b793aa52a6c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo-sidebar.png",
+          "sha": "807c350a69d113d339117530889f4aebdafe2bd6",
+          "size": 6629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo.png",
+          "sha": "3879e8529a60d099ec588e785ad6fc5d39d2bc1a",
+          "size": 18971,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changes.rst",
+          "sha": "955deaf27bc821a6367e818f36c016892fed3d33",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "8986282ac8da918f86b0ed21e45be74f30ed564a",
+          "size": 1864,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/encoding.rst",
+          "sha": "0c5a0e3e77d3ed70eb5f02f1f19f3d3cd09e6389",
+          "size": 139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exceptions.rst",
+          "sha": "0d75655f42e3118ddc6fe8dedc3c5f84a28a0c86",
+          "size": 332,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "c5b16cb068ecd27110250179f261584ff4fdb1d3",
+          "size": 1981,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/jws.rst",
+          "sha": "06f5bcd01c82dee82f90e491fdbac652e750de07",
+          "size": 1482,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/license.rst",
+          "sha": "cc8c2f32baafc7148cacdcfcf76fcb2bc826c22b",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "7893348a1b7dbb588983a48e6991282eae7e1b55",
+          "size": 752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "53544004d6972a14974c9b681435fa45321772cd",
+          "size": 97,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/serializer.rst",
+          "sha": "2f08e2ae11fd40a624984c7c06c202531f686e4e",
+          "size": 4267,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/signer.rst",
+          "sha": "b25efb9e985622396207a4e3effba1acb5c00994",
+          "size": 1310,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/timed.rst",
+          "sha": "8964d175982f5ff8cc4a95136b4c16fd88688fa3",
+          "size": 679,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/url_safe.rst",
+          "sha": "bd5e2dc56aabbdfbbc52ad33658c6aaa95c67dd5",
+          "size": 615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "f5af1a1afef82320c74f9eac2e4418a114462290",
+          "size": 1642,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "779a2c0c763be8b592a892549e4b37a020bb72dc",
+          "size": 57,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "73994c552f29feb97bd31561f859d9308865a87e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/itsdangerous",
+          "sha": "a16eb774c1e095e281313952732a0ddceabd9ea4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/__init__.py",
+          "sha": "1709a9bc44601342b017db0c408670d97f88a781",
+          "size": 712,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/_json.py",
+          "sha": "470636fd16de456f81f837fcf33362c3ac7992c9",
+          "size": 423,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/encoding.py",
+          "sha": "afcaca49cb7f1edc39884dfe6eb4ac52858ee026",
+          "size": 1185,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/exc.py",
+          "sha": "8c9021db167cb2d8379cd8542bced9a9c48c0368",
+          "size": 2829,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/jws.py",
+          "sha": "27ee1401eb8ba44d5137508ad0b846f5ea45c4d5",
+          "size": 7776,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/serializer.py",
+          "sha": "72e84a18f1963a04b165b00411962188c42681cb",
+          "size": 8624,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/signer.py",
+          "sha": "2dd4c803ed7110a1eb04c085145dc857bd301e30",
+          "size": 6300,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/timed.py",
+          "sha": "656bc1656e06a425541f9e9ad522f506e34d9924",
+          "size": 6222,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/url_safe.py",
+          "sha": "14aa7b9723356ee4ab96e7bb142891512ce7c3a3",
+          "size": 2219,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "f24ab812ce8bb5f94965fe67b405c2618b553247",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "tests/test_itsdangerous",
+          "sha": "4f163950939cae8a3ffa743da9a186cefe0949c8",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_encoding.py",
+          "sha": "268367e6b10b33c846beb6c60eeae64ce1c3072d",
+          "size": 1004,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_jws.py",
+          "sha": "e57e5cbb9608f0dd5e6f06811645156ca948d22f",
+          "size": 4408,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_serializer.py",
+          "sha": "fcd0ab220c9d618dd8457d5ac4d09a50e0d3efd9",
+          "size": 6195,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_signer.py",
+          "sha": "17599eef3aeb7a41c42370afc59ca1f528c12eee",
+          "size": 3141,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_timed.py",
+          "sha": "18de74117d41c06e252453809a2393dc710cb861",
+          "size": 3029,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_url_safe.py",
+          "sha": "09a7e7cf22046433f3f3bb638ce5d58f953a80ba",
+          "size": 775,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "95386b74a7198e8a87cfee950a5422de073d5533",
+          "size": 439,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "itsdangerous_future",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "5e52f3701c5333d253e66b392b0a7aff2c47367d78bcc3ee199161b65ec681d8",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "pallets/itsdangerous",
+  "schema_version": "1.0",
+  "selection_reason": "Negative signature-age rejection in timestamp verification, including inherited and fixture-driven tests.",
+  "warnings": []
+}

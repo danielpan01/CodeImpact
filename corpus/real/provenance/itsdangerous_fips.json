@@ -1,0 +1,1099 @@
+{
+  "base": {
+    "commit": {
+      "message": "change entry for generic serializer",
+      "parents": [
+        {
+          "sha": "135eb234ed4a07520779ffb679407b7d27c8ffe6"
+        }
+      ],
+      "sha": "93ae366874bbd4f69d90495c45b2cd336387496c",
+      "tree": {
+        "sha": "1485901fc7f4c17472afca288d1a6515a694fa47"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright 2011 Pallets\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n1.  Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n2.  Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions and the following disclaimer in the\n    documentation and/or other materials provided with the distribution.\n\n3.  Neither the name of the copyright holder nor the names of its\n    contributors may be used to endorse or promote products derived from\n    this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\nPARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nHOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\nTO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "40f5e13a39d50776a4f5f98828211ff49a3b58b79aced9a61ae8a51a7bf6486b",
+      "src/itsdangerous/__init__.py": "e122bbe6c09edbdc5b460404d5942d3079ca52e65801fddb4a964eadf7f52006",
+      "src/itsdangerous/_json.py": "c0f4069a07b6c99f77dbc107285ea069d19ec866022502b1b54fa22ca13a5270",
+      "src/itsdangerous/encoding.py": "c304f3e6aff7ccb71a01dba793afef4a84adc06a9859edf4ed997f53ceda4453",
+      "src/itsdangerous/exc.py": "46bddec68d0c44511c3d996dc1e7322b5e955756c4d8af7f175f9dfa58dc527e",
+      "src/itsdangerous/serializer.py": "3e67700032ea912c902d9d2338a0200ec016e24fc7d13940ef5122df3d02e5a2",
+      "src/itsdangerous/signer.py": "b1126648fe80efcc376c4053918fa67e75bca3ba0e9039f3b21f7f541280f6db",
+      "src/itsdangerous/timed.py": "e91bc332a36e9863317f4f8796969974df4f51042646fad01a994a871ba2bd4b",
+      "src/itsdangerous/url_safe.py": "6b3e1ee5f5e2fefb3e61b5a3f186709f8c2254a7de0fef8610a453e547aee0fe",
+      "tests/test_itsdangerous/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_itsdangerous/test_encoding.py": "af71dbee0825fc8ae947b6c789b05f2331afe60efae2aee5145727446385c3f0",
+      "tests/test_itsdangerous/test_serializer.py": "7bbe7fca39fd3937df734dd7c2b05a6d24922ceab38bfdfc7ac057fdf949c805",
+      "tests/test_itsdangerous/test_signer.py": "219c2a399adc874f14534d1311e950c1e29b2c7d05d037770701b2af258b97a2",
+      "tests/test_itsdangerous/test_timed.py": "b75531b8901d48a6d7a5c4bbbb2342f02f6ef022185840121f7705c1e907979a",
+      "tests/test_itsdangerous/test_url_safe.py": "64d2afc9ab467f209549841f0d87125243d646e011c725818eda8e75ad4d830d"
+    },
+    "tree": {
+      "sha": "1485901fc7f4c17472afca288d1a6515a694fa47",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".devcontainer",
+          "sha": "6c1f2b16b32fea485a40ee2a5939b2f2bd501c22",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".devcontainer/devcontainer.json",
+          "sha": "58b406f1a55fda61b2be6cc9693a4ed32c5f93f7",
+          "size": 441,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": ".devcontainer/on-create-command.sh",
+          "sha": "eaebea61856f7f6bde03a0deb1c7098fb085ca29",
+          "size": 165,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "2ff985a67af35fdfd1076354b771c425867cdab4",
+          "size": 233,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "8d0a7330cc71a121c1cf2941dfef5651c26a842e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "a3f2b2ae1058a4613583e9d4e27c8477e8ca8fc5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug-report.md",
+          "sha": "f8518155f12db67c1c59e07f4463430583b806ec",
+          "size": 643,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "548aa86d812639230eaf25425a638595495e142a",
+          "size": 339,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature-request.md",
+          "sha": "c9cb728d99dae2f9eac7cdd48d2622d1e4463bc9",
+          "size": 430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "fa94b770a882d1856f03dc8642f3b0f2bcc482c7",
+          "size": 554,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/pull_request_template.md",
+          "sha": "eb124d251a733352fc4e867844072e876d1a8508",
+          "size": 822,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "729ca801d3b91daa98ee624ac5f097a22ab32fc5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/lock.yaml",
+          "sha": "22228a1cd2fd561782e0fc49bbbe17d61007f4d8",
+          "size": 661,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/publish.yaml",
+          "sha": "9cedc0f22fd709d442b4225c57a470c7659fa0b8",
+          "size": 2668,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/tests.yaml",
+          "sha": "91a02d0caf03975e86194d2b8b169aaeb3b9c74d",
+          "size": 1765,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "62c1b887d73cc6325731f0c9c97927df23a42d1d",
+          "size": 89,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "8fd500e471dee979c1658b117a41bbb4d013dd5b",
+          "size": 407,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "865c68597994a02456d113489a5d931464d2b9c5",
+          "size": 209,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "cdd39b47790587380f2b2bc078252d46e30a00f9",
+          "size": 7766,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "c8602af268086307ce83d9947d6b116f5d2d1083",
+          "size": 6571,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "7b190ca6712aa09eede3e6de79f68d7fa29072da",
+          "size": 1475,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "59b9a5b9b77caa9942fa933b42e13bd0acd0b693",
+          "size": 1110,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "ee39aa7bb8c17d13cadc8d2afad2e5d5a9937818",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "51285967a7d9722c5bdee4f6a81c154a56aa0846",
+          "size": 581,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "2d51a04de30887f1a3e1f89eb1697b793aa52a6c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo-sidebar.png",
+          "sha": "807c350a69d113d339117530889f4aebdafe2bd6",
+          "size": 6629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo.png",
+          "sha": "3879e8529a60d099ec588e785ad6fc5d39d2bc1a",
+          "size": 18971,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changes.rst",
+          "sha": "955deaf27bc821a6367e818f36c016892fed3d33",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/concepts.rst",
+          "sha": "01a880d31b7361ebe33afe0d66bc33e0ed6701ba",
+          "size": 5230,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "ea5dd91f8c9aa944c07a0f8d7b083050419d5eff",
+          "size": 1976,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/encoding.rst",
+          "sha": "0c5a0e3e77d3ed70eb5f02f1f19f3d3cd09e6389",
+          "size": 139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exceptions.rst",
+          "sha": "0d75655f42e3118ddc6fe8dedc3c5f84a28a0c86",
+          "size": 332,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "4b981fc97e112cccf21111b14b0fb0862394dd48",
+          "size": 1654,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/license.rst",
+          "sha": "2a445f9c62843f5205e3e4a920fd49c1808a399e",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "7893348a1b7dbb588983a48e6991282eae7e1b55",
+          "size": 752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/serializer.rst",
+          "sha": "af5e6f12848c054dc1b2384d5d8253771a791c93",
+          "size": 3485,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/signer.rst",
+          "sha": "1c64ea73b53a2045ea53d76ff60ec502ea166eae",
+          "size": 1263,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/timed.rst",
+          "sha": "9890f6be11eb6ab941c42ee60cbc3e2b7a207277",
+          "size": 689,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/url_safe.rst",
+          "sha": "bd5e2dc56aabbdfbbc52ad33658c6aaa95c67dd5",
+          "size": 615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "966c86258cd5adfd8d1074050b357044cacfe2f4",
+          "size": 1872,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "requirements",
+          "sha": "b235994eb1fd64a57f06574e6275bbc20a6ddece",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/build.in",
+          "sha": "378eac25d311703f3f2cd456d8036da525cd0366",
+          "size": 6,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/build.txt",
+          "sha": "9ecc4895274bca9b26b8e012ce8fd53de1c497a4",
+          "size": 227,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/dev.in",
+          "sha": "1efde82b173ffe47e0b7410a7d28addacff74a11",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/dev.txt",
+          "sha": "272c42fda22958f03de010152bfe7aa8048a4560",
+          "size": 3125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/docs.in",
+          "sha": "ba3fd777497d8a8369916141293596d11055363f",
+          "size": 55,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/docs.txt",
+          "sha": "cf900713b77d2da74dc98669d17dac3925ca3a3b",
+          "size": 1141,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/tests.in",
+          "sha": "7167f60299fa02c0e43a2b45a3ec469711af039f",
+          "size": 17,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/tests.txt",
+          "sha": "1d21920f4a1670e552e822270139855e4e7ed949",
+          "size": 381,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/typing.in",
+          "sha": "8be59c5dc36bac6517788b5003db1822a89a6c2f",
+          "size": 20,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/typing.txt",
+          "sha": "ba1e8f1d62fe29ec641e3a9ac207d407638b24dc",
+          "size": 535,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "56bfbf392cc7c57908491f609522999ecbba400c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/itsdangerous",
+          "sha": "e3a3b8e068a3e1e825029146324f9138e11d608a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/__init__.py",
+          "sha": "ea55256ebd6feed68d8f1c5afedd141df6c7e766",
+          "size": 1427,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/_json.py",
+          "sha": "fc23feaaff690c477901dc50cc52dd18086051c5",
+          "size": 473,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/encoding.py",
+          "sha": "f5ca80f905c9bb29b993c437a89174e668704658",
+          "size": 1409,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/exc.py",
+          "sha": "a75adcd52762458db556111d8b90415e75df7277",
+          "size": 3201,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/serializer.py",
+          "sha": "5ddf3871d8898c90fabd5bddd8299404e6e7e2f3",
+          "size": 15601,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/signer.py",
+          "sha": "6410e652f0d340677c32b25f638d5efe047d6d64",
+          "size": 9360,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/timed.py",
+          "sha": "73843755d90979f750976705c5eaeeb3b98f178c",
+          "size": 8083,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/url_safe.py",
+          "sha": "56a0793315a19f24c8385c017a26ec8a9d4c23c3",
+          "size": 2505,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "a0d2f05ada9bc19ee2ada599e684aea643081773",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "tests/test_itsdangerous",
+          "sha": "99a589ebbf1c8b5b35d5a0863e648fd28cc2f99d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_encoding.py",
+          "sha": "268367e6b10b33c846beb6c60eeae64ce1c3072d",
+          "size": 1004,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_serializer.py",
+          "sha": "283712110440c5d9c5809125953fa6c41ad7692e",
+          "size": 6822,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_signer.py",
+          "sha": "1e053883aad5b517cb3acf3f7c46d2561bb33b96",
+          "size": 3435,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_timed.py",
+          "sha": "a4c1741f96536d6d6e0aa9b6670e8b61a98190b3",
+          "size": 3807,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_url_safe.py",
+          "sha": "37e48123937a1d3e9e7f0258fc6f67a2cca1e166",
+          "size": 793,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "a385dc7052ada05beae1bacc8dab4932151be8ff",
+          "size": 960,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/pallets/itsdangerous/commit/2f69e841d2a979c616a55b226e444694f5d9c962",
+  "head": {
+    "commit": {
+      "message": "support FIPS builds without SHA-1 (#378)",
+      "parents": [
+        {
+          "sha": "93ae366874bbd4f69d90495c45b2cd336387496c"
+        },
+        {
+          "sha": "7f4dcf83a07bb3d53f4e0e65ef1b43327b4cca90"
+        }
+      ],
+      "sha": "2f69e841d2a979c616a55b226e444694f5d9c962",
+      "tree": {
+        "sha": "2f83effca7924b0abb0deb0d46b81337275692e1"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright 2011 Pallets\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n1.  Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n2.  Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions and the following disclaimer in the\n    documentation and/or other materials provided with the distribution.\n\n3.  Neither the name of the copyright holder nor the names of its\n    contributors may be used to endorse or promote products derived from\n    this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\nPARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nHOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\nTO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "40f5e13a39d50776a4f5f98828211ff49a3b58b79aced9a61ae8a51a7bf6486b",
+      "src/itsdangerous/__init__.py": "e122bbe6c09edbdc5b460404d5942d3079ca52e65801fddb4a964eadf7f52006",
+      "src/itsdangerous/_json.py": "c0f4069a07b6c99f77dbc107285ea069d19ec866022502b1b54fa22ca13a5270",
+      "src/itsdangerous/encoding.py": "c304f3e6aff7ccb71a01dba793afef4a84adc06a9859edf4ed997f53ceda4453",
+      "src/itsdangerous/exc.py": "46bddec68d0c44511c3d996dc1e7322b5e955756c4d8af7f175f9dfa58dc527e",
+      "src/itsdangerous/serializer.py": "3e67700032ea912c902d9d2338a0200ec016e24fc7d13940ef5122df3d02e5a2",
+      "src/itsdangerous/signer.py": "60ed0257b341bc703a8f9e3d4441c91548d4a23c36a47ab0714a509d4ef23584",
+      "src/itsdangerous/timed.py": "e91bc332a36e9863317f4f8796969974df4f51042646fad01a994a871ba2bd4b",
+      "src/itsdangerous/url_safe.py": "6b3e1ee5f5e2fefb3e61b5a3f186709f8c2254a7de0fef8610a453e547aee0fe",
+      "tests/test_itsdangerous/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_itsdangerous/test_encoding.py": "af71dbee0825fc8ae947b6c789b05f2331afe60efae2aee5145727446385c3f0",
+      "tests/test_itsdangerous/test_serializer.py": "e9620d6a6999a77773e3a5733ca71cb81375dafd06ad0f3a5b2bea9404e66c26",
+      "tests/test_itsdangerous/test_signer.py": "219c2a399adc874f14534d1311e950c1e29b2c7d05d037770701b2af258b97a2",
+      "tests/test_itsdangerous/test_timed.py": "b75531b8901d48a6d7a5c4bbbb2342f02f6ef022185840121f7705c1e907979a",
+      "tests/test_itsdangerous/test_url_safe.py": "64d2afc9ab467f209549841f0d87125243d646e011c725818eda8e75ad4d830d"
+    },
+    "tree": {
+      "sha": "2f83effca7924b0abb0deb0d46b81337275692e1",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".devcontainer",
+          "sha": "6c1f2b16b32fea485a40ee2a5939b2f2bd501c22",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".devcontainer/devcontainer.json",
+          "sha": "58b406f1a55fda61b2be6cc9693a4ed32c5f93f7",
+          "size": 441,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": ".devcontainer/on-create-command.sh",
+          "sha": "eaebea61856f7f6bde03a0deb1c7098fb085ca29",
+          "size": 165,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "2ff985a67af35fdfd1076354b771c425867cdab4",
+          "size": 233,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "8d0a7330cc71a121c1cf2941dfef5651c26a842e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "a3f2b2ae1058a4613583e9d4e27c8477e8ca8fc5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug-report.md",
+          "sha": "f8518155f12db67c1c59e07f4463430583b806ec",
+          "size": 643,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "548aa86d812639230eaf25425a638595495e142a",
+          "size": 339,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature-request.md",
+          "sha": "c9cb728d99dae2f9eac7cdd48d2622d1e4463bc9",
+          "size": 430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "fa94b770a882d1856f03dc8642f3b0f2bcc482c7",
+          "size": 554,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/pull_request_template.md",
+          "sha": "eb124d251a733352fc4e867844072e876d1a8508",
+          "size": 822,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "729ca801d3b91daa98ee624ac5f097a22ab32fc5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/lock.yaml",
+          "sha": "22228a1cd2fd561782e0fc49bbbe17d61007f4d8",
+          "size": 661,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/publish.yaml",
+          "sha": "9cedc0f22fd709d442b4225c57a470c7659fa0b8",
+          "size": 2668,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/tests.yaml",
+          "sha": "91a02d0caf03975e86194d2b8b169aaeb3b9c74d",
+          "size": 1765,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "62c1b887d73cc6325731f0c9c97927df23a42d1d",
+          "size": 89,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "8fd500e471dee979c1658b117a41bbb4d013dd5b",
+          "size": 407,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "865c68597994a02456d113489a5d931464d2b9c5",
+          "size": 209,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "8b56a4de94f1b06415d4c840fdbbd73172ec866a",
+          "size": 7937,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "c8602af268086307ce83d9947d6b116f5d2d1083",
+          "size": 6571,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "7b190ca6712aa09eede3e6de79f68d7fa29072da",
+          "size": 1475,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "59b9a5b9b77caa9942fa933b42e13bd0acd0b693",
+          "size": 1110,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "ee39aa7bb8c17d13cadc8d2afad2e5d5a9937818",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "51285967a7d9722c5bdee4f6a81c154a56aa0846",
+          "size": 581,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "2d51a04de30887f1a3e1f89eb1697b793aa52a6c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo-sidebar.png",
+          "sha": "807c350a69d113d339117530889f4aebdafe2bd6",
+          "size": 6629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/itsdangerous-logo.png",
+          "sha": "3879e8529a60d099ec588e785ad6fc5d39d2bc1a",
+          "size": 18971,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changes.rst",
+          "sha": "955deaf27bc821a6367e818f36c016892fed3d33",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/concepts.rst",
+          "sha": "01a880d31b7361ebe33afe0d66bc33e0ed6701ba",
+          "size": 5230,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "ea5dd91f8c9aa944c07a0f8d7b083050419d5eff",
+          "size": 1976,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/encoding.rst",
+          "sha": "0c5a0e3e77d3ed70eb5f02f1f19f3d3cd09e6389",
+          "size": 139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exceptions.rst",
+          "sha": "0d75655f42e3118ddc6fe8dedc3c5f84a28a0c86",
+          "size": 332,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "4b981fc97e112cccf21111b14b0fb0862394dd48",
+          "size": 1654,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/license.rst",
+          "sha": "2a445f9c62843f5205e3e4a920fd49c1808a399e",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "7893348a1b7dbb588983a48e6991282eae7e1b55",
+          "size": 752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/serializer.rst",
+          "sha": "af5e6f12848c054dc1b2384d5d8253771a791c93",
+          "size": 3485,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/signer.rst",
+          "sha": "1c64ea73b53a2045ea53d76ff60ec502ea166eae",
+          "size": 1263,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/timed.rst",
+          "sha": "9890f6be11eb6ab941c42ee60cbc3e2b7a207277",
+          "size": 689,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/url_safe.rst",
+          "sha": "bd5e2dc56aabbdfbbc52ad33658c6aaa95c67dd5",
+          "size": 615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "966c86258cd5adfd8d1074050b357044cacfe2f4",
+          "size": 1872,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "requirements",
+          "sha": "b235994eb1fd64a57f06574e6275bbc20a6ddece",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/build.in",
+          "sha": "378eac25d311703f3f2cd456d8036da525cd0366",
+          "size": 6,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/build.txt",
+          "sha": "9ecc4895274bca9b26b8e012ce8fd53de1c497a4",
+          "size": 227,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/dev.in",
+          "sha": "1efde82b173ffe47e0b7410a7d28addacff74a11",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/dev.txt",
+          "sha": "272c42fda22958f03de010152bfe7aa8048a4560",
+          "size": 3125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/docs.in",
+          "sha": "ba3fd777497d8a8369916141293596d11055363f",
+          "size": 55,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/docs.txt",
+          "sha": "cf900713b77d2da74dc98669d17dac3925ca3a3b",
+          "size": 1141,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/tests.in",
+          "sha": "7167f60299fa02c0e43a2b45a3ec469711af039f",
+          "size": 17,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/tests.txt",
+          "sha": "1d21920f4a1670e552e822270139855e4e7ed949",
+          "size": 381,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/typing.in",
+          "sha": "8be59c5dc36bac6517788b5003db1822a89a6c2f",
+          "size": 20,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements/typing.txt",
+          "sha": "ba1e8f1d62fe29ec641e3a9ac207d407638b24dc",
+          "size": 535,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "d8a1dd5aac04cd04d12cd93d372dcd5f371149b4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/itsdangerous",
+          "sha": "90ae5349d3b9ddf3e1d0a4569bf17a9bf94e1038",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/__init__.py",
+          "sha": "ea55256ebd6feed68d8f1c5afedd141df6c7e766",
+          "size": 1427,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/_json.py",
+          "sha": "fc23feaaff690c477901dc50cc52dd18086051c5",
+          "size": 473,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/encoding.py",
+          "sha": "f5ca80f905c9bb29b993c437a89174e668704658",
+          "size": 1409,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/exc.py",
+          "sha": "a75adcd52762458db556111d8b90415e75df7277",
+          "size": 3201,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/serializer.py",
+          "sha": "5ddf3871d8898c90fabd5bddd8299404e6e7e2f3",
+          "size": 15601,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/signer.py",
+          "sha": "e324dc03da90d9002200b68088f501df62777cd6",
+          "size": 9647,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/timed.py",
+          "sha": "73843755d90979f750976705c5eaeeb3b98f178c",
+          "size": 8083,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/itsdangerous/url_safe.py",
+          "sha": "56a0793315a19f24c8385c017a26ec8a9d4c23c3",
+          "size": 2505,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "627dd9521402ad4c89a39fa2a3c6cc2749ce6e72",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "tests/test_itsdangerous",
+          "sha": "3a84b85b3e74ee1a83c860350eb8f8be5c07db71",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_encoding.py",
+          "sha": "268367e6b10b33c846beb6c60eeae64ce1c3072d",
+          "size": 1004,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_serializer.py",
+          "sha": "2c511cd202978f79a4e2f381f37b2b036b2b8370",
+          "size": 6863,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_signer.py",
+          "sha": "1e053883aad5b517cb3acf3f7c46d2561bb33b96",
+          "size": 3435,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_timed.py",
+          "sha": "a4c1741f96536d6d6e0aa9b6670e8b61a98190b3",
+          "size": 3807,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_itsdangerous/test_url_safe.py",
+          "sha": "37e48123937a1d3e9e7f0258fc6f67a2cca1e166",
+          "size": 793,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "a385dc7052ada05beae1bacc8dab4932151be8ff",
+          "size": 960,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "itsdangerous_fips",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "b1a43f766b79cf26a38155c0b771aa07dd7eb1c72b5297e7b66345ac54695125",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "pallets/itsdangerous",
+  "schema_version": "1.0",
+  "selection_reason": "Deferred default digest lookup crosses class defaults, signer construction and serializer fixtures; no FIPS runtime claim.",
+  "warnings": []
+}

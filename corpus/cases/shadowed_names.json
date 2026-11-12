@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "id": "shadowed_names",
-  "description": "Parameter and local assignment shadowing suppress precise calls but not broad imports.",
-  "category": "known_limitation",
+  "description": "Parameter and local bindings suppress imported calls and unrelated aggregate module fallback.",
+  "category": "supported",
   "features": [
     "shadowing",
     "module_fallback",
@@ -41,14 +41,9 @@
   },
   "unclassified": {},
   "known_discrepancies": {
-    "false_positives": {
-      "tests/test_shadow.py::test_parameter": "worker imports core, retaining a conservative path despite parameter shadowing.",
-      "tests/test_shadow.py::test_local": "worker imports core, retaining a conservative path despite assignment shadowing."
-    },
+    "false_positives": {},
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
-  "limitations": [
-    "Precise call resolution respects function parameter/local-store shadowing, but module fallback can still overselect both tests."
-  ]
+  "limitations": []
 }

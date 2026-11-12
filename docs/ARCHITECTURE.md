@@ -32,7 +32,7 @@ parsed module, including empty and comment-only modules, to compare semantics
 without source locations. Comments, whitespace and moved lines do not count. A
 function body, signature, decorator or annotation change can count. Modules include
 the whole AST, so a function change also changes its module. Classes include methods;
-nested functions also affect their enclosing function. This deliberately favors recall.
+nested functions also affect their enclosing function. These full fingerprints remain visible in Changes; propagation seeds are filtered as described below.
 
 The collector recursively visits direct function/class bodies; definitions inside
 conditional/loop/try blocks are not currently indexed. Duplicate module paths such
@@ -148,7 +148,8 @@ a changed module constant reach its caller without contaminating unrelated sibli
 functions. Such an import edge can remain when rebinding suppresses a precise call;
 it describes the conservative dependency on importing the module. Conditional
 imports do not get these new fallback edges. Resolved call paths retain preference
-over fallback paths under the unchanged traversal and scoring rules.
+over fallback paths. The selection refinement below filters aggregate-only
+fallback without changing the scoring formula.
 
 Both revisions contribute nodes and edges. Removed functions stay visible and old
 callers still propagate impact. A union path may combine edges from different
@@ -163,16 +164,120 @@ locations or evidence text in each revision. Their identity excludes source loca
 
 ## Impact and ranking
 
-Multi-source reverse breadth-first search starts at changed nodes. A visited set
+Multi-source reverse breadth-first search starts at propagation seeds. A visited set
 terminates cycles. Sorted inputs and adjacency lists make ordering deterministic.
-One pass traverses all edges; another traverses only call edges from changed
-non-module symbols. A call path is preferred when available; otherwise the report
-labels the module/import fallback. The stored path runs **test → ... → changed node**.
-Its `evidence_edges` identify the exact typed edges for consecutive hops. A tied pair
-chooses `call`, then `import`, then `module`, without changing the existing node BFS
-or score. The intersection of those edges' revision sets determines `path_revision`.
-An empty intersection is explicitly `mixed`; it describes this shown path, not all
-possible paths. A zero-hop changed test has no edges and uses its node presence.
+One pass traverses all edges from executable changes; another traverses only call
+edges from non-module seeds. Aggregate-only changed modules have separate filtered
+fallback passes. A call path is preferred when available; otherwise the report
+labels conservative module/import evidence. The path runs **test → ... → changed
+node**. Typed `evidence_edges` identify every hop; ties prefer `call`, `import`, then
+`module`. Across fallback passes, equal-length paths use lexicographic path order.
+The intersection of edge revision sets determines `path_revision`; an empty
+intersection is `mixed`. A changed test has a zero-hop path and its node presence.
+
+### Scoped aggregate fallback
+
+`selection.py` separates full display fingerprints from propagation. A body-only
+method edit still changes its method, enclosing class and module in the report,
+but the class is not a constructor-impact seed solely because its method changed.
+Function/test changes and additions/removals remain seeds. Class `__init__`/`__new__`
+changes seed constructor users. Module/class assignments, bases, decorators,
+potentially effectful defaults and parse failures retain broad initialization
+fallback. Builtin `@property` and simple `name = property(getter)` declarations are
+normalized as deferred accessors only when the builtin is not shadowed.
+
+For an aggregate-only module, entering a symbol through a `module` edge or a
+function-local `import` edge requires a possible source reference to an edited
+declaration, in either revision. These checks follow lexical/import aliases,
+passed callables, conditional declaration names, member spellings, simple source
+constructors, fluent/factory returns, properties and consistent stored-field
+values. Known incompatible receivers can exclude an unrelated member. Uncertain
+receivers retain possible same-name members in their source import scope; inherited
+bodies also consider known subclasses. Competing parameters/bindings, external
+bases, custom allocation, field mutations and reflective writes prevent the
+corresponding type exclusions. Recognized builtin calls include `repr`, `str`,
+`len`, `bool`, `iter` and `next`, with their bounded fallback protocols; shadowed
+builtins do not invent dispatch. Containers remain uncertain because protocols
+can touch their elements. Unmodeled special-method changes retain broad fallback
+and a warning rather than suppressing operator dependencies.
+
+**These are possible references, not new resolved call edges.** Every retained
+recommendation still uses existing typed module/import evidence. No source is
+executed. Node/edge IDs, graph direction, before/head evidence, removed symbols,
+full changed-file source and report schemas are unchanged. A subsequent bounded
+argument filter handles eligible class-default initialization changes as described
+below; other initialization effects still propagate conservatively.
+Arbitrary mutation, reflection, descriptors, implicit protocols, closure/data flow,
+fixture injection and runtime imports remain incomplete. This filter is not a
+proof that unselected tests are independent.
+
+Reference recursion is capped at 24 levels, becoming unknown at the boundary.
+Dependency exploration is capped at 2,000 visited symbols per check; exceeding it
+retains fallback with a warning. Caches are request-local. Each aggregate changed
+module may add a graph traversal and reference checks, so cost can increase with
+changed modules; this is not a linear-time or adversarial-isolation guarantee.
+
+### Bounded constructor and factory arguments
+
+`arguments.py` adds a contextual exclusion check for modules whose **entire** AST
+difference is confined to supported class default assignments and passive helper
+function additions/removals referenced by those assignments. Other module effects,
+constructor body changes, descriptor construction, custom `staticmethod`, class
+creation hooks, decorated/customized classes and unsupported bases keep the existing
+fallback. Eligible values are literals, unadorned source functions, simple aliases
+of those values and explicit `hashlib` digest references (`md5`, `sha1`, `sha224`,
+`sha256`, `sha384`, `sha512`), optionally wrapped in builtin `staticmethod`.
+These names are data; no digest or upstream callable is imported or invoked.
+The surrounding module/class bodies must also have passive initialization: arbitrary
+expressions, definition-header effects and conditional initialization decline this
+filter even when those statements themselves are unchanged.
+
+The AST query carries positional and keyword arguments, known `*`/`**` expansions,
+keyword-only parameters, source wrapper calls, `functools.partial` keyword overrides,
+instance fields and option dictionaries through known constructors/methods. It can
+follow stored class factories, bounded collection iteration/comprehensions and
+forwarded fallback configurations. Unknown conditions explore alternatives. Omitted nonliteral or mutable definition
+defaults retain fallback, preserving captured values and shared-default uncertainty. Literal
+identity/equality/membership checks can establish an early `raise` before a default
+read; a read before that raise still retains impact. Partial known text can prove
+membership in a fixed suffix without guessing unknown characters. Reading a changed
+default or helper retains the dependency in either revision. Graph edges are not
+added, removed or upgraded to precise dispatch.
+
+A local module/class `@pytest.fixture(...)` provider is considered only when its
+body is a single return (apart from a docstring), its parameters are limited to
+`self`/`request`, and its factory variants are statically available. Direct literal
+data returns can supply argument values too. This narrowly supports fixture-provided
+partial factories and constant options; general fixture dependency discovery,
+conftest resolution, arbitrary setup effects and inherited fixture contexts remain
+unsupported. It does not repair the authored fixture-injection miss. Function-local
+aliases become available only after their direct import statement.
+
+Unresolved arguments/calls, arbitrary imported settings that may be `None`, mutable
+or conflicting bindings, unknown iteration counts, implicit protocols on source
+or unknown objects, reflection, unsupported statements and source objects escaping
+to external calls keep recommendations. Known scalar/container values and opaque
+external data results are carried without executing operations from analyzed source.
+A small set of literal operations, UTF-8/ASCII conversion and builtin/standard-library
+API shapes are modeled internally; arbitrary Python behavior is not interpreted.
+
+Limits per query: 12,000 AST/data-flow steps, 24 call/lookup levels, 16 alternatives
+or branch states, 64 literal sequence/comprehension items and 4,096-character/byte
+literals. Budget exhaustion or recursive uncertainty retains fallback. Caches are
+request-local. Each eligible changed module is traversed separately so excluding
+one default dependency cannot erase a path to a different change. Both snapshots
+must support exclusion; existing deleted-symbol and mixed-revision handling remains.
+A new passive helper import from a module already imported in both revisions does
+not independently fan out to every test in the importing module. Prior initialization
+must be established by an earlier eager import (including its eager dependencies)
+or by a retained import in the same statement; moving initialization earlier keeps
+broad fallback. In either case, its other changes
+and actual helper references still propagate.
+
+This is bounded source dependency analysis, not full Python execution or proof that
+unselected tests are safe. Arbitrary factories, mutation, descriptors, dispatch,
+fixture injection and runtime imports remain incomplete. The six pilot cases
+informed these fixes; they are regression data, not an unseen accuracy benchmark.
 
 The current priority formula is:
 
@@ -188,8 +293,8 @@ calibrated failure probabilities. A directly modified test is explained separate
 The full test suite remains the correctness gate. A missing path means only that
 this analyzer did not find one.
 
-AST parsing/indexing is approximately linear in input size for simple cases. Two
-graph traversals visit O(V+E) graph elements, but copying full evidence paths adds
+AST parsing/indexing is approximately linear in input size for simple cases. Each
+graph traversal visits O(V+E) graph elements, but copying full evidence paths adds
 O(V × path length) storage/work and can be quadratic on a long chain. Current sorting
 and repeated nested AST walks add overhead. A later predecessor-map representation
 can make traversal storage linear and materialize paths only for selected tests.
@@ -289,6 +394,42 @@ cases, observed mistakes and the workflow for adding a case. The corpus mileston
 left the analyzer unchanged; the later local-import milestone extends resolution
 within the bounds above. Scoring rules, stable IDs, report versions, input contract
 and dashboard remain unchanged.
+
+## Real-repository evaluation v1
+
+`real_evaluate.py` is an offline wrapper around the unchanged authored loader and
+evaluator. `corpus/real` is a separate dataset: six real changes across three
+public repositories, exact first-parent/head pairs, complete supported Python
+snapshots, source hashes, full tree inventories and original license text. The
+optional `scripts/capture_real.py` uses the existing bounded GitHub reader; neither
+capture nor evaluation checks out or executes the upstream repositories.
+
+Before invoking the analyzer, the wrapper validates selection identity and pins,
+parent linkage, source path completeness, SHA-1 blob sizes/hashes, SHA-256 source
+hashes, license bytes and frozen label hashes. It reconstructs recursive Git tree
+hashes to detect incomplete inventories. Metadata has separate 4 MB per-file and
+20 MB total bounds; source/case limits are unchanged. Recorded commit metadata is
+an HTTPS capture attestation, not raw commit/signature authentication. The protocol
+states this trust boundary explicitly.
+
+`make evaluate-real` emits a **separate dataset wrapper schema 1.0**, identified by
+`dataset_schema_version`. It embeds unchanged evaluation schema 1.0 and analyzer
+report 2.0. It adds a dataset digest, coverage/provenance summaries, review status,
+selected IDs/counts, total unclassified tests (including unselected ones), selected
+unclassified counts and explanation categories, per case/repository/overall.
+Existing `validate_report` checks every typed recommendation path and its revision
+evidence. Only embedded `stats.elapsed_ms` is removed for determinism.
+
+All current labels are agent drafted, frozen before analysis and awaiting human
+review. FP/FN/unknown-selection baselines were added after the first run, without
+changing those labels or source. Reviewed status requires a reviewer and review
+reference; fields alone do not certify independent review. The source-only review
+generator does not invoke the analyzer. See [the protocol](../corpus/real/README.md)
+and [observed results](REAL_EVALUATION.md). The initial evaluation milestone did not change the analyzer. The subsequent
+selection refinement uses these cases as regression inputs, preserves frozen source
+and labels, and deliberately updates discrepancy annotations. Scoring, app report
+contract, GitHub PR ingestion and dashboard design remain unchanged; historical
+results are retained in `corpus/selection-baseline-v1.json`.
 
 ## Public GitHub ingestion
 

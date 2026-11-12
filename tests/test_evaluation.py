@@ -220,8 +220,8 @@ def test_cli_invalid_corpus_output_error_and_input_preservation(tmp_path):
         ),
         (
             "module_rebinding",
-            "tests/test_worker.py::test_read",
-            "Conservative module/import dependency",
+            "tests/test_price.py::test_price",
+            "Resolved call path",
             "both",
         ),
     ],
