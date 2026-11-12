@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "policy": "Purposive pilot chosen from source-change descriptions before analyzer execution, not a random or representative accuracy sample. Three small public libraries provide string/HTML processing, signed serialization, and scheduling. Two commits per repository vary bug fixes and API/default behavior. Take each selected commit against its exact first parent (including two merge commits); retain the entire supported Python tree. Exclude changes outside Python runtime behavior, duplicate merge copies, unsupported licenses, or snapshots exceeding existing limits. No analyzer result is a selection criterion.",
+  "cases": [
+    {
+      "id": "markupsafe_striptags",
+      "repository": "pallets/markupsafe",
+      "head": "60a6512315d0ce05e6788808f80be526f2084b3f",
+      "license": "BSD-3-Clause",
+      "reason": "Whitespace handling bug in an HTML/string method; includes its real test edit and the unchanged tests.",
+      "base": "73e6a4886564a554c4a19983d29c97f9fc95457d"
+    },
+    {
+      "id": "markupsafe_format_map",
+      "repository": "pallets/markupsafe",
+      "head": "391aa07d3c68d4d0888b31fdea62516df9e19cb8",
+      "license": "BSD-3-Clause",
+      "reason": "New escaping-aware mapping-format method, contrasting API addition with the whitespace fix.",
+      "base": "60e7eb97e65947a83fa290010f3dde71be8fed84"
+    },
+    {
+      "id": "itsdangerous_fips",
+      "repository": "pallets/itsdangerous",
+      "head": "2f69e841d2a979c616a55b226e444694f5d9c962",
+      "license": "BSD-3-Clause",
+      "reason": "Deferred default digest lookup crosses class defaults, signer construction and serializer fixtures; no FIPS runtime claim.",
+      "base": "93ae366874bbd4f69d90495c45b2cd336387496c"
+    },
+    {
+      "id": "itsdangerous_future",
+      "repository": "pallets/itsdangerous",
+      "head": "c30678d19e37011890e2374cca04f7789e101793",
+      "license": "BSD-3-Clause",
+      "reason": "Negative signature-age rejection in timestamp verification, including inherited and fixture-driven tests.",
+      "base": "1a9b8d1f9968eb248bda69f39d373a6330b692ba"
+    },
+    {
+      "id": "schedule_repr",
+      "repository": "dbader/schedule",
+      "head": "3863effe15ec8239ba88c65a4231a67e43b116df",
+      "license": "MIT",
+      "reason": "Partially configured job representation fix exercises special-method dispatch and unrelated scheduling controls.",
+      "base": "a3ecd3548aff70bef15a61baee0d2d7f22f57992"
+    },
+    {
+      "id": "schedule_tags",
+      "repository": "dbader/schedule",
+      "head": "c883af0229143285cf38e1c7733aaf36656c8744",
+      "license": "MIT",
+      "reason": "Tagged next-run API adds a method and changes a property/wrapper while preserving unrelated job operations.",
+      "base": "64f83981b2a55136ea3737b8c35cf3da7b270055"
+    }
+  ],
+  "exclusions": [
+    {
+      "repository": "pallets/markupsafe",
+      "revision": "4e111271b1494995708a9e878a10829b5e10c7ba",
+      "reason": "Dependency update; not a Python runtime behavior case."
+    },
+    {
+      "repository": "pallets/markupsafe",
+      "revision": "b3b0f02baddd025191b789f5a4b0ecd3896bbf98",
+      "reason": "Lint/format migration; excluded in favor of functional source changes, before examining analyzer output."
+    },
+    {
+      "repository": "pallets/markupsafe",
+      "revision": "ff06d77e1ee8cfe62d9e289ccc5bf1f49e4a0873",
+      "reason": "Another striptags implementation change; the whitespace fix plus a separate API addition gives broader source-level variety in a two-case quota."
+    },
+    {
+      "repository": "pallets/itsdangerous",
+      "revision": "b0410878b9e46bd4c008eeac8cf4ed3d345e69b4",
+      "reason": "Build provenance workflow change, outside Python runtime scope."
+    },
+    {
+      "repository": "pallets/itsdangerous",
+      "revision": "64cd581d83c0770ec5683d312cedbed06395b9ed",
+      "reason": "Merge copy of the timestamp work; use the single-parent functional commit instead."
+    },
+    {
+      "repository": "dbader/schedule",
+      "revision": "82a43db1b938d8fdf60103bd41f329e06c8d3651",
+      "reason": "Release metadata; not a functional source-change case."
+    },
+    {
+      "repository": "dbader/schedule",
+      "revision": "073dbc6e5f8254d27c656f88a5062cca2cdfc4a2",
+      "reason": "Tests-only addition, outside the runtime-source-change selection rule."
+    },
+    {
+      "repository": "dbader/schedule",
+      "revision": "2dcb5833cdf2b7d7a1bda90c19e2fb7e373e66df",
+      "reason": "Timezone work was considered; representation and tagged lookup were selected for distinct source mechanisms and a bounded manual label review. This is a purposive historical sample, not the newest-two-commits sample."
+    }
+  ]
+}

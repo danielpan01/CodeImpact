@@ -997,3 +997,397 @@ CORPUS, BUILD_PLAN, PROJECT_CONTEXT and this record describe the bounded correct
 All changes remain unstaged and uncommitted; the owner handles commit, push, PR and
 merge. Reports are ignored reproducibility artifacts, not files to stage.
 
+
+## Real-repository evaluation v1 — November 11, 2026
+
+Implemented on `codex/real-repository-evaluation`, starting from
+`aca764e9e3205a612898e29b065230695667fc85` (merged module-rebinding milestone).
+This adds an evaluation workflow and dataset; analyzer behavior, scoring, stable
+IDs, revision evidence, deleted-symbol handling, report 2.0, GitHub PR ingestion,
+and dashboard design are unchanged. No commit, staging, push, PR or merge was made.
+
+### Data and labeling procedure
+
+Selected six actual functional source changes across MarkupSafe, ItsDangerous and
+Schedule, with two changes each. Selection and eight considered/excluded changes
+are recorded in `corpus/real/selection.json`; no analyzer output was used to choose
+cases. This is a purposive historical pilot, not random or representative sampling.
+All three repositories fit; no repository exclusion or size trimming was needed.
+Two heads are merges, explicitly compared against pinned first parents. All twelve
+complete recursive trees were untruncated. Each revision contains 4–18 supported
+Python files and at most 77,705 source bytes, within unchanged ingestion limits.
+No captured tree has excluded Python paths, symlinks or submodules. Non-Python
+entries remain in tree receipts; non-Python contents other than licenses are not
+part of supported snapshots.
+
+The optional capture helper read GitHub REST commit/tree/blob objects, checked
+public identity and existing network/source budgets, and retained exact source
+strings, SHA-256 hashes, Git blob IDs/sizes and original licenses. Pallets licenses
+are BSD-3-Clause; Schedule is MIT. All twelve license receipts match the accessible
+attribution copies. No analyzed repository was cloned, checked out, installed,
+imported or executed. Source, including setup/test code, remains JSON string data.
+
+Source inspection and AST-only test discovery produced 45 affected, 123 unaffected
+and 33 uncertain labels **before the first analyzer run on any of the six cases**.
+All six review records remain `draft`, author Codex, reviewer/reference null.
+Canonical hashes frozen at that point remain unchanged. This is an agent process
+attestation, not independently verified chronology or label review. The review pack
+contains all 201 definition IDs, rationales, pinned source links and complete Python
+diffs; its generator does not run the analyzer. Inherited contexts and C-extension
+variants remain uncertain where Python-only inspection is insufficient. The unit is
+a test definition per change, not an expanded pytest item or runtime failure.
+
+The first evaluation, with empty discrepancy maps, exited nonzero. After inspecting
+recommendations, the observed FP IDs/explanations and selected-unclassified IDs were
+recorded as deliberate baselines. The frozen labels, source snapshots and analysis
+outputs were compared before/after this metadata update and are identical. There
+was no analyzer tuning. All six cases remain `known_limitation`.
+
+### Observed results
+
+| Case | Selected / discovered | TP | FP | FN | TN | Unclassified total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| itsdangerous_fips | 33 / 37 | 29 | 4 | 0 | 4 | 0 / 0 |
+| itsdangerous_future | 20 / 44 | 7 | 2 | 0 | 17 | 18 / 11 |
+| markupsafe_format_map | 22 / 23 | 1 | 14 | 0 | 0 | 8 / 7 |
+| markupsafe_striptags | 22 / 23 | 1 | 15 | 0 | 0 | 7 / 6 |
+| schedule_repr | 38 / 38 | 3 | 35 | 0 | 0 | 0 / 0 |
+| schedule_tags | 36 / 36 | 4 | 32 | 0 | 0 | 0 / 0 |
+| **Overall** | **171 / 201** | **45** | **102** | **0** | **21** | **33 / 24** |
+
+Draft-label precision is 45/147 (30.6%); recall is 45/45 (100%), conditional on the
+classified drafts. Selected IDs and all classifications are present in the JSON;
+[REAL_EVALUATION.md](REAL_EVALUATION.md) also lists every selected ID. Explanations:
+48 resolved paths, 116 conservative module/import paths, 7 changed tests. Every
+recommendation passed the existing typed path, caller-to-dependency direction,
+changed endpoint, stable edge ID, source range and revision-evidence checks.
+
+The main measured mistakes are broad module/test-module fallback and class-level
+fingerprints. `Markup` construction reaches a changed class even when the called
+method is unrelated; Schedule selects every discovered test in both cases.
+“Resolved call path” does not guarantee feature-level relevance. The 33 uncertain
+labels, seven changed-test selections, correlated case-test pairs and nonrandom
+sample prevent general accuracy claims. No upstream assertion failures, FIPS runtime
+behavior, production performance, hosted CI or deployed integration is asserted.
+
+### Verification
+
+Commands were run from the project root, except the browser suite:
+
+```sh
+.venv/bin/pytest tests/test_real_evaluate.py --no-cov
+make check
+make evaluate
+make evaluate-real
+.venv/bin/python -m codeimpact.real_evaluate --output reports/real-repeat.json
+cd web && npm run test:e2e
+```
+
+The focused suite covers offline operation, source-as-data imports/process guards,
+exact-repeat determinism, complete denominator accounting, deliberate baseline drift,
+output containment and atomic replacement (including hard links and failed writes),
+source/tree/license/pin/label tampering, duplicate keys/paths, missing or symlinked
+metadata, per-file/aggregate bounds, fabricated review status, invalid evidence
+paths, source-only review generation, and mocked recapture of three stored upstream
+object sets. The initial test collection failed before the new module existed;
+all final workflow/failure-mode regressions pass.
+
+Final results: **34 focused tests passed; 393 Python tests passed** in `make check`,
+with Ruff lint/format, strict mypy and TypeScript/Vite production build also passing.
+**28 Playwright tests passed**, covering desktop and Pixel 7 layouts against isolated
+local servers. Chromium used the required local launch permission. Browser tests
+exercise existing dashboard behavior; no dashboard code was changed. Existing
+Starlette/httpx deprecation and React Flow/environment warnings were non-failing.
+
+Both final real reports are byte-identical, excluding only embedded analyzer
+`stats.elapsed_ms` via the unchanged evaluator. No timestamps or other volatile
+fields are removed. The source-only review pack was regenerated and matched exactly.
+
+- Real dataset digest: `9fd07dda75c07067d2f19a9a5202281748d68791832ffe3a0e8d71f40ed64e57`.
+- Real corpus digest: `94776d2b16538e5bc837773f4dc4259e84dd804329f4e7be61092ba9fd4ad836`.
+- Real report SHA-256: `802054f1bf9b460653ca5da211e19b0c6da841618922de05432fcd0e2beaf32c`.
+
+The original 25 authored case files have **no diff from starting HEAD**. Their
+complete before/after evaluation JSON is byte-identical: TP 23, FN 2, FP 6, TN 26,
+plus two unclassified selections. Corpus digest remains
+`41f8992ec96f473cb9bd1d0f8bd89614a42f5c49833c264f9e9f8713f09e0c94`;
+report digest remains
+`cb04cff672f0f8cce1f80ca1ad84c3226242de8409ee7d767389a69d755d8a9c`.
+
+Ignored local artifacts: `reports/real-capture/*.json`, `real-first-evaluation.json`,
+`real-first-evaluation.txt`, `real-authored-before.json`, `real-authored-before.txt`,
+`real-authored-after.txt`, `real-focused.txt`, `real-check.txt`, `real-browser.txt`,
+`real-evaluation.json`, `real-evaluation.txt`, `real-repeat.json`, `real-repeat.txt`.
+The checked-in dataset, review pack and result document reproduce the workflow
+without those artifacts or network access.
+
+Offline provenance checks establish consistency with recorded trees and hashes;
+they do not reconstruct raw commit objects, verify commit signatures or authenticate
+GitHub afresh. See [the full protocol](../corpus/real/README.md) for this trust
+boundary, limits and the human review procedure. Independent label review remains
+outstanding by design. All milestone changes are left unstaged and uncommitted.
+
+## Scoped class/module selection refinement — November 11, 2026
+
+This is a user-requested follow-up to real-repository evaluation v1, in the same
+unstaged working tree starting at `aca764e9e3205a612898e29b065230695667fc85`.
+The earlier section records the initial unchanged-analyzer measurement; the
+results below supersede it for the current implementation. No commit, staging,
+push, PR or merge was performed.
+
+### Change and regression evidence
+
+`selection.py` separates full AST display fingerprints from propagation seeds.
+Body-only aggregate classes no longer imply constructor impact. Aggregate-only
+module fallback is filtered through bounded possible source references. Actual
+initialization changes, parse failures and constructor changes retain conservative
+propagation. The helper uses AST data only and never creates a precise call edge
+from an uncertain method spelling. Scoring, stable IDs, edge direction, deletion
+handling, schemas and dashboard design are unchanged. See
+[Architecture](ARCHITECTURE.md#scoped-aggregate-fallback) for the exact boundaries.
+
+The first regression run failed **15 tests** before implementing the filter
+(`reports/selection-red.txt`). Additional safety checks exposed four more protocol
+gaps before correction: `str` falling back to `__repr__`, container element
+representation, shadowed builtins and unmodeled operator protocols
+(`reports/selection-protocol-red.txt`). All **41 selection regressions** now pass.
+Coverage includes sibling/test-body edits, method additions/deletions, constructor
+changes, direct/local receivers, properties, fluent factories, field/property
+name collisions, callbacks, callable aliases, conditional and inherited members,
+initialization/default/decorator effects, parse failures, parameter rebinding,
+foreign field writes, external bases/custom allocation, local imports, protocol
+fallbacks and reference-budget exhaustion. Unsupported special-method changes and
+exhausted symbol budgets retain broad fallback with visible warnings.
+
+The first full application run exposed expected stale discrepancy and evidence
+assertions. Those were updated only after inspecting actual recommendations; no
+source or affected/unaffected/uncertain label was changed. The final check also
+caught a mypy variable-type conflict in the new protocol guard; it was corrected
+before rerunning the complete check successfully.
+
+### Actual measured results
+
+| Dataset | Before selection | Current selection | Current TP | FP | FN | TN | Unclassified total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Authored 25 cases | 31 | 25 | 23 | 0 | 2 | 32 | 2 / 2 |
+| Real 6 cases | 171 | 60 | 45 | 4 | 0 | 119 | 33 / 11 |
+
+The authored refinement removes six FPs across `module_overselection`,
+`module_rebinding`, `shadowed_names`, `conditional_definitions` and
+`inherited_dispatch`. The first three become supported demonstrations: 18 supported
+and 7 limitation cases overall. Conditional and inherited references remain
+conservative. Fixture injection and runtime imports remain the same two misses.
+
+The real refinement removes **98 of 102 FPs**: all 29 MarkupSafe, all 67 Schedule,
+and both timestamp-case FPs. Four FIPS default-initialization FPs remain:
+`TestSerializer.test_fallback_signers`, `TestSigner.test_digest_method`,
+`TestSigner.test_invalid_separator`, and `test_abstract_algorithm`. These need
+argument-sensitive constructor/factory and early-exit analysis; the current filter
+does not claim it. No label editing or case-specific suppressions hide them.
+All 45 affected drafts remain selected. Current reasons: 6 resolved call paths,
+47 conservative module/import paths and 7 changed tests.
+
+Real draft-label precision is 45/49 (91.8%), recall 45/45 (100%). Authored precision
+is 23/23 (100%), recall 23/25 (92.0%). The 33 uncertain real labels remain in the
+report; none was moved to improve a denominator. The real cases informed this fix
+and are now development/regression data, not an unseen accuracy benchmark. All six
+review statuses remain draft; no upstream runtime failures or independent label
+review are claimed. Full application tests remain the merge gate.
+
+### Commands and verification
+
+Run from the project root, except the browser command:
+
+```sh
+.venv/bin/pytest tests/test_selection_precision.py tests/test_module_rebinding.py \
+  tests/test_evaluation.py tests/test_real_evaluate.py --no-cov -q
+make check
+make evaluate
+make evaluate-real
+.venv/bin/python -m codeimpact.evaluate --output reports/selection-authored-repeat.json
+.venv/bin/python -m codeimpact.real_evaluate --output reports/selection-real-repeat.json
+.venv/bin/python scripts/review_real.py > reports/selection-label-review.md
+cd web && npm run test:e2e
+```
+
+- **220 focused regressions passed.**
+- **`make check` passed:** Ruff lint/format, strict mypy, **434 Python tests**,
+  and TypeScript/Vite production build. Observed statement coverage: 94%; coverage
+  is not a correctness or accuracy claim. One existing Starlette/httpx deprecation
+  warning was non-failing.
+- **`make evaluate` and `make evaluate-real` passed**, with no baseline drift and
+  every recommendation's typed paths and revision/source evidence validated.
+- **30 Playwright tests passed**, across desktop and Pixel 7 layouts against
+  isolated local servers. The rebinding browser regression now checks that the
+  unrelated wrapper is absent while import graph evidence remains. A new class
+  method regression checks one conservative recommendation, visible full changes,
+  source preview and exact JSON export on both layouts. Chromium used its required
+  local launch permission; no dashboard production code changed.
+- Both evaluation reports are **byte-identical on repeat**. Only embedded analysis
+  `stats.elapsed_ms` is excluded. Reversing base/head snapshot file insertion order
+  also produces identical complete stable analyses for all 31 cases.
+- All 31 source snapshots and affected/unaffected/unclassified maps match their
+  pre-refinement records. All graph nodes/edges, `changed`, `removed`, `changes`
+  and `source_files` also match exactly. Scores may change when selected paths
+  change, but the formula and graph dependent counts do not.
+- The regenerated 201-label review pack is byte-identical. Real provenance, exact
+  pins, complete tree/source hashes, licenses and frozen label hashes still pass
+  the offline loader. No upstream code was executed/imported/installed/checked out.
+
+[The historical baseline](../corpus/selection-baseline-v1.json) retains original
+annotations, selected IDs, classification counts and source/label hashes for both
+datasets. Active baselines deliberately remove fixed FP annotations and update
+uncertain-selection lists and limitation explanations; none was accepted silently.
+The corpus/dataset digests change because those annotations are part of the digest.
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Authored corpus | `33ff141b4817c94c7bb2dccf01ae4aa7cd7722ef6ce2de8e44ddf7afe540629d` |
+| Authored report | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| Real corpus | `ed5d8ae64a1d372792408baab537bc347bb7e80ede86766974400f4e7bcb1f72` |
+| Real dataset | `fafaf7e886d99f2fc0c47378314c86865b8b8843f9138af032c8fe2daa89882a` |
+| Real report | `3bfac5389b252016355396cda5a03e73353b6201744173e572e6247c03b707fa` |
+
+Ignored local artifacts: `reports/selection-before-*.json`, `selection-red.txt`,
+`selection-protocol-red.txt`, `selection-focused.txt`, `selection-focused-all.txt`,
+`selection-check.txt`, `selection-browser.txt`, `selection-evaluate*.txt`,
+`selection-*-repeat.json`, `selection-preservation.json`, `selection-label-review.md`.
+The final preservation record contains exact hashes and comparisons. Final
+`git diff --check` passed; the index is empty and HEAD remains the starting commit.
+All edits, including the earlier real-evaluation workflow, are unstaged/uncommitted.
+
+## Bounded constructor/factory argument tracking — November 12, 2026
+
+Implemented at the user's request to remove the four remaining ItsDangerous
+recommendations after the class/module selection refinement. Starting HEAD remains
+`aca764e9e3205a612898e29b065230695667fc85`; all preceding work and this follow-up are
+unstaged/uncommitted. The previous section is the intermediate 60-selection record.
+
+### Implementation and boundaries
+
+The new `arguments.py` performs bounded AST data-flow queries for changes confined
+to supported class-default bindings. It tracks supplied positional/keyword values,
+known argument expansions, partial factories, wrapper calls, stored option mappings,
+known collection iteration, and source-level early exceptions. Both revisions must
+support exclusion. The graph and evidence remain unchanged; separate per-module
+traversals preserve recommendations justified by other changed sources.
+
+Pure local pytest factory providers (including known `request.param` alternatives)
+and direct literal data providers can supply values. This is narrower than general
+fixture injection. The original authored injection miss remains unchanged.
+Explicit standard-library digest references can be recognized as non-None callable
+values without importing or calling them; arbitrary external settings cannot.
+An added passive helper import from an already-imported module no longer creates
+an independent all-tests fallback. Other initialization effects stay conservative.
+
+Unknown arguments, imported values, callables, iteration counts, source/unknown
+implicit protocols, escaping objects, unsupported mutation/flow and exceeded
+budgets retain recommendations. The applicability check declines descriptor
+construction, custom `staticmethod`, class creation hooks, unsupported bases and
+other module changes. Limits are documented in
+[Architecture](ARCHITECTURE.md#bounded-constructor-and-factory-arguments). No
+analyzed source, dependency, fixture or upstream test was executed/imported/installed
+or checked out. No repository/test names are used for suppression.
+
+### Regression development and observed outcomes
+
+The initial regression run, before changing the analyzer, had **9 failures and
+12 passes** (`reports/arguments-red.txt`). It covered explicit/positional/expanded
+arguments, default/None/unknown controls, wrappers and partials, local parameterized
+factory providers, stored factory options, fallback dictionaries, early exceptions,
+rebinding, before/head preservation, other initialization effects, and the exact
+four real false positives. Additional failing controls were added for passive-helper
+imports, unknown imported values, implicit protocols, branch mutation, descriptor
+and custom decorator effects, local-import timing, unknown iterations and comparisons. A further failing control verifies that a helper
+import cannot hide a change in module initialization order.
+
+All **47 argument regressions** now pass, also covering query budgets, source-as-data,
+repeatability, keyword-only arguments and deep alias chains. Later failing controls
+cover captured constructor defaults, shared mutable function defaults and unchanged
+module/class initialization effects. These cases retain conservative fallback;
+nonliteral defaults are not recreated or guessed. Effectful definition headers
+and arbitrary surrounding initialization decline the exclusion filter. A full run before the
+baseline update failed only the three stale real-evaluation expectations. The
+updated drift test deliberately restores an obsolete FP annotation and still
+requires a nonzero evaluator exit; improvements are not silently accepted.
+
+| Dataset | Selected before | Selected now | TP | FP | FN | TN | Unclassified total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Authored 25 cases | 25 | 25 | 23 | 0 | 2 | 32 | 2 / 2 |
+| Real 6 cases | 60 | 56 | 45 | 0 | 0 | 123 | 33 / 11 |
+
+All four former `itsdangerous_fips` FPs are excluded:
+
+- `TestSigner.test_digest_method`: explicit MD5 survives the partial factory,
+  constructor and nested algorithm construction; no changed default is read.
+- `TestSerializer.test_fallback_signers`: visible serializer factory variants,
+  signer options and fallback dictionaries all supply explicit digests.
+- `TestSigner.test_invalid_separator`: known byte membership establishes an early
+  source-level exception before default lookup.
+- `test_abstract_algorithm`: the unrelated abstract class/method does not consume
+  the edited defaults.
+
+The FIPS case now selects **29/37**, TP 29 / FP 0 / FN 0 / TN 8. The other five
+real cases retain identical analysis reports. Overall reasons are 6 resolved call
+paths, 43 conservative module/import paths and 7 changed tests. All 45 affected
+labels remain selected; all 33 uncertain labels and their 11 selections are unchanged.
+Classified draft-label precision and recall are both 45/45. These are regression
+results on cases used to develop the fix, not independently reviewed labels,
+production accuracy, runtime failures or an unseen benchmark. Existing fixture
+injection and runtime-import misses remain in the authored totals.
+
+### Final verification
+
+Commands from the project root, except the browser suite:
+
+```sh
+.venv/bin/pytest tests/test_arguments.py tests/test_selection_precision.py \
+  tests/test_module_rebinding.py tests/test_evaluation.py tests/test_real_evaluate.py --no-cov
+make check
+make evaluate
+make evaluate-real
+PYTHONHASHSEED=17 .venv/bin/python -m codeimpact.real_evaluate \
+  --output reports/arguments-real-repeat.json
+PYTHONHASHSEED=31 .venv/bin/python -m codeimpact.evaluate \
+  --output reports/arguments-authored-repeat.json
+.venv/bin/python scripts/review_real.py > reports/arguments-label-review.md
+cd web && npm run test:e2e
+```
+
+- **267 focused regressions passed**; the new argument file contributes 47.
+- **`make check` passed:** Ruff lint/format, strict mypy, **481 Python tests**, and
+  TypeScript/Vite production build. Statement coverage was 93%; it is not an
+  accuracy claim. One existing Starlette/httpx deprecation warning was non-failing.
+- **Both evaluations passed** with zero baseline drift. All typed evidence paths,
+  source ranges, revision provenance, pins, complete source/tree hashes, licenses
+  and frozen label hashes pass their existing validations.
+- **32 Playwright tests passed**, desktop and Pixel 7. The additional regression
+  checks that an explicit constructor override is excluded, the default user retains
+  its existing resolved class path in both revisions, changed-source preview works,
+  and exported JSON equals the API response. No dashboard production code changed.
+- Repeat reports are **byte-identical**, including different hash seeds. Reversing
+  snapshot file order also yields identical stable analyses for all 31 cases.
+  Only the already-documented `stats.elapsed_ms` field is omitted.
+- All 31 source/label maps, graph nodes/edges, changed and removed IDs, change ranges
+  and full source-evidence records match the preceding milestone exactly.
+  The entire authored evaluation JSON is byte-identical. The other five complete
+  real case analyses are identical; only FIPS recommendation/impact propagation
+  changes. Scoring formulas, report schemas and stable IDs are preserved.
+- The regenerated 201-label review pack is byte-identical. Review statuses remain
+  draft. Only the FIPS discrepancy map and limitation explanation were deliberately
+  updated. The historical archive now also retains the intermediate four-FP baseline.
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Authored corpus | `33ff141b4817c94c7bb2dccf01ae4aa7cd7722ef6ce2de8e44ddf7afe540629d` |
+| Authored report | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| Real corpus | `cc295683bb432a32bc554cfc2dd3b31dd1ac6dbc83ea4e1e2eb417c5060c67f3` |
+| Real dataset | `bcc3c986a75f83baacfd7348e4ed2d7394cfb03a299b147138010a0ea0c69bec` |
+| Real report | `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae` |
+
+Ignored local evidence includes `reports/arguments-before-*.json`, `arguments-red.txt`,
+`arguments-*-red.txt`, `arguments-focused.txt`, `arguments-focused-all.txt`,
+`arguments-check.txt`, `arguments-browser.txt`, `arguments-evaluate*.txt`,
+`arguments-*-repeat.json`, `arguments-preservation.json`, and `arguments-label-review.md`.
+Final `git diff --check` passed, the index is empty, and HEAD is unchanged. No commit,
+push, PR, branch creation or merge was performed.

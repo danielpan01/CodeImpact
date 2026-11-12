@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate
+.PHONY: setup dev check demo evaluate evaluate-real
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -16,3 +16,5 @@ demo:
 	.venv/bin/codeimpact --demo
 evaluate:
 	.venv/bin/python -m codeimpact.evaluate --corpus corpus/cases --output reports/corpus-evaluation.json
+evaluate-real:
+	.venv/bin/python -m codeimpact.real_evaluate --corpus corpus/real --output reports/real-evaluation.json

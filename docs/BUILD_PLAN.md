@@ -28,15 +28,17 @@ local aliases resolve after their import, ambiguous bindings suppress precision,
 and fallback imports belong to their function. The existing `local_import` case
 moves from FN to TP with its authored labels unchanged; the other 24 case reports
 are identical. See CORPUS.md and the separate VALIDATION.md entry for the boundary
-and observed checks. Overall precision is 23/29 and recall 23/25 on these authored
+and observed checks. At that milestone precision was 23/29 and recall 23/25 on these authored
 labels, not production accuracy.
 
-Bounded module-level rebinding is now implemented locally. The misleading call in
-`module_rebinding` is removed, while the same test remains a recorded FP through
-module/import fallback. All selected IDs and aggregate counts are unchanged; its
-priority changes from 72 to 23 using the existing formula. See CORPUS.md and the
-separate validation record for evidence and scope. A next step is independently
-reviewed evaluation of module fallback before attempting to narrow recommendations.
+Bounded module-level rebinding removed a misleading call in `module_rebinding`.
+At that milestone its FP remained through fallback, with priority 23 instead of 72.
+The subsequent aggregate-selection refinement removes that FP and five others
+without changing labels or graph evidence. Current authored counts are TP 23,
+FP 0, FN 2, TN 32, with two uncertain selections. See CORPUS.md and the separate
+validation records. Fixture injection, runtime imports and constructor/factory
+flow need further bounded work, preceded by independent label review and fresh
+evaluation cases.
 Source revision provenance and changed-code inspection are already in
 starting commit `546ee8e`: report 2.0 retains per-revision evidence and exact typed
 paths, labels mixed paths, and shows bounded before/after code.
@@ -86,7 +88,16 @@ and a fresh user can complete the workflow on desktop and phone.
 ## 5. Measure and present (2–3 days)
 
 The local authored corpus supplies a reproducible first step (25 cases, no live
-test execution); it does not complete this real-repository evaluation stage.
+test execution). Real-repository evaluation v1 now adds six pinned source changes
+across three public repositories, offline provenance validation and a label review
+pack. Its labels are agent drafted; independent review remains outstanding. See
+[REAL_EVALUATION.md](REAL_EVALUATION.md): the first run selected 171/201 definitions
+with 102 false positives. Class/module selection removed 98 FPs; bounded constructor/factory argument tracking
+now removes the remaining four. Current selection: 56/201, TP 45, FP 0, FN 0, TN 123,
+with 33 uncertain tests (11 selected). Sources and draft labels are unchanged; archived baselines preserve the
+original measurement. These cases informed the fix and are regression data, not
+an unseen benchmark. Next: independently review the labels and reserve fresh
+changes before further constructor/factory or fixture-flow work.
 Evaluate a fixed, documented set of Python changes with independently reviewed
 labels and, where practical, mutation tests. Run trusted fixture code only in a separate controlled
 evaluation environment—not in the analyzer. Report repository counts, source sizes,

@@ -143,7 +143,7 @@ test("local import corpus upload shows resolved evidence and exports scoped impo
   );
 });
 
-test("rebound module import shows conservative evidence and exports the remaining false positive", async ({
+test("rebound module import keeps graph evidence without selecting the unrelated wrapper", async ({
   page,
 }) => {
   const fixture = JSON.parse(
@@ -167,22 +167,24 @@ test("rebound module import shows conservative evidence and exports the remainin
     "module_rebinding",
   );
   await page.getByRole("button", { name: "Tests", exact: true }).click();
-  await expect(page.locator(".test-row")).toHaveCount(2);
-  await page.getByRole("button", { name: /test_read/ }).click();
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  await expect(page.locator(".test-row")).toContainText("test_price");
   await expect(page.locator(".detail-content")).toContainText(
-    "Conservative module/import dependency",
+    "Resolved call path",
   );
-  await expect(page.locator(".risk-score")).toContainText("23");
-  await expect(page.locator(".evidence-path li")).toHaveCount(4);
-  const recommendation = report.recommendations.find((item) =>
-    item.symbol.endsWith("::test_read"),
-  );
-  expect(recommendation?.evidence_path).toEqual([
-    "tests/test_worker.py::test_read",
-    "tests/test_worker.py::<module>",
-    "worker.py::<module>",
-    "core.py::<module>",
+  await expect(page.locator(".risk-score")).toContainText("81");
+  await expect(page.locator(".evidence-path li")).toHaveCount(2);
+  expect(report.recommendations.map((item) => item.symbol)).toEqual([
+    "tests/test_price.py::test_price",
   ]);
+  expect(
+    report.edges.some(
+      (edge) =>
+        edge.source === "worker.py::<module>" &&
+        edge.target === "core.py::<module>" &&
+        edge.kind === "import",
+    ),
+  ).toBe(true);
   expect(
     report.edges.some(
       (edge) => edge.source === "worker.py::read" && edge.kind === "call",
@@ -374,4 +376,110 @@ test("invalid PR URL is rejected by backend and can be corrected", async ({
   await input.press("Enter");
   await expect(page.locator(".pr-source")).toContainText("acme/widget #7");
   await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
+test("method edits retain conservative evidence without selecting unrelated constructors", async ({
+  page,
+}) => {
+  const source =
+    "class Widget:\n    def price(self): return 1\n    def healthy(self): return True\n";
+  const tests =
+    "from widget import Widget\ndef test_price(): return Widget().price()\ndef test_health(): return Widget().healthy()\ndef test_construct(): return Widget()\n";
+  await page.goto("/");
+  await expect(page.locator(".detail-content")).toContainText("test_discount");
+  const responsePromise = page.waitForResponse("**/api/analyze");
+  await page.getByLabel("Upload snapshot JSON").setInputFiles({
+    name: "method-change.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(
+      JSON.stringify({
+        base: { files: { "widget.py": source, "test_widget.py": tests } },
+        head: {
+          files: {
+            "widget.py": source.replace("return 1", "return 2"),
+            "test_widget.py": tests,
+          },
+        },
+      }),
+    ),
+  });
+  const response = await responsePromise;
+  expect(response.status()).toBe(200);
+  const report: Report = await response.json();
+  expect(report.changed).toEqual([
+    "widget.py::<module>",
+    "widget.py::Widget",
+    "widget.py::Widget.price",
+  ]);
+  expect(report.recommendations.map((r) => r.symbol)).toEqual([
+    "test_widget.py::test_price",
+  ]);
+  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  await expect(page.locator(".detail-content")).toContainText(
+    "Conservative module/import dependency",
+  );
+  await page.getByRole("button", { name: "Open changed code" }).click();
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("return 2");
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export report" }).click();
+  const download = await downloadPromise;
+  expect(JSON.parse(await readFile((await download.path())!, "utf8"))).toEqual(
+    report,
+  );
+});
+
+test("constructor overrides exclude unrelated tests while default users keep evidence", async ({
+  page,
+}) => {
+  const source =
+    'class Engine:\n    default_mode = "old"\n    def __init__(self, mode=None):\n        if mode is None: mode=self.default_mode\n        self.mode=mode\n';
+  const tests =
+    'from engine import Engine\ndef test_default(): return Engine()\ndef test_override(): return Engine(mode="explicit")\n';
+  await page.goto("/");
+  await expect(page.locator(".detail-content")).toContainText("test_discount");
+  const responsePromise = page.waitForResponse("**/api/analyze");
+  await page.getByLabel("Upload snapshot JSON").setInputFiles({
+    name: "constructor-arguments.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(
+      JSON.stringify({
+        base: { files: { "engine.py": source, "test_engine.py": tests } },
+        head: {
+          files: {
+            "engine.py": source.replace('"old"', '"new"'),
+            "test_engine.py": tests,
+          },
+        },
+      }),
+    ),
+  });
+  const response = await responsePromise;
+  expect(response.status()).toBe(200);
+  const report: Report = await response.json();
+  expect(report.recommendations.map((r) => r.symbol)).toEqual([
+    "test_engine.py::test_default",
+  ]);
+  expect(report.recommendations[0].evidence_path).toEqual([
+    "test_engine.py::test_default",
+    "engine.py::Engine",
+  ]);
+  expect(report.recommendations[0].path_revision).toBe("both");
+  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  await expect(page.locator(".detail-content")).toContainText(
+    "Resolved call path",
+  );
+  await page.getByRole("button", { name: "Open changed code" }).click();
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText('default_mode = "new"');
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export report" }).click();
+  const download = await downloadPromise;
+  expect(JSON.parse(await readFile((await download.path())!, "utf8"))).toEqual(
+    report,
+  );
 });

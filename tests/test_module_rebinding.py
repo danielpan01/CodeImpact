@@ -181,30 +181,23 @@ def test_local_import_can_resolve_despite_ambiguous_same_named_module_import():
     assert call_targets(index, "worker.py::sibling") == set()
 
 
-def test_module_rebinding_corpus_retains_selection_but_removes_false_resolved_path():
+def test_module_rebinding_corpus_removes_unrelated_selection_and_stale_call():
     data = json.loads((CASES / "module_rebinding.json").read_text())
     request = AnalysisRequest.model_validate(data["request"])
     report = analyze(request)
     validate_report(request, report)
     assert {rec.symbol for rec in report.recommendations} == {
         "tests/test_price.py::test_price",
-        "tests/test_worker.py::test_read",
     }
     assert not any(
         edge.source == "worker.py::read" and edge.kind == "call" for edge in report.edges
     )
-    rec = next(item for item in report.recommendations if item.symbol.endswith("::test_read"))
-    assert rec.reason == "Conservative module/import dependency"
-    assert rec.path_revision == "both"
-    assert rec.evidence_path == [
-        "tests/test_worker.py::test_read",
-        "tests/test_worker.py::<module>",
-        "worker.py::<module>",
-        "core.py::<module>",
-    ]
-    assert rec.score == 23
-    edges = {edge.id: edge for edge in report.edges}
-    assert [edges[eid].kind for eid in rec.evidence_edges] == ["module", "import", "import"]
+    assert any(
+        edge.source == "worker.py::<module>"
+        and edge.target == "core.py::<module>"
+        and edge.kind == "import"
+        for edge in report.edges
+    )  # Selection filtering must not erase graph evidence.
     affected = next(item for item in report.recommendations if item.symbol.endswith("::test_price"))
     assert affected.reason == "Resolved call path"
     assert affected.evidence_path == ["tests/test_price.py::test_price", "core.py::price"]
@@ -260,8 +253,7 @@ def test_rebound_deleted_target_and_removed_test_keep_only_justified_evidence():
     report = analyze(request)
     validate_report(request, report)
     assert "core.py::price" in report.removed
-    assert {rec.symbol for rec in report.recommendations} == {"test_worker.py::test_read"}
-    assert report.recommendations[0].reason == "Conservative module/import dependency"
+    assert report.recommendations == []
     assert not any(e.source == "worker.py::read" and e.kind == "call" for e in report.edges)
 
 

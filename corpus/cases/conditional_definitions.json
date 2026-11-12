@@ -38,13 +38,11 @@
   },
   "unclassified": {},
   "known_discrepancies": {
-    "false_positives": {
-      "tests/test_health.py::test_health": "Both imports reach the changed module despite healthy being independent."
-    },
+    "false_positives": {},
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
   "limitations": [
-    "Definitions under conditionals are not individually indexed. Module fallback rescues the affected test but overselects the sibling test."
+    "Conditional definitions remain unindexed and unresolved. Possible name references retain conservative evidence without selecting the unrelated sibling."
   ]
 }

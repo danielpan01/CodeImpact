@@ -1,0 +1,570 @@
+{
+  "base": {
+    "commit": {
+      "message": "Updated README with sample of job with arguments (#519)",
+      "parents": [
+        {
+          "sha": "ed7d21961242f86342da240ee1d089c1cee37de6"
+        }
+      ],
+      "sha": "64f83981b2a55136ea3737b8c35cf3da7b270055",
+      "tree": {
+        "sha": "73997a5423498810d3679be241cdf084700f938e"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b",
+      "spdx": "MIT",
+      "text": "The MIT License (MIT)\n\nCopyright (c) 2013 Daniel Bader (http://dbader.org)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "67dd029ab1047b65ac292d8690176f872e4465d2c070109c2b15d01c3ab78982",
+      "schedule/__init__.py": "f8c976d9b38df24b16019c196675c7c2881844fafa4da2c59a67214655f57e1f",
+      "setup.py": "b5eb944503d4f261e2b67c0f89b8cc3ac07d737e2ee2f6858f20e97e77dcafbf",
+      "test_schedule.py": "31950262f3f8193172c3731f9099c6f83ae113408d7c1f788232a8c75376e28a"
+    },
+    "tree": {
+      "sha": "73997a5423498810d3679be241cdf084700f938e",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "965648cd69d0540ac9d834d874221e48219f9c4d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "c55818bde1bd63903afac875278604d212865dde",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "b023fd1e6edc1c30f7d8baa95cc49f9d26e82393",
+          "size": 2296,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ef3a80980fa834f60e327b7c6892d32d69cc83ea",
+          "size": 404,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AUTHORS.rst",
+          "sha": "0d0620fdf3d8b8d53097bef13d279a27469f3a86",
+          "size": 1539,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "HISTORY.rst",
+          "sha": "a85a8ce0a2b78288f82bf13905a3b0b35b81b029",
+          "size": 5719,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "7c51781e88c8933284572fb4f24d55f4359b7c05",
+          "size": 1099,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "36fac618f4b04f87dac6337f78ad22d904ad1148",
+          "size": 147,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "211875552d99dbe309dd1135db96dc2e1ad68c50",
+          "size": 2216,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "f5550b7992fdd836aec23b370290381de5f0d519",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "698342a3251b4f7858dcefd94b9fee9d0853775d",
+          "size": 7614,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "504600a6a6569123979c294316a417ff7855d90a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/.gitkeep",
+          "sha": "fcefbe32a2f1a52083eff8e4d47ec54d7a953542",
+          "size": 182,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_templates",
+          "sha": "73b2cbe3fb0be0beed48cf00c33c180d49b67f6d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_templates/sidebarintro.html",
+          "sha": "d29d939ed410a43a6f8244600bb6c721c079484e",
+          "size": 962,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/background-execution.rst",
+          "sha": "f185c8aa5a2668a26b11dcf335f1b5a8f58c5101",
+          "size": 1652,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog.rst",
+          "sha": "250649964bbc36f4bec2942f69238aa6f7c02c1a",
+          "size": 28,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "e63cd0de960544cb2cf917093bba714e23258e8f",
+          "size": 10641,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/development.rst",
+          "sha": "08dccdaeacc0288390d3c9a854e15b556180d241",
+          "size": 1752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/examples.rst",
+          "sha": "397fc91393b7d25e8d687a4a3eab1cef052b8608",
+          "size": 7442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exception-handling.rst",
+          "sha": "7afcb7c2610c4ef4898fbab024c8e9a6010173ca",
+          "size": 1162,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/faq.rst",
+          "sha": "81519cff07151ecf947785b9b45de94b5dc4f393",
+          "size": 3287,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "b2327ea6f409773b780124b6a9e1d0100c088cc6",
+          "size": 3081,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/installation.rst",
+          "sha": "9daa66d98740fcc63accc8d646cde127d9d05dc3",
+          "size": 2883,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/logging.rst",
+          "sha": "eb34558f3a00cda39e8b116981f837fa0a024d3e",
+          "size": 1830,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/multiple-schedulers.rst",
+          "sha": "649648ca3c0fc248364bf33badf0b7698710e4f5",
+          "size": 865,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/parallel-execution.rst",
+          "sha": "8cd1398fdb2a20753d7e5a401c117d085a818c60",
+          "size": 2125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/reference.rst",
+          "sha": "9faff67753b0f42d519b8afbf4223ab6230d6fd9",
+          "size": 623,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-dev.txt",
+          "sha": "ed51505a0ebc3cc9e7d814029580d3391c07c6ad",
+          "size": 93,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "schedule",
+          "sha": "a6a3f19d4fa5471473f617229e9c650143bbaa3d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "schedule/__init__.py",
+          "sha": "0cab4be0df58f851e0255d5159d49b50cb2b6ded",
+          "size": 28680,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "fc1dec8dbb159befae0f83ef34813bab55e09750",
+          "size": 52,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "360da610199f8883eadc01cba163a629868ff56d",
+          "size": 1442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_schedule.py",
+          "sha": "e6c11d8398b7293f6b59c8677ea0871049871d04",
+          "size": 32040,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "584d93e175455fdce17c162a2c1b695c15bfd69b",
+          "size": 647,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/dbader/schedule/commit/c883af0229143285cf38e1c7733aaf36656c8744",
+  "head": {
+    "commit": {
+      "message": "Get next run by tag (#463)\n\n\r\nCo-authored-by: Sijmen Huizenga <sijmenhuizenga@gmail.com>",
+      "parents": [
+        {
+          "sha": "64f83981b2a55136ea3737b8c35cf3da7b270055"
+        }
+      ],
+      "sha": "c883af0229143285cf38e1c7733aaf36656c8744",
+      "tree": {
+        "sha": "6499a413b67e4fb83af1f76bf457bcdec76084ee"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b",
+      "spdx": "MIT",
+      "text": "The MIT License (MIT)\n\nCopyright (c) 2013 Daniel Bader (http://dbader.org)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "67dd029ab1047b65ac292d8690176f872e4465d2c070109c2b15d01c3ab78982",
+      "schedule/__init__.py": "e0eba86dba0b2fc37b1a54ecbc67ceceafece801455bf79418ca9b08c3286dcf",
+      "setup.py": "b5eb944503d4f261e2b67c0f89b8cc3ac07d737e2ee2f6858f20e97e77dcafbf",
+      "test_schedule.py": "6a022ae26980a306d9395eb58ce59d907f644648469a60a2d96d554c6a1b9e3a"
+    },
+    "tree": {
+      "sha": "6499a413b67e4fb83af1f76bf457bcdec76084ee",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "965648cd69d0540ac9d834d874221e48219f9c4d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "c55818bde1bd63903afac875278604d212865dde",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "b023fd1e6edc1c30f7d8baa95cc49f9d26e82393",
+          "size": 2296,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ef3a80980fa834f60e327b7c6892d32d69cc83ea",
+          "size": 404,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AUTHORS.rst",
+          "sha": "0d0620fdf3d8b8d53097bef13d279a27469f3a86",
+          "size": 1539,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "HISTORY.rst",
+          "sha": "a85a8ce0a2b78288f82bf13905a3b0b35b81b029",
+          "size": 5719,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "7c51781e88c8933284572fb4f24d55f4359b7c05",
+          "size": 1099,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "36fac618f4b04f87dac6337f78ad22d904ad1148",
+          "size": 147,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "211875552d99dbe309dd1135db96dc2e1ad68c50",
+          "size": 2216,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "f5550b7992fdd836aec23b370290381de5f0d519",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "698342a3251b4f7858dcefd94b9fee9d0853775d",
+          "size": 7614,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "504600a6a6569123979c294316a417ff7855d90a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/.gitkeep",
+          "sha": "fcefbe32a2f1a52083eff8e4d47ec54d7a953542",
+          "size": 182,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_templates",
+          "sha": "73b2cbe3fb0be0beed48cf00c33c180d49b67f6d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_templates/sidebarintro.html",
+          "sha": "d29d939ed410a43a6f8244600bb6c721c079484e",
+          "size": 962,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/background-execution.rst",
+          "sha": "f185c8aa5a2668a26b11dcf335f1b5a8f58c5101",
+          "size": 1652,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog.rst",
+          "sha": "250649964bbc36f4bec2942f69238aa6f7c02c1a",
+          "size": 28,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "e63cd0de960544cb2cf917093bba714e23258e8f",
+          "size": 10641,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/development.rst",
+          "sha": "08dccdaeacc0288390d3c9a854e15b556180d241",
+          "size": 1752,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/examples.rst",
+          "sha": "397fc91393b7d25e8d687a4a3eab1cef052b8608",
+          "size": 7442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/exception-handling.rst",
+          "sha": "7afcb7c2610c4ef4898fbab024c8e9a6010173ca",
+          "size": 1162,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/faq.rst",
+          "sha": "81519cff07151ecf947785b9b45de94b5dc4f393",
+          "size": 3287,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "b2327ea6f409773b780124b6a9e1d0100c088cc6",
+          "size": 3081,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/installation.rst",
+          "sha": "9daa66d98740fcc63accc8d646cde127d9d05dc3",
+          "size": 2883,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/logging.rst",
+          "sha": "eb34558f3a00cda39e8b116981f837fa0a024d3e",
+          "size": 1830,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/multiple-schedulers.rst",
+          "sha": "649648ca3c0fc248364bf33badf0b7698710e4f5",
+          "size": 865,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/parallel-execution.rst",
+          "sha": "8cd1398fdb2a20753d7e5a401c117d085a818c60",
+          "size": 2125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/reference.rst",
+          "sha": "9faff67753b0f42d519b8afbf4223ab6230d6fd9",
+          "size": 623,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-dev.txt",
+          "sha": "ed51505a0ebc3cc9e7d814029580d3391c07c6ad",
+          "size": 93,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "schedule",
+          "sha": "ad63d7c1abb50176dfbfec20bb2c5d1bb17a8e42",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "schedule/__init__.py",
+          "sha": "4fd75519b09ad778fd21908c24d5ef04858f0265",
+          "size": 28964,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "fc1dec8dbb159befae0f83ef34813bab55e09750",
+          "size": 52,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "360da610199f8883eadc01cba163a629868ff56d",
+          "size": 1442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_schedule.py",
+          "sha": "a52ecfaccf029530edeebb6de549efb3e2253280",
+          "size": 32729,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "584d93e175455fdce17c162a2c1b695c15bfd69b",
+          "size": 647,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "schedule_tags",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "1d3592d7f5d91000973a6f6097419b3f8e28fa607b17947052ff508b5ff008c5",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "dbader/schedule",
+  "schema_version": "1.0",
+  "selection_reason": "Tagged next-run API adds a method and changes a property/wrapper while preserving unrelated job operations.",
+  "warnings": []
+}

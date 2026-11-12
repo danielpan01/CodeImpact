@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "id": "module_rebinding",
-  "description": "A module-level assignment replaces an imported callable before a wrapper uses it.",
-  "category": "known_limitation",
+  "description": "A competing module assignment suppresses the stale imported call and unrelated body-change fallback while retaining the real direct caller.",
+  "category": "supported",
   "features": [
     "module_rebinding",
     "false_positive",
@@ -40,13 +40,9 @@
   },
   "unclassified": {},
   "known_discrepancies": {
-    "false_positives": {
-      "tests/test_worker.py::test_read": "The stale imported call is suppressed after rebinding, but conservative module/import fallback still reaches the changed core module and selects this unaffected wrapper test."
-    },
+    "false_positives": {},
     "false_negatives": {}
   },
   "expected_unclassified_recommendations": [],
-  "limitations": [
-    "Bounded module-level rebinding removes the misleading resolved-call edge, but retained module/import fallback still overselects the unaffected wrapper test."
-  ]
+  "limitations": []
 }

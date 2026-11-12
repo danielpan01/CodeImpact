@@ -26,11 +26,14 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Dependency analysis** | Indexes symbols and supported calls/imports; preserves removed dependencies across revisions. |
 | **Function-local imports** | Resolves direct local import aliases after their binding statement; keeps ambiguous bindings unresolved and import fallback scoped to the function. |
 | **Module import rebinding** | Suppresses misleading resolved calls when a module import name has competing bindings; preserves conservative import evidence. |
+| **Scoped fallback selection** | Separates body edits from initialization changes; uses bounded possible references to avoid unrelated class/module recommendations without inventing resolved calls. |
+| **Constructor and factory arguments** | Tracks bounded default overrides, partial factories, forwarded options and early exits; uncertain cases retain recommendations. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
 | **Inspectable reports** | Connects Map, Tests, and Changes views with exportable JSON and exact analyzed revision metadata for GitHub PRs. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
+| **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
 
@@ -78,29 +81,55 @@ make evaluate
   --output reports/local-import.json
 ```
 
-Observed overall agreement with these authored dependency labels: **23 true
-positives, 2 false negatives, 6 false positives, 26 true negatives**. Precision is
-**23/29 (79.3%)**; recall is **23/25 (92.0%)**. Two unclassified recommendations are
-reported separately. All 15 supported and 10 known-limitation cases enter the overall
-results. Known discrepancies fail tests if they change, including improvements that
-need deliberate review. A passing evaluation means the baseline matches, not that
-the analyzer has no mistakes.
+Observed agreement with these authored dependency labels: **23 true positives,
+2 false negatives, 0 false positives, 32 true negatives**. Precision is **23/23
+(100%)**; recall is **23/25 (92.0%)**. Two unclassified recommendations are reported
+separately. All 18 supported and 7 known-limitation cases enter the totals.
+Known discrepancies fail evaluation if they change, including improvements needing
+deliberate review. Passing means the recorded baseline matches, not zero mistakes.
 
-The function-local import milestone fixes the previous `local_import` miss without
-changing its authored labels: `test_read → read → price` now has a resolved path.
-At that milestone, the other 24 case reports remained unchanged. The subsequent
-module-rebinding fix removes the stale `worker.read → core.price` call edge in
-`module_rebinding`. Its unaffected wrapper test remains selected through module/import
-fallback, with priority 23 instead of 72. The directly affected test remains resolved,
-with priority 81 instead of 82 after the incorrect incoming edge is removed. The
-scoring formula, selected test IDs and overall counts above are unchanged; the other
-24 case reports are identical to the pre-rebinding baseline. Module fallback still
-overselects an unchanged sibling function in `module_overselection`; fixture injection
-and runtime imports remain the two measured misses.
+Earlier milestones fixed a function-local import miss and removed a stale resolved
+call after a module import was rebound. The selection refinement now removes all
+six recorded authored false positives: unrelated sibling functions, shadowed or
+rebound names, conditional definitions and inherited-method controls. It preserves
+the affected selections and keeps uncertain method references labeled conservative.
+Fixture injection and runtime imports remain the two measured misses. Sources and
+authored labels are unchanged; discrepancy annotations were deliberately updated.
+The [historical baseline](corpus/selection-baseline-v1.json) retains prior results.
 These are small authored fixtures, not externally validated ground truth,
 production accuracy or proof that a test fails. Fixture code is never executed.
 Statement coverage measures executed lines, not correctness; passing regression
 tests does not establish general accuracy. Keep the full test suite as the merge gate.
+
+### Real-repository evaluation v1
+
+Run the separate pinned dataset without network access:
+
+```sh
+make evaluate-real
+# reports/real-evaluation.json: selected IDs, labels, counts and complete evidence
+```
+
+The six changes cover MarkupSafe, ItsDangerous and Schedule. Sources, licenses,
+revision pins and hashes are retained under `corpus/real`, separately from the
+25 authored cases. Labels were drafted from source before analysis and are **not
+independently reviewed**. No upstream source or tests were executed.
+
+The initial evaluation selected 171/201 test definitions with 102 false positives.
+After class/module selection and bounded argument tracking: **56/201 selected;
+45 TP, 0 FP, 0 FN, 123 TN**, plus **11 selected out of 33 unclassified tests**.
+Draft-label precision is 45/45 (100%) and recall is 45/45 (100%). The first
+refinement removed 98 false positives; constructor/factory argument tracking now
+removes the final four ItsDangerous recommendations by distinguishing explicit
+overrides, forwarded options, early exceptions and unrelated classes. Sources and
+labels were not changed. Uncertain tests remain separate in the report.
+
+These cases informed the fix and are now a development/regression sample, **not
+an unseen accuracy benchmark**. Zero labeled misses does not show that omitted
+tests are safe to skip. Sources, labels, review status and provenance stayed fixed.
+Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
+[source/label protocol](corpus/real/README.md), and
+[201-label review pack](corpus/real/REVIEW.md).
 
 ## Quality checks
 
@@ -117,9 +146,13 @@ npm run test:e2e
 
 CodeImpact is a developer review tool. Static Python analysis is incomplete for dynamic dispatch, runtime imports, inheritance, re-exports, and pytest fixtures. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
 
-Next steps include real-repository accuracy evaluation, stronger resolution coverage, worker isolation, and hosted deployment. GitHub App authorization for private repositories, persisted jobs, and cross-request caching are not implemented. See the [build plan](docs/BUILD_PLAN.md).
+Next steps include independent review of the real-source pilot labels, fresh
+changes reserved for evaluation, broader factory coverage, stronger resolution
+coverage, worker isolation, and hosted deployment. GitHub App authorization for
+private repositories, persisted jobs, and cross-request caching are not implemented.
+See the [build plan](docs/BUILD_PLAN.md).
 
-Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. A next step is to measure module fallback against independently reviewed changes before attempting to narrow its recommendations.
+Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.
 
 Exports contain the full before/after source of changed files, including content outside bounded on-screen previews.
 
