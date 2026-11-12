@@ -1391,3 +1391,386 @@ Ignored local evidence includes `reports/arguments-before-*.json`, `arguments-re
 `arguments-*-repeat.json`, `arguments-preservation.json`, and `arguments-label-review.md`.
 Final `git diff --check` passed, the index is empty, and HEAD is unchanged. No commit,
 push, PR, branch creation or merge was performed.
+
+## Original fresh-repository evaluation v2 and regression gates — November 12, 2026
+
+Implemented on `codex/fresh-repository-validation` from merged reference
+`bef99db1bbc144ac399ecb3f537269293fe3f22e`. The work adds evaluation data and gates;
+**analyzer behavior, scoring, app report contracts and dashboard are unchanged**.
+No commits, staging, pushes, PRs or merges were performed for this milestone.
+
+### Source selection, labels and first measurement
+
+The pre-analysis protocol selected two localized source changes each from
+Atomicwrites, Python Slugify and Cachetools, all previously absent from v1.
+Ten considered changes were excluded for documented documentation/release/test-only,
+duplicate-merge or broad-refactor reasons. This is purposive small-project sampling,
+not random or newest-two sampling. All six changes fit the original limits.
+The existing bounded capture script read exact commit/tree/blob objects over HTTPS,
+including full supported before/after Python trees and MIT license bytes. No
+repository was checked out, imported, installed or executed. No snapshot was trimmed.
+
+Source inspection produced **581 definition labels: 109 affected, 450 unaffected,
+22 uncertain**. All six review statuses remain draft, author Codex, with no human
+reviewer claimed. Complete sources, label/selection hashes, six frozen engine/source
+hashes and the source-only review pack were recorded before the first analysis.
+The pre-analysis `frozen-inputs.json` file SHA-256 is
+`3cf5b6d90e1d04e2b1b0632b3fd68ce6f3f34e4958a69344ef0669a20e4c210c`.
+Hashes attest to integrity and recorded procedure, not independent certification.
+
+The first evaluator run exited 1 against deliberately empty discrepancy annotations.
+`corpus/real-v2/first-run.json` preserves first measured IDs, counts, classifications,
+reason counts, stable analysis hashes, original drift messages and raw-report hash.
+Only discrepancy maps, expected uncertain selections and limitation explanations
+were then deliberately annotated. Source/label/provenance/review-pack hashes remain
+unchanged. No analyzer tuning or replacement of difficult cases occurred.
+
+| Dataset | Selected | TP | FP | FN | TN | Uncertain total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Authored 25 | 25 | 23 | 0 | 2 | 32 | 2 / 2 |
+| Real v1 six | 56 / 201 | 45 | 0 | 0 | 123 | 33 / 11 |
+| Fresh v2 six | 362 / 581 | 65 | 284 | 44 | 166 | 22 / 13 |
+
+V2 explanation totals: 6 resolved paths, 349 conservative module/import paths,
+7 changed tests. Precision is 65/349 (18.6%); recall 65/109 (59.6%) against classified
+draft labels. Per-case/repository IDs, metrics, pins, coverage, concrete mistakes and
+interpretation are in REAL_EVALUATION_V2.md and generated reports. V2 is kept separate
+from both existing datasets; passing a recorded baseline does not remove mistakes.
+
+### Workflow and failure-mode verification
+
+The new `fresh_evaluate.py` reuses `evaluate_real` and its typed evidence validation.
+The existing CLI accepts an evaluator/default paths so both workflows share output
+protection and atomic writes. It adds an explicitly versioned fresh extension 1.0;
+existing dataset wrapper 1.0, evaluation 1.0 and analysis 2.0 remain unchanged.
+The v2 gate checks frozen source/label/engine receipts, complete provenance, all
+recommendation evidence, recorded discrepancy annotations and the first measured
+selections/classifications/analysis hashes. Metadata limits include added receipts
+and the source-only review pack. Original data/report hashes have a preservation test.
+
+28 new workflow tests cover incomplete or altered snapshots, missing/overlapping
+labels, coordinated label-hash rewrites, truncated provenance, parent/license
+mismatch, invalid review claims, frozen-source inventory/path tampering, changed
+engine/review bytes, metadata limits, symlink/missing first-run receipts, malformed
+evidence, baseline drift, protected output, offline/source-as-data execution,
+reordered inputs, original data/report preservation, and CI gate presence.
+The first workflow test invocation failed collection because the new module did not
+yet exist (`reports/v2-workflow-red.txt`); the implemented failure-mode suite passes.
+
+Observed commands:
+
+```sh
+.venv/bin/pytest tests/test_fresh_evaluate.py tests/test_real_evaluate.py \
+  tests/test_corpus.py tests/test_evaluation.py --no-cov
+make check
+make evaluate
+make evaluate-real
+make evaluate-real-v2
+PYTHONHASHSEED=17 .venv/bin/python -m codeimpact.evaluate \
+  --output reports/v2-repeat-authored.json
+PYTHONHASHSEED=31 .venv/bin/python -m codeimpact.real_evaluate \
+  --output reports/v2-repeat-v1.json
+PYTHONHASHSEED=47 .venv/bin/python -m codeimpact.fresh_evaluate \
+  --output reports/v2-repeat-fresh.json
+.venv/bin/python scripts/review_real.py --corpus corpus/real-v2 \
+  > reports/v2-review-repeat.md
+cd web && npm run test:e2e
+```
+
+- **509 Python tests passed**, including **28 new v2 workflow tests**; the combined
+  focused evaluator/corpus suites passed **143 tests**.
+- `make check` passed Ruff lint/format, strict mypy, pytest and the TypeScript/Vite
+  production build. One existing Starlette/httpx deprecation warning was non-failing.
+- **32 Playwright tests passed** on desktop and Pixel 7 using isolated local servers.
+  No dashboard behavior or upstream runtime tests were changed/executed.
+- **All three evaluations passed** with matching recorded mistakes. Offline tests
+  forbid socket connections, subprocesses and imports of the three analyzed packages.
+- All three report JSON files are **byte-identical** across repeat runs/different
+  hash seeds. Reversing snapshot file order yields identical stable analyses for
+  **all 37 cases**. Only the existing `stats.elapsed_ms` field is omitted.
+- All original authored/v1 dataset files, historical baselines and stable reports
+  remain byte-identical. Frozen analyzer/selection/argument/model/ingestion source
+  hashes match the reference commit. The 581-label review pack regenerates identically.
+- CI is configured with all three offline commands, using pinned local data and no
+  capture step. These uncommitted workflow changes have not run on GitHub; the checks
+  above were executed locally. Remote CI must pass after the user's eventual push.
+
+| Stable artifact | SHA-256 |
+| --- | --- |
+| Authored report (unchanged) | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| V1 report (unchanged) | `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae` |
+| Fresh v2 report | `ec86ffd62cedcdd19c97e1287f6902355e250ecb1b0e7dc0321d3afe555749ed` |
+
+Ignored local evidence: `reports/v2-capture/`, `v2-first-report.json`,
+`v2-first-run.txt`, `v2-check.txt`, `v2-browser.txt`, `v2-focused.txt`,
+`v2-evaluate*.txt`, `v2-repeat-*.json`, `v2-review-repeat.md`, and
+`v2-verification.json`. Initial results and all pinned source/provenance inputs needed
+for offline reproduction are retained in the versioned dataset, not only reports/.
+
+### Remaining work
+
+The 44 v2 misses are partial-bound modern Slugify calls; recommended next work is
+bounded module-level `functools.partial` call binding with ambiguity/rebinding guards.
+The 284 false positives expose separate dispatcher-argument and protocol-fallback
+limitations. Independent human label review remains outstanding, as do the authored
+fixture-injection/runtime-import misses. No omitted test is certified safe to skip.
+Future analyzer or reviewed-label work must preserve the initial v2 measurement and
+explicitly version its new reference/baseline instead of silently updating this gate.
+
+Final diff validation passed; the index is empty and HEAD remains the reference.
+All milestone changes are unstaged and uncommitted.
+
+## Bounded module-level partial binding — November 12, 2026
+
+Implemented after the original v2 measurement above, at the user's request to
+repair the Slugify misses. This changes bounded call resolution, so v2 is now
+**development/regression data**. It is not fresh validation of this fix. All labels
+remain agent drafted; no upstream code or tests were executed and no human review
+or runtime failure evidence is claimed.
+
+### Implementation and regression development
+
+`partial_bindings.py` recognizes single direct module assignments to imported
+`functools.partial`, including aliases and annotated assignments. Targets are plain,
+undecorated functions reached through direct/relative imports, module aliases,
+`src/` layouts, same-module definitions and bounded package re-exports. Slugify's
+wildcard package exports require a complete static export inventory and a unique
+target; dynamic or competing exports are declined. Ordinary call resolution is
+otherwise unchanged. No synthetic nodes or invocation edges at construction are added.
+
+The new call edge retains the actual call-site range, underlying function range
+and a textual partial-binding location. Source order, module and lexical shadowing,
+rebinding/deletion, conditional imports/bindings, wildcard uncertainty, dynamic
+arguments/targets, import cycles and local stdlib shadowing have regression controls.
+Unsupported/rebound/conditional/chained candidates cannot fall through to a same-named
+function. Before-only and deleted-target evidence remains valid. Stable IDs, edge
+direction, report 2.0, scoring formula and selection/argument code are unchanged.
+The new graph can change scores; heuristic scores remain non-probabilistic.
+
+Initial tests ran before implementation: **15 failed, 33 passed**, including both
+real Slugify misses (`reports/partial-red.txt`). A final ambiguity review added five
+controls; four reproduced the same-name fallthrough before the guard was tightened
+(`reports/partial-ambiguity-red.txt`). Final focused suite: **72 passed**. No labels
+were modified to make these regressions or evaluations pass.
+
+### Preserved and current measurements
+
+| Dataset / baseline | Selected | TP | FP | FN | TN | Uncertain total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Authored 25 (unchanged) | 25 | 23 | 0 | 2 | 32 | 2 / 2 |
+| Real v1 six (unchanged) | 56 / 201 | 45 | 0 | 0 | 123 | 33 / 11 |
+| Original v2 `bef99db` (preserved) | 362 / 581 | 65 | 284 | 44 | 166 | 22 / 13 |
+| Current v2 `module-partial-v1` | 413 / 581 | 109 | 291 | 0 | 159 | 22 / 13 |
+
+All **44 Slugify false negatives** are now selected. The fix also exposes **seven
+additional false positives**, explicitly recorded: four case/test pairs reject
+invalid arguments before the changed helper, and three ASCII-case calls use
+`allow_unicode=True` to bypass transliteration. Existing 284 false positives remain.
+See REAL_EVALUATION_V2.md for their exact IDs, per-case/repository counts and examples.
+Current precision is 109/400 (27.25%) and recall 109/109 (100%) against classified
+draft labels. Explanation totals are 58 resolved paths, 348 conservative paths and
+7 changed tests. All 22 uncertain IDs remain counted: 13 selected, 9 unselected.
+
+Every original authored/v1/v2 file remains byte-identical, including v2's 24 original
+files, source/labels/provenance, discrepancy annotations, review pack, frozen engine
+receipt and first measurement. Current results and current engine hashes are stored
+separately in `corpus/real-v2/baselines/module-partial-v1.json`; no automatic baseline
+update command was added. The final ambiguity guard changed only the current source
+hash: a direct measurement comparison confirmed unchanged selections and evidence
+before that hash was deliberately updated.
+
+The current gate validates original input/annotation/first-run hashes and the current
+seven-file engine inventory. Only discrepancy category/maps/limitations may be
+applied as in-memory overlays; labels and snapshots cannot be overlaid. The active
+measurement and discrepancy maps must both match. Fresh extension **2.0** reports
+current and original summaries separately, with `first_measurement_matches: false`
+and `current_measurement_matches: true`. The original analyzer is retained as a
+recorded first measurement, not claimed to be rerun by the current command. Analysis
+2.0, evaluation 1.0 and dataset-wrapper 1.0 remain unchanged.
+
+### Final verification of the completed change
+
+Observed on the final source:
+
+```sh
+.venv/bin/pytest tests/test_partial_bindings.py --no-cov
+make check
+make evaluate
+make evaluate-real
+make evaluate-real-v2
+PYTHONHASHSEED=17 .venv/bin/python -m codeimpact.evaluate \
+  --output reports/partial-repeat-authored.json
+PYTHONHASHSEED=31 .venv/bin/python -m codeimpact.real_evaluate \
+  --output reports/partial-repeat-v1.json
+PYTHONHASHSEED=47 .venv/bin/python -m codeimpact.fresh_evaluate \
+  --output reports/partial-repeat-v2.json
+cd web && npm run test:e2e
+```
+
+- **587 Python tests passed**, including **72 partial-binding regressions** and
+  **34 v2 workflow tests**. One existing Starlette/httpx deprecation warning remains
+  non-failing. Ruff lint/format, strict mypy and TypeScript/Vite production build passed.
+- **32 Playwright tests passed** on desktop and Pixel 7. No dashboard changes were made.
+- **All three evaluation commands exited 0** against their deliberate baselines.
+  Passing preserves the recorded mistakes; it does not establish safe test skipping.
+- All three stable report files match byte-for-byte on repeated runs with different
+  hash seeds. A separate seed-73 run reversed snapshot file order and reproduced
+  stable analysis for **all 37 cases**. Only existing `analysis.stats.elapsed_ms` is
+  excluded. Authored/v1 reports still match their original hashes exactly.
+- Source/provenance/evidence validation, original-v2 preservation, baseline-drift
+  rejection, offline/source-as-data guards and source-only review regeneration pass.
+  Selection, argument tracking, models and GitHub ingestion source bytes are unchanged.
+- Local checks passed; remote GitHub CI has not run on these uncommitted changes.
+  The existing CI configuration includes all three offline evaluations and browser tests.
+
+| Final stable artifact | SHA-256 |
+| --- | --- |
+| Authored report (unchanged) | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| V1 report (unchanged) | `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae` |
+| Current v2 report | `efe5413cdb4c73b554f5d526d0947f597ea71b5588768969a8198a84985885ed` |
+
+Ignored local verification artifacts include `reports/partial-{red,ambiguity-red,
+focused,check,browser,determinism}.txt`, `partial-evaluate-*.txt`,
+`partial-repeat-*.json`, `partial-verification.json`, `partial-before-files.json`
+and before-report copies. Versioned baseline receipts contain the results needed
+by offline CI. Final Git checks confirm an empty index and unchanged HEAD `bef99db`;
+all work remains unstaged and uncommitted.
+
+### Remaining boundaries and next work
+
+This milestone binds the underlying callable; it does not evaluate arbitrary factories,
+imports, execution order, monkeypatches, dynamic dispatch or argument-dependent paths.
+Function-local/imported/nested partial bindings, constructors and bound methods remain
+outside this resolver. The two authored misses (fixture injection and runtime imports)
+and Cachetools fallback over-selection remain. Recommended next work is bounded
+argument-sensitive reachability for ordinary/partial calls, starting with the seven
+newly exposed early-validation/unicode-bypass controls. Preserve both v2 baselines and
+all labels; independent human review remains outstanding.
+
+## Bounded argument-sensitive call filtering — November 12, 2026
+
+Implemented at the user's request to remove the seven false positives introduced by
+partial binding. All seven case/test pairs are now excluded, while all 109 affected
+v2 selections remain. The original and partial-binding v2 baselines are preserved;
+this section records a third measurement. V2 remains development/regression data,
+with agent-drafted labels and no independent review or upstream runtime evidence.
+Analyzed source was read as data; no upstream code or tests were executed.
+
+### Implementation and regression development
+
+`call_arguments.py` follows existing resolved call sites using bounded literal and
+parameter bindings, partial captures, keyword overrides, forwarded options,
+supported branch guards and early returns/raises. Filtering requires the complete
+changed module difference to consist of existing undecorated function bodies. Both
+revisions and every relevant call site must support exclusion. Reaching an edited
+function retains its dependency; this does not infer whether an edited line runs.
+
+Only test-to-function call contributions to selection are filtered. Serialized
+graph nodes, edges, IDs, direction, change records, source evidence and the scoring
+formula remain unchanged. Module/import fallback remains conservative. Twenty
+retained ASCII-case recommendations now use the modern branch instead of the
+legacy branch, with unchanged scores, distances and revision classifications.
+
+Unknown bindings, mutable defaults, modified/escaping options, mutable partial
+captures, unsupported control flow, callbacks, recursion, customized functions and
+exhausted budgets retain the existing path. Limits are 2,000 query steps, 16 nested
+callable levels and 64 carried arguments/collection items. General dynamic dispatch,
+implicit protocols and external monkeypatching remain outside this bounded query.
+Internal call metadata does not change analysis report schema 2.0.
+
+The first regression run preceded implementation: **9 failed, 20 passed**
+(`reports/dispatch-red.txt`). Additional failure-mode regressions caught mutable
+options/defaults, callable escape/customization, invalid bindings and conservative
+fallback boundaries during development. Final coverage includes **61 call-argument
+tests** and **five additional v2 gate tests**, including previous-baseline tampering,
+a missing previous receipt and the required new source hash. No labels were changed.
+
+### Preserved and current measurements
+
+| Dataset / baseline | Selected | TP | FP | FN | TN | Uncertain total / selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Authored 25 (unchanged) | 25 | 23 | 0 | 2 | 32 | 2 / 2 |
+| Real v1 six (unchanged) | 56 / 201 | 45 | 0 | 0 | 123 | 33 / 11 |
+| Original v2 `bef99db` (preserved) | 362 / 581 | 65 | 284 | 44 | 166 | 22 / 13 |
+| V2 `module-partial-v1` (preserved) | 413 / 581 | 109 | 291 | 0 | 159 | 22 / 13 |
+| Current v2 `argument-guards-v1` | 406 / 581 | 109 | 284 | 0 | 166 | 22 / 13 |
+
+The seven removed recommendations comprise four case/test pairs that reject invalid
+arguments before the changed helper and three ASCII-case unicode bypasses. Exact
+IDs and per-case/repository counts are in [REAL_EVALUATION_V2.md](REAL_EVALUATION_V2.md).
+Current explanation totals are **51 resolved paths, 348 conservative paths and
+7 changed tests**. Precision is 109/393 (**27.74%**) and recall 109/109 (**100%**) against
+classified draft labels. All 22 uncertain IDs remain counted: 13 selected, 9 unselected.
+No new false positives or false negatives appeared relative to the partial baseline.
+
+Every pre-existing corpus file remains byte-identical, including all 25 prior v2
+files, both measurement receipts, snapshots, labels, provenance, discrepancy
+annotations and the review pack. The new baseline is separately recorded at
+`corpus/real-v2/baselines/argument-guards-v1.json`, with eight current engine source
+hashes and the previous baseline's byte hash. The gate checks both historical
+receipts and current measurements; it never automatically accepts drift. Fresh
+wrapper **3.0** exposes original, previous and current summaries separately, with
+`first_measurement_matches: false` and `current_measurement_matches: true`. Analysis
+2.0, evaluation 1.0 and dataset-wrapper 1.0 remain unchanged.
+
+### Final verification of the completed change
+
+Observed on the final source:
+
+```sh
+.venv/bin/pytest tests/test_call_arguments.py tests/test_partial_bindings.py \
+  tests/test_arguments.py --no-cov
+.venv/bin/pytest tests/test_fresh_evaluate.py --no-cov
+make check
+make evaluate
+make evaluate-real
+make evaluate-real-v2
+PYTHONHASHSEED=17 .venv/bin/python -m codeimpact.evaluate \
+  --output reports/dispatch-repeat-authored.json
+PYTHONHASHSEED=31 .venv/bin/python -m codeimpact.real_evaluate \
+  --output reports/dispatch-repeat-v1.json
+PYTHONHASHSEED=47 .venv/bin/python -m codeimpact.fresh_evaluate \
+  --output reports/dispatch-repeat-v2.json
+cd web && npm run test:e2e
+```
+
+- **653 Python tests passed**, including the **180 focused argument/partial tests**
+  and **39 v2 workflow tests**. One existing Starlette/httpx deprecation warning is
+  non-failing. Ruff lint/format, strict mypy and TypeScript/Vite production build passed.
+- **32 Playwright tests passed** on desktop and Pixel 7. No dashboard files changed.
+- **All three evaluation commands exited 0** against their deliberate baselines.
+  Passing means recorded results match, not that no mistakes remain.
+- All three stable reports are byte-identical across repeated runs with different
+  hash seeds (17, 31 and 47). A seed-73 run reversed snapshot file order for **all
+  37 cases** and reproduced their stable analysis. Only the already documented
+  `analysis.stats.elapsed_ms` field is excluded from stable analysis comparisons.
+- Authored/v1 stable reports are byte-identical to the pre-change copies. All
+  original dataset bytes and both prior v2 baselines match their pre-change hashes.
+  Selection, constructor argument tracking, partial binding, models and GitHub
+  ingestion source bytes are unchanged. V2 graphs and retained scores are unchanged;
+  exactly seven recommendations disappeared and 20 retained evidence paths improved.
+- Local checks passed. Remote GitHub CI has not run on these uncommitted changes;
+  the existing workflow includes all three offline evaluations and browser tests.
+
+| Final stable artifact | SHA-256 |
+| --- | --- |
+| Authored report (unchanged) | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| V1 report (unchanged) | `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae` |
+| Current v2 report | `fc33aede311104cd63bdef021484f8be81471a588c9d9cd486230937be491fb9` |
+
+Ignored local evidence includes `reports/dispatch-{red,focused,workflow,check,browser,
+determinism}.txt`, `dispatch-evaluate-*.txt`, `dispatch-repeat-*.json`,
+`dispatch-before-files.json`, before-report copies and `dispatch-verification.json`.
+The versioned baseline contains the current results and receipts needed by offline CI.
+Final diff checks passed; the index is empty and HEAD remains `bef99db`. All changes
+remain unstaged and uncommitted.
+
+### Remaining boundaries and next work
+
+The older **284 false positives** remain: 117 Slugify and 167 Cachetools selections.
+The two authored misses involving fixture injection and runtime imports also remain.
+These are recorded analyzer limitations, not failing regression checks. Recommended
+next work is a separate bounded Cachetools protocol-fallback milestone, beginning
+with the 136 LFU case false positives and treating the 31 descriptor-case false
+positives as a distinct control. Preserve all three measurements and obtain human
+label review before broader accuracy claims. No omitted test is certified safe to skip.

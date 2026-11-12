@@ -106,6 +106,49 @@ attributes/shared objects, reflective namespace changes, re-export propagation,
 runtime imports and general control-flow analysis are outside this correction.
 The scan does not infer which replacement object is callable or execute source.
 
+### Bounded module-level `functools.partial` calls
+
+`partial_bindings.py` adds an independent syntax-only resolver used only for
+module partial candidates. A candidate is one direct simple-name assignment
+(including an annotated assignment) to an unambiguous imported
+`functools.partial` or module alias. A local snapshot named `functools` disables
+stdlib identification. The captured callable must resolve to a plain, undecorated
+function through earlier direct imports/aliases, relative imports, a `src/` layout,
+or an earlier same-module definition. Bound arguments must be small immutable
+literal expressions (at most 64 AST nodes per argument); unpacking and dynamic
+expressions are declined. No constructor, bound method, nested partial, function-local
+partial construction, imported partial binding, or arbitrary factory is inferred.
+
+Target re-exports are followed for at most 16 hops. Explicit package re-exports
+retain the import's module/member boundary, avoiding a same-named submodule collision.
+Slugify also requires wildcard re-exports: those are followed only when every source
+module has a complete static export inventory and exactly one exports the target.
+A single literal list/tuple `__all__` (at most 256 names), or the public names from a
+module without `__all__`, supplies that inventory. Unknown/dynamic/competing stars,
+conditional stars, dynamic module attribute hooks, export-list reads/mutations,
+recognized export-source namespace reflection and import cycles decline precision. This support is confined to resolving
+a partial's target; ordinary wildcard call handling remains unchanged.
+
+The partial, factory and target must have one binding with no competing assignment,
+delete, definition, conditional binding, wildcard, observed global/nonlocal declaration,
+or direct attribute/subscript mutation. Construction must follow its captured bindings;
+a same-file call must textually follow construction. This conservative source-order
+rule does not infer when a function actually runs. Separate functions do not leak
+ordinary local bindings. Local/enclosing parameters, imports, assignments, annotations,
+definitions and declarations block the global partial. Lambdas and comprehensions
+may use it only without shadowing the name. Unsupported candidates reserve their
+name instead of falling through to a same-named function.
+
+A supported invocation creates the existing caller-to-underlying-function `call`
+edge. Evidence names the partial's source location, with the actual invocation as
+source range and the underlying function as target range. Construction itself adds
+no invocation edge or synthetic node. Both revisions resolve independently, so
+before-only/deleted-target evidence survives. Stable IDs, edge direction, schema 2.0,
+selection code and scoring formula remain unchanged; new edges can change paths and
+scores. A resolved partial target does not establish branch reachability, runtime
+execution or valid arguments. General monkeypatching, reflective alias mutation,
+control flow and dispatch-argument pruning remain outside this bounded inference.
+
 ### Bounded function-local imports
 
 An `import` or `from ... import` statement directly in a function/async-function
@@ -279,6 +322,52 @@ unselected tests are safe. Arbitrary factories, mutation, descriptors, dispatch,
 fixture injection and runtime imports remain incomplete. The six pilot cases
 informed these fixes; they are regression data, not an unseen accuracy benchmark.
 
+### Bounded argument guards on resolved call paths
+
+`call_arguments.py` is a selection-only filter for changes confined to existing,
+undecorated, top-level function bodies. The entire module difference must fit that
+shape; additions/deletions, signature/default/decorator changes, class edits and
+initialization changes decline this filter. Reaching any edited function body counts
+as a dependency regardless of which edited lines execute.
+
+The index retains internal per-call AST bindings, including captured partial arguments.
+These are not serialized. A test-to-function call contribution can be excluded only
+when every recorded invocation in both revisions avoids all edited bodies for that
+module. Tests themselves changed, module/class targets and paths supported only by
+fallback are not excluded. Queries are grouped by changed module so one exclusion
+cannot erase evidence to a different edit. Import/module fallback is preserved;
+ordinary direct calls can therefore remain conservatively recommended even after
+a resolved route is filtered. All graph nodes/edges, stable IDs, revision evidence,
+core report 2.0 and scoring formula remain unchanged.
+
+The query carries literal positional/keyword arguments, immutable defaults, bounded
+known `*`/`**` expansion, forwarded parameters/options and call-time overrides of
+partial keywords. Boolean operators retain operand values. Literal equality, identity
+to `None`, tuple membership, `not`, and unshadowed builtin `isinstance` can decide
+branches, including Python's bool-as-int relationship. Unknown conditions retain
+both alternatives. Calls in return/raise expressions are inspected before stopping;
+a call before an early raise still retains impact. Loops are visited conservatively
+without inferring cardinality. `try`, context managers, recursion and unsupported
+control flow retain the path.
+
+Competing parameter writes invalidate their carried values. Missing/duplicate/unknown
+argument bindings, mutable captured defaults, customized function code/defaults,
+reflected or unresolved named calls, decorated/ambiguous callees and constructors
+retain uncertainty. Possible mutation, mutable aliases and mutable values escaping
+to other calls retain paths; mutation effects are not simulated. A terminal return
+to an already-known unrelated function has no later guard to invalidate. Partial
+attribute access or escape prevents trusting captured keywords. A literal loop alias
+is allowed solely when all uses of that alias are direct invocations, as required by
+the captured Slugify source. This does not execute a provider or infer arbitrary factories.
+
+Bounds are 2,000 query steps, 16 nested callable levels and 64 carried arguments or
+literal collection items. Exceeding a bound retains the call path. Caches and AST
+metadata are request-local. This is bounded filtering of **existing resolved paths**,
+not full Python execution or new dynamic/implicit-protocol resolution. Unresolved
+attribute dispatch, external effects and arbitrary monkeypatching remain limitations.
+Source is only parsed and read as data. The constructor/default filter in
+`arguments.py` is unchanged.
+
 The current priority formula is:
 
 ```text
@@ -430,6 +519,40 @@ selection refinement uses these cases as regression inputs, preserves frozen sou
 and labels, and deliberately updates discrepancy annotations. Scoring, app report
 contract, GitHub PR ingestion and dashboard design remain unchanged; historical
 results are retained in `corpus/selection-baseline-v1.json`.
+
+## Fresh-repository evaluation v2
+
+`fresh_evaluate.py` reuses `evaluate_real` and its typed evidence checks. The original
+`frozen-inputs.json` pins the six engine/ingestion files at `bef99db`, selection,
+snapshots, labels and source-only review pack. `first-run.json` retains the initial
+selections, classifications, uncertainty, explanation counts and analysis hashes.
+Those original receipts and all original case annotations remain unchanged.
+
+The partial milestone added `baselines/module-partial-v1.json` with its seven-file
+engine receipt, measurements and discrepancy annotations. It remains byte-identical.
+The argument-guard milestone adds `baselines/argument-guards-v1.json`, pinning eight
+current engine files, the previous baseline's file hash and the unchanged original
+receipts/cases. Only category, limitations and discrepancy maps may be overlaid in
+memory. `dataset_sha256` still identifies the original dataset; the active baseline
+hash identifies the overlay, and the nested evaluation hash identifies evaluated
+cases. No expected results are generated or accepted automatically.
+
+The fresh extension is now **3.0**. It retains all 2.0 fields and adds
+`previous_baseline`, `previous_baseline_sha256` and `previous_summary`, alongside
+`original_summary` and current results. `first_measurement_matches` stays honestly
+false; `current_measurement_matches` must be true. Historical analyzers are retained
+as recorded measurements, not claimed to be rerun by the current command.
+Invalid inputs/evidence, modified current engine bytes or rewritten historical
+receipts exit 2; measured drift exits 1; a matching imperfect baseline exits 0.
+Dataset wrapper 1.0, evaluation 1.0 and analysis 2.0 remain unchanged. V1 output is
+identical. Metadata retains its 4 MB per-file / 20 MB total bounds, including both
+versioned baselines. Writes remain atomic and cannot target the dataset. Only
+existing elapsed timing is excluded from comparisons.
+
+CI runs all three offline evaluation commands against pinned data. Historical dataset
+bytes, authored/v1 stable reports and both prior v2 baselines have preservation tests.
+Hashes establish recorded integrity, not independent review or authenticated authorship.
+V2 remains development/regression data. See [v2 results](REAL_EVALUATION_V2.md).
 
 ## Public GitHub ingestion
 

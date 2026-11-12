@@ -14,6 +14,7 @@ from pathlib import PurePosixPath
 from typing import Literal
 
 from codeimpact.arguments import ArgumentFallback
+from codeimpact.call_arguments import CallArgumentFilter, CallBinding
 from codeimpact.models import (
     AnalysisRequest,
     DependencyEvidence,
@@ -29,6 +30,7 @@ from codeimpact.models import (
     Symbol,
     SymbolChange,
 )
+from codeimpact.partial_bindings import PartialBindings
 from codeimpact.selection import AggregateFallback, propagation_changes
 
 DEFINITIONS = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
@@ -274,6 +276,8 @@ class IndexedEdge:
 
 @dataclass
 class Index:
+    call_bindings: dict[ast.Call, CallBinding] = field(default_factory=dict)
+    partials: PartialBindings | None = None
     nodes: dict[str, Symbol] = field(default_factory=dict)
     edges: dict[tuple[str, str, str], IndexedEdge] = field(default_factory=dict)
     ranges: dict[str, SourceRange] = field(default_factory=dict)
@@ -396,6 +400,8 @@ def build_index(snapshot: Snapshot) -> Index:
         names[mod] = sid
         collect(path, tree.body)
 
+    partials = PartialBindings(trees, modules, import_targets)
+    index.partials = partials
     for path, tree in trees.items():
         mod = module_name(path)
         module_id = f"{path}::<module>"
@@ -478,7 +484,23 @@ def build_index(snapshot: Snapshot) -> Index:
                 )
             )
             connect_calls(
-                index, definition, sid, name, path, mod, aliases, names, local, enclosing, ambiguous
+                index,
+                definition,
+                sid,
+                name,
+                path,
+                mod,
+                aliases,
+                names,
+                local,
+                enclosing,
+                ambiguous,
+                partials,
+                [
+                    other
+                    for _, other, qualified in definitions[path]
+                    if name == qualified or name.startswith(qualified + ".")
+                ],
             )
     return index
 
@@ -495,24 +517,43 @@ def connect_calls(
     local: LocalImports,
     enclosing_imports: set[str],
     ambiguous_imports: set[str],
+    partials: PartialBindings,
+    partial_scopes: list[ast.AST],
 ) -> None:
     args = getattr(node, "args", None)
     shadowed = {a.arg for a in (args.posonlyargs + args.args + args.kwonlyargs)} if args else set()
     if args:
         shadowed.update(a.arg for a in (args.vararg, args.kwarg) if a)
 
-    def visit(current: ast.AST, allow_local: bool = True) -> None:
+    def visit(
+        current: ast.AST, allow_local: bool = True, partial_shadowed: frozenset[str] = frozenset()
+    ) -> None:
         if current is not node and isinstance(current, DEFINITIONS):
             return
         if isinstance(
             current, (ast.Lambda, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
         ):
             allow_local = False
+            # A global partial can be used in a comprehension/lambda only when
+            # the inner scope does not shadow it. Local imports retain their
+            # existing more conservative handling.
+            partial_shadowed = (
+                partial_shadowed
+                | frozenset(
+                    child.id
+                    for child in ast.walk(current)
+                    if isinstance(child, ast.Name) and isinstance(child.ctx, (ast.Store, ast.Del))
+                )
+                | frozenset(child.arg for child in ast.walk(current) if isinstance(child, ast.arg))
+            )
         if isinstance(current, ast.Call):
             call = dotted(current.func)
             target: str | None = None
             if call:
                 root, _, tail = call.partition(".")
+                handled, partial_target, detail = partials.call_target(
+                    path, call, current, partial_scopes, root not in partial_shadowed
+                )
                 if local.wildcard:
                     pass
                 elif root in local.bound:
@@ -525,6 +566,8 @@ def connect_calls(
                             statement.end_col_offset or 0,
                         ):
                             target = names.get(target_name + (f".{tail}" if tail else ""))
+                elif handled:
+                    target = partial_target
                 elif root in shadowed or root in enclosing_imports or root in ambiguous_imports:
                     pass
                 elif root in aliases:
@@ -538,11 +581,23 @@ def connect_calls(
                             break
                         scope.pop()
                 if target:
+                    call_binding = CallBinding(sid, target)
+                    if partial_target:
+                        construction = partials.candidates[path][call].value
+                        assert isinstance(construction, ast.Call)
+                        call_binding = CallBinding(
+                            sid,
+                            target,
+                            tuple(construction.args[1:]),
+                            tuple(construction.keywords),
+                            call,
+                        )
+                    index.call_bindings[current] = call_binding
                     index.add_edge(
                         sid,
                         target,
                         "call",
-                        f"{path}:{current.lineno} calls {call}",
+                        f"{path}:{current.lineno} calls {call}{detail if partial_target else ''}",
                         SourceLocation(
                             path=path,
                             line=current.lineno,
@@ -570,7 +625,7 @@ def connect_calls(
             else:
                 index.warnings.append(f"Dynamic call: {path}:{current.lineno}")
         for child in ast.iter_child_nodes(current):
-            visit(child, allow_local)
+            visit(child, allow_local, partial_shadowed)
 
     # Assignments can rebind a global/imported callable. Avoid claiming a
     # precise edge in this case (module fallback can still select tests).
@@ -630,16 +685,26 @@ def analyze(request: AnalysisRequest) -> Report:
     active = [sid for sid in active if sid not in arguments.passive_import_modules]
     aggregate = [sid for sid in changed if nodes[sid].kind == "module" and sid not in active]
     fallback = AggregateFallback(before, after, {nodes[sid].path for sid in aggregate})
+    call_arguments = CallArgumentFilter(before, after, {nodes[sid].path for sid in active})
 
     def walk(
         seeds: list[str],
         calls_only: bool,
         aggregate_path: str | None = None,
         initialization_path: str | None = None,
+        body_path: str | None = None,
     ) -> dict[str, list[str]]:
         adjacency: dict[str, set[str]] = defaultdict(set)
         for edge in edges.values():
             if not calls_only or edge.kind == "call":
+                if (
+                    body_path is not None
+                    and edge.kind == "call"
+                    and nodes[edge.source].kind == "test"
+                    and edge.source not in changed
+                    and not call_arguments.allows(edge.source, edge.target, body_path)
+                ):
+                    continue
                 if (
                     initialization_path is not None
                     and nodes[edge.source].kind == "test"
@@ -669,8 +734,20 @@ def analyze(request: AnalysisRequest) -> Report:
     def active_paths(calls_only: bool) -> dict[str, list[str]]:
         seeds = [sid for sid in active if not calls_only or nodes[sid].kind != "module"]
         result = walk(
-            [sid for sid in seeds if nodes[sid].path not in arguments.changes], calls_only
+            [
+                sid
+                for sid in seeds
+                if nodes[sid].path not in arguments.changes
+                and nodes[sid].path not in call_arguments.changes
+            ],
+            calls_only,
         )
+        for source_path in call_arguments.changes:
+            group = [sid for sid in seeds if nodes[sid].path == source_path]
+            for sid, candidate in walk(group, calls_only, body_path=source_path).items():
+                current = result.get(sid)
+                if current is None or (len(candidate), candidate) < (len(current), current):
+                    result[sid] = candidate
         for source_path in arguments.changes:
             group = [sid for sid in seeds if nodes[sid].path == source_path]
             for sid, candidate in walk(group, calls_only, initialization_path=source_path).items():
@@ -681,7 +758,9 @@ def analyze(request: AnalysisRequest) -> Report:
 
     paths = active_paths(False)
     for module in aggregate:
-        for sid, candidate in walk([module], False, nodes[module].path).items():
+        for sid, candidate in walk(
+            [module], False, nodes[module].path, body_path=nodes[module].path
+        ).items():
             current = paths.get(sid)
             if current is None or (len(candidate), candidate) < (len(current), current):
                 paths[sid] = candidate

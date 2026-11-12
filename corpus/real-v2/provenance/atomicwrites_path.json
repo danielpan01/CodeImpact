@@ -1,0 +1,363 @@
+{
+  "base": {
+    "commit": {
+      "message": "Do not use deprecated template variable in tempfile module (#45)\n\n* Do not use deprecated template variable in tempfile module\r\n\r\nUse gettempprefix() instead, as suggested by the documentation.\r\n\r\n* fix: Styling\r\n\r\nCo-authored-by: Markus Unterwaditzer <markus@unterwaditzer.net>",
+      "parents": [
+        {
+          "sha": "55eed75c5d1337380314d03098703289e511af29"
+        },
+        {
+          "sha": "7930174f1a46961045b5bb0beba6b009f30c9dd9"
+        }
+      ],
+      "sha": "4705e84ce6cb31b6df0bd6a641280617b27b66d0",
+      "tree": {
+        "sha": "3602c04e0dfbb832af0122ef4a6eff5860b91504"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "878329f0bd878ad015129ce8bda82f481e86ec2e80831e909c0d67171d922e73",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2015-2016 Markus Unterwaditzer\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\nof the Software, and to permit persons to whom the Software is furnished to do\nso, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "atomicwrites/__init__.py": "c004b424ea27ded09a063488e70da8267c7ccce16751d86505e3cc6e6b22616a",
+      "docs/conf.py": "764edcdfc9777a9fbb892842d8ed7a091acb721793be7d9324d90faeadd88530",
+      "setup.py": "2f106ac901811e90e710312fb31e635859a5270a2af20610ae859713363afd17",
+      "tests/test_atomicwrites.py": "913b40ae401cea024395a0a334433ca3985def508c5c1c12f7173bacc804000d"
+    },
+    "tree": {
+      "sha": "3602c04e0dfbb832af0122ef4a6eff5860b91504",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "2ffef354a54ff2f2340f3e5d29c72aac8cc8060b",
+          "size": 84,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "715ac80c87b5d063cef8036bc3666769f7c34847",
+          "size": 317,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "86d3e4a65e7d28249a9b8bbac15bff37c49b2ae4",
+          "size": 250,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "3bbadc3af2cc3a5e91241dce4252c99a72c5f37f",
+          "size": 1069,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "bfa6b82c6c05dfa85f8220907f8f48b02b71e53e",
+          "size": 154,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "d257e7b6731b86267b31c2b30987f6d937806fc2",
+          "size": 51,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "4c9fbed4d439bb7644def71cc6e9a80c76ff31d2",
+          "size": 4810,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "appveyor.yml",
+          "sha": "5a9406462b4e619269fb2817881ec0276d0e0131",
+          "size": 512,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "atomicwrites",
+          "sha": "68a2014fa914b59e67c53e67b469deff2ad74147",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "atomicwrites/__init__.py",
+          "sha": "1859e83b265e108e2e007c0a36b3f435f80e7e3e",
+          "size": 6569,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "3c44654061da0f67721fece26603bbe8f63a5f92",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "af5f9d9aa53ae352a37937ac072b5f878bff04e9",
+          "size": 6786,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "d1413b7698ca1bbf0fcbb3a801ec8cd4c2370eef",
+          "size": 3291,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "0391c04477126f9a7272ca24da05241a7f56f486",
+          "size": 607,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "36fd3f6baf5afbfa902ff2dbb1a417bbed726b42",
+          "size": 6713,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "5e4090017a9bec5de60a745d17007a9e95f31a43",
+          "size": 22,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "adbf232f7615a37348bccf2ef459adc63f1a499d",
+          "size": 1238,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "afaf64da590dc409d55d08fd4a6e0d1ff506fc48",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_atomicwrites.py",
+          "sha": "b3128c5b4f16043e8c76e8927708fd70b5cf1f22",
+          "size": 2729,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "df7b9cad3ecf7f7ab25d8182b6e8a06cec7446e8",
+          "size": 205,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/untitaker/python-atomicwrites/commit/2a91f2ef3e85b6a6c4dca3209a02eaba9b003059",
+  "head": {
+    "commit": {
+      "message": "Use fspath to ensure path is str or bytes",
+      "parents": [
+        {
+          "sha": "4705e84ce6cb31b6df0bd6a641280617b27b66d0"
+        }
+      ],
+      "sha": "2a91f2ef3e85b6a6c4dca3209a02eaba9b003059",
+      "tree": {
+        "sha": "5d675a9deee6934c523ad7a072fdbed1cdcc309c"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "878329f0bd878ad015129ce8bda82f481e86ec2e80831e909c0d67171d922e73",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2015-2016 Markus Unterwaditzer\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\nof the Software, and to permit persons to whom the Software is furnished to do\nso, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "atomicwrites/__init__.py": "3235293e00e4ee2ed65b5be367cb9d16822a05e7ba215b80c9ed4916b0b8a54f",
+      "docs/conf.py": "764edcdfc9777a9fbb892842d8ed7a091acb721793be7d9324d90faeadd88530",
+      "setup.py": "2f106ac901811e90e710312fb31e635859a5270a2af20610ae859713363afd17",
+      "tests/test_atomicwrites.py": "913b40ae401cea024395a0a334433ca3985def508c5c1c12f7173bacc804000d"
+    },
+    "tree": {
+      "sha": "5d675a9deee6934c523ad7a072fdbed1cdcc309c",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "2ffef354a54ff2f2340f3e5d29c72aac8cc8060b",
+          "size": 84,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "715ac80c87b5d063cef8036bc3666769f7c34847",
+          "size": 317,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "86d3e4a65e7d28249a9b8bbac15bff37c49b2ae4",
+          "size": 250,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "3bbadc3af2cc3a5e91241dce4252c99a72c5f37f",
+          "size": 1069,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "bfa6b82c6c05dfa85f8220907f8f48b02b71e53e",
+          "size": 154,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "d257e7b6731b86267b31c2b30987f6d937806fc2",
+          "size": 51,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "4c9fbed4d439bb7644def71cc6e9a80c76ff31d2",
+          "size": 4810,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "appveyor.yml",
+          "sha": "5a9406462b4e619269fb2817881ec0276d0e0131",
+          "size": 512,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "atomicwrites",
+          "sha": "af5f1ff9320f6f9d40d32e66e443dbcf21da8e6e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "atomicwrites/__init__.py",
+          "sha": "5592ec433c98f5a609c6b0ff5ce1d7fb9170c3bc",
+          "size": 6794,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "3c44654061da0f67721fece26603bbe8f63a5f92",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "af5f9d9aa53ae352a37937ac072b5f878bff04e9",
+          "size": 6786,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "d1413b7698ca1bbf0fcbb3a801ec8cd4c2370eef",
+          "size": 3291,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "0391c04477126f9a7272ca24da05241a7f56f486",
+          "size": 607,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "36fd3f6baf5afbfa902ff2dbb1a417bbed726b42",
+          "size": 6713,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "5e4090017a9bec5de60a745d17007a9e95f31a43",
+          "size": 22,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "adbf232f7615a37348bccf2ef459adc63f1a499d",
+          "size": 1238,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "afaf64da590dc409d55d08fd4a6e0d1ff506fc48",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_atomicwrites.py",
+          "sha": "b3128c5b4f16043e8c76e8927708fd70b5cf1f22",
+          "size": 2729,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "df7b9cad3ecf7f7ab25d8182b6e8a06cec7446e8",
+          "size": 205,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "atomicwrites_path",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "29f2aa0c275410b3df19d27b5e7c32a12f6dfab4de715c814737c45632cdbbf2",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "untitaker/python-atomicwrites",
+  "schema_version": "1.0",
+  "selection_reason": "Path-like input conversion in AtomicWriter construction; no test edit in this commit.",
+  "warnings": []
+}

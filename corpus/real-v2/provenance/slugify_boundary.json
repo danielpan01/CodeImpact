@@ -1,0 +1,756 @@
+{
+  "base": {
+    "commit": {
+      "message": "Add tests for CLI interruption and legacy backend error contracts (#203)\n\nCo-authored-by: \u0421\u043a\u043b\u044f\u0440\u043e\u0432 \u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d \u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0438\u0447 <276334258+dyda5505-cloud@users.noreply.github.com>",
+      "parents": [
+        {
+          "sha": "866401ea6b346d7575cf941bc73ad32a362e34aa"
+        }
+      ],
+      "sha": "b91081447b68517081089aeb758628036fd79222",
+      "tree": {
+        "sha": "bb5d49fae20e486da00f3afb65b91437396653b2"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "30ba4dc69a9f4dce132dd703937c7a93b573e2524604d2d5f92c5066514c0d4f",
+      "spdx": "MIT",
+      "text": "The MIT License\n\nCopyright (c) Val Neekman @ Neekware Inc. http://neekware.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "500a09846dc1773bd95e495c381d0ac412803779b8b30dbf1621e39f993bbcd1",
+      "slugify/__init__.py": "43ef5b28242ff3db9fddb26bff21f130f84159737c602ce5c50c0afe476979f2",
+      "slugify/__main__.py": "998f2f2d2c76e0d91dc9879163e282ec802ba386c38d3700b4ff24cff45c27ec",
+      "slugify/__version__.py": "318319c0824c7349a398ba28b381aba24e1860bdd72fba0771d117d7f0285188",
+      "slugify/_legacy.py": "3a75db994fcfdbe0404f192533bbbff830f145c50eb03790002ca97f353dbcf2",
+      "slugify/slugify.py": "e3d9421e5e35b902804a16235fe1346f4f481fa5c40d695c5844f6ccc8eb36bd",
+      "slugify/special.py": "167edef5987b4c9b63d6a5f5864d34aff1adcbcbfd896809c05b5549f3f07856",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_add_uppercase_error.py": "9246ce3b0c04be8f940a1b1675eba01a969d7381a8ebf34b213df436d423f55e",
+      "tests/test_cli_interrupt.py": "e34dee77a5820ec126be9c40fb9209483c783fca4a4ebb8243afddd64f46eee0",
+      "tests/test_legacy.py": "f10f27fa48230d93c34826c7e3c03336ea9fa5103c5a0706174c586470403eda",
+      "tests/test_legacy_backend_errors.py": "b173399d2f7674d9e7e6f171d36e9db24ac1581ab131c9c98843bc01199a48c4",
+      "tests/test_release.py": "866e9679fcde040c76626536987b96dc2a6152f0d60c9eb0ce3282868db9a582",
+      "tools/check_algorithms.py": "02bc1f2d47a710901046a57ce88f06050e39e3c6eb381234275035966d43be8e",
+      "tools/check_dist.py": "067478709d28a1bfc85349246199481d7e91798cb746c63c6627b02c20a68be8",
+      "tools/legacy_reference.py": "b4dde01bdc86a9bfdc1cbbae0e87be9d16528a2de18dadbfa16826e8405d7df3"
+    },
+    "tree": {
+      "sha": "bb5d49fae20e486da00f3afb65b91437396653b2",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "cc9c497123c89efb89b098bbc8e72d51de7ca1aa",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "a94a80cf4da3c6a97985f4906e6528b57aa3d05c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "cf4fc55f578cd80a9251d1ecf92633dbb1d8ab05",
+          "size": 1298,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/dev.yml",
+          "sha": "632830e996486faea7cd50ebe98e5d80fe59bc01",
+          "size": 1301,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/main.yml",
+          "sha": "ba507939b10dd52f11a897336daff12054b88ff1",
+          "size": 675,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "e92162412ecd0b0471b163a93f7e8edd747c1dfe",
+          "size": 781,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".vscode",
+          "sha": "984ba3e50d307165680b4864a6a2121625d56757",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".vscode/settings.json",
+          "sha": "ecfbb807b5a3af92bff274612258ee075268b675",
+          "size": 135,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AGENTS.md",
+          "sha": "7c60e4a487c12f2a5cf7e184dd9851494bca1b92",
+          "size": 6832,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "9d6a8cb7d515bf9e960d8ff130a528e558ec7d84",
+          "size": 7310,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "82af695f594e8c1e83ee98db0bcae758620f1b63",
+          "size": 1103,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "aedb0e47bc05fab9fc2d5583dbcc7c2d13014966",
+          "size": 254,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "fa1d7c2197ecd704669d229797da152981188207",
+          "size": 11190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "dev.requirements.txt",
+          "sha": "d5e79deae3380fee339c641b7fe4a146516f0fa7",
+          "size": 106,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "d6a5bf639efc8c612427e441872a4f12543b77ef",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/release-9",
+          "sha": "2bccae51f85a684704575114a4eea5103fe57d42",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/historical-evidence.json",
+          "sha": "e8522482c45078999dff9bfcf51b97353c47462d",
+          "size": 3594939,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/historical-review.md",
+          "sha": "c9180e4bb984026881f15b83d2cbb7eaaefe20e8",
+          "size": 63670,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/migration.md",
+          "sha": "6c21f33f21d06c807532dd45943774e53945141c",
+          "size": 6329,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/recent-evidence.json",
+          "sha": "d8a2c2940466e8743b2fa01db1ee0642e6517e16",
+          "size": 95943,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/recent-review.md",
+          "sha": "46b8c0886da2da47bcd78cbea8020e98c47393f9",
+          "size": 9408,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/verification.md",
+          "sha": "94ce29d6bd891efe3eb20beec8b07a34434ed59e",
+          "size": 7186,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "format.sh",
+          "sha": "cd6122dd7dc764b18d7e5c524d3b2a11083172f3",
+          "size": 418,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "eb11a4901817485e7485f0bb78e358a48da2a17f",
+          "size": 1914,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "setup.py",
+          "sha": "24f872ac76678e430c251109e94e1839e69db2e1",
+          "size": 121,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "slugify",
+          "sha": "070a32434c3b0712c51865bb57e5f889bf0f9ae8",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__init__.py",
+          "sha": "6d3279fb1ac2e9c3febeca395a5f7350d8fa5969",
+          "size": 346,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__main__.py",
+          "sha": "fde2a86316ec08e237f22fe824076dadd4321b7d",
+          "size": 4914,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__version__.py",
+          "sha": "6c1a4e521cf673fbc2866f389158c9ba80ad19ef",
+          "size": 350,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/_legacy.py",
+          "sha": "c0dfd67a830d0040eb3c6f93da900b65541e96a4",
+          "size": 6358,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/slugify.py",
+          "sha": "f9539c185b61972496a432f4c6882b85e96b4cce",
+          "size": 9291,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/special.py",
+          "sha": "3c25658f09299beae3eab152cd64a67398d609ad",
+          "size": 1507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tea.yaml",
+          "sha": "dda3df903dccfbad347c5683aeab6c44481da4bb",
+          "size": 127,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "69e5fc2dec616aa293940325403b31f14cd70214",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_add_uppercase_error.py",
+          "sha": "a0705d52f9bd170a54341675186a6c95dac4aa56",
+          "size": 1770,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cli_interrupt.py",
+          "sha": "d99ae87362508c24fb08f7557e68a38c619db87d",
+          "size": 751,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_legacy.py",
+          "sha": "fcec4b6824f930cb891277320be96ed464e46853",
+          "size": 24518,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_legacy_backend_errors.py",
+          "sha": "0a313be6b3fc9bbe7fe01ce7d8d2c3416b781204",
+          "size": 1124,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_release.py",
+          "sha": "0daccd60988c93f6e9abc615aea95aa78c8cd1e9",
+          "size": 24155,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tools",
+          "sha": "5f3222bd8fc6644b07187bf4cc955f66bbccd573",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/check_algorithms.py",
+          "sha": "02d09efdeccdd8a5b4d65a70f27dfd8702a701a3",
+          "size": 3525,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/check_dist.py",
+          "sha": "3bc7756821e869942056941fff3a4abed928c1c8",
+          "size": 6297,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/legacy_reference.py",
+          "sha": "b81e5ec2fba09d41d8dcb870289ec4db02daa08e",
+          "size": 6270,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "66149c2ab322271ef044bac5ee46f9361519ede2",
+          "size": 1625,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/un33k/python-slugify/commit/c9e9698c70c8fe1ffe6e13158bb19a6251471b8b",
+  "head": {
+    "commit": {
+      "message": "Preserve modern word-boundary replacement delimiters (#204)",
+      "parents": [
+        {
+          "sha": "b91081447b68517081089aeb758628036fd79222"
+        }
+      ],
+      "sha": "c9e9698c70c8fe1ffe6e13158bb19a6251471b8b",
+      "tree": {
+        "sha": "ffe0b43f909bb84ba6a47ab0d215e65223d9c347"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "30ba4dc69a9f4dce132dd703937c7a93b573e2524604d2d5f92c5066514c0d4f",
+      "spdx": "MIT",
+      "text": "The MIT License\n\nCopyright (c) Val Neekman @ Neekware Inc. http://neekware.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "500a09846dc1773bd95e495c381d0ac412803779b8b30dbf1621e39f993bbcd1",
+      "slugify/__init__.py": "43ef5b28242ff3db9fddb26bff21f130f84159737c602ce5c50c0afe476979f2",
+      "slugify/__main__.py": "998f2f2d2c76e0d91dc9879163e282ec802ba386c38d3700b4ff24cff45c27ec",
+      "slugify/__version__.py": "318319c0824c7349a398ba28b381aba24e1860bdd72fba0771d117d7f0285188",
+      "slugify/_legacy.py": "3a75db994fcfdbe0404f192533bbbff830f145c50eb03790002ca97f353dbcf2",
+      "slugify/slugify.py": "81f6b705b8b34d6c816f9561441fa35e83d79af71a260dceb60f9e0b566a3bb9",
+      "slugify/special.py": "167edef5987b4c9b63d6a5f5864d34aff1adcbcbfd896809c05b5549f3f07856",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_add_uppercase_error.py": "9246ce3b0c04be8f940a1b1675eba01a969d7381a8ebf34b213df436d423f55e",
+      "tests/test_cli_interrupt.py": "e34dee77a5820ec126be9c40fb9209483c783fca4a4ebb8243afddd64f46eee0",
+      "tests/test_legacy.py": "f10f27fa48230d93c34826c7e3c03336ea9fa5103c5a0706174c586470403eda",
+      "tests/test_legacy_backend_errors.py": "b173399d2f7674d9e7e6f171d36e9db24ac1581ab131c9c98843bc01199a48c4",
+      "tests/test_modern_word_boundary.py": "26b10288dfe02ca530bc3103d8a290b6800037845f3683968b0b0ea1f3bc7ac4",
+      "tests/test_release.py": "866e9679fcde040c76626536987b96dc2a6152f0d60c9eb0ce3282868db9a582",
+      "tools/check_algorithms.py": "02bc1f2d47a710901046a57ce88f06050e39e3c6eb381234275035966d43be8e",
+      "tools/check_dist.py": "067478709d28a1bfc85349246199481d7e91798cb746c63c6627b02c20a68be8",
+      "tools/legacy_reference.py": "b4dde01bdc86a9bfdc1cbbae0e87be9d16528a2de18dadbfa16826e8405d7df3"
+    },
+    "tree": {
+      "sha": "ffe0b43f909bb84ba6a47ab0d215e65223d9c347",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "cc9c497123c89efb89b098bbc8e72d51de7ca1aa",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "a94a80cf4da3c6a97985f4906e6528b57aa3d05c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "cf4fc55f578cd80a9251d1ecf92633dbb1d8ab05",
+          "size": 1298,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/dev.yml",
+          "sha": "632830e996486faea7cd50ebe98e5d80fe59bc01",
+          "size": 1301,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/main.yml",
+          "sha": "ba507939b10dd52f11a897336daff12054b88ff1",
+          "size": 675,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "e92162412ecd0b0471b163a93f7e8edd747c1dfe",
+          "size": 781,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".vscode",
+          "sha": "984ba3e50d307165680b4864a6a2121625d56757",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".vscode/settings.json",
+          "sha": "ecfbb807b5a3af92bff274612258ee075268b675",
+          "size": 135,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AGENTS.md",
+          "sha": "7c60e4a487c12f2a5cf7e184dd9851494bca1b92",
+          "size": 6832,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "9d6a8cb7d515bf9e960d8ff130a528e558ec7d84",
+          "size": 7310,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "82af695f594e8c1e83ee98db0bcae758620f1b63",
+          "size": 1103,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "aedb0e47bc05fab9fc2d5583dbcc7c2d13014966",
+          "size": 254,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "fa1d7c2197ecd704669d229797da152981188207",
+          "size": 11190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "dev.requirements.txt",
+          "sha": "d5e79deae3380fee339c641b7fe4a146516f0fa7",
+          "size": 106,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "d6a5bf639efc8c612427e441872a4f12543b77ef",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/release-9",
+          "sha": "2bccae51f85a684704575114a4eea5103fe57d42",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/historical-evidence.json",
+          "sha": "e8522482c45078999dff9bfcf51b97353c47462d",
+          "size": 3594939,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/historical-review.md",
+          "sha": "c9180e4bb984026881f15b83d2cbb7eaaefe20e8",
+          "size": 63670,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/migration.md",
+          "sha": "6c21f33f21d06c807532dd45943774e53945141c",
+          "size": 6329,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/recent-evidence.json",
+          "sha": "d8a2c2940466e8743b2fa01db1ee0642e6517e16",
+          "size": 95943,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/recent-review.md",
+          "sha": "46b8c0886da2da47bcd78cbea8020e98c47393f9",
+          "size": 9408,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/release-9/verification.md",
+          "sha": "94ce29d6bd891efe3eb20beec8b07a34434ed59e",
+          "size": 7186,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "format.sh",
+          "sha": "cd6122dd7dc764b18d7e5c524d3b2a11083172f3",
+          "size": 418,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "eb11a4901817485e7485f0bb78e358a48da2a17f",
+          "size": 1914,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "setup.py",
+          "sha": "24f872ac76678e430c251109e94e1839e69db2e1",
+          "size": 121,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "slugify",
+          "sha": "7f44494cb58216727db2a0e761c9c9102a09226b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__init__.py",
+          "sha": "6d3279fb1ac2e9c3febeca395a5f7350d8fa5969",
+          "size": 346,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__main__.py",
+          "sha": "fde2a86316ec08e237f22fe824076dadd4321b7d",
+          "size": 4914,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/__version__.py",
+          "sha": "6c1a4e521cf673fbc2866f389158c9ba80ad19ef",
+          "size": 350,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/_legacy.py",
+          "sha": "c0dfd67a830d0040eb3c6f93da900b65541e96a4",
+          "size": 6358,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/slugify.py",
+          "sha": "27df54bb735e2ab9cbb74614ac60640d83b2c58f",
+          "size": 9662,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "slugify/special.py",
+          "sha": "3c25658f09299beae3eab152cd64a67398d609ad",
+          "size": 1507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tea.yaml",
+          "sha": "dda3df903dccfbad347c5683aeab6c44481da4bb",
+          "size": 127,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "7d6f19347be261627949bce68d2c23a8410bbe8c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_add_uppercase_error.py",
+          "sha": "a0705d52f9bd170a54341675186a6c95dac4aa56",
+          "size": 1770,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cli_interrupt.py",
+          "sha": "d99ae87362508c24fb08f7557e68a38c619db87d",
+          "size": 751,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_legacy.py",
+          "sha": "fcec4b6824f930cb891277320be96ed464e46853",
+          "size": 24518,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_legacy_backend_errors.py",
+          "sha": "0a313be6b3fc9bbe7fe01ce7d8d2c3416b781204",
+          "size": 1124,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_modern_word_boundary.py",
+          "sha": "6a262931fbfaf0463caa6086d749c2f34c01ecc3",
+          "size": 1840,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_release.py",
+          "sha": "0daccd60988c93f6e9abc615aea95aa78c8cd1e9",
+          "size": 24155,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tools",
+          "sha": "5f3222bd8fc6644b07187bf4cc955f66bbccd573",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/check_algorithms.py",
+          "sha": "02d09efdeccdd8a5b4d65a70f27dfd8702a701a3",
+          "size": 3525,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/check_dist.py",
+          "sha": "3bc7756821e869942056941fff3a4abed928c1c8",
+          "size": 6297,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tools/legacy_reference.py",
+          "sha": "b81e5ec2fba09d41d8dcb870289ec4db02daa08e",
+          "size": 6270,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "66149c2ab322271ef044bac5ee46f9361519ede2",
+          "size": 1625,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "slugify_boundary",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "1f3632dc7e246ef9243251b94928da0f4aee792a7d8323ff16746f9503067815",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "un33k/python-slugify",
+  "schema_version": "1.0",
+  "selection_reason": "Preserve delimiter runs in modern word-boundary truncation, with unchanged legacy controls and new tests.",
+  "warnings": []
+}

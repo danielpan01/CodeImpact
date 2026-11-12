@@ -17,6 +17,12 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - run: make setup
       - run: make check
+      - name: Offline authored evaluation
+        run: make evaluate
+      - name: Offline real-source v1 evaluation
+        run: make evaluate-real
+      - name: Offline fresh-source v2 evaluation
+        run: make evaluate-real-v2
       - run: npx playwright install --with-deps chromium
         working-directory: web
         env:

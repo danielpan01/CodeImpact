@@ -10,6 +10,7 @@ import json
 import sys
 import tempfile
 from collections import Counter, defaultdict
+from collections.abc import Callable
 from pathlib import Path, PurePosixPath
 from typing import Annotated, Any, Literal
 
@@ -351,8 +352,23 @@ def summarize(cases: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def evaluate_real(directory: Path) -> dict[str, Any]:
+def evaluate_real(
+    directory: Path, *, annotations: dict[str, dict[str, Any]] | None = None
+) -> dict[str, Any]:
     selection, cases, provenance, coverage = load_real(directory)
+    original_cases = cases
+    if annotations is not None:
+        require(set(annotations) == {case.id for case in cases}, "Baseline case inventory mismatch")
+        require(
+            all(
+                set(value) == {"category", "known_discrepancies", "limitations"}
+                for value in annotations.values()
+            ),
+            "Baseline may only override discrepancy annotations",
+        )
+        cases = [
+            CorpusCase.model_validate(case.model_dump() | annotations[case.id]) for case in cases
+        ]
     # evaluate() validates every recommendation's typed path and revision evidence.
     evaluation = evaluate(cases)
     results = []
@@ -384,7 +400,7 @@ def evaluate_real(directory: Path) -> dict[str, Any]:
     digest = canonical_hash(
         {
             "selection": selection.model_dump(),
-            "cases": [c.model_dump() for c in cases],
+            "cases": [c.model_dump() for c in original_cases],
             "provenance": {id: p.model_dump() for id, p in sorted(provenance.items())},
         }
     )
@@ -408,17 +424,23 @@ def evaluate_real(directory: Path) -> dict[str, Any]:
     }
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(
+    argv: list[str] | None = None,
+    *,
+    evaluator: Callable[[Path], dict[str, Any]] = evaluate_real,
+    default_corpus: Path = Path("corpus/real"),
+    default_output: Path = Path("reports/real-evaluation.json"),
+) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--corpus", type=Path, default=Path("corpus/real"))
-    parser.add_argument("--output", type=Path, default=Path("reports/real-evaluation.json"))
+    parser.add_argument("--corpus", type=Path, default=default_corpus)
+    parser.add_argument("--output", type=Path, default=default_output)
     args = parser.parse_args(argv)
     try:
         require(
             not args.output.resolve().is_relative_to(args.corpus.resolve()),
             "Report output must be outside the corpus directory",
         )
-        report = evaluate_real(args.corpus)
+        report = evaluator(args.corpus)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         # Atomic replacement avoids partially written reports and cannot overwrite
         # dataset bytes through a pre-existing hard link at the output path.
