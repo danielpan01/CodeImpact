@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-11** (America/New_York).
+Checked on **2026-11-12** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -21,20 +21,68 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: CONTRIBUTING.md | PASS | Local target exists; fragment not checked |
 | README.md: SECURITY.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/cases/ | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real-v2/REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real-v2/baselines/argument-guards-v1.json | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real/README.md | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real/REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md#bounded-function-local-imports | PASS | Local target exists; fragment not checked |
+| README.md: docs/ARCHITECTURE.md#bounded-module-level-rebinding | PASS | Local target exists; fragment not checked |
+| README.md: docs/ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | README.md: docs/BUILD_PLAN.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/CORPUS.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/desktop.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/before-desktop.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone3-dark-changes.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone3-dark-map.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone3-dark-tests.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone3-light-tests.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone3-mobile-evidence.png | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/portfolio-banner.svg | PASS | Local target exists; fragment not checked |
 | README.md: src/codeimpact/ | PASS | Local target exists; fragment not checked |
 | README.md: tests/ | PASS | Local target exists; fragment not checked |
 | README.md: web/ | PASS | Local target exists; fragment not checked |
 | CONTRIBUTING.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/before-desktop.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/before-mobile.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/desktop.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/map.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-map.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-mobile-changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-mobile-evidence.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-mobile-map.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-mobile-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone2-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-dark-changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-dark-map.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-dark-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-light-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-mobile-changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-mobile-evidence.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/milestone3-mobile-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/mobile-changes.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/mobile-tests.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: media/mobile.png | PASS | Local target exists; fragment not checked |
 | Python syntax: src/codeimpact/__init__.py | PASS | Parsed without importing or executing the application |
 | Python syntax: src/codeimpact/analyzer.py | PASS | Parsed without importing or executing the application |
 | Python syntax: src/codeimpact/api.py | PASS | Parsed without importing or executing the application |
@@ -54,8 +102,8 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | anyio | ==4.16.0 | 4.16.0 | >=3.10 |
 | certifi | ==2026.10.23 | 2026.10.23 | >=3.7 |
 | click | ==8.5.0 | 8.5.1 | >=3.10 |
-| coverage | ==7.17.2 | 7.17.2 | >=3.11 |
-| fastapi | ==0.162.0 | 0.162.4 | >=3.10 |
+| coverage | ==7.17.2 | 7.17.3 | >=3.11 |
+| fastapi | ==0.162.0 | 0.162.5 | >=3.10 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
 | httpx | ==0.28.1 | 0.28.1 | >=3.8 |
@@ -72,7 +120,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | pydantic_core | ==2.50.4 | 2.50.4 | >=3.10 |
 | pytest-cov | ==7.1.0 | 7.1.0 | >=3.9 |
 | pytest | ==9.2.0 | 9.2.0 | >=3.10 |
-| ruff | ==0.17.4 | 0.17.4 | >=3.7 |
+| ruff | ==0.17.4 | 0.17.5 | >=3.7 |
 | starlette | ==1.10.0 | 1.10.0 | >=3.11 |
 | typing-inspection | ==0.4.5 | 0.4.5 | >=3.10 |
 | typing_extensions | ==4.16.0 | 4.16.0 | >=3.9 |
