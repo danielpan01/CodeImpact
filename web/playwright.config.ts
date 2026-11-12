@@ -8,8 +8,7 @@ export default defineConfig({
   testDir: "./tests",
   use: {
     baseURL: `http://127.0.0.1:${webPort}`,
-    channel: "chromium",
-    launchOptions: { args: ["--disable-gpu"] },
+    colorScheme: "light",
     trace: "retain-on-failure",
   },
   webServer: [
@@ -29,7 +28,36 @@ export default defineConfig({
     },
   ],
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["Pixel 7"] } },
+    {
+      name: "desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        channel: "chromium",
+        launchOptions: { args: ["--disable-gpu"] },
+      },
+    },
+    {
+      name: "mobile",
+      use: {
+        ...devices["Pixel 7"],
+        channel: "chromium",
+        launchOptions: { args: ["--disable-gpu"] },
+      },
+    },
+    {
+      name: "firefox",
+      testMatch: "**/release.spec.ts",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      testMatch: "**/release.spec.ts",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "webkit-phone",
+      testMatch: "**/release.spec.ts",
+      use: { ...devices["iPhone 13"] },
+    },
   ],
 });

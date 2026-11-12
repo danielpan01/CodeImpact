@@ -1,8 +1,9 @@
 # CodeImpact frontend redesign roadmap
 
-Status: milestone 1 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
-after CI passed on November 12, 2026. Milestone 2 is implemented locally and remains
-unstaged/uncommitted. Milestone 3 remains planned. No deployment, independent review
+Status: milestones 1 and 2 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
+and [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after CI passed on
+November 12, 2026. Milestone 3 is implemented locally and remains unstaged/uncommitted.
+The owner waived the separate developer walkthrough. No deployment, independent review
 or usability study is claimed. See [VALIDATION.md](VALIDATION.md) for observed checks.
 
 ## Product goal
@@ -130,7 +131,7 @@ Acceptance:
 
 ## Milestone 2 — Refine graph, tests and code review
 
-**Implemented locally.** Tests has literal test/file search, explanation categories,
+**Merged in PR #8.** Tests has literal test/file search, explanation categories,
 deterministic sorts, filtered/total counts and reset/reveal-selection actions. Map
 focuses exact evidence paths, retains module fallback and revision context, jumps to
 individual symbols at readable scale, fits/resets and preserves pan/zoom across views.
@@ -166,6 +167,17 @@ graph focus work by keyboard. Add meaningful browser regressions for the new
 interactions. Displayed counts and exported report data remain consistent.
 
 ## Milestone 3 — Responsive polish and frontend release
+
+**Implemented locally.** Both themes cover inputs, Tests, Map, source and revision
+evidence with shared tokens and a saved appearance preference. Responsive focus,
+touch targets, Escape/back navigation and graph framing have cross-browser coverage.
+Error recovery distinguishes invalid input, limits, network and unreadable responses;
+retry preserves the submitted snapshot in memory. The README and usage walkthrough
+have current screenshots. Analyzer behavior and all baseline outputs remain unchanged.
+The separate developer walkthrough was explicitly waived by the owner and was not
+performed; agent browser/visual checks do not substitute for a user study.
+
+Original milestone scope (delivered, except the waived walkthrough):
 
 - Complete both light and dark themes with shared semantic tokens and a saved
   local theme preference. Theme changes must not alter report data.

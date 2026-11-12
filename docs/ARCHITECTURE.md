@@ -399,7 +399,7 @@ interfaces (including the CLI) emit schema 2.0, described below.
 React Flow displays dependency arrows, search, module filtering, selection and
 evidence highlighting using exact edge IDs. The dashboard uses real API results,
 including the explicitly loaded demo. Successful requests open Tests and collapse
-input behind New analysis. The light workspace uses semantic CSS tokens and local
+input behind New analysis. Light and dark workspaces share semantic CSS tokens and local
 system fonts. The shell, input, report context, Tests, Map and evidence inspector are
 separate React components; report types and API requests are unchanged. Focus moves
 after React commits a destination. Selection and expanded evidence persist when
@@ -407,6 +407,24 @@ switching review views; mobile/tablet evidence replaces the primary pane.
 Metrics include module nodes where labeled. Search filters the visible graph only;
 it does not recompute recommendations. The UI exports a report; its upload expects
 the separate snapshot-pair input schema.
+
+`theme.ts` follows the OS color scheme until an explicit preference is chosen. The
+`codeimpact.theme` local-storage value contains only `light` or `dark`; storage errors
+fall back to in-memory state. A small HTML bootstrap applies appearance before React
+paints, and storage events synchronize open tabs. Theme changes affect CSS and React
+Flow color mode, not report objects, selected IDs or exports. No report/source storage
+is added. Reduced-motion CSS disables transitions; compact layouts use larger touch
+targets. Focus tracking retains an active inspector when a desktop viewport becomes
+compact, including engines that blur a newly hidden element before a media-query event.
+Resize events also cover WebKit's coalesced breakpoint notifications; an inspector
+that remains visible keeps focus on its current control.
+
+The API client categorizes input, rate-limit, network and response failures while
+preserving server messages. Retry holds the submitted PR URL or parsed snapshot in
+memory and resends it only on user action; successful loads clear the retry snapshot.
+Invalid JSON, unavailable API and unreadable responses have explicit recovery routes.
+Loading announces the operation, with no invented completion estimate. Input limits,
+API routes, request/report schemas and the analyzer remain unchanged.
 
 Test review controls live in the application shell, so query/category/sort survive
 view changes. Pure presentation helpers filter a new array and use locale-independent
@@ -423,6 +441,9 @@ Fit view frames all visible measured cards. Reset clears graph controls and fits
 overview. Measured node bounds and a saved viewport remain presentation state;
 neither enters report data. The overview layout algorithm is unchanged. Large
 reports retain all rows/nodes; no virtualization or layout dependency was added.
+Symbol jumps, initial framing and fitting share the measured-node scheduling path;
+an explicit jump takes priority over initial framing. Empty filtered maps offer a
+reset that clears search and includes module nodes without changing the report.
 
 The Changes view groups added/modified/removed symbols by file. Open changed code
 from a recommendation preserves the selected test's explanation and opens the last

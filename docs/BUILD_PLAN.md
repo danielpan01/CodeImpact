@@ -2,20 +2,22 @@
 
 ## Active roadmap — November 12, 2026
 
-**Frontend milestone 1 is merged; milestone 2 is implemented locally.** The redesign priority
+**Frontend milestones 1–2 are merged; milestone 3 is implemented locally.** The redesign priority
 comes from the owner's request after the evaluation v2 and bounded call-filtering
 work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
 delivery sequence and acceptance criteria are in [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md).
 The visual foundation merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
-after CI passed. Interaction refinement remains unstaged/uncommitted; milestone 3 is
-next. See VALIDATION.md for observed checks and review limits.
+after CI passed; interaction refinement merged in
+[PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after its CI passed.
+Milestone 3 remains unstaged/uncommitted on `codex/frontend-polish`. The owner waived
+the separate developer walkthrough. See VALIDATION.md for observed checks and review limits.
 
 | Order | Milestone | What the user will notice | Completion evidence |
 | --- | --- | --- | --- |
 | 1 — merged | Frontend foundation and complete analysis workspace | A distinct visual identity, readable typography, compact input controls, clear navigation and coordinated Map, Tests, Changes and evidence views | Real API data; inspected desktop/tablet/phone captures; 50 browser checks and 653 Python tests pass; all three evaluations unchanged |
-| 2 — implemented locally | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; keyboard interaction checks |
-| 3 | Responsive polish and frontend release | Deliberate phone/tablet layouts, polished light/dark themes, loading/error/empty states and restrained motion | Responsive visual matrix, accessibility checks, all evaluations and CI passing; updated usage screenshots |
+| 2 — merged | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; 74 browser checks and CI passed |
+| 3 — implemented locally | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, Chromium/Firefox/WebKit checks, unchanged evaluations and updated screenshots; remote CI not yet run; separate walkthrough waived |
 | 4 | Review labels and narrow Cachetools fallback | Fewer unrelated recommendations where source evidence supports exclusion | Human review status recorded; bounded LFU controls first; all three v2 baselines retained |
 | 5 | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Selection/labels frozen before analysis; results and usability feedback documented |
 | 6 | Performance, isolation and hosted pilot | A dependable shareable service within explicit limits | Measured runtime/memory, bounded workers, access controls and deployment verification |
@@ -23,9 +25,9 @@ next. See VALIDATION.md for observed checks and review limits.
 Milestones 1–3 form the frontend redesign program. Milestone 1 includes light tokens,
 Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
 phone/tablet navigation. Milestone 2 adds test filtering/sorting, graph focus and
-source coloring. Dark theme and further device/accessibility polish remain. Deliver and validate each complete
-slice before expanding it; the first slice includes a functioning workspace, not
-only a visual concept or landing page. Preserve existing analyzer behavior, report
+source coloring. Milestone 3 completes themes and responsive recovery/focus polish.
+The next candidate is independent label review and bounded Cachetools fallback work.
+Preserve existing analyzer behavior, report
 contracts, corpus bytes and all baselines throughout these frontend milestones.
 Independent source-label review can proceed alongside frontend work. Known analysis
 limitations remain visible; visual polish must not suggest stronger accuracy.
