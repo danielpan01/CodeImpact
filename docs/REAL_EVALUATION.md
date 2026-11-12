@@ -268,3 +268,12 @@ See [VALIDATION.md](VALIDATION.md) for the verification record and local artifac
 | `test_schedule.py::SchedulerTests.test_next_run_property` | TP | Resolved call path |
 | `test_schedule.py::SchedulerTests.test_next_run_time` | TP | Resolved call path |
 
+
+## Separate fresh evaluation
+
+[Fresh-repository evaluation v2](REAL_EVALUATION_V2.md) now measures six additional
+changes on the unchanged post-fix engine. It finds 284 false positives and 44
+false negatives against its draft labels. These results are kept separate from
+v1; the original six snapshots, labels, provenance and baseline remain unchanged.
+They demonstrate why the perfect classified v1 regression score is not a general
+accuracy claim. Both datasets still await independent human label review.

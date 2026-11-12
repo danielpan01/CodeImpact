@@ -338,3 +338,40 @@ and deliberate baseline updates. The [review pack](../corpus/real/REVIEW.md)
 contains every label/rationale with pinned source links and full Python diffs.
 [REAL_EVALUATION.md](REAL_EVALUATION.md) records per-case/aggregate measurements,
 selected IDs, concrete false positives and reproducible report hashes.
+
+## Fresh-repository evaluation v2
+
+`corpus/real-v2` adds six changes across three previously unused repositories,
+with 581 frozen draft labels and complete supported snapshots. Run
+`make evaluate-real-v2`; CI now includes this and the existing two offline gates.
+The original v2 analyzer measurement is frozen at `bef99db`; the authored 25 and v1 six retain every original
+source, label, annotation, provenance and baseline byte. Their stable reports are
+also unchanged, verified by a separate preservation receipt and regression test.
+
+V2 initially measured **65 TP / 284 FP / 44 FN / 166 TN**, plus 13 selected of 22 uncertain
+IDs. It retains the first measured results, pre-analysis hashes and source-only
+review pack. Matching the baseline is a reproducibility check, not zero errors.
+No human review or runtime failures are claimed. Read the separate
+[v2 results](REAL_EVALUATION_V2.md) and [protocol](../corpus/real-v2/README.md).
+Definition discovery is unchanged: inherited executions are not expanded, and
+methods named exactly `test` or defined in `tests/__init__.py` do not enter these
+static-ID totals. This particularly limits interpretation of Cachetools results.
+
+The bounded partial-call milestone retains all original v2 bytes and adds
+`corpus/real-v2/baselines/module-partial-v1.json`. Its intermediate results were **109 TP /
+291 FP / 0 FN / 159 TN**, with 413/581 selected and 13/22 uncertain selected.
+All 44 missed Slugify case/test pairs are recovered; seven additional false positives
+are recorded without relabeling. That milestone checked the new engine hashes,
+original receipts, and current discrepancy/measurement baseline. Fresh extension
+2.0 separates current results from the preserved first summary. The original source
+review pack still regenerates identically. V2 is now development/regression data.
+
+The argument-guard milestone adds a third receipt,
+`corpus/real-v2/baselines/argument-guards-v1.json`. The original first measurement and
+`module-partial-v1` remain byte-identical. The existing offline command now checks
+both historical receipts and the active eight-file engine/results baseline. Current
+results are **109 TP / 284 FP / 0 FN / 166 TN**, with **406/581 selected** and the same
+13/22 uncertain selections. Exactly seven recommendations were removed; all affected
+labels and selected IDs are retained. Fresh extension 3.0 explicitly separates the
+original, partial and current summaries. Existing module/import fallback remains,
+including 117 Slugify and 167 Cachetools false positives. No labels were reclassified.

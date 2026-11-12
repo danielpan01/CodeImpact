@@ -129,3 +129,54 @@ integration, deployment and accuracy story as an opaque final product. The scaff
 already supplies the first slice. Use [CODEX_PROMPT.md](CODEX_PROMPT.md) to direct the
 next implementation with explicit acceptance tests. Keep your own commits between
 phases. The engineering signal is your ability to explain tradeoffs and evidence.
+
+## Original fresh validation v2 — November 12, 2026
+
+Fresh evaluation v2 is implemented against the frozen `bef99db` analyzer: six
+previously unused changes across Atomicwrites, Python Slugify and Cachetools.
+It adds pre-analysis receipts, a 581-label draft review pack, preserved first
+measurements and all three offline evaluation gates in CI. The engine and both
+existing datasets are unchanged. See REAL_EVALUATION_V2.md and VALIDATION.md.
+
+Observed draft-label results are TP 65, FP 284, FN 44, TN 166, with 13 selected
+of 22 uncertain definitions. The next target identified by that original measurement was bounded
+module-level `functools.partial` call binding, motivated by all 44 Slugify misses.
+Begin with source-derived regressions and rebinding/unknown-target controls;
+preserve the frozen v2 first measurement and explicitly version any new baseline.
+General dispatcher-argument filtering and protocol-specific fallback narrowing
+need separate bounded milestones. Independent label review remains outstanding;
+the fixture-injection/runtime-import authored misses are not fixed by evaluation.
+
+## Completed bounded partial binding — November 12, 2026
+
+Module-level `functools.partial` calls now bind to uniquely resolved plain functions,
+including the bounded package re-exports needed by Slugify. Scope/rebinding/order
+controls and revision evidence are covered by regression tests. All 44 v2 Slugify
+misses are selected; seven additional false positives are openly recorded. The first
+v2 baseline remained untouched and a separate `module-partial-v1` baseline gated
+that intermediate behavior. See REAL_EVALUATION_V2.md and VALIDATION.md for measured results.
+
+The next work identified by the partial milestone was bounded argument-sensitive reachability for ordinary function and partial
+calls. Begin with the seven newly exposed unicode-bypass/early-validation controls,
+then legacy dispatch controls; preserve unknown/overridden arguments and before/head
+evidence. Do not mix that work with Cachetools protocol fallback changes. Keep the
+original and partial baselines, labels and uncertain counts intact. Human review of
+the drafted labels remains outstanding. Fixture injection and runtime imports also
+remain separate limitations.
+
+## Completed bounded call-argument guards — November 12, 2026
+
+Existing resolved call paths now use bounded immutable argument checks for branch
+bypasses and early type-validation exits. Exactly seven newly exposed Slugify false
+positives are removed; all 109 v2 affected labels remain selected. Current v2 is
+109 TP, 284 FP, 0 FN, 166 TN, plus 13/22 uncertain selections. Both prior baselines
+remain intact and `argument-guards-v1` separately records current behavior. Other
+fallback evidence, graph IDs, revision paths and the scoring formula remain intact.
+
+Next substantial candidate: bounded protocol-aware fallback narrowing for Cachetools,
+starting with source-based LFU versus unrelated cache controls (136 recorded false
+positives), with the descriptor/classmethod fallback (31) scoped separately. Do not
+claim independent accuracy or remove uncertain IDs. Preserve all three recorded v2
+measurements and obtain human label review before broader accuracy claims. Slugify's
+remaining 117 fallback false positives, fixture injection and runtime imports also
+remain open; the current call-path filter does not solve those mechanisms.

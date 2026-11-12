@@ -1,0 +1,828 @@
+{
+  "base": {
+    "commit": {
+      "message": "Update bug report template.",
+      "parents": [
+        {
+          "sha": "340c474a11bdbdce46c9c6ff19ec9c693d038a4d"
+        }
+      ],
+      "sha": "ba26e56aee0670a28979f02b94fb344515fe33ab",
+      "tree": {
+        "sha": "7d3e44f4c1ad5b7363b2830c8c19f9d66346224e"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "28c000b52b0ee27138a68ef778227e4057046e86b65f62f1cacb99b0cc49e0d2",
+      "spdx": "MIT",
+      "text": "The MIT License (MIT)\n\nCopyright (c) 2014-2026 Thomas Kemmer\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "f68affa8dfcf4a20d5fe872cfb0e19f9b284f8feda563dd8e8e23eafe75cd4eb",
+      "src/cachetools/__init__.py": "1d8b8fcd461afec6a755171990e173f6080f09706e5d2e85249165057227f448",
+      "src/cachetools/_cached.py": "90e2df70e55683f4d6f95fe04daa0e4f36d1e4ce50ea3a79b37e77c3dba1034b",
+      "src/cachetools/_cachedmethod.py": "c0623918a651fa7b4b58101471315ab91f460b77e53b8da9f1e636ec2a106140",
+      "src/cachetools/_descriptor.py": "b6032929c9cd495efda610275533f86f48d00a7c042ebcc2180be7a2d099bd41",
+      "src/cachetools/func.py": "87724e4fc82303fd5172cc9fd03c7aaf6a767c6c477f3cb74a245fc45ebf7816",
+      "src/cachetools/keys.py": "a4abf97ebc7523245d67c616d9f42886a40d09a52dd0582ae8435815a4f08224",
+      "tests/__init__.py": "01504c124b96d9d677db220bd1346437051fdf547731191c5f8905e35b5cf5c1",
+      "tests/test_cache.py": "dbdf81b02f344a0e62a5dcf2364be7e135e2511e765e93b43864aeb7aa3b115c",
+      "tests/test_cached.py": "11f9dfb7064d9e6b800cb272bb8ed9d8af71dcc7435147e062d4fa06730c872d",
+      "tests/test_cachedmethod.py": "95479e86583639438e299fbf957c63bd6a2f05a816a06bec0e04d0bdb3d9d26b",
+      "tests/test_classmethod.py": "8049063055be3fc23ea7e68f799847ad015ec03a5d9a6186aa17dd86686d86c1",
+      "tests/test_fifo.py": "c6134627b4d9daab20e67b27fe2ff8d7e225116ae46d6a0e79b2c9b620d25941",
+      "tests/test_func.py": "f9dc6bc1aaffa713ee17ce7d307ea56e483f782d61fda795d1d3c8689e8afe51",
+      "tests/test_keys.py": "0ee4070bcc3cefebe59ccc8dd3006c8b1530a8f7b81a1024e385e6502f6f0353",
+      "tests/test_lfu.py": "11981704035d965ae733140734efb7cd30615ef492cfeeb464f63992db59b404",
+      "tests/test_lru.py": "dbfd53eb372f24571f70d739faeb6c4963f79c80ef18228f44b38b1112bf1a6c",
+      "tests/test_rr.py": "995ee7555ebe96c8b4f988c23a8923de980b5f0c42ca073906988e28dd773ec2",
+      "tests/test_threading.py": "8d2e53ee065976ce9caf2964a64dd4b3d47bbe3337bb84eb763103f7710ec032",
+      "tests/test_tlru.py": "a2a433a7928f72d0b3e226be099c64878d3b901ead91688696224217c403b4be",
+      "tests/test_ttl.py": "a5c61f7e1a767c2104a274679d0415e80533670a59e218bfacd7be2b74278ab2"
+    },
+    "tree": {
+      "sha": "7d3e44f4c1ad5b7363b2830c8c19f9d66346224e",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "3ad3c8b54255e038f4cc4ee3d813ed9357f14d36",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.yml",
+          "sha": "2b1634acf03df44365baa3a4774811410c7c5449",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "8dda117bae5fd2c56ed7c1d75e4d7ea63d3a593b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+          "sha": "76f7569426c1d5d19ebcfad227716a3690f16922",
+          "size": 994,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "3ba13e0cec6cbbfd462e9ebf529dd2093148cd69",
+          "size": 28,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+          "sha": "d689ec7a704b00b26626b40a4e193e69d0e83879",
+          "size": 190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/PULL_REQUEST_TEMPLATE.md",
+          "sha": "61d4dc83ea705af249102e984efb3192f32eed2a",
+          "size": 1336,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "a62ab055c94b9de27aeddec59815d59a6dc63278",
+          "size": 775,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/copilot-instructions.md",
+          "sha": "6d1c9bb3c51691339b1bbbbbec53fbc611ccb75b",
+          "size": 7716,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/copilot-review.md",
+          "sha": "fa9550fdf8b099d17af40d0c9b65da71613ef2e0",
+          "size": 9246,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "3f7438f72fc0c55bf31909f5747fda389a43e001",
+          "size": 215,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "8731aa60695cee6236c3ab8e09ed66d6be520c03",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "4c5abee44b051985cf535ac179e2300a15159fbe",
+          "size": 843,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "d9ac52270e6fe5fddc7d33981dad51ce984f37e7",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "93b1537c21f58a7afcb3a61df88fe1e3207aa011",
+          "size": 187,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.rst",
+          "sha": "e166f03baa57d2edc90eb498cc79cf4d1d70e339",
+          "size": 17307,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "f980a19c78c25959f922b8cc93854d91a89e686f",
+          "size": 1085,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "822372a0eb95d8f35bdd50d84547afdb768cbb1c",
+          "size": 60,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "dd72500f7e4eb123a9ffd7d00e7fd141b5edbfb5",
+          "size": 4144,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "bc720e8a0f636215e048b44faf139fd6675ad9cd",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "f92c699fa320c321f522570640ec0a5abb6dd243",
+          "size": 471,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "c0ee0e145ede5364a1fa8579349a9afb661736a1",
+          "size": 32249,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "06594edb0c09b1f455548972afb15368f8640566",
+          "size": 1710,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "3d15e80d6863bcece5d6a0751531c5ebcdcf5a68",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/cachetools",
+          "sha": "8dadc98e04ea6cdc768f5e4fb08152ebe101ec87",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/__init__.py",
+          "sha": "4ff8b92dad37efbbeafe1c91ecef34817b767be4",
+          "size": 24738,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/__init__.pyi",
+          "sha": "41c1c0684d695776f136809b51351b17b6825888",
+          "size": 9959,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_cached.py",
+          "sha": "6f9daa28a8272b552b84161773a8155272ca8d77",
+          "size": 7727,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_cachedmethod.py",
+          "sha": "487efc849a6fba5f02af1578dab4fcb287e65b0c",
+          "size": 11881,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_descriptor.py",
+          "sha": "84ee6c64a61701060f49301b093e263858e1a594",
+          "size": 6951,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/func.py",
+          "sha": "07116bd9eae98994adb5943e50a14efc3370223a",
+          "size": 3275,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/func.pyi",
+          "sha": "c8e2dc4e0034fffe075c04ad266f8cadc14da22a",
+          "size": 2954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/keys.py",
+          "sha": "bdaff5229bff0622745f44fd3d817bdf0c55d460",
+          "size": 2578,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/keys.pyi",
+          "sha": "da9c809345319b67a904361fe7a7f1dd3f7ffc92",
+          "size": 534,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "3ee796e9d29597887b392ed7ccfe44ec1788a164",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "40d194abe21c49345d4b77900f04f0397a9e0fff",
+          "size": 15456,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cache.py",
+          "sha": "afcb196d719dc292073d3c097604b908e139d94e",
+          "size": 148,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cached.py",
+          "sha": "9b3a4872ec6d4c552d0b576b7e1fe9e8684f013b",
+          "size": 19098,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cachedmethod.py",
+          "sha": "045a9e8aec63543674c9ca0caef40cfa6cf69f0c",
+          "size": 42986,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_classmethod.py",
+          "sha": "5fdcee3a5aeade01d804a262730fc83176f5b163",
+          "size": 6638,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_fifo.py",
+          "sha": "e444609ee3468a514a319d29bd3f6822efea00b2",
+          "size": 1699,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_func.py",
+          "sha": "138a750bb3f54ad0704006c5329e32ad54fd254d",
+          "size": 8461,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_keys.py",
+          "sha": "edd0f30124af566a5818eb42bde8854016d17c1b",
+          "size": 5390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_lfu.py",
+          "sha": "259aeead3e03ca0c33a2d56e55b34c09ebf232cf",
+          "size": 2904,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_lru.py",
+          "sha": "1a397d0cc51b1ee8e8953cad64b17287e601cbab",
+          "size": 2268,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_rr.py",
+          "sha": "76d509c530d5163c94f2520e64a2c94826370889",
+          "size": 2897,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_threading.py",
+          "sha": "00ad18cb5ce0faa478f339af3ad301dacfdf6007",
+          "size": 7861,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_tlru.py",
+          "sha": "4575a81aa166cde87cec15da09ae5ca8a87a700d",
+          "size": 12847,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_ttl.py",
+          "sha": "2fceab1152c803232e4ac75ad3210ecf5b0484d8",
+          "size": 8866,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "1186ff59d8554f0f1b2717a2c9502ded226203f0",
+          "size": 689,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/tkem/cachetools/commit/8c953ab8cabb147c6921b5d08d262078e22891ec",
+  "head": {
+    "commit": {
+      "message": "Fix #451: Forward self keyword arguments in cached methods",
+      "parents": [
+        {
+          "sha": "ba26e56aee0670a28979f02b94fb344515fe33ab"
+        }
+      ],
+      "sha": "8c953ab8cabb147c6921b5d08d262078e22891ec",
+      "tree": {
+        "sha": "be55aeb848e0ef7147130ccd87b4ffb7efc88d13"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "28c000b52b0ee27138a68ef778227e4057046e86b65f62f1cacb99b0cc49e0d2",
+      "spdx": "MIT",
+      "text": "The MIT License (MIT)\n\nCopyright (c) 2014-2026 Thomas Kemmer\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "f68affa8dfcf4a20d5fe872cfb0e19f9b284f8feda563dd8e8e23eafe75cd4eb",
+      "src/cachetools/__init__.py": "1d8b8fcd461afec6a755171990e173f6080f09706e5d2e85249165057227f448",
+      "src/cachetools/_cached.py": "90e2df70e55683f4d6f95fe04daa0e4f36d1e4ce50ea3a79b37e77c3dba1034b",
+      "src/cachetools/_cachedmethod.py": "c0623918a651fa7b4b58101471315ab91f460b77e53b8da9f1e636ec2a106140",
+      "src/cachetools/_descriptor.py": "b299ee1d678ea2498347315b5cbfd5e5d98c997d626e16fa9eeef62cd9aad2c4",
+      "src/cachetools/func.py": "87724e4fc82303fd5172cc9fd03c7aaf6a767c6c477f3cb74a245fc45ebf7816",
+      "src/cachetools/keys.py": "a4abf97ebc7523245d67c616d9f42886a40d09a52dd0582ae8435815a4f08224",
+      "tests/__init__.py": "01504c124b96d9d677db220bd1346437051fdf547731191c5f8905e35b5cf5c1",
+      "tests/test_cache.py": "dbdf81b02f344a0e62a5dcf2364be7e135e2511e765e93b43864aeb7aa3b115c",
+      "tests/test_cached.py": "11f9dfb7064d9e6b800cb272bb8ed9d8af71dcc7435147e062d4fa06730c872d",
+      "tests/test_cachedmethod.py": "95479e86583639438e299fbf957c63bd6a2f05a816a06bec0e04d0bdb3d9d26b",
+      "tests/test_classmethod.py": "8049063055be3fc23ea7e68f799847ad015ec03a5d9a6186aa17dd86686d86c1",
+      "tests/test_fifo.py": "c6134627b4d9daab20e67b27fe2ff8d7e225116ae46d6a0e79b2c9b620d25941",
+      "tests/test_func.py": "f9dc6bc1aaffa713ee17ce7d307ea56e483f782d61fda795d1d3c8689e8afe51",
+      "tests/test_keys.py": "0ee4070bcc3cefebe59ccc8dd3006c8b1530a8f7b81a1024e385e6502f6f0353",
+      "tests/test_lfu.py": "11981704035d965ae733140734efb7cd30615ef492cfeeb464f63992db59b404",
+      "tests/test_lru.py": "dbfd53eb372f24571f70d739faeb6c4963f79c80ef18228f44b38b1112bf1a6c",
+      "tests/test_rr.py": "995ee7555ebe96c8b4f988c23a8923de980b5f0c42ca073906988e28dd773ec2",
+      "tests/test_threading.py": "8d2e53ee065976ce9caf2964a64dd4b3d47bbe3337bb84eb763103f7710ec032",
+      "tests/test_tlru.py": "a2a433a7928f72d0b3e226be099c64878d3b901ead91688696224217c403b4be",
+      "tests/test_ttl.py": "a5c61f7e1a767c2104a274679d0415e80533670a59e218bfacd7be2b74278ab2"
+    },
+    "tree": {
+      "sha": "be55aeb848e0ef7147130ccd87b4ffb7efc88d13",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "3ad3c8b54255e038f4cc4ee3d813ed9357f14d36",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.yml",
+          "sha": "2b1634acf03df44365baa3a4774811410c7c5449",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "8dda117bae5fd2c56ed7c1d75e4d7ea63d3a593b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+          "sha": "76f7569426c1d5d19ebcfad227716a3690f16922",
+          "size": 994,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "3ba13e0cec6cbbfd462e9ebf529dd2093148cd69",
+          "size": 28,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+          "sha": "d689ec7a704b00b26626b40a4e193e69d0e83879",
+          "size": 190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/PULL_REQUEST_TEMPLATE.md",
+          "sha": "61d4dc83ea705af249102e984efb3192f32eed2a",
+          "size": 1336,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "a62ab055c94b9de27aeddec59815d59a6dc63278",
+          "size": 775,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/copilot-instructions.md",
+          "sha": "6d1c9bb3c51691339b1bbbbbec53fbc611ccb75b",
+          "size": 7716,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/copilot-review.md",
+          "sha": "fa9550fdf8b099d17af40d0c9b65da71613ef2e0",
+          "size": 9246,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "3f7438f72fc0c55bf31909f5747fda389a43e001",
+          "size": 215,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "8731aa60695cee6236c3ab8e09ed66d6be520c03",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/ci.yml",
+          "sha": "4c5abee44b051985cf535ac179e2300a15159fbe",
+          "size": 843,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "d9ac52270e6fe5fddc7d33981dad51ce984f37e7",
+          "size": 98,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "93b1537c21f58a7afcb3a61df88fe1e3207aa011",
+          "size": 187,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.rst",
+          "sha": "e166f03baa57d2edc90eb498cc79cf4d1d70e339",
+          "size": 17307,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "f980a19c78c25959f922b8cc93854d91a89e686f",
+          "size": 1085,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "822372a0eb95d8f35bdd50d84547afdb768cbb1c",
+          "size": 60,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "dd72500f7e4eb123a9ffd7d00e7fd141b5edbfb5",
+          "size": 4144,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "bc720e8a0f636215e048b44faf139fd6675ad9cd",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "f92c699fa320c321f522570640ec0a5abb6dd243",
+          "size": 471,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "c0ee0e145ede5364a1fa8579349a9afb661736a1",
+          "size": 32249,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "06594edb0c09b1f455548972afb15368f8640566",
+          "size": 1710,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "3a86faecbf7688356b82fc5b6ba4dabfc3a89570",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/cachetools",
+          "sha": "3d2f0884313c8bf82b4e1f46e39031254211433b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/__init__.py",
+          "sha": "4ff8b92dad37efbbeafe1c91ecef34817b767be4",
+          "size": 24738,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/__init__.pyi",
+          "sha": "41c1c0684d695776f136809b51351b17b6825888",
+          "size": 9959,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_cached.py",
+          "sha": "6f9daa28a8272b552b84161773a8155272ca8d77",
+          "size": 7727,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_cachedmethod.py",
+          "sha": "487efc849a6fba5f02af1578dab4fcb287e65b0c",
+          "size": 11881,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/_descriptor.py",
+          "sha": "ce8fa3ae65404b2067b86a645ff35ca7779d4353",
+          "size": 6954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/func.py",
+          "sha": "07116bd9eae98994adb5943e50a14efc3370223a",
+          "size": 3275,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/func.pyi",
+          "sha": "c8e2dc4e0034fffe075c04ad266f8cadc14da22a",
+          "size": 2954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/keys.py",
+          "sha": "bdaff5229bff0622745f44fd3d817bdf0c55d460",
+          "size": 2578,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/keys.pyi",
+          "sha": "da9c809345319b67a904361fe7a7f1dd3f7ffc92",
+          "size": 534,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/cachetools/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "3ee796e9d29597887b392ed7ccfe44ec1788a164",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "40d194abe21c49345d4b77900f04f0397a9e0fff",
+          "size": 15456,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cache.py",
+          "sha": "afcb196d719dc292073d3c097604b908e139d94e",
+          "size": 148,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cached.py",
+          "sha": "9b3a4872ec6d4c552d0b576b7e1fe9e8684f013b",
+          "size": 19098,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cachedmethod.py",
+          "sha": "045a9e8aec63543674c9ca0caef40cfa6cf69f0c",
+          "size": 42986,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_classmethod.py",
+          "sha": "5fdcee3a5aeade01d804a262730fc83176f5b163",
+          "size": 6638,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_fifo.py",
+          "sha": "e444609ee3468a514a319d29bd3f6822efea00b2",
+          "size": 1699,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_func.py",
+          "sha": "138a750bb3f54ad0704006c5329e32ad54fd254d",
+          "size": 8461,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_keys.py",
+          "sha": "edd0f30124af566a5818eb42bde8854016d17c1b",
+          "size": 5390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_lfu.py",
+          "sha": "259aeead3e03ca0c33a2d56e55b34c09ebf232cf",
+          "size": 2904,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_lru.py",
+          "sha": "1a397d0cc51b1ee8e8953cad64b17287e601cbab",
+          "size": 2268,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_rr.py",
+          "sha": "76d509c530d5163c94f2520e64a2c94826370889",
+          "size": 2897,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_threading.py",
+          "sha": "00ad18cb5ce0faa478f339af3ad301dacfdf6007",
+          "size": 7861,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_tlru.py",
+          "sha": "4575a81aa166cde87cec15da09ae5ca8a87a700d",
+          "size": 12847,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_ttl.py",
+          "sha": "2fceab1152c803232e4ac75ad3210ecf5b0484d8",
+          "size": 8866,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "1186ff59d8554f0f1b2717a2c9502ded226203f0",
+          "size": 689,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "cachetools_descriptor",
+  "label_review": {
+    "author": "Codex",
+    "drafted_before_analysis": true,
+    "labels_sha256": "6a5bb5276e92776acb4b044cbe8ce7adeb29b4f29df2a8e40d87d2d26340f191",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "tkem/cachetools",
+  "schema_version": "1.0",
+  "selection_reason": "Positional-only descriptor self parameter; deliberately retains platform/version-dependent classmethod uncertainty.",
+  "warnings": []
+}

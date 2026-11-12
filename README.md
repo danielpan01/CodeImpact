@@ -27,6 +27,8 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Function-local imports** | Resolves direct local import aliases after their binding statement; keeps ambiguous bindings unresolved and import fallback scoped to the function. |
 | **Module import rebinding** | Suppresses misleading resolved calls when a module import name has competing bindings; preserves conservative import evidence. |
 | **Scoped fallback selection** | Separates body edits from initialization changes; uses bounded possible references to avoid unrelated class/module recommendations without inventing resolved calls. |
+| **Module-level partial calls** | Resolves bounded `functools.partial` bindings to unambiguous functions, with alias, re-export and lexical-scope guards. |
+| **Argument-sensitive call paths** | Filters existing resolved paths when bounded argument guards establish a bypass or early exit; preserves other fallback evidence. |
 | **Constructor and factory arguments** | Tracks bounded default overrides, partial factories, forwarded options and early exits; uncertain cases retain recommendations. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
@@ -34,6 +36,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Inspectable reports** | Connects Map, Tests, and Changes views with exportable JSON and exact analyzed revision metadata for GitHub PRs. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
+| **Fresh-source regression gates** | Replays six additional changes from three previously unused repositories with a preserved first measurement and explicitly versioned regression baselines, checking source, label, evidence and result drift in CI. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
 
@@ -131,24 +134,61 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 [source/label protocol](corpus/real/README.md), and
 [201-label review pack](corpus/real/REVIEW.md).
 
+### Fresh-repository evaluation v2
+
+```sh
+make evaluate-real-v2
+# reports/real-v2-evaluation.json
+```
+
+Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
+running the unchanged `bef99db` analyzer. The original measurement is preserved:
+**65 TP, 284 FP, 44 FN, 166 TN; 362/581 definitions selected**.
+
+Bounded module-level `functools.partial` binding repaired **all 44 Slugify misses**,
+while initially adding seven false positives. That intermediate baseline remains
+preserved: **109 TP, 291 FP, 0 FN, 159 TN; 413/581 selected**.
+
+Bounded argument-sensitive call filtering now removes **exactly those seven false
+positives**, retaining all affected selections. Current results are **109 TP, 284 FP,
+0 FN, 166 TN; 406/581 selected**, including **13 of 22 uncertain definitions**.
+Draft-label precision is 109/393 (27.74%); recall is 109/109 (100%). Known
+`allow_unicode=True` bypasses and early type-validation exits can filter resolved
+call paths. Unknown/mutated arguments and other module/import fallback remain
+conservative. Existing Slugify and Cachetools fallback mistakes remain recorded.
+
+All original snapshots, labels, provenance, discrepancy annotations and both prior
+v2 baselines are unchanged. The separate
+[`argument-guards-v1` baseline](corpus/real-v2/baselines/argument-guards-v1.json)
+records current source hashes, results and remaining mistakes. The offline gate
+verifies both historical receipts and the active baseline; it never accepts drift
+automatically. V2 is **development/regression data**, not unseen validation. Labels
+remain agent drafted, with no upstream tests executed. See
+[current and historical v2 results](docs/REAL_EVALUATION_V2.md) and the
+[source-only review pack](corpus/real-v2/REVIEW.md). Keep the full test suite as the
+merge gate; these measurements do not establish that omitted tests are safe.
+
 ## Quality checks
 
 ```sh
 make check
+make evaluate
+make evaluate-real
+make evaluate-real-v2
 cd web
 npm run install:browsers
 npm run test:e2e
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, and desktop/mobile browser tests. The [validation record](docs/VALIDATION.md) preserves observed results and the scope of each experiment.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The [validation record](docs/VALIDATION.md) preserves observed local results and distinguishes them from remote CI runs.
 
 ## Scope & next steps
 
 CodeImpact is a developer review tool. Static Python analysis is incomplete for dynamic dispatch, runtime imports, inheritance, re-exports, and pytest fixtures. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
 
-Next steps include independent review of the real-source pilot labels, fresh
-changes reserved for evaluation, broader factory coverage, stronger resolution
-coverage, worker isolation, and hosted deployment. GitHub App authorization for
+Next steps include independent review of both real-source datasets and bounded
+protocol-aware fallback narrowing, motivated by the remaining Cachetools mistakes.
+General dynamic dispatch and further fallback precision remain separate work. Worker isolation and hosted deployment remain later milestones. GitHub App authorization for
 private repositories, persisted jobs, and cross-request caching are not implemented.
 See the [build plan](docs/BUILD_PLAN.md).
 

@@ -1,0 +1,40 @@
+{
+  "analyzer_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/analyzer.py": "633a564440184fa7278e64c9b850f368220e59ca42b75b620ddda278559985ed",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/selection.py": "a27e77f3a87f76026fb10b9aa8642d74a57ea779c9a8df5be0408f2cd33e2ef8"
+  },
+  "cases": {
+    "atomicwrites_path": {
+      "labels_sha256": "29f2aa0c275410b3df19d27b5e7c32a12f6dfab4de715c814737c45632cdbbf2",
+      "snapshots_sha256": "ea42c0331cd9ec82cf42ecf39d27ea965ad3047b2efe93485266693f94470717"
+    },
+    "atomicwrites_prefix": {
+      "labels_sha256": "632e9b98bc3e1e3d46abe3e574201b29a99e95d03a408feddf980b34a446c115",
+      "snapshots_sha256": "6c7815b6a7719c7877934790257b5de04d5479bf9e28acecb7bc3a206a3f03a0"
+    },
+    "cachetools_descriptor": {
+      "labels_sha256": "6a5bb5276e92776acb4b044cbe8ce7adeb29b4f29df2a8e40d87d2d26340f191",
+      "snapshots_sha256": "d93a9fa5c18eb9790e30d7fa9b3050062d6f44164f0a8059514c5270037dd475"
+    },
+    "cachetools_lfu": {
+      "labels_sha256": "f5bcadce0ee303f5e8e0ec7f722d1e471f52ebfe2b3df601f7126919fb025ef2",
+      "snapshots_sha256": "4db167eb73be34a3d8ad70368ad7123e01cd0246dbe1dca81d971bc0bb898ab3"
+    },
+    "slugify_ascii": {
+      "labels_sha256": "8aac38c047b0d689b640a9d42a8f87476aa9329bf9f59dd0516b5c01b079a28c",
+      "snapshots_sha256": "9b5c239aea8af6d1bc7c78516738754defd5e5d23d3294ba49f438dfd89340e3"
+    },
+    "slugify_boundary": {
+      "labels_sha256": "1f3632dc7e246ef9243251b94928da0f4aee792a7d8323ff16746f9503067815",
+      "snapshots_sha256": "0efc55f8d004226f4440c064cf9319248ddf478895601cd0bdb0c14c1b574bf4"
+    }
+  },
+  "reference_commit": "bef99db1bbc144ac399ecb3f537269293fe3f22e",
+  "review_pack_sha256": "d4aed25e51d945c674a0553af26e93e1d5d7f5a35be17236a5cff530f62a9698",
+  "schema_version": "1.0",
+  "selection_sha256": "c85340a414d94d2e3c78cca586f644f0c3ff59640590e4d1e94afb0f5135296b"
+}

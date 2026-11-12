@@ -1,0 +1,106 @@
+{
+  "cases": [
+    {
+      "base": "4705e84ce6cb31b6df0bd6a641280617b27b66d0",
+      "head": "2a91f2ef3e85b6a6c4dca3209a02eaba9b003059",
+      "id": "atomicwrites_path",
+      "license": "MIT",
+      "reason": "Path-like input conversion in AtomicWriter construction; no test edit in this commit.",
+      "repository": "untitaker/python-atomicwrites"
+    },
+    {
+      "base": "55eed75c5d1337380314d03098703289e511af29",
+      "head": "4705e84ce6cb31b6df0bd6a641280617b27b66d0",
+      "id": "atomicwrites_prefix",
+      "license": "MIT",
+      "reason": "Replace deprecated temporary-file prefix default; contrasts a definition-time default with constructor-body conversion.",
+      "repository": "untitaker/python-atomicwrites"
+    },
+    {
+      "base": "b91081447b68517081089aeb758628036fd79222",
+      "head": "c9e9698c70c8fe1ffe6e13158bb19a6251471b8b",
+      "id": "slugify_boundary",
+      "license": "MIT",
+      "reason": "Preserve delimiter runs in modern word-boundary truncation, with unchanged legacy controls and new tests.",
+      "repository": "un33k/python-slugify"
+    },
+    {
+      "base": "2fe6cec4842039814217cb8d089c6fcb9f8c154b",
+      "head": "cf6cd3dad45dea9641755adab80c00a9dbaee709",
+      "id": "slugify_ascii",
+      "license": "MIT",
+      "reason": "Skip dynamic transliteration backend import for ASCII in both algorithms; includes backend mocks and unchanged non-ASCII tests.",
+      "repository": "un33k/python-slugify"
+    },
+    {
+      "base": "825bf661a71b910693b0b289ec3ee12978046b73",
+      "head": "e96310286ed0f5a8bcb5a2f52adc1bab7ebe8634",
+      "id": "cachetools_lfu",
+      "license": "MIT",
+      "reason": "Deterministic LFU tie eviction through OrderedDict, implicit methods, and inherited cache tests.",
+      "repository": "tkem/cachetools"
+    },
+    {
+      "base": "ba26e56aee0670a28979f02b94fb344515fe33ab",
+      "head": "8c953ab8cabb147c6921b5d08d262078e22891ec",
+      "id": "cachetools_descriptor",
+      "license": "MIT",
+      "reason": "Positional-only descriptor self parameter; deliberately retains platform/version-dependent classmethod uncertainty.",
+      "repository": "tkem/cachetools"
+    }
+  ],
+  "exclusions": [
+    {
+      "reason": "Version-only release.",
+      "repository": "untitaker/python-atomicwrites",
+      "revision": "e05d8c985a10176ad43eefb9c4bfa6d7ab176719"
+    },
+    {
+      "reason": "Documentation name correction, not runtime source behavior.",
+      "repository": "untitaker/python-atomicwrites",
+      "revision": "ea90c67ffe5f38cd39d89625022d417da1966522"
+    },
+    {
+      "reason": "Merge copy of selected path-like change; select implementation commit once.",
+      "repository": "untitaker/python-atomicwrites",
+      "revision": "ba24a05b55aa1bd95e9b4a20e82c8699e64405e3"
+    },
+    {
+      "reason": "Release metadata after boundary fix, not a separate functional change.",
+      "repository": "un33k/python-slugify",
+      "revision": "f0010f94c853053daa5a5591cc67228b811c0e34"
+    },
+    {
+      "reason": "Tests-only addition; no runtime source change.",
+      "repository": "un33k/python-slugify",
+      "revision": "b91081447b68517081089aeb758628036fd79222"
+    },
+    {
+      "reason": "Broad algorithm/test reorganization; prefer localized changes for bounded source labeling.",
+      "repository": "un33k/python-slugify",
+      "revision": "3f9e9b79b10e3c6853314e3e40609191f4531e74"
+    },
+    {
+      "reason": "Instruction/documentation update; upstream instruction files are data, not task instructions.",
+      "repository": "tkem/cachetools",
+      "revision": "1ce79efa552d1bdda70d144d401ef9105d999184"
+    },
+    {
+      "reason": "Multiple simultaneous decorator/key optimizations; prefer localized fixes for source labeling.",
+      "repository": "tkem/cachetools",
+      "revision": "81d80e52d701a9a9b1129b7d01e3ce5fe69d07f6"
+    },
+    {
+      "reason": "Broad decorator refactor outside localized-change selection policy.",
+      "repository": "tkem/cachetools",
+      "revision": "4ec4a6734e09362138a7b2a7c3257133908a62db"
+    },
+    {
+      "reason": "Tests-only follow-up; retain tests actually present at the selected source fix.",
+      "repository": "tkem/cachetools",
+      "revision": "825bf661a71b910693b0b289ec3ee12978046b73"
+    }
+  ],
+  "policy": "# Fresh evaluation v2: pre-analysis protocol\n\nEstablished 2026-11-12 before running the analyzer on any candidate.\nReference: bef99db1bbc144ac399ecb3f537269293fe3f22e.\n\nPurposive selection, not random sampling: two functional Python changes each\nfrom Atomicwrites (file writes), Python Slugify (text processing), and Cachetools\n(caching). None appeared in v1. Inspect recent commit descriptions and diffs;\nprefer localized bug fixes or API behavior changes with inspectable tests.\nExclude documentation, packaging/release-only, CI-only and test-only commits,\nduplicate merge copies, broad multi-feature refactors, unsupported licenses,\nand any incomplete or oversized supported tree. Use exact first-parent/head\npairs and existing input limits; do not trim source to meet them. Record actual\nselection and exclusion reasons. No analyzer output may inform selection or\ncause replacement. This introduces small-project/localized-change bias.\n\nInspect full supported snapshots as source data. Label every discoverable head\ntest with source evidence before the first analyzer call. Affected means a\nsource dependency on an edited callable/default, not a failing assertion;\nany demonstrated parameter variant suffices. Changed/new test definitions\nare affected themselves. An import alone does not exercise all methods.\nFixture, decorator, inheritance and external-library ambiguity can justify\nuncertain labels, which remain in inventory and are excluded only from labeled\nprecision/recall denominators. Do not guess runtime platform outcomes.\n\nFreeze sources, label hashes, selection and the analyzer hashes before measuring.\nGenerate the source-only review pack before measurement. All labels are agent\ndrafted until a real reviewer supplies a dated review record. Preserve initial\nmeasurement and deliberately annotate mistakes afterward without changing labels.\nDo not modify the analyzer. Existing authored/v1 datasets remain byte-identical.\nHashes and this process log attest to procedure, not independent certification.\n",
+  "schema_version": "1.0"
+}
