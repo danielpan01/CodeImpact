@@ -57,7 +57,13 @@ Ensure `python3` selects Python 3.12 or newer before running `make setup`. The c
    or expanded evidence. Selecting a changed symbol directly replaces the inspector
    with that symbol's own details. **Changed files & symbols** expands/collapses file
    navigation; added, modified and removed symbols have text labels.
-6. In Map, use symbol search, **Module dependencies**, pan, zoom and Fit view to
+6. Choose **Focus path in Map** in the evidence inspector (or **Focus path** in Map).
+   Focus shows only the exact recorded path, including any module fallback. Use
+   **Jump to path symbol** to center a step at readable scale, **Inspect test** to
+   return to its explanation, and **Fit view** to see the entire path. Pan/zoom
+   persists across view switches. **Reset map** clears graph search/module/focus
+   settings and fits the overview; it retains the selected symbol.
+   In the overview, use symbol search, **Module dependencies**, pan and zoom to
    inspect the broader graph. Arrows point from caller to dependency; solid edges
    are resolved calls and dashed edges are conservative fallback. The initial zoom
    favors readable nodes; Fit view provides an overview, which can be dense on large
@@ -66,9 +72,21 @@ Ensure `python3` selects Python 3.12 or newer before running `make setup`. The c
    contains source. If no tests are recommended, **Review changed code** opens Changes;
    an empty list does not establish that omitted tests are safe.
 
-The complete test list retains the analyzer's order and scores. Search/filter/sort for
-Tests and graph path-focus controls belong to the next milestone. The current theme
-is light with local system fonts; there is no theme switcher or saved report history.
+Tests initially retains the analyzer's order and scores. **Search tests** matches test
+and file names, ignoring case and surrounding spaces; multiple words must all match.
+**Explanation** filters resolved calls, conservative fallback or changed tests.
+Category counts describe the full report; the result count shows filtered/total tests.
+**Sort tests** offers analysis order, test name, file name or ascending priority;
+name/file sorts use deterministic code-point ordering and full-symbol tie breakers.
+Row numbers retain the original analysis rank. **Reset tests** restores the full list
+and original order. A hidden selection keeps its evidence; **Show selected test**
+resets the controls and focuses that row. Controls persist across views and reset
+when a new analysis loads. Exports always contain every original recommendation.
+
+Changed code uses lightweight Python syntax coloring over the bounded, escaped
+preview; malformed source stays visible. It does not execute or parse source in the
+browser. The current theme is light with local system fonts; there is no theme
+switcher or saved report history.
 
 To inspect a deleted function and a mixed path, choose **New analysis → Analyze snapshots** to upload
 [`tests/fixtures/mixed-revisions.json`](../tests/fixtures/mixed-revisions.json). Select

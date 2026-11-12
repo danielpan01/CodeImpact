@@ -9,12 +9,14 @@ export function EvidenceInspector({
   openCode,
   onBack,
   headingRef,
+  focusPath,
 }: {
   report: Report;
   selected: string | null;
   openCode: (id: string) => void;
   onBack: () => void;
   headingRef: RefObject<HTMLHeadingElement | null>;
+  focusPath: (id: string) => void;
 }) {
   const symbol = report.nodes.find((n) => n.id === selected);
   const recommendation = report.recommendations.find(
@@ -55,13 +57,27 @@ export function EvidenceInspector({
                 >
                   Open changed code <Icon name="arrow" />
                 </button>
+                <button
+                  className="secondary focus-path-link"
+                  onClick={() => focusPath(recommendation.symbol)}
+                >
+                  <Icon name="map" /> Focus path in Map
+                </button>
                 <h4 className="trail-heading">
-                  Dependency trail <small>test → changed dependency</small>
+                  Dependency trail{" "}
+                  <small>
+                    {recommendation.evidence_path.length}{" "}
+                    {recommendation.evidence_path.length === 1
+                      ? "symbol"
+                      : "symbols"}{" "}
+                    · test → changed dependency
+                  </small>
                 </h4>
                 <ol className="evidence-path">
                   {recommendation.evidence_path.map((id, i) => (
                     <li key={id}>
                       <span className="trail-role">
+                        {i + 1}.{" "}
                         {i === 0
                           ? "Test"
                           : i === recommendation.evidence_path.length - 1

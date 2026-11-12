@@ -290,19 +290,13 @@ test("preview character budget includes line breaks and export preserves full so
   const characters = await after
     .locator(".source-line > code")
     .evaluateAll((codes) =>
-      codes.reduce(
-        (total, code) =>
-          total +
-          Array.from(code.childNodes)
-            .filter((node) => node.nodeType === Node.TEXT_NODE)
-            .reduce(
-              (length, node) => length + (node.textContent?.length ?? 0),
-              0,
-            ),
-        0,
-      ),
+      codes.reduce((total, code) => {
+        const copy = code.cloneNode(true) as HTMLElement;
+        copy.querySelectorAll(".clipped").forEach((marker) => marker.remove());
+        return total + (copy.textContent?.length ?? 0);
+      }, 0),
     );
-  expect(characters).toBeGreaterThan(0);
+  expect(characters).toBe(12_000);
   expect(characters).toBeLessThanOrEqual(12_000);
   expect(await after.locator(".source-line").count()).toBeLessThanOrEqual(120);
   const downloadPromise = page.waitForEvent("download");

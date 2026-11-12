@@ -1,9 +1,9 @@
 # CodeImpact frontend redesign roadmap
 
-Status: milestone 1 implemented locally, November 12, 2026. Requested by the owner after the analyzer and
-evaluation milestone merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6).
-Milestone 1 is implemented and locally verified below. Milestones 2–3 remain planned;
-no deployment, independent review or usability study is claimed.
+Status: milestone 1 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
+after CI passed on November 12, 2026. Milestone 2 is implemented locally and remains
+unstaged/uncommitted. Milestone 3 remains planned. No deployment, independent review
+or usability study is claimed. See [VALIDATION.md](VALIDATION.md) for observed checks.
 
 ## Product goal
 
@@ -82,7 +82,7 @@ not the page body. Desktop side-by-side code remains available where space permi
 
 ## Milestone 1 — Visual foundation and complete workspace
 
-**Implemented locally.** The application now has shared semantic light-theme tokens,
+**Merged in PR #7.** The application now has shared semantic light-theme tokens,
 system fonts, SVG controls, compact dark navigation/report context and a summary strip.
 Initial input offers PR analysis, snapshot upload and an explicit Load demo action.
 Every successful analysis opens Tests and collapses input behind New analysis.
@@ -129,6 +129,18 @@ Acceptance:
   data. A static mockup alone does not complete this milestone.
 
 ## Milestone 2 — Refine graph, tests and code review
+
+**Implemented locally.** Tests has literal test/file search, explanation categories,
+deterministic sorts, filtered/total counts and reset/reveal-selection actions. Map
+focuses exact evidence paths, retains module fallback and revision context, jumps to
+individual symbols at readable scale, fits/resets and preserves pan/zoom across views.
+The inspector numbers trail steps and opens a focused map without discarding expanded
+source locations. Changes retains file/symbol navigation and adds safe lexical source
+coloring within the existing preview limits. Reports/exports and all analyzer data
+remain unchanged. No dependencies or virtualization were added after local rendering
+observations on the 150-recommendation, 585-visible-node LFU case.
+
+Original milestone scope (delivered):
 
 Deliver the interactions that make real reports easier to inspect.
 

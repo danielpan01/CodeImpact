@@ -1649,3 +1649,221 @@ footer {
     transition: none !important;
   }
 }
+
+/* Review controls share a compact, labeled rhythm across Tests and Map. */
+.test-toolbar {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(140px, 0.85fr) minmax(
+      130px,
+      0.75fr
+    );
+  gap: 12px;
+  padding: 14px 24px 10px;
+}
+.test-toolbar label,
+.path-navigation label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.test-toolbar input,
+.test-toolbar select,
+.path-navigation select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0 10px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+.results-bar,
+.selection-notice,
+.map-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 0 24px 10px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.results-bar {
+  border-bottom: 1px solid var(--border);
+}
+.text-button {
+  background: transparent;
+  border: 0;
+  padding: 6px 0;
+  color: var(--accent);
+  font-size: 12px;
+}
+.text-button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+.selection-notice {
+  padding-block: 8px;
+  background: var(--selected);
+  border-bottom: 1px solid var(--border);
+}
+.focus-path-link {
+  width: 100%;
+  margin-top: 8px;
+}
+.map-actions {
+  padding-top: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.map-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.map-buttons .secondary {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.map-buttons .text-button {
+  padding: 7px 4px;
+}
+.map-count {
+  font-variant-numeric: tabular-nums;
+}
+.focused-path-label {
+  min-width: 0;
+}
+.focused-path-label strong {
+  display: block;
+  font-size: 13px;
+}
+.focused-path-label span {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.path-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px 16px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.path-navigation label {
+  flex: 1;
+}
+.path-navigation p {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 12px;
+  color: var(--warning);
+}
+.react-flow__node.path-node {
+  box-shadow: 0 0 0 2px #365bd640;
+}
+.react-flow__node.context-node {
+  background: #f3f4f7 !important;
+  border-color: #b4bac5 !important;
+}
+.syntax-keyword {
+  color: #7542a0;
+  font-weight: 600;
+}
+.syntax-string {
+  color: #276749;
+}
+.syntax-comment {
+  color: #657080;
+  font-style: italic;
+}
+.syntax-number {
+  color: #a34323;
+}
+/* Allow the canvas to shrink when its controls occupy more rows. */
+@media (min-width: 601px) {
+  .graph-canvas {
+    min-height: 190px;
+  }
+}
+@media (max-width: 700px) {
+  .test-toolbar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 14px 16px 8px;
+    gap: 10px;
+  }
+  .test-search {
+    grid-column: 1 / -1;
+  }
+  .test-toolbar input,
+  .test-toolbar select,
+  .path-navigation select {
+    height: 44px;
+    font-size: 14px;
+  }
+  .test-toolbar input {
+    font-size: 16px;
+  }
+  .results-bar,
+  .selection-notice,
+  .map-actions {
+    padding-inline: 16px;
+  }
+  .text-button,
+  .map-buttons .secondary {
+    min-height: 44px;
+  }
+  .path-navigation {
+    padding: 12px 16px;
+  }
+}
+.map-top.focused {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.map-top.focused .graph-toolbar {
+  flex: 1;
+  border: 0;
+}
+.map-top.focused .map-actions {
+  border: 0;
+  padding-block: 12px;
+}
+.map-top.focused .map-count {
+  flex-basis: 100%;
+  text-align: right;
+}
+@media (max-width: 700px) {
+  .test-search > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .results-bar {
+    padding-bottom: 0;
+  }
+  .map-top.focused .graph-toolbar {
+    flex-basis: 100%;
+    padding-bottom: 0;
+  }
+  .map-top.focused .map-actions {
+    width: 100%;
+    padding-block: 4px;
+  }
+  .map-top.focused .map-count {
+    flex-basis: auto;
+  }
+}
