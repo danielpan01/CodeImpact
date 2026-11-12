@@ -1,5 +1,40 @@
 # Build plan and portfolio strategy
 
+## Active roadmap — November 12, 2026
+
+**Frontend milestone 1 is implemented locally; interaction refinement is next.** The redesign priority
+comes from the owner's request after the evaluation v2 and bounded call-filtering
+work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
+`f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
+delivery sequence and acceptance criteria are in [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md).
+The visual foundation and complete workspace are implemented and locally verified.
+Milestones 2–3 remain planned; see VALIDATION.md for observed checks and review limits.
+
+| Order | Milestone | What the user will notice | Completion evidence |
+| --- | --- | --- | --- |
+| 1 — implemented locally | Frontend foundation and complete analysis workspace | A distinct visual identity, readable typography, compact input controls, clear navigation and coordinated Map, Tests, Changes and evidence views | Real API data; inspected desktop/tablet/phone captures; 50 browser checks and 653 Python tests pass; all three evaluations unchanged |
+| 2 | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; keyboard interaction checks |
+| 3 | Responsive polish and frontend release | Deliberate phone/tablet layouts, polished light/dark themes, loading/error/empty states and restrained motion | Responsive visual matrix, accessibility checks, all evaluations and CI passing; updated usage screenshots |
+| 4 | Review labels and narrow Cachetools fallback | Fewer unrelated recommendations where source evidence supports exclusion | Human review status recorded; bounded LFU controls first; all three v2 baselines retained |
+| 5 | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Selection/labels frozen before analysis; results and usability feedback documented |
+| 6 | Performance, isolation and hosted pilot | A dependable shareable service within explicit limits | Measured runtime/memory, bounded workers, access controls and deployment verification |
+
+Milestones 1–3 form the frontend redesign program. Milestone 1 includes light tokens,
+Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
+phone/tablet navigation. Dark theme, advanced filtering and larger-graph interaction
+work remain. Deliver and validate each complete
+slice before expanding it; the first slice includes a functioning workspace, not
+only a visual concept or landing page. Preserve existing analyzer behavior, report
+contracts, corpus bytes and all baselines throughout these frontend milestones.
+Independent source-label review can proceed alongside frontend work. Known analysis
+limitations remain visible; visual polish must not suggest stronger accuracy.
+
+The following sections retain the original build strategy and historical milestone
+records. Their time estimates and earlier “next” items are historical; the ordered
+roadmap above is the current priority.
+
+## Original build strategy and milestone history
+
 The local starter is the first vertical slice. A credible flagship project comes
 from improving its correctness, evaluating it honestly, and making it useful to
 someone besides its author. Treat the following time ranges as estimates.
@@ -173,7 +208,7 @@ positives are removed; all 109 v2 affected labels remain selected. Current v2 is
 remain intact and `argument-guards-v1` separately records current behavior. Other
 fallback evidence, graph IDs, revision paths and the scoring formula remain intact.
 
-Next substantial candidate: bounded protocol-aware fallback narrowing for Cachetools,
+Next analyzer candidate, following the frontend redesign program above: bounded protocol-aware fallback narrowing for Cachetools,
 starting with source-based LFU versus unrelated cache controls (136 recorded false
 positives), with the descriptor/classmethod fallback (31) scoped separately. Do not
 claim independent accuracy or remove uncertain IDs. Preserve all three recorded v2

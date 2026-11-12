@@ -1,68 +1,81 @@
-import { StrictMode, useEffect, useMemo, useRef, useState } from "react";
+import { StrictMode, useLayoutEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  Background,
-  Controls,
-  MarkerType,
-  Position,
-  ReactFlow,
-  type Node,
-  type Edge,
-} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./style.css";
 import type { Report } from "./types";
+import { getReport } from "./api";
+import { Icon } from "./Icon";
+import { AnalysisInput } from "./AnalysisInput";
+import { ReportContext } from "./ReportContext";
+import { TestsView } from "./TestsView";
+import { DependencyMap } from "./DependencyMap";
 import { ChangesView } from "./ChangesView";
-import { EdgeEvidence, PathRevision } from "./Evidence";
+import { EvidenceInspector } from "./EvidenceInspector";
 
-async function getReport(url: string, body?: unknown): Promise<Report> {
-  const response = await fetch(
-    url,
-    body !== undefined
-      ? {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }
-      : {},
-  ).catch(() => {
-    throw new Error(
-      "Cannot reach CodeImpact. Start the local servers, then retry.",
-    );
-  });
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new Error(
-      typeof data.detail === "string"
-        ? data.detail
-        : typeof data.detail?.message === "string"
-          ? data.detail.message
-          : `Analysis rejected (${response.status}). Check your snapshot format and limits.`,
-    );
-  }
-  const report = await response.json();
-  if (report.schema_version !== "2.0") {
-    throw new Error(
-      "Unsupported report version. Restart the API and refresh the dashboard together (schema 2.0 required).",
-    );
-  }
-  return report;
-}
-
+type View = "tests" | "graph" | "changes";
 function App() {
   const [report, setReport] = useState<Report | null>(null);
+  const [kind, setKind] = useState<"demo" | "snapshots" | "github">("demo");
   const [selected, setSelected] = useState<string | null>(null);
   const [selectedChange, setSelectedChange] = useState<string | null>(null);
   const [showModules, setShowModules] = useState(false);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(true);
-  const [revision, setRevision] = useState(0);
-  const [view, setView] = useState<"graph" | "tests" | "changes">("graph");
-  const explorer = useRef<HTMLElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [view, setView] = useState<View>("tests");
+  const [inputOpen, setInputOpen] = useState(true);
+  const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [prUrl, setPrUrl] = useState("");
   const [retryPR, setRetryPR] = useState<string | null>(null);
+  const explorer = useRef<HTMLElement>(null);
+  const evidenceHeading = useRef<HTMLHeadingElement>(null);
+  const prInput = useRef<HTMLInputElement>(null);
+  const errorMessage = useRef<HTMLDivElement>(null);
+  const newAnalysis = useRef<HTMLButtonElement>(null);
+  const evidenceTrigger = useRef<HTMLElement | null>(null);
   const requestVersion = useRef(0);
+
+  // Move focus after React commits the destination, never before it is mounted.
+  const [focusRequest, setFocusRequest] = useState<{
+    target: "loaded" | "input" | "evidence" | "explorer" | "back" | "error";
+  } | null>(null);
+  useLayoutEffect(() => {
+    const compact = window.matchMedia("(max-width: 1100px)").matches;
+    switch (focusRequest?.target) {
+      case "loaded":
+        explorer.current?.focus({ preventScroll: true });
+        window.scrollTo({ top: 0 });
+        break;
+      case "input":
+        prInput.current?.focus();
+        break;
+      case "error":
+        errorMessage.current?.focus();
+        break;
+      case "evidence":
+        if (compact) {
+          evidenceHeading.current?.focus({ preventScroll: true });
+          document
+            .getElementById("review-workspace")
+            ?.scrollIntoView({ block: "start" });
+        }
+        break;
+      case "explorer":
+        explorer.current?.focus({ preventScroll: true });
+        if (compact)
+          document
+            .getElementById("review-workspace")
+            ?.scrollIntoView({ block: "start" });
+        break;
+      case "back": {
+        const trigger = evidenceTrigger.current;
+        if (trigger?.isConnected && trigger.getClientRects().length)
+          trigger.focus();
+        else explorer.current?.focus();
+        break;
+      }
+    }
+  }, [focusRequest]);
 
   async function load(body?: unknown, githubUrl?: string) {
     const version = ++requestVersion.current;
@@ -71,6 +84,8 @@ function App() {
     setReport(null);
     setSelected(null);
     setSelectedChange(null);
+    setEvidenceOpen(false);
+    setInputOpen(true);
     setRetryPR(githubUrl ?? null);
     try {
       const next = await getReport(
@@ -83,6 +98,7 @@ function App() {
       );
       if (version !== requestVersion.current) return;
       setReport(next);
+      setKind(githubUrl ? "github" : body !== undefined ? "snapshots" : "demo");
       setSelected(next.recommendations[0]?.symbol ?? null);
       setSelectedChange(
         next.recommendations[0]?.evidence_path.at(-1) ??
@@ -90,112 +106,59 @@ function App() {
           null,
       );
       setQuery("");
-      setRevision((n) => n + 1);
+      setView("tests");
+      setInputOpen(false);
+      setFocusRequest({ target: "loaded" });
     } catch (e) {
       if (version !== requestVersion.current) return;
       setError(e instanceof Error ? e.message : "Could not load analysis");
+      setFocusRequest({ target: "error" });
     } finally {
       if (version === requestVersion.current) setBusy(false);
     }
   }
-  useEffect(() => {
-    void load();
-  }, []);
-
-  const graph = useMemo(() => {
-    if (!report) return { nodes: [] as Node[], edges: [] as Edge[] };
-    const changed = new Set(report.changed),
-      impacted = new Set(report.impacted);
-    const removed = new Set(report.removed);
-    const visible = report.nodes.filter(
-      (n) =>
-        (showModules || n.kind !== "module") &&
-        `${n.name} ${n.path}`.toLowerCase().includes(query.toLowerCase()),
-    );
-    const ids = new Set(visible.map((n) => n.id));
-    const ranks: Record<string, number> = {};
-    for (const id of report.changed) ranks[id] = 0;
-    for (let i = 0; i < 5; i++)
-      for (const e of report.edges) {
-        if (ranks[e.target] !== undefined && ranks[e.source] === undefined)
-          ranks[e.source] = Math.min(4, ranks[e.target] + 1);
-      }
-    const rows = new Map<number, number>();
-    const evidence =
-      report.recommendations.find((r) => r.symbol === selected)
-        ?.evidence_edges ?? [];
-    const nodes: Node[] = visible.map((n) => {
-      const column = changed.has(n.id) ? 0 : (ranks[n.id] ?? 4);
-      const row = rows.get(column) ?? 0;
-      rows.set(column, row + 1);
-      const state = removed.has(n.id)
-        ? "removed"
-        : changed.has(n.id)
-          ? "changed"
-          : impacted.has(n.id)
-            ? "impacted"
-            : "unaffected";
-      return {
-        id: n.id,
-        position: { x: (4 - column) * 265, y: row * 118 },
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left,
-        className: `${state} ${selected === n.id ? "active-node" : ""}`,
-        data: {
-          label: (
-            <div className="symbol-label">
-              <span className="node-type">
-                {n.kind} · {state}
-              </span>
-              <strong>{n.name}</strong>
-              <small>
-                {n.path}:{n.line}
-              </small>
-            </div>
-          ),
-        },
-        style: { width: 230 },
-      };
-    });
-    const edges: Edge[] = report.edges
-      .filter((e) => ids.has(e.source) && ids.has(e.target))
-      .map((e) => {
-        const highlighted = evidence.includes(e.id);
-        return {
-          id: e.id,
-          source: e.source,
-          target: e.target,
-          animated: highlighted,
-          markerEnd: { type: MarkerType.ArrowClosed },
-          style: {
-            stroke: highlighted ? "#51e0b2" : "#58726d",
-            strokeWidth: highlighted ? 3 : 1.5,
-            strokeDasharray: e.kind === "call" ? undefined : "5 4",
-          },
-        };
-      });
-    return { nodes, edges };
-  }, [report, selected, showModules, query]);
-
-  const symbol = report?.nodes.find((n) => n.id === selected);
-  const recommendation = report?.recommendations.find(
-    (r) => r.symbol === selected,
-  );
-  const edgesById = useMemo(
-    () => new Map(report?.edges.map((e) => [e.id, e])),
-    [report],
-  );
-
-  function openCode(id: string) {
-    setSelectedChange(id);
-    setView("changes");
-    // Move keyboard focus with the view, including when the details stack below on mobile.
-    requestAnimationFrame(() => explorer.current?.focus());
+  async function upload(file: File) {
+    // Bound the upload before reading it. Python source stays JSON string data.
+    const version = ++requestVersion.current;
+    setBusy(true);
+    setError("");
+    try {
+      if (file.size > 6_000_000) throw new Error("Snapshot file exceeds 6 MB.");
+      const body: unknown = JSON.parse(await file.text());
+      if (version === requestVersion.current) await load(body);
+    } catch (e) {
+      if (version !== requestVersion.current) return;
+      setReport(null);
+      setSelected(null);
+      setSelectedChange(null);
+      setRetryPR(null);
+      setEvidenceOpen(false);
+      setError(e instanceof Error ? e.message : "Invalid JSON");
+      setFocusRequest({ target: "error" });
+    } finally {
+      if (version === requestVersion.current) setBusy(false);
+    }
   }
-  const changedCount =
-    report?.nodes.filter(
-      (n) => n.kind !== "module" && report.changed.includes(n.id),
-    ).length ?? 0;
+  function showEvidence(id?: string) {
+    evidenceTrigger.current = document.activeElement as HTMLElement;
+    if (id) setSelected(id);
+    setEvidenceOpen(true);
+    setFocusRequest({ target: "evidence" });
+  }
+  function closeEvidence() {
+    setEvidenceOpen(false);
+    setFocusRequest({ target: "back" });
+  }
+
+  function changeView(next: View) {
+    setView(next);
+    setEvidenceOpen(false);
+  }
+  function openCode(id: string | null) {
+    setSelectedChange(id);
+    changeView("changes");
+    setFocusRequest({ target: "explorer" });
+  }
 
   function download() {
     if (!report) return;
@@ -208,183 +171,84 @@ function App() {
     a.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <a className="skip-link" href="#review-workspace">
+        Skip to workspace
+      </a>
+      <header className="topbar">
         <a className="brand" href="/" aria-label="CodeImpact home">
-          <span className="brand-mark">ci</span> CodeImpact
+          <span className="brand-mark">
+            <Icon name="branch" />
+          </span>
+          CodeImpact
         </a>
-        <div className="workspace-label">DEVELOPER WORKSPACE</div>
-        <button
-          className={view === "graph" ? "nav active" : "nav"}
-          onClick={() => setView("graph")}
-        >
-          <span>◉</span> Impact explorer
-        </button>
-        <button
-          className={view === "tests" ? "nav active" : "nav"}
-          onClick={() => setView("tests")}
-        >
-          <span>✓</span> Recommended tests{" "}
-          <b>{report?.recommendations.length ?? 0}</b>
-        </button>
-        <div className="sidebar-bottom">
-          <span className="status-dot" /> Local analysis
-          <br />
-          <small>Python · static evidence</small>
-          <p>
-            Know what changed.
-            <br />
-            Understand what follows.
-          </p>
+        <span className="nav-context">Developer workspace</span>
+        <div className="top-actions">
+          <span className="local-status">
+            <i /> Local analysis
+          </span>
+          <a href="/docs" target="_blank" rel="noreferrer">
+            API reference <Icon name="external" />
+          </a>
         </div>
-      </aside>
+      </header>
       <main>
-        <header>
+        <div className="workspace-bar">
           <span>
-            Workspace <span className="muted">/</span>{" "}
+            Workspace <span className="separator">/</span>{" "}
             <strong>Change analysis</strong>
           </span>
-          <span className="version">
-            MVP 0.1 <span className="status-dot" />
-          </span>
-        </header>
-        <section className="page-heading">
-          <div>
-            <div className="eyebrow">BEFORE YOU MERGE</div>
-            <h1>Know your blast radius.</h1>
-            <p>
-              Trace a code change to the functions and tests that depend on it.
-            </p>
-          </div>
-          <div className="export-action">
-            <button
-              className="secondary"
-              onClick={download}
-              disabled={!report}
-              aria-describedby="export-notice"
-            >
-              ↓ Export report
-            </button>
-            <small id="export-notice">Export includes source code</small>
-          </div>
-        </section>
-        <form
-          className="pr-form"
-          aria-label="Analyze a public GitHub pull request"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void load(undefined, prUrl.trim());
-          }}
-        >
-          <label htmlFor="pr-url">Analyze a GitHub pull request</label>
-          <p id="pr-help">Public Python repositories · Read-only access</p>
-          <div className="pr-input-row">
-            <input
-              id="pr-url"
-              type="url"
-              required
-              maxLength={300}
-              placeholder="https://github.com/owner/repo/pull/123"
-              aria-describedby="pr-help"
-              value={prUrl}
-              onChange={(event) => setPrUrl(event.target.value)}
-              disabled={busy}
-              spellCheck={false}
-            />
-            <button className="primary" type="submit" disabled={busy}>
-              Analyze PR
-            </button>
-          </div>
-        </form>
-        <section className="analysis-bar">
-          <div>
-            <span className="repo-icon">⌘</span>
-            <span className="analysis-label">
-              {busy
-                ? retryPR
-                  ? "Reading GitHub revisions…"
-                  : "Analyzing Python snapshots…"
-                : (report?.label ?? "Ready for analysis")}
-              <small>AST comparison · base + head dependency graph</small>
-            </span>
-          </div>
           <div className="actions">
             <button
               className="secondary"
-              disabled={busy}
-              onClick={() => void load()}
+              ref={newAnalysis}
+              disabled={busy || !report}
+              aria-expanded={inputOpen}
+              aria-controls="analysis-entry"
+              onClick={() => {
+                setInputOpen(true);
+                setFocusRequest({ target: "input" });
+              }}
             >
-              Load demo
+              <Icon name="plus" /> New analysis
             </button>
-            <label className={`primary upload ${busy ? "disabled" : ""}`}>
-              ↑ Analyze snapshots
-              <input
-                aria-label="Upload snapshot JSON"
-                type="file"
-                accept=".json,application/json"
-                disabled={busy}
-                onChange={async (event) => {
-                  const file = event.target.files?.[0];
-                  if (!file) return;
-                  try {
-                    if (file.size > 6_000_000)
-                      throw new Error("Snapshot file exceeds 6 MB.");
-                    await load(JSON.parse(await file.text()));
-                  } catch (e) {
-                    setReport(null);
-                    setSelected(null);
-                    setSelectedChange(null);
-                    setRetryPR(null);
-                    setError(e instanceof Error ? e.message : "Invalid JSON");
-                  }
-                  event.target.value = "";
-                }}
-              />
-            </label>
+            <div className="export-action">
+              <button
+                className="secondary"
+                onClick={download}
+                disabled={!report || busy}
+                aria-describedby="export-notice"
+              >
+                <Icon name="download" /> Export report
+              </button>
+              <small id="export-notice">Export includes source code</small>
+            </div>
           </div>
-        </section>
+        </div>
         {busy && (
-          <p role="status" className="analysis-status">
-            {retryPR
-              ? "Fetching complete Python snapshots and analyzing dependencies…"
-              : "Loading analysis…"}
-          </p>
-        )}
-        {report?.source && (
-          <section className="pr-source" aria-label="GitHub analysis source">
-            <a href={report.source.pr_url} target="_blank" rel="noreferrer">
-              {report.source.repository} #{report.source.pr_number} ↗
-            </a>
-            <p>{report.source.title}</p>
-            <details>
-              <summary>Exact analyzed revisions</summary>
-              <dl>
-                <dt>Before (merge base)</dt>
-                <dd>
-                  <code>{report.source.merge_base_sha}</code>
-                </dd>
-                <dt>After (PR head)</dt>
-                <dd>
-                  <code>{report.source.head_sha}</code>
-                </dd>
-                <dt>Target branch at retrieval</dt>
-                <dd>
-                  <code>{report.source.base_sha}</code>
-                </dd>
-                <dt>Head repository</dt>
-                <dd>{report.source.head_repository}</dd>
-                <dt>Analyzer version</dt>
-                <dd>{report.source.analyzer_version}</dd>
-              </dl>
-            </details>
-          </section>
+          <div role="status" className="analysis-status">
+            <Icon name="clock" />
+            <div>
+              <strong>
+                {retryPR ? "Reading GitHub revisions…" : "Loading analysis…"}
+              </strong>
+              <p>
+                {retryPR
+                  ? "Fetching complete Python snapshots and analyzing dependencies…"
+                  : "Comparing the before and after snapshots and tracing dependencies."}
+              </p>
+            </div>
+          </div>
         )}
         {error && (
-          <div className="error" role="alert">
-            {error}{" "}
+          <div className="error" role="alert" tabIndex={-1} ref={errorMessage}>
+            <div>
+              <strong>Analysis could not complete</strong>
+              <p>{error}</p>
+            </div>
             <button
+              className="secondary"
               disabled={busy}
               onClick={() => void load(undefined, retryPR ?? undefined)}
             >
@@ -392,287 +256,173 @@ function App() {
             </button>
           </div>
         )}
-        <section className="metrics">
-          <div>
-            <span>Changed symbols</span>
-            <strong className="coral">
-              {changedCount.toString().padStart(2, "0")}
-            </strong>
-            <small>AST changes, excluding modules</small>
-          </div>
-          <div>
-            <span>Potentially affected</span>
-            <strong className="amber">{report?.stats.impacted ?? "—"}</strong>
-            <small>Dependent symbols + modules</small>
-          </div>
-          <div>
-            <span>Tests to prioritize</span>
-            <strong className="mint">
-              {report?.recommendations.length ?? "—"}
-            </strong>
-            <small>Ranked with traceable evidence</small>
-          </div>
-          <div>
-            <span>Analysis time</span>
-            <strong>
-              {report?.stats.elapsed_ms ?? "—"}
-              <em>ms</em>
-            </strong>
-            <small>Measured for this analysis</small>
-          </div>
-        </section>
-        <div className="explorer-layout">
-          <section
-            className="graph-panel"
-            ref={explorer}
-            tabIndex={-1}
-            aria-label="Change explorer"
-          >
-            <div className="panel-heading">
-              <div>
-                <h2>
-                  {view === "graph"
-                    ? "Dependency map"
-                    : view === "tests"
-                      ? "Recommended tests"
-                      : "Changed code"}
-                </h2>
-                <span>
-                  {view === "graph"
-                    ? "Select a test to reveal its evidence path"
-                    : view === "tests"
-                      ? "Priority scores are heuristics, not failure probabilities"
-                      : "Before and after · exact analyzed source"}
-                </span>
-              </div>
-              <div className="view-toggle" aria-label="Explorer view">
-                <button
-                  aria-pressed={view === "graph"}
-                  onClick={() => setView("graph")}
-                >
-                  Map
-                </button>
-                <button
-                  aria-pressed={view === "tests"}
-                  onClick={() => setView("tests")}
-                >
-                  Tests
-                </button>
-                <button
-                  aria-pressed={view === "changes"}
-                  onClick={() => setView("changes")}
-                >
-                  Changes
-                </button>
-              </div>
-            </div>
-            {view === "graph" ? (
-              <>
-                <div className="graph-toolbar">
-                  <input
-                    aria-label="Search symbols"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search symbols or files…"
-                  />
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={showModules}
-                      onChange={(e) => setShowModules(e.target.checked)}
-                    />{" "}
-                    Module dependencies
-                  </label>
-                </div>
-                <div className="graph-canvas" data-testid="dependency-graph">
-                  <ReactFlow
-                    key={`${revision}-${showModules}-${query}`}
-                    nodes={graph.nodes}
-                    edges={graph.edges}
-                    fitView
-                    fitViewOptions={{ padding: 0.18 }}
-                    minZoom={0.25}
-                    nodesDraggable={false}
-                    nodesConnectable={false}
-                    onNodeClick={(_, n) => setSelected(n.id)}
-                    colorMode="dark"
+        <div id="analysis-entry" hidden={!inputOpen}>
+          <AnalysisInput
+            busy={busy}
+            prUrl={prUrl}
+            setPrUrl={setPrUrl}
+            onPR={() => void load(undefined, prUrl.trim())}
+            onDemo={() => void load()}
+            onUpload={(file) => void upload(file)}
+            inputRef={prInput}
+            onClose={
+              report
+                ? () => {
+                    setInputOpen(false);
+                    newAnalysis.current?.focus();
+                  }
+                : undefined
+            }
+          />
+        </div>
+        {report ? (
+          <>
+            <ReportContext report={report} kind={kind} />
+            <div className="workspace-nav" id="review-workspace">
+              <nav className="view-toggle" aria-label="Explorer view">
+                {(
+                  [
+                    ["tests", "Tests", "tests"],
+                    ["graph", "Map", "map"],
+                    ["changes", "Changes", "code"],
+                  ] as const
+                ).map(([id, label, icon]) => (
+                  <button
+                    key={id}
+                    aria-pressed={view === id}
+                    aria-label={label}
+                    onClick={() => changeView(id)}
                   >
-                    <Background color="#263b36" gap={22} />
-                    <Controls showInteractive={false} />
-                  </ReactFlow>
-                  {!busy && !graph.nodes.length && (
-                    <div className="empty-graph">
-                      No symbols match this view.
-                    </div>
+                    <Icon name={icon} />
+                    {label}
+                    {id !== "graph" && (
+                      <span className="view-count" aria-hidden="true">
+                        {id === "tests"
+                          ? report.recommendations.length
+                          : report.changes.length}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </nav>
+              <button
+                className="secondary evidence-toggle"
+                aria-expanded={evidenceOpen}
+                onClick={() =>
+                  evidenceOpen ? closeEvidence() : showEvidence()
+                }
+              >
+                <Icon name="evidence" />{" "}
+                {evidenceOpen ? "Close evidence" : "View evidence"}
+              </button>
+              <span className="workspace-hint">
+                Review the change. Follow the evidence.
+              </span>
+            </div>
+            <div
+              className={`explorer-layout ${evidenceOpen ? "evidence-open" : ""}`}
+              onKeyDown={(event) => {
+                if (event.key === "Escape" && evidenceOpen) {
+                  event.stopPropagation();
+                  closeEvidence();
+                }
+              }}
+            >
+              <section
+                className="graph-panel"
+                ref={explorer}
+                tabIndex={-1}
+                aria-label="Change explorer"
+              >
+                <div className="panel-heading">
+                  <div>
+                    <h2>
+                      {view === "tests"
+                        ? "Recommended tests"
+                        : view === "graph"
+                          ? "Dependency map"
+                          : "Changed code"}
+                    </h2>
+                    <p>
+                      {view === "tests"
+                        ? "Prioritized by static evidence. Scores are heuristics, not failure probabilities."
+                        : view === "graph"
+                          ? "Select a symbol to inspect its dependencies and revision evidence."
+                          : "Before and after · exact analyzed source"}
+                    </p>
+                  </div>
+                  {view === "tests" && (
+                    <span className="badge">
+                      {report.recommendations.length} tests
+                    </span>
                   )}
                 </div>
-                <div className="legend">
-                  <span>
-                    <i className="changed-dot" /> Changed
-                  </span>
-                  <span>
-                    <i className="impacted-dot" /> Potential impact
-                  </span>
-                  <span>
-                    <i /> Unaffected
-                  </span>
-                  <small>
-                    Arrows: caller → dependency · dashed: module fallback
-                  </small>
-                </div>
-              </>
-            ) : view === "changes" ? (
-              report ? (
-                <ChangesView
-                  report={report}
-                  selected={selectedChange}
-                  onSelect={(id) => {
-                    setSelectedChange(id);
-                    setSelected(id);
-                  }}
-                />
-              ) : (
-                <p className="detail-content">
-                  Load an analysis to inspect changed code.
-                </p>
-              )
-            ) : (
-              <div className="test-list">
-                {report?.recommendations.length ? (
-                  report.recommendations.map((r) => (
-                    <button
-                      key={r.symbol}
-                      className={`test-row ${selected === r.symbol ? "selected" : ""}`}
-                      onClick={() => setSelected(r.symbol)}
-                    >
-                      <strong>{r.symbol.split("::")[1]}</strong>
-                      <span>{r.reason}</span>
-                      <b>{r.score}</b>
-                    </button>
-                  ))
+                {view === "tests" ? (
+                  <TestsView
+                    report={report}
+                    selected={selected}
+                    onSelect={showEvidence}
+                    onChanges={() =>
+                      openCode(selectedChange ?? report.changed[0] ?? null)
+                    }
+                  />
+                ) : view === "graph" ? (
+                  <DependencyMap
+                    report={report}
+                    selected={selected}
+                    onSelect={showEvidence}
+                    query={query}
+                    setQuery={setQuery}
+                    showModules={showModules}
+                    setShowModules={setShowModules}
+                  />
                 ) : (
-                  <p>No tests were selected. This does not establish safety.</p>
+                  <ChangesView
+                    report={report}
+                    selected={selectedChange}
+                    onSelect={(id) => {
+                      setSelectedChange(id);
+                      setSelected(id);
+                    }}
+                  />
                 )}
-              </div>
-            )}
-          </section>
-          <aside className="detail-panel">
-            <div className="panel-heading">
-              <div>
-                <div className="eyebrow">FOLLOW THE EVIDENCE</div>
-                <h2>Why this matters</h2>
-              </div>
+              </section>
+              <EvidenceInspector
+                report={report}
+                selected={selected}
+                openCode={openCode}
+                onBack={closeEvidence}
+                headingRef={evidenceHeading}
+              />
             </div>
-            {symbol ? (
-              <div className="detail-content">
-                <span className="pill">{symbol.kind}</span>
-                <h3>{symbol.name}</h3>
-                <code>
-                  {symbol.path}:{symbol.line}
-                </code>
-                {recommendation ? (
-                  <>
-                    <div className="risk-score">
-                      <strong>
-                        {recommendation.score}
-                        <small>/100</small>
-                      </strong>
-                      <span>
-                        Test priority
-                        <br />
-                        <small>Heuristic score</small>
-                      </span>
-                    </div>
-                    <p>{recommendation.reason}</p>
-                    <PathRevision recommendation={recommendation} />
-                    <button
-                      className="primary"
-                      onClick={() =>
-                        openCode(recommendation.evidence_path.at(-1)!)
-                      }
-                    >
-                      Open changed code
-                    </button>
-                    <ol className="evidence-path">
-                      {recommendation.evidence_path.map((id, i) => (
-                        <li key={id}>
-                          <span>
-                            {i === 0
-                              ? "TEST"
-                              : i === recommendation.evidence_path.length - 1
-                                ? "CHANGED"
-                                : "DEPENDS ON"}
-                          </span>
-                          <strong>{id.split("::")[1]}</strong>
-                          <small>{id.split("::")[0]}</small>
-                          {edgesById.get(recommendation.evidence_edges[i]) && (
-                            <EdgeEvidence
-                              edge={edgesById.get(
-                                recommendation.evidence_edges[i],
-                              )!}
-                            />
-                          )}
-                        </li>
-                      ))}
-                    </ol>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      {report?.changed.includes(symbol.id)
-                        ? "This symbol changed between snapshots."
-                        : report?.impacted.includes(symbol.id)
-                          ? "A dependency path reaches a changed symbol."
-                          : "No path to a changed symbol was found in this static graph."}
-                    </p>
-                    {report?.changed.includes(symbol.id) && (
-                      <button
-                        className="primary"
-                        onClick={() => openCode(symbol.id)}
-                      >
-                        Open changed code
-                      </button>
-                    )}
-                    <h4>Outgoing evidence</h4>
-                    {report?.edges
-                      .filter((e) => e.source === symbol.id)
-                      .map((e) => (
-                        <EdgeEvidence edge={e} key={e.id} />
-                      ))}
-                  </>
-                )}
-              </div>
-            ) : (
-              <p className="detail-content">
-                Select a symbol to inspect its dependencies.
+            <details className="limitations">
+              <summary>
+                Analysis scope & limitations{" "}
+                <span>{report.warnings.length} notes</span>
+              </summary>
+              <p>
+                Static Python analysis is incomplete. A missing dependency path
+                does not establish safety.
               </p>
-            )}
-            <div className="confidence-note">
-              Static evidence guides review. Keep the full test suite as your
-              merge gate.
-            </div>
-          </aside>
-        </div>
-        <details className="limitations">
-          <summary>
-            Analysis scope & limitations{" "}
-            <span>{report?.warnings.length ?? 0} notes</span>
-          </summary>
-          {report?.warnings.map((w) => (
-            <p key={w}>{w}</p>
-          ))}
-        </details>
+              {report.warnings.map((w) => (
+                <p key={w}>{w}</p>
+              ))}
+            </details>
+          </>
+        ) : (
+          <div id="review-workspace" />
+        )}
         <footer>
-          CODEIMPACT <span>Understand the change. Make a better review.</span>
-          <a href="/docs" target="_blank" rel="noreferrer">
-            API reference ↗
-          </a>
+          <span>
+            CodeImpact <span className="separator">/</span> Explainable
+            change-impact analysis
+          </span>
+          <span>Python · source as data</span>
         </footer>
       </main>
     </div>
   );
 }
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />

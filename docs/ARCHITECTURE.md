@@ -398,7 +398,12 @@ interfaces (including the CLI) emit schema 2.0, described below.
 
 React Flow displays dependency arrows, search, module filtering, selection and
 evidence highlighting using exact edge IDs. The dashboard uses real API results,
-including the demo.
+including the explicitly loaded demo. Successful requests open Tests and collapse
+input behind New analysis. The light workspace uses semantic CSS tokens and local
+system fonts. The shell, input, report context, Tests, Map and evidence inspector are
+separate React components; report types and API requests are unchanged. Focus moves
+after React commits a destination. Selection and expanded evidence persist when
+switching review views; mobile/tablet evidence replaces the primary pane.
 Metrics include module nodes where labeled. Search filters the visible graph only;
 it does not recompute recommendations. The UI exports a report; its upload expects
 the separate snapshot-pair input schema.
@@ -416,7 +421,8 @@ pane displays at most 120 lines, 12,000 UTF-16 source code units including rende
 newlines, and 500 code units of source per line (excluding its newline). Generated
 line numbers and truncation labels are outside that source-character budget.
 Any omitted lines/characters have a visible truncation notice. Scrolling supports
-keyboard access; narrow screens stack panes and the explanation. Previews may omit
+keyboard access; phones stack source panes and use a separate evidence view with
+Back/Escape navigation. Tablets also use a separate evidence pane. Previews may omit
 the changed statement in a large module; select the individual definition where
 available or export the full source. There is no inline line-diff or rename matching.
 

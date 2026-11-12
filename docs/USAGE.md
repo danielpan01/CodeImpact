@@ -39,26 +39,44 @@ Ensure `python3` selects Python 3.12 or newer before running `make setup`. The c
 
 ## Try the demo
 
-1. The checkout demo changes `discount(total)` from 10% to 15%.
-2. The changed function turns coral. Dependent callers and tests turn amber.
-3. Click a test and follow the evidence chain. The API test depends on
-   `create_order → checkout → discount`; the health test has no path to the change.
-4. Click **Open changed code**. **Changes** shows `discount` before and after with
-   source line numbers; the test explanation stays beside it (below on mobile).
-   Each dependency identifies **Before only**, **After only**, or **Both revisions**.
-   Expand its **Before**/**After** evidence to inspect call/import locations.
-5. Switch between **Map**, **Tests**, and **Changes**. Changes are grouped by file and
-   labeled added, modified or removed. Module entries include module-level statements.
-6. Toggle **Module dependencies** in Map to inspect the broader fallback graph.
-7. Export the report, or upload a JSON snapshot pair to analyze your own code.
+1. Choose **Load demo** on the initial input screen. The checkout demo changes
+   `discount(total)` from 10% to 15%. Successful analyses open **Tests** and collapse
+   the input form; **New analysis** reopens PR input, snapshot upload and the demo.
+2. Select `test_create_order`. Its reason and dependency trail appear in the evidence
+   inspector: `test_create_order → create_order → checkout → discount`.
+   Priorities (82, 72 and 62 for this demo) are heuristics, not failure probabilities.
+3. On phones and tablets, selecting a test opens a full-width evidence pane. Use
+   **Back to results** or Escape to return, or **View evidence** to reopen the current
+   selection. Map, Tests and Changes remain accessible above the pane.
+4. Choose **Open changed code**. **Changes** shows `discount` before and after with
+   source line numbers, side by side on wider screens and stacked on phones. The test
+   explanation is retained; reopen **View evidence** on small screens to see it.
+   Dependencies visibly distinguish **Before only**, **After only**, **Both revisions**
+   and **Mixed revisions**. Expand **Before**/**After** evidence for source locations.
+5. Switch between **Tests**, **Map**, and **Changes** without losing the selected test
+   or expanded evidence. Selecting a changed symbol directly replaces the inspector
+   with that symbol's own details. **Changed files & symbols** expands/collapses file
+   navigation; added, modified and removed symbols have text labels.
+6. In Map, use symbol search, **Module dependencies**, pan, zoom and Fit view to
+   inspect the broader graph. Arrows point from caller to dependency; solid edges
+   are resolved calls and dashed edges are conservative fallback. The initial zoom
+   favors readable nodes; Fit view provides an overview, which can be dense on large
+   reports. Nodes can be selected using Enter or Space as well as a pointer.
+7. Export the report. The disclosure beside **Export report** reminds you that it
+   contains source. If no tests are recommended, **Review changed code** opens Changes;
+   an empty list does not establish that omitted tests are safe.
 
-To inspect a deleted function and a mixed path, use **Analyze snapshots** to upload
+The complete test list retains the analyzer's order and scores. Search/filter/sort for
+Tests and graph path-focus controls belong to the next milestone. The current theme
+is light with local system fonts; there is no theme switcher or saved report history.
+
+To inspect a deleted function and a mixed path, choose **New analysis → Analyze snapshots** to upload
 [`tests/fixtures/mixed-revisions.json`](../tests/fixtures/mixed-revisions.json). Select
 **Tests → test_g → Open changed code**. The before panel shows `a.py::f`; the after
 panel identifies the present but empty file. The explanation says **Mixed revisions**:
 `test_g → g` exists only after, while `g → f` exists only before. Neither revision
 contains that entire shown path. This is a conservative estimate, not an executable
-call sequence from one revision. **Load demo** restores the original example.
+call sequence from one revision. **New analysis → Load demo** restores the original example.
 
 **Report schema 2.0 exports contain complete before/after source for files with
 semantic changes**, including content beyond the displayed preview. Source is stored
@@ -73,7 +91,7 @@ The displayed timing is measured for that request. It is not a benchmark claim.
 
 ## Analyze a public GitHub PR
 
-1. Paste an exact `https://github.com/owner/repo/pull/number` URL into **Analyze a
+1. Open **New analysis** if a report is loaded. Paste an exact `https://github.com/owner/repo/pull/number` URL into **Analyze a
    GitHub pull request**, then press Enter or **Analyze PR**.
 2. Try [MarkupSafe PR #469](https://github.com/pallets/markupsafe/pull/469), the small
    public PR checked for this milestone. It changes `escape` in Python source.

@@ -1,3 +1,4 @@
+import { Icon } from "./Icon";
 import type {
   Report,
   SourceRange,
@@ -113,7 +114,7 @@ export function ChangesView({
   }
   return (
     <div className="changes-view">
-      <p>
+      <p className="changes-description">
         Semantic changes only. Comments and line movement alone are ignored.
         Modules include module-level statements and nested definitions.
       </p>
@@ -121,31 +122,44 @@ export function ChangesView({
         <p>No semantic changes in these snapshots.</p>
       ) : (
         <>
-          <nav className="change-list" aria-label="Changed symbols by file">
-            {[...groups].map(([path, items]) => (
-              <div key={path} className="change-file">
-                <h3>{path}</h3>
-                {items.map((item) => (
-                  <button
-                    key={item.symbol}
-                    className={`change-row ${change?.symbol === item.symbol ? "selected" : ""}`}
-                    aria-pressed={change?.symbol === item.symbol}
-                    onClick={() => onSelect(item.symbol)}
-                  >
-                    <span className={`change-status ${item.status}`}>
-                      {item.status}
-                    </span>
-                    <strong>{item.symbol.split("::")[1]}</strong>
-                  </button>
-                ))}
-              </div>
-            ))}
-          </nav>
+          <details className="change-navigation" open>
+            <summary>
+              Changed files & symbols{" "}
+              <span>
+                {groups.size} files · {report.changes.length} symbols
+              </span>
+            </summary>
+            <nav className="change-list" aria-label="Changed symbols by file">
+              {[...groups].map(([path, items]) => (
+                <div key={path} className="change-file">
+                  <h3>
+                    <Icon name="file" />
+                    {path}
+                  </h3>
+                  {items.map((item) => (
+                    <button
+                      key={item.symbol}
+                      className={`change-row ${change?.symbol === item.symbol ? "selected" : ""}`}
+                      aria-pressed={change?.symbol === item.symbol}
+                      onClick={() => onSelect(item.symbol)}
+                    >
+                      <span className={`change-status ${item.status}`}>
+                        {item.status}
+                      </span>
+                      <strong>{item.symbol.split("::")[1]}</strong>
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </nav>
+          </details>
           {change && file && (
             <section className="code-review" aria-label="Selected changed code">
               <h3>
                 {change.symbol.split("::")[1]}{" "}
-                <span className="pill">{change.status}</span>
+                <span className={`change-status ${change.status}`}>
+                  {change.status}
+                </span>
               </h3>
               <p>{file.path} · Exact analyzed snapshots</p>
               <div className="source-columns">

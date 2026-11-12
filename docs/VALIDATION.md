@@ -1774,3 +1774,144 @@ next work is a separate bounded Cachetools protocol-fallback milestone, beginnin
 with the 136 LFU case false positives and treating the 31 descriptor-case false
 positives as a distinct control. Preserve all three measurements and obtain human
 label review before broader accuracy claims. No omitted test is certified safe to skip.
+
+## Merged milestone and frontend roadmap review — November 12, 2026
+
+[PR #6](https://github.com/danielpan01/CodeImpact/pull/6) is merged into `main` as
+`f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The PR quality run
+[43289784168](https://github.com/danielpan01/CodeImpact/actions/runs/43289784168)
+passed. The separate push-triggered run on the actual merged commit,
+[43290736589](https://github.com/danielpan01/CodeImpact/actions/runs/43290736589),
+also completed successfully. Its logs confirm **653 Python tests passed**, the
+production build passed, all three offline evaluations matched their recorded
+baselines, and **32 desktop/mobile browser tests passed**. The existing single
+deprecation warning remains non-failing. No open repository PRs were returned by
+the verification search at this time.
+
+Before the roadmap edits, the completed feature branch and fetched `origin/main`
+had identical file trees. The local documentation branch `codex/frontend-roadmap`
+starts at the merged commit. This update changes only roadmap/context/validation
+documentation and README; application code and corpus data remain unchanged.
+
+The running interface was visually inspected at the existing narrow browser width.
+Observed hierarchy and layout issues inform [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md).
+The new plan prioritizes the visual foundation and complete workspace, graph/test/code
+refinement, then responsive/theme/accessibility polish. These are future deliverables;
+no redesigned interface or completed usability study is claimed by this update.
+
+Documentation diff whitespace and local-link checks passed. Full application tests
+were not rerun solely for these documentation changes; the merged-commit CI results
+above are the current code verification. Roadmap edits remain unstaged/uncommitted.
+
+## Frontend milestone 1 — November 12, 2026
+
+Implemented locally on top of the owner's existing documentation/roadmap edits.
+Those edits were preserved; `docs/PROJECT_CONTEXT.md` was not changed by this work.
+No dependencies, analyzer code, report types/contracts, scoring, resource limits or
+corpus data changed. Analyzed Python remained source-string data throughout.
+
+### Delivered workspace
+
+The existing React/TypeScript/Vite application now has a warm light canvas, compact
+ink navigation, cobalt selection, shared semantic tokens, system fonts and SVG
+controls. PR input, snapshot upload and the demo share an initial input screen.
+Successful analyses open Tests, select the first recommendation and collapse input
+behind New analysis. Failed analyses clear stale results and retain correction/retry.
+Export still includes full source and the exact GitHub revision metadata.
+
+Tests show every recommendation in the original order, with file context, reason
+and labeled heuristic score. Map retains its layout algorithm, node/edge identities,
+caller-to-dependency direction, search, module toggle and zoom/fit controls. The
+initial map scale favors readable nodes; Fit View supplies a complete overview.
+Changes provides collapsible file/symbol navigation and distinctly labeled source
+revisions; source panes remain escaped text with the original preview bounds.
+Evidence leads with the reason and dependency trail. Before/after/shared/mixed
+badges, expandable locations, deleted source and Open changed code remain intact.
+
+At tablet/phone widths, evidence replaces the main pane with Back to results and
+Escape behavior; the view navigation remains available. Focus moves after React
+commits the destination. Switching views retains selection and expanded evidence.
+Zero recommendations explicitly lead to Changes without a safe-to-skip claim.
+
+### Observed verification
+
+| Check | Observed result |
+| --- | --- |
+| Focused workspace browser regressions | 18 passed (nine scenarios on desktop and Pixel 7 projects) |
+| `make check` | Passed: Ruff lint/format, strict mypy, 653 Python tests, TypeScript and Vite production build |
+| `make evaluate` | Passed; authored report byte-identical to pre-change output |
+| `make evaluate-real` | Passed; v1 report byte-identical to pre-change output |
+| `make evaluate-real-v2` | Passed; v2 report byte-identical to pre-change output |
+| `cd web && npm run test:e2e` | 50 passed; all 32 prior cases retained and 18 additional checks |
+| `cd web && npm run format:check` | Passed |
+| Normal local launcher | `CODEIMPACT_API_PORT=8003 CODEIMPACT_WEB_PORT=5175 make dev` served the website and proxied health successfully; those temporary servers were stopped |
+| Console and layout | No console/page errors in the final five-size checkout visual pass; no page errors or horizontal overflow in the real-case visual pass |
+| Git and preservation | Empty index; no commits/pushes/PRs; all 104 pre-existing protected files under `src`, `tests` and `corpus` retain their byte hashes |
+
+New browser coverage exercises initial Tests, keyboard input reopening/cancel,
+selection and evidence expansion across views, phone/tablet Back/Escape and focus
+restoration, zero recommendations, 360 px long names/code scrolling, keyboard graph
+selection, module visibility, Fit View containment, and pinned large-case list/score/
+evidence/export preservation. Existing invalid JSON, rate limit, retry, version
+rejection, PR provenance, empty/absent source, parse warnings, deleted/mixed paths,
+safe text rendering and preview bounds continue to pass. Public PR tests still use
+the existing test-only GitHub transport override with the real ingestion/analyzer;
+no fresh live GitHub smoke test or deployment is claimed here.
+
+Development checks caught and corrected a focus-before-commit race after analysis,
+a mobile recovery helper that checked the evidence button before the result mounted,
+and an overly constrained Fit View. Initial browser-launch attempts were blocked by
+the macOS sandbox; the authorized Chromium runs above completed. Existing non-failing
+Starlette/httpx deprecation and Node color-environment warnings remain. Vite retained
+stale modules during this environment's hot reload, so owned previews were restarted
+before final captures; isolated browser tests always start fresh servers.
+
+### Preserved measurements
+
+All three stable evaluation files are byte-identical to copies generated before
+frontend changes. Their existing serializers already exclude `analysis.stats.elapsed_ms`;
+no new volatile exclusions, changed baselines or accepted drift were introduced.
+
+| Report | SHA-256 (unchanged) |
+| --- | --- |
+| Authored | `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b` |
+| Real v1 | `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae` |
+| Real v2 | `fc33aede311104cd63bdef021484f8be81471a588c9d9cd486230937be491fb9` |
+
+Authored counts remain 23 TP / 0 FP / 2 FN / 32 TN; v1 remains
+45 TP / 0 FP / 0 FN / 123 TN; v2 remains 109 TP / 284 FP / 0 FN / 166 TN.
+Unclassified selections remain separately recorded. The original v2 first run,
+module-partial-v1 and argument-guards-v1 receipts, labels, provenance and review
+metadata are unchanged. These are regression measurements against agent-drafted
+labels, not independent accuracy validation or permission to omit tests.
+
+### Visual review and remaining scope
+
+Captured the original desktop and phone layouts before editing, then inspected the
+running redesign at 1440×900, 1280×800, 768×1024, 390×844 and 360×844. The report
+workspace now appears well above its former position; phone evidence has an explicit
+return route instead of stacking below the entire graph. The final screenshot set:
+
+- [Desktop Tests](media/desktop.png), [Map](media/map.png), [changed code](media/changes.png).
+- [Phone Tests](media/mobile-tests.png), [phone evidence](media/mobile.png), [phone code](media/mobile-changes.png).
+- [Original desktop](media/before-desktop.png), [original phone](media/before-mobile.png).
+
+Both pinned Slugify cases and Cachetools LFU were inspected on desktop and phone:
+100, 108 and 150 recommendations respectively, with the entire lists retained.
+Deleted/before-only and mixed-revision evidence, empty results, long file/test names,
+loading and invalid-URL error states were also inspected. Screenshots use real API
+responses; the long-name case is an explicitly authored source fixture analyzed by
+the API, not a synthesized report. The loading capture holds a real request pending
+and displays no invented progress. Timing in screenshots is measured per request.
+
+Keyboard/focus and sampled text-color contrast were checked; this is not a full
+accessibility audit, physical-phone/Safari test, usability study or independent
+review. There is one light theme. Large graphs still need pan/zoom/search; test
+search, filters, sorting, graph path-focus and code syntax coloring remain milestone 2.
+Dark theme and broader device/accessibility polish remain milestone 3. Source preview
+bounds and analyzer limitations are unchanged. No accounts, history, jobs, storage,
+private-repository support or hosting were added. Remote CI has not run for these edits.
+
+Ignored local evidence: `reports/frontend-before/`, `reports/frontend-after/`,
+`reports/frontend-preservation.json`, `reports/frontend-{check,browser,focused-final}.log`
+and the three `frontend-evaluate*.log` files. All changes remain unstaged/uncommitted.

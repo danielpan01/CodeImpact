@@ -1,5 +1,20 @@
 # CodeImpact project context
 
+## Current priority — November 12, 2026
+
+Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
+are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
+`f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. Earlier implementation-status paragraphs
+below are historical records, not descriptions of uncommitted work today.
+
+The owner has prioritized a substantial frontend redesign next. Follow the active
+sequence in [BUILD_PLAN.md](BUILD_PLAN.md) and the detailed [frontend roadmap](FRONTEND_ROADMAP.md):
+visual foundation/complete workspace, graph/test/code interaction refinement, then
+responsive/accessibility/theme polish. These are planned features. Keep the analyzer,
+report contracts and all evaluation baselines fixed during this work. Human label
+review and bounded Cachetools fallback improvements remain subsequent work; hosting
+and infrastructure follow a demonstrated pilot need.
+
 Owner: GitHub **danielpan01**. Goal: a memorable, practical SWE portfolio project
 with an original analysis component the owner can defend in an interview.
 
@@ -137,8 +152,8 @@ Sources checked during setup:
 Use Codex to implement bounded slices. Review and understand each before making your
 own commit. Engine, public PR ingestion, revision evidence and the authored corpus
 are present locally, with bounded function-local imports and module import rebinding.
-Next, independently review the real-source labels and assess conservative module
-fallback and class fingerprint over-selection before narrowing recommendations. Durable jobs, private
+The current next step is the frontend program above. Independent review of real-source
+labels and bounded fallback improvements remain on the roadmap. Durable jobs, private
 authorization and deployment need their own demonstrated requirements.
 
 Most impressive evidence: show a real change, traverse its dependency path to a test,

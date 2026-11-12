@@ -1,3 +1,4 @@
+import { loadDemo, openAnalysis, openChangedCode } from "./helpers";
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import type { Report } from "../src/types";
@@ -7,10 +8,11 @@ const publicPR = "https://github.com/acme/widget/pull/7";
 test("demo graph and explanation show real backend results", async ({
   page,
 }) => {
-  await page.goto("/");
+  await loadDemo(page);
   await expect(
     page.getByText("Checkout service · discount 10% → 15%"),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByTestId("dependency-graph")).toBeVisible();
   await expect(page.locator(".detail-content")).toContainText("test_discount");
   await expect(page.locator(".detail-content")).toContainText(
@@ -32,10 +34,11 @@ test("demo graph and explanation show real backend results", async ({
 test("upload handles valid empty snapshots and invalid input", async ({
   page,
 }) => {
-  await page.goto("/");
+  await loadDemo(page);
   await expect(
     page.getByText("Checkout service · discount 10% → 15%"),
   ).toBeVisible();
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "empty.json",
     mimeType: "application/json",
@@ -50,7 +53,12 @@ test("upload handles valid empty snapshots and invalid input", async ({
   await expect(page.locator(".analysis-label")).toContainText(
     "Empty repository",
   );
+  await expect(
+    page.getByRole("heading", { name: "No tests recommended" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByText("No symbols match this view.")).toBeVisible();
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "invalid.json",
     mimeType: "application/json",
@@ -64,7 +72,7 @@ test("upload handles valid empty snapshots and invalid input", async ({
 });
 
 test("report downloads with analysis data", async ({ page }) => {
-  await page.goto("/");
+  await loadDemo(page);
   await expect(
     page.getByText("Checkout service · discount 10% → 15%"),
   ).toBeVisible();
@@ -83,9 +91,10 @@ test("local import corpus upload shows resolved evidence and exports scoped impo
       "utf8",
     ),
   );
-  await page.goto("/");
+  await loadDemo(page);
   await expect(page.locator(".detail-content")).toContainText("test_discount");
   const responsePromise = page.waitForResponse("**/api/analyze");
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "local-import.json",
     mimeType: "application/json",
@@ -125,7 +134,7 @@ test("local import corpus upload shows resolved evidence and exports scoped impo
       (edge) => edge.source === "worker.py::<module>" && edge.kind === "import",
     ),
   ).toBe(false);
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "Before source" }),
   ).toContainText("return 1");
@@ -152,9 +161,10 @@ test("rebound module import keeps graph evidence without selecting the unrelated
       "utf8",
     ),
   );
-  await page.goto("/");
+  await loadDemo(page);
   await expect(page.locator(".detail-content")).toContainText("test_discount");
   const responsePromise = page.waitForResponse("**/api/analyze");
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "module-rebinding.json",
     mimeType: "application/json",
@@ -190,7 +200,7 @@ test("rebound module import keeps graph evidence without selecting the unrelated
       (edge) => edge.source === "worker.py::read" && edge.kind === "call",
     ),
   ).toBe(false);
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(page.locator(".detail-content")).toContainText(
     "Path exists in both revisions",
   );
@@ -208,7 +218,8 @@ test("rebound module import keeps graph evidence without selecting the unrelated
 test("public PR uses real ingestion, pinned revisions and valid exported evidence", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await loadDemo(page);
+  await openAnalysis(page);
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeEnabled();
@@ -231,6 +242,7 @@ test("public PR uses real ingestion, pinned revisions and valid exported evidenc
   await expect(page.locator(".pr-source")).toContainText(
     "contributor/widget-fork",
   );
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.locator(".react-flow__node")).toHaveCount(5);
   await expect(page.locator(".detail-content")).toContainText(
     "Resolved call path",
@@ -253,7 +265,7 @@ test("public PR uses real ingestion, pinned revisions and valid exported evidenc
     }
   }
   expect(report.impacted).not.toContain("test_health.py::test_health");
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "Before source" }),
   ).toContainText("return 10");
@@ -290,11 +302,13 @@ test("public PR uses real ingestion, pinned revisions and valid exported evidenc
     fullPage: true,
   });
   // Switching back must clear PR provenance while preserving the demo behavior.
+  await openAnalysis(page);
   await page.getByRole("button", { name: "Load demo" }).click();
   await expect(page.locator(".analysis-label")).toContainText(
     "Checkout service",
   );
   await expect(page.locator(".pr-source")).toHaveCount(0);
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("0.15");
@@ -328,7 +342,8 @@ test("PR rate-limit failure clears old results and retries the same URL", async 
       await route.continue();
     }
   });
-  await page.goto("/");
+  await loadDemo(page);
+  await openAnalysis(page);
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeEnabled();
@@ -360,7 +375,8 @@ test("PR rate-limit failure clears old results and retries the same URL", async 
 test("invalid PR URL is rejected by backend and can be corrected", async ({
   page,
 }) => {
-  await page.goto("/");
+  await loadDemo(page);
+  await openAnalysis(page);
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeEnabled();
@@ -385,9 +401,10 @@ test("method edits retain conservative evidence without selecting unrelated cons
     "class Widget:\n    def price(self): return 1\n    def healthy(self): return True\n";
   const tests =
     "from widget import Widget\ndef test_price(): return Widget().price()\ndef test_health(): return Widget().healthy()\ndef test_construct(): return Widget()\n";
-  await page.goto("/");
+  await loadDemo(page);
   await expect(page.locator(".detail-content")).toContainText("test_discount");
   const responsePromise = page.waitForResponse("**/api/analyze");
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "method-change.json",
     mimeType: "application/json",
@@ -419,7 +436,7 @@ test("method edits retain conservative evidence without selecting unrelated cons
   await expect(page.locator(".detail-content")).toContainText(
     "Conservative module/import dependency",
   );
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("return 2");
@@ -438,9 +455,10 @@ test("constructor overrides exclude unrelated tests while default users keep evi
     'class Engine:\n    default_mode = "old"\n    def __init__(self, mode=None):\n        if mode is None: mode=self.default_mode\n        self.mode=mode\n';
   const tests =
     'from engine import Engine\ndef test_default(): return Engine()\ndef test_override(): return Engine(mode="explicit")\n';
-  await page.goto("/");
+  await loadDemo(page);
   await expect(page.locator(".detail-content")).toContainText("test_discount");
   const responsePromise = page.waitForResponse("**/api/analyze");
+  await openAnalysis(page);
   await page.getByLabel("Upload snapshot JSON").setInputFiles({
     name: "constructor-arguments.json",
     mimeType: "application/json",
@@ -472,7 +490,7 @@ test("constructor overrides exclude unrelated tests while default users keep evi
   await expect(page.locator(".detail-content")).toContainText(
     "Resolved call path",
   );
-  await page.getByRole("button", { name: "Open changed code" }).click();
+  await openChangedCode(page);
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText('default_mode = "new"');
