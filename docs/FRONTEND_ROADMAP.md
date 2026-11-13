@@ -2,7 +2,8 @@
 
 Status: milestones 1 and 2 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
 and [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after CI passed on
-November 12, 2026. Milestone 3 is implemented locally and remains unstaged/uncommitted.
+November 12, 2026. Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9)
+after CI passed. New analyzer work follows the active [build plan](BUILD_PLAN.md).
 The owner waived the separate developer walkthrough. No deployment, independent review
 or usability study is claimed. See [VALIDATION.md](VALIDATION.md) for observed checks.
 
@@ -168,7 +169,7 @@ interactions. Displayed counts and exported report data remain consistent.
 
 ## Milestone 3 — Responsive polish and frontend release
 
-**Implemented locally.** Both themes cover inputs, Tests, Map, source and revision
+**Merged in PR #9 after CI passed.** Both themes cover inputs, Tests, Map, source and revision
 evidence with shared tokens and a saved appearance preference. Responsive focus,
 touch targets, Escape/back navigation and graph framing have cross-browser coverage.
 Error recovery distinguishes invalid input, limits, network and unreadable responses;
@@ -222,5 +223,5 @@ visual design. Keep changes unstaged/uncommitted for the owner to review and pub
    explicit access and resource controls. Introduce jobs/storage/private authorization
    only when required by the pilot.
 
-The 284 existing v2 false positives, two authored misses and outstanding label review
+The 284 v2 false positives present at frontend release, two authored misses and outstanding label review
 remain documented work. The frontend redesign does not change those measurements.

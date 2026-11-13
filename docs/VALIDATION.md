@@ -2134,3 +2134,99 @@ work remain next; hosting, accounts, jobs and private-repository support were no
 Ignored local evidence: `reports/milestone3-before/`, `reports/milestone3-after/`,
 `reports/milestone3-preservation.json`, `reports/milestone3-{check,focused,browser,resize}.log`,
 the three `milestone3-evaluate*.log` files, and local visual/keyboard/debug scripts.
+
+## Frontend milestone 3 publication — November 12, 2026
+
+The owner explicitly requested pushing and merging milestone 3 before implementing
+the next build-plan milestone. The frontend changes were committed as
+`faaeecf6b9eaba45aac650180c05615e43d02555`, pushed on `codex/frontend-polish`, and
+merged through [PR #9](https://github.com/danielpan01/CodeImpact/pull/9). Squash merge:
+`1dbec1bd1051b2ced15a5bd10aa980e768f07cca`.
+[GitHub Actions run 43310062607](https://github.com/danielpan01/CodeImpact/actions/runs/43310062607)
+completed successfully, including `make check`, all three evaluation gates and the
+Chromium/Firefox/WebKit browser suite. The historical milestone-3 record above
+describes its local checks before publication. Its developer walkthrough remained waived.
+
+## Bounded mapping fallback — November 12, 2026
+
+Implemented the next active BUILD_PLAN milestone locally on `codex/mapping-fallback`
+from the milestone-3 merge. New changes remain unstaged and uncommitted. No new
+remote CI run, deployment or independent review is claimed for this analyzer work.
+
+### Scope and observed result
+
+`mapping_protocols.py` narrows only eligible aggregate fallback for body-only edits
+to existing item methods. It follows bounded source receiver references in both
+revisions, retaining unknown/customized receivers, class-stored callables, shared
+mixins, initialization effects (including annotations/decorators) and exhausted
+budgets. Existing source indexing,
+graph edges, scoring formula, deleted-symbol handling and analysis report 2.0 remain
+unchanged. No analyzed repository was executed, imported, installed or checked out.
+
+The LFU case changes from 150 to **139 of 156** selected definitions: **6 TP,
+125 FP, 0 FN, 17 TN**, with **all eight uncertain definitions selected**. Eleven
+previous false positives are removed: three FIFO, four LRU and four RR controls.
+The exact IDs and source reasoning are recorded in
+[MAPPING_FALLBACK_REVIEW.md](MAPPING_FALLBACK_REVIEW.md). Class-stored decorators
+remain conservative; the TTL datetime control was deliberately retained after an
+initial prototype excluded it. Original draft labels were never changed.
+
+Overall v2 is **395/581 selected; 109 TP, 273 FP, 0 FN, 177 TN**, with **13/22
+uncertain selections**. Five other v2 case analyses are identical. Descriptor
+fallback still contributes 31 false positives; Slugify contributes 117; LFU retains
+125. These are development/regression results against agent-drafted labels. Human
+label review is explicitly **pending**, with no reviewer or approval invented.
+
+LFU graph nodes/edges, changed/deleted IDs and source evidence are unchanged. All
+139 retained recommendations keep their scores, distances, reason categories and
+revision presence. Twenty-two evidence paths now traverse existing test-module
+imports after unrelated class paths are filtered; each passes typed edge/revision
+validation. The obsolete blanket “unmodeled protocol change” warning is removed
+only for eligible mapping changes. Other unresolved-call warnings remain.
+
+### Checks
+
+| Check | Observed result |
+| --- | --- |
+| Focused mapping/selection regressions | 108 passed, covering receiver identity, aliases/factories, inheritance, generic ABCs, private storage, unknown operations, rebinding, custom hooks, deleted/mixed edits, initialization effects and query exhaustion |
+| `make check` | Passed: Ruff lint/format, strict mypy, **725 Python tests**, TypeScript and Vite production build |
+| `make evaluate` | Passed; authored report byte-identical: 23 TP / 0 FP / 2 FN / 32 TN, plus 2 uncertain selections |
+| `make evaluate-real` | Passed; v1 report byte-identical: 45 TP / 0 FP / 0 FN / 123 TN, plus 11 uncertain selections |
+| `make evaluate-real-v2` | Passed against the separate `mapping-fallback-v1` baseline; no unrecorded discrepancy or measurement drift |
+| `cd web && npm run test:e2e -- --workers=3` | **134 passed**, covering Chromium desktop/phone, Firefox, WebKit desktop/phone |
+| Preservation | All 75 protected existing files byte-identical, including every original corpus file, schema/type contract and frontend dependency manifests |
+| Documentation and diff | Changed documentation's relative links resolve; `git diff --check` passes; Git index remains empty |
+
+The first authored controls failed on known unrelated mapping receivers before the
+implementation. Development runs exposed additional callable/storage guards, which
+were fixed before the final full suite. An earlier full Python run was stopped
+before applying those guards; the final successful run used the frozen engine and
+baseline. No upstream tests were run. Non-failing Starlette/httpx deprecation and
+Node color-environment warnings remain. Browser launch used the existing macOS
+sandbox exception and isolated test servers; it did not replace the user's API server.
+
+### Historical preservation and explicit new receipt
+
+Original first-run, `module-partial-v1` and `argument-guards-v1` receipts remain
+byte-identical, along with all source snapshots, labels, provenance, review packs
+and discrepancy annotations. The new `mapping-fallback-v1` file pins nine engine
+files, current measurements, a discrepancy overlay and the prior baseline hash.
+The gate verifies the mapping → argument → partial hash chain. Missing/tampered
+prior receipts fail before analysis and are never regenerated by evaluation.
+
+Only the separate fresh-evaluation wrapper advances to **4.0**: it exposes the
+original, partial and argument summaries alongside current results. Dataset wrapper
+1.0, evaluation 1.0 and analysis 2.0 stay unchanged. All 581 original labels retain
+their draft status; uncertain IDs remain present and are not reclassified.
+
+Stable report SHA-256 values:
+
+- Authored (unchanged): `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b`.
+- V1 (unchanged): `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae`.
+- New v2 wrapper/result: `e4cd3fe60b1728dccfb5abc6326b998815f7f3d477314638a1fbcf520397b254`.
+
+Ignored local evidence: `reports/mapping-before/`, `mapping-red.log`,
+`mapping-focused.log`, `mapping-check.log`, `mapping-evaluations.log`,
+`mapping-browser.log`, `mapping-baseline.log` and `mapping-preservation.json`.
+The next build-plan milestone is fresh evaluation and a developer pilot; pending
+source-label review and the remaining known mistakes carry forward explicitly.

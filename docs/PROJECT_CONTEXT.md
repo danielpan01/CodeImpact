@@ -7,20 +7,28 @@ are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. Earlier implementation-status paragraphs
 below are historical records, not descriptions of uncommitted work today.
 
-The owner has prioritized a substantial frontend redesign next. Follow the active
-sequence in [BUILD_PLAN.md](BUILD_PLAN.md) and the detailed [frontend roadmap](FRONTEND_ROADMAP.md):
-visual foundation/complete workspace, graph/test/code interaction refinement, then
-responsive/accessibility/theme polish. Milestone 1 merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7),
-commit `37781e658fc6c2c8f527e87cf196f985818edaa0`, after its CI passed. Milestone 2 merged
-in [PR #8](https://github.com/danielpan01/CodeImpact/pull/8), commit
-`01dc2eacac3880277f229a256265dc128b2f0224`, after its CI passed. Milestone 3 is
-implemented locally on `codex/frontend-polish` and remains unstaged/uncommitted:
-light/dark appearance, responsive focus/touch polish, recovery and cross-browser
-checks. The owner waived the separate developer walkthrough; it was not performed.
-See VALIDATION.md for actual checks. Keep the analyzer,
-report contracts and all evaluation baselines fixed during this work. Human label
-review and bounded Cachetools fallback improvements remain subsequent work; hosting
-and infrastructure follow a demonstrated pilot need.
+Frontend milestones 1–3 are merged. Foundation landed in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7),
+interaction refinement in [PR #8](https://github.com/danielpan01/CodeImpact/pull/8),
+and themes/responsive recovery in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9),
+commit `1dbec1bd1051b2ced15a5bd10aa980e768f07cca`, after CI passed. The owner waived
+milestone 3's separate developer walkthrough; it was not performed.
+
+The next [build-plan](BUILD_PLAN.md) milestone is implemented locally on
+`codex/mapping-fallback`, with all new edits unstaged/uncommitted. Bounded mapping
+fallback removes 11 unrelated FIFO/LRU/RR recommendations from the LFU case while
+retaining every affected and uncertain selection. V2 is 109 TP / 273 FP / 0 FN / 177 TN,
+395/581 selected, including 13/22 uncertain definitions. Authored/v1 reports and
+all five other v2 analyses remain unchanged. `mapping-fallback-v1` records current
+behavior separately; all three prior v2 baselines and original corpus files remain
+intact. Analysis report 2.0 and dashboard contracts are unchanged; only the separate
+fresh evaluation wrapper advances to 4.0.
+
+Human source-label review remains pending; [review notes](MAPPING_FALLBACK_REVIEW.md)
+record the source-only controls without claiming approval. Fresh evaluation and a
+developer pilot are next, with unused selections/labels frozen before measurement.
+Remaining LFU, descriptor, Slugify, fixture and runtime-import limitations stay open.
+See VALIDATION.md for observed checks. Hosting and infrastructure follow a demonstrated
+pilot need.
 
 Owner: GitHub **danielpan01**. Goal: a memorable, practical SWE portfolio project
 with an original analysis component the owner can defend in an interview.

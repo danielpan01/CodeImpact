@@ -2,7 +2,7 @@
 
 ## Active roadmap — November 12, 2026
 
-**Frontend milestones 1–2 are merged; milestone 3 is implemented locally.** The redesign priority
+**Frontend milestones 1–3 are merged; bounded mapping fallback is implemented locally.** The redesign priority
 comes from the owner's request after the evaluation v2 and bounded call-filtering
 work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
@@ -10,15 +10,17 @@ delivery sequence and acceptance criteria are in [FRONTEND_ROADMAP.md](FRONTEND_
 The visual foundation merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
 after CI passed; interaction refinement merged in
 [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after its CI passed.
-Milestone 3 remains unstaged/uncommitted on `codex/frontend-polish`. The owner waived
-the separate developer walkthrough. See VALIDATION.md for observed checks and review limits.
+Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9) after
+CI passed. The owner waived its separate developer walkthrough. The new analyzer
+work remains unstaged/uncommitted on `codex/mapping-fallback`. See VALIDATION.md for
+observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label review.
 
 | Order | Milestone | What the user will notice | Completion evidence |
 | --- | --- | --- | --- |
 | 1 — merged | Frontend foundation and complete analysis workspace | A distinct visual identity, readable typography, compact input controls, clear navigation and coordinated Map, Tests, Changes and evidence views | Real API data; inspected desktop/tablet/phone captures; 50 browser checks and 653 Python tests pass; all three evaluations unchanged |
 | 2 — merged | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; 74 browser checks and CI passed |
-| 3 — implemented locally | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, Chromium/Firefox/WebKit checks, unchanged evaluations and updated screenshots; remote CI not yet run; separate walkthrough waived |
-| 4 | Review labels and narrow Cachetools fallback | Fewer unrelated recommendations where source evidence supports exclusion | Human review status recorded; bounded LFU controls first; all three v2 baselines retained |
+| 3 — merged | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, 134 browser checks and CI passed; unchanged evaluations; separate walkthrough waived |
+| 4 — implemented locally; human review pending | Review labels and narrow Cachetools fallback | Eleven fewer unrelated FIFO/LRU/RR recommendations in the LFU case | Source-only controls recorded; all affected/uncertain selections retained; all three prior v2 baselines preserved; new mapping baseline and required checks |
 | 5 | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Selection/labels frozen before analysis; results and usability feedback documented |
 | 6 | Performance, isolation and hosted pilot | A dependable shareable service within explicit limits | Measured runtime/memory, bounded workers, access controls and deployment verification |
 
@@ -26,7 +28,8 @@ Milestones 1–3 form the frontend redesign program. Milestone 1 includes light 
 Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
 phone/tablet navigation. Milestone 2 adds test filtering/sorting, graph focus and
 source coloring. Milestone 3 completes themes and responsive recovery/focus polish.
-The next candidate is independent label review and bounded Cachetools fallback work.
+The next implementation milestone is fresh evaluation and a developer pilot.
+Independent label review remains pending; do not represent regression results as unseen accuracy.
 Preserve existing analyzer behavior, report
 contracts, corpus bytes and all baselines throughout these frontend milestones.
 Independent source-label review can proceed alongside frontend work. Known analysis
@@ -206,15 +209,31 @@ remain separate limitations.
 
 Existing resolved call paths now use bounded immutable argument checks for branch
 bypasses and early type-validation exits. Exactly seven newly exposed Slugify false
-positives are removed; all 109 v2 affected labels remain selected. Current v2 is
+positives are removed; all 109 v2 affected labels remain selected. At that milestone, v2 was
 109 TP, 284 FP, 0 FN, 166 TN, plus 13/22 uncertain selections. Both prior baselines
 remain intact and `argument-guards-v1` separately records current behavior. Other
 fallback evidence, graph IDs, revision paths and the scoring formula remain intact.
 
-Next analyzer candidate, following the frontend redesign program above: bounded protocol-aware fallback narrowing for Cachetools,
+The next analyzer candidate identified then was bounded protocol-aware fallback narrowing for Cachetools,
 starting with source-based LFU versus unrelated cache controls (136 recorded false
 positives), with the descriptor/classmethod fallback (31) scoped separately. Do not
 claim independent accuracy or remove uncertain IDs. Preserve all three recorded v2
 measurements and obtain human label review before broader accuracy claims. Slugify's
 remaining 117 fallback false positives, fixture injection and runtime imports also
 remain open; the current call-path filter does not solve those mechanisms.
+
+## Bounded mapping fallback — implemented locally November 12, 2026
+
+Body-only mapping edits can exclude known unrelated receivers from aggregate module
+fallback. Eleven FIFO/LRU/RR controls leave the LFU recommendation list; all six
+affected and eight uncertain LFU definitions remain. Overall v2 is 395/581 selected:
+109 TP, 273 FP, 0 FN, 177 TN, plus 13/22 uncertain selections. Authored/v1 reports and
+the other five v2 case analyses are unchanged. No protocol call edges or stronger
+reason labels are invented; retained scores are unchanged and all fallback paths remain valid.
+
+The new `mapping-fallback-v1` receipt preserves the original, partial and argument
+baselines. Human label review is **pending**, with no reviewer or approval invented;
+see [MAPPING_FALLBACK_REVIEW.md](MAPPING_FALLBACK_REVIEW.md). Remaining LFU mistakes
+(125), descriptor fallback (31) and Slugify fallback (117) stay recorded. The next
+milestone must freeze unused changes/labels before analysis and record actual pilot
+participation; this milestone does not supply independent accuracy or usability evidence.

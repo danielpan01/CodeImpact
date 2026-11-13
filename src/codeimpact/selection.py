@@ -740,6 +740,9 @@ class References:
 
 class AggregateFallback:
     def __init__(self, before: "Index", after: "Index", paths: set[str]) -> None:
+        from codeimpact.mapping_protocols import MappingFallback
+
+        self.mapping = MappingFallback(before, after, paths)
         self.before = References(before)
         self.after = References(after)
         self.changed = {}
@@ -758,12 +761,15 @@ class AggregateFallback:
                 for name in self.changed[path]
             ):
                 self.broad.add(path)
-                after.warnings.append(
-                    f"Conservative fallback retained: unmodeled protocol change in {path}"
-                )
+                if path not in self.mapping.changes:
+                    after.warnings.append(
+                        f"Conservative fallback retained: unmodeled protocol change in {path}"
+                    )
         self.cache: dict[tuple[str, str], bool] = {}
 
     def allows(self, sid: str, path: str) -> bool:
+        if path in self.mapping.changes:
+            return self.mapping.allows(sid, path)
         if path in self.broad:
             return True
         key = (sid, path)
