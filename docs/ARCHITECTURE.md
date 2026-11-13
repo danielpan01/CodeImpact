@@ -576,29 +576,73 @@ Those original receipts and all original case annotations remain unchanged.
 
 The partial milestone added `baselines/module-partial-v1.json` with its seven-file
 engine receipt, measurements and discrepancy annotations. It remains byte-identical.
-The argument-guard milestone adds `baselines/argument-guards-v1.json`, pinning eight
-current engine files, the previous baseline's file hash and the unchanged original
+The argument-guard milestone added `baselines/argument-guards-v1.json`, pinning eight
+engine files, the previous baseline's file hash and the unchanged original
 receipts/cases. Only category, limitations and discrepancy maps may be overlaid in
 memory. `dataset_sha256` still identifies the original dataset; the active baseline
 hash identifies the overlay, and the nested evaluation hash identifies evaluated
 cases. No expected results are generated or accepted automatically.
 
-The fresh extension is now **3.0**. It retains all 2.0 fields and adds
-`previous_baseline`, `previous_baseline_sha256` and `previous_summary`, alongside
-`original_summary` and current results. `first_measurement_matches` stays honestly
+The mapping milestone adds `baselines/mapping-fallback-v1.json`, pinning nine engine
+files and the argument baseline's file hash. The gate validates both links in the
+mapping → argument → partial receipt chain; all three historical measurements remain
+intact. The fresh extension is now **4.0**. Its `previous_baseline`,
+`previous_baseline_sha256` and `previous_summary` identify the argument baseline.
+New `partial_baseline`, `partial_baseline_sha256` and `partial_summary` fields preserve
+the earlier summary alongside `original_summary` and current results.
+`first_measurement_matches` stays honestly
 false; `current_measurement_matches` must be true. Historical analyzers are retained
 as recorded measurements, not claimed to be rerun by the current command.
 Invalid inputs/evidence, modified current engine bytes or rewritten historical
 receipts exit 2; measured drift exits 1; a matching imperfect baseline exits 0.
 Dataset wrapper 1.0, evaluation 1.0 and analysis 2.0 remain unchanged. V1 output is
-identical. Metadata retains its 4 MB per-file / 20 MB total bounds, including both
-versioned baselines. Writes remain atomic and cannot target the dataset. Only
+identical. Metadata retains its 4 MB per-file / 20 MB total bounds, including
+all three versioned baseline files. Writes remain atomic and cannot target the dataset. Only
 existing elapsed timing is excluded from comparisons.
 
 CI runs all three offline evaluation commands against pinned data. Historical dataset
-bytes, authored/v1 stable reports and both prior v2 baselines have preservation tests.
+bytes, authored/v1 stable reports and all three prior v2 measurements have preservation tests.
 Hashes establish recorded integrity, not independent review or authenticated authorship.
 V2 remains development/regression data. See [v2 results](REAL_EVALUATION_V2.md).
+
+### Bounded mapping fallback
+
+`mapping_protocols.py` filters only aggregate module/import fallback for a narrow
+shape: an existing class's item-method body changes, possibly with other existing
+method bodies in that class/module. AST comparison requires unchanged definitions,
+signatures, decorators and module/class initialization text. Deleted/added methods,
+mixed initialization edits, duplicate definitions and unmodeled special-method edits
+decline the filter. Unchanged initialization is also checked: unknown calls,
+annotations with calls, decorators and implicit container operations retain fallback.
+Bounded exceptions cover plain `object()`, literal stdlib `collections.namedtuple`,
+builtin method decorators and stdlib `functools.total_ordering` on a class without
+bases or metaclass keywords. Rebound or snapshot-local stdlib names decline these checks.
+
+The query considers both revisions and follows source references with receiver
+context. Subscripts, deletion, mapping methods, iteration, membership and selected
+builtin protocols can reach the relevant source methods. It reuses the existing
+reference index and receiver checks without changing ordinary call resolution.
+Single inheritance, simple aliases/factory returns, private lexical storage and
+unmodified `collections.abc` mapping generic aliases supply the bounded receiver
+information needed by the pinned FIFO/LRU/RR controls. Compatible eager `collections`
+imports are recognized only inside this query; ambiguous, shadowed or mutated bindings
+do not justify exclusion. Python's [container protocol](https://docs.python.org/3/reference/datamodel.html#emulating-container-types)
+and [mapping ABC documentation](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+describe the underlying operations; this is a limited static model, not Python execution.
+
+Unknown receivers, inherited shared test definitions, custom hooks/metaclasses,
+class-stored callables, reflective writes, nested callbacks and unsupported receiver
+flow retain fallback. Depth/visit limits and recursion exhaustion also retain it.
+The descriptor change remains outside this scope. No source repository is imported,
+executed or installed, and no runtime failure or safe omission is inferred.
+
+This query neither synthesizes protocol call edges nor changes graph IDs, direction,
+scoring, deleted-symbol handling or source/revision evidence. Surviving paths remain
+explicitly conservative. The LFU case loses 11 false positives; all retained
+recommendations keep their scores, distances, reason categories and revision presence.
+Twenty-two now use existing import paths after unrelated class paths are filtered;
+each path remains valid. The five other v2 analyses are identical to the argument
+baseline. See [source-only review notes](MAPPING_FALLBACK_REVIEW.md) for limits and status.
 
 ## Public GitHub ingestion
 

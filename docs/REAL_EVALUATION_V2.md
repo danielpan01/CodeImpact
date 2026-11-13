@@ -1,14 +1,47 @@
 # Fresh-repository evaluation v2 — observed results
 
 The original fresh evaluation ran on 2026-11-12 against `bef99db1bbc144ac399ecb3f537269293fe3f22e`.
-Its sources, labels and first measurement remain preserved. A subsequent bounded
-module-level partial-call fix now uses these cases as **development/regression data**.
+Its sources, labels and first measurement remain preserved. Subsequent bounded
+partial-call, argument-guard and mapping fixes use these cases as **development/regression data**.
 All six cases retain agent-drafted labels; no human review or upstream runtime failures
 are claimed. These purposive samples are not production accuracy. Keep the full test suite.
 
 [Source protocol](../corpus/real-v2/PROTOCOL.md) · [Original capture/review protocol](../corpus/real-v2/README.md) · [581-label review pack](../corpus/real-v2/REVIEW.md) · [First measurement](../corpus/real-v2/first-run.json) · [Attribution](../corpus/real-v2/ATTRIBUTION.md)
 
-## Current measurement: bounded argument guards
+## Current measurement: bounded mapping fallback
+
+**395/581 selected; 109 TP, 273 FP, 0 FN, 177 TN.** Draft-label precision is
+109/382 (28.53%); recall is 109/109 (100%). Uncertainty remains 13 selected and
+9 unselected out of 22. Eleven FIFO/LRU/RR controls are excluded in the LFU case;
+all affected and uncertain IDs remain selected. This is development on known cases,
+not an unseen benchmark. Independent human review remains **pending**.
+
+| Case | Selected / tests | TP | FP | FN | TN | Uncertain total / selected | Resolved / fallback / changed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `atomicwrites_path` | 6 / 6 | 6 | 0 | 0 | 0 | 0 / 0 | 0 / 6 / 0 |
+| `atomicwrites_prefix` | 6 / 6 | 6 | 0 | 0 | 0 | 0 / 0 | 0 / 6 / 0 |
+| `cachetools_descriptor` | 36 / 154 | 0 | 31 | 0 | 115 | 8 / 5 | 0 / 36 / 0 |
+| `cachetools_lfu` | 139 / 156 | 6 | 125 | 0 | 17 | 8 / 8 | 0 / 136 / 3 |
+| `slugify_ascii` | 100 / 126 | 63 | 37 | 0 | 23 | 3 / 0 | 23 / 75 / 2 |
+| `slugify_boundary` | 108 / 133 | 28 | 80 | 0 | 22 | 3 / 0 | 28 / 78 / 2 |
+
+Totals: **51 resolved paths, 337 conservative paths, 7 changed tests**. The other
+five case analyses are byte-identical after stable serialization. LFU graph nodes,
+edges, changed/deleted IDs and source evidence are unchanged. All 139 retained
+recommendations keep their scores, distances, reason categories and revision presence.
+Twenty-two use an existing test-module import path after an unrelated class path
+is filtered; every replacement path passes the typed evidence validator.
+Only the eligible aggregate fallback selection narrows; mapping syntax does not gain
+invented resolved edges. Unknown receivers, shared mixins, assigned callables,
+custom class hooks, effects during initialization and exhausted budgets stay conservative.
+
+[Exact controls and review status](MAPPING_FALLBACK_REVIEW.md) explain the scope.
+The [active mapping baseline](../corpus/real-v2/baselines/mapping-fallback-v1.json)
+records the result separately. All three prior measurements, original annotations,
+source snapshots, labels, review packs and provenance remain unchanged. There are
+still 125 LFU, 31 descriptor and 117 Slugify false positives.
+
+## Previous measurement: bounded argument guards (preserved)
 
 **406/581 selected; 109 TP, 284 FP, 0 FN, 166 TN.** Draft-label precision is
 109/393 (27.74%); recall is 109/109 (100%). All 22 uncertain definitions remain:
@@ -25,7 +58,7 @@ pairs with draft labels, not independent executions or production accuracy.
 | `slugify_ascii` | 100 / 126 | 63 | 37 | 0 | 23 | 3 / 0 | 23 / 75 / 2 |
 | `slugify_boundary` | 108 / 133 | 28 | 80 | 0 | 22 | 3 / 0 | 28 / 78 / 2 |
 
-Current explanation totals: **51 resolved paths, 348 conservative paths, 7 changed tests**.
+Argument-guard explanation totals: **51 resolved paths, 348 conservative paths, 7 changed tests**.
 Atomicwrites and Cachetools measurements are unchanged. Slugify selects **208/259**:
 91 TP, 117 FP, 0 FN, 45 TN; all six uncertain IDs remain unselected. The graph is
 unchanged. Twenty retained ASCII-case evidence paths now follow `_modern_slugify`
@@ -38,8 +71,8 @@ calling the edited helper. Filtering applies only to bounded resolved call paths
 other module/import fallback remains. Unknown/modified arguments, callbacks,
 mutable partial keywords and unsupported control flow retain recommendations.
 
-The [new active baseline](../corpus/real-v2/baselines/argument-guards-v1.json) stores
-current measurements and hashes separately. **Both prior v2 baselines, every
+The [preserved argument baseline](../corpus/real-v2/baselines/argument-guards-v1.json) stores
+that milestone’s measurements and hashes separately. **Both prior v2 baselines, every
 snapshot/label and all provenance remain byte-identical.** The gate verifies these
 receipts and current results without relabeling or accepting drift automatically.
 
@@ -90,7 +123,7 @@ examples below. That milestone stopped at bounded call binding; the subsequent g
 Precision is 65/349 (18.6%); recall is 65/109 (59.6%) against classified draft labels.
 All **22 uncertain definitions** remain counted: **13 selected, 9 unselected**.
 These totals count case/test pairs; repeated revisions and tests are not independent samples.
-These are the original `bef99db` results; the current gate uses the separate argument-guard baseline above.
+These are the original `bef99db` results; the current gate uses the separate mapping baseline above.
 
 | Case | Selected / tests | TP | FP | FN | TN | Uncertain total / selected | Resolved / fallback / changed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
@@ -181,14 +214,14 @@ The first run correctly exited 1 against empty discrepancy annotations. Its meas
 counts, classifications, explanation categories, per-case stable-analysis hashes, and raw
 report hash are retained in `first-run.json`. Only discrepancy maps, selected-uncertain
 baselines and limitation explanations were then deliberately annotated. All 581 labels,
-sources, provenance and review-pack bytes stayed fixed. The partial and argument-guard milestones add separate versioned baselines with
+sources, provenance and review-pack bytes stayed fixed. The partial, argument-guard and mapping milestones add separate versioned baselines with
 current source hashes, measurements and in-memory discrepancy overlays. Original case
-files, first-run receipt, `module-partial-v1`, labels, source, provenance and review
+files, first-run receipt, `module-partial-v1`, `argument-guards-v1`, labels, source, provenance and review
 bytes remain untouched. The current gate verifies the preserved historical inputs,
-the previous baseline's file hash, and the active argument-guard baseline.
+the argument-to-partial baseline hash chain, and the active mapping baseline.
 Exit 0 means the active imperfect baseline matches; 1 means measured drift; 2 means
 invalid inputs/provenance/evidence, changed current engine, or invalid output.
-Fresh wrapper **3.0** reports original and partial summaries alongside current results;
+Fresh wrapper **4.0** reports original, partial and argument-guard summaries alongside current results;
 `first_measurement_matches` is false and `current_measurement_matches` is true.
 Historical engines are not rerun by this command. The dataset's root documents remain
 preserved as the original capture record; current reproduction is this section.
@@ -197,12 +230,11 @@ The original authored corpus remains **23 TP / 0 FP / 2 FN / 32 TN**, plus two u
 selections. V1 remains **45 TP / 0 FP / 0 FN / 123 TN**, plus 11 uncertain selections.
 All original dataset bytes and stable reports are preserved; they are not pooled into v2 metrics.
 
-## Recommended next analyzer milestone
+## Remaining work
 
-**Bounded protocol-aware fallback narrowing for Cachetools.** Begin with the 136
-LFU-change false positives versus unaffected cache implementations, retaining unknown
-receivers, shared mixins and uncertain labels. Treat the 31 descriptor/classmethod
-fallback mistakes as a separate scope. Slugify's 117 remaining fallback mistakes
-also need work beyond the current resolved-path filter. Preserve all three v2
-measurements and every label; independent human review remains outstanding. Fixture
-injection, runtime imports and general dynamic dispatch remain separate limitations.
+The [build plan](BUILD_PLAN.md) next calls for fresh evaluation and a developer pilot.
+Freeze unused changes and labels before analysis, record actual human review status,
+and preserve all four v2 measurements. The 125 remaining LFU fallback mistakes need
+additional bounded work; descriptor/classmethod fallback (31) and Slugify fallback
+(117) remain separate scopes. Fixture injection, runtime imports and general dynamic
+dispatch also remain limitations. No stronger accuracy claim follows from this regression improvement.

@@ -33,9 +33,11 @@ FROZEN_SOURCES = frozenset(
 )
 
 PARTIAL_BASELINE_FILE = "baselines/module-partial-v1.json"
-BASELINE_FILE = "baselines/argument-guards-v1.json"
+ARGUMENT_BASELINE_FILE = "baselines/argument-guards-v1.json"
+BASELINE_FILE = "baselines/mapping-fallback-v1.json"
 PARTIAL_SOURCES = FROZEN_SOURCES | {"src/codeimpact/partial_bindings.py"}
-CURRENT_SOURCES = PARTIAL_SOURCES | {"src/codeimpact/call_arguments.py"}
+ARGUMENT_SOURCES = PARTIAL_SOURCES | {"src/codeimpact/call_arguments.py"}
+CURRENT_SOURCES = ARGUMENT_SOURCES | {"src/codeimpact/mapping_protocols.py"}
 
 
 class FrozenCase(StrictModel):
@@ -74,7 +76,7 @@ class CaseBaseline(StrictModel):
 
 class RegressionBaseline(StrictModel):
     schema_version: Literal["1.0"]
-    name: Literal["module-partial-v1", "argument-guards-v1"]
+    name: Literal["module-partial-v1", "argument-guards-v1", "mapping-fallback-v1"]
     previous_baseline_sha256: SHA256 | None = None
     explanation: Nonblank
     frozen_inputs_sha256: SHA256
@@ -87,20 +89,35 @@ class RegressionBaseline(StrictModel):
 
     @model_validator(mode="after")
     def source_inventory(self) -> "RegressionBaseline":
-        current = self.name == "argument-guards-v1"
+        sources = {
+            "module-partial-v1": PARTIAL_SOURCES,
+            "argument-guards-v1": ARGUMENT_SOURCES,
+            "mapping-fallback-v1": CURRENT_SOURCES,
+        }
         require(
-            set(self.analyzer_sha256) == (CURRENT_SOURCES if current else PARTIAL_SOURCES),
+            set(self.analyzer_sha256) == sources[self.name],
             "Current analyzer source inventory",
         )
-        require(current == (self.previous_baseline_sha256 is not None), "Previous baseline receipt")
+        require(
+            (self.name != "module-partial-v1") == (self.previous_baseline_sha256 is not None),
+            "Previous baseline receipt",
+        )
         return self
 
 
 def active_baseline(directory: Path, project: Path = PROJECT) -> RegressionBaseline:
     baseline = RegressionBaseline.model_validate(read_metadata(directory / BASELINE_FILE)[0])
-    require(baseline.name == "argument-guards-v1", "Active baseline name mismatch")
+    require(baseline.name == "mapping-fallback-v1", "Active baseline name mismatch")
     require(
-        file_hash(directory / PARTIAL_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        file_hash(directory / ARGUMENT_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        "Preserved argument baseline changed",
+    )
+    argument = RegressionBaseline.model_validate(
+        read_metadata(directory / ARGUMENT_BASELINE_FILE)[0]
+    )
+    require(argument.name == "argument-guards-v1", "Previous baseline name mismatch")
+    require(
+        file_hash(directory / PARTIAL_BASELINE_FILE) == argument.previous_baseline_sha256,
         "Preserved partial baseline changed",
     )
     previous = RegressionBaseline.model_validate(
@@ -190,6 +207,7 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             "frozen-inputs.json",
             "first-run.json",
             BASELINE_FILE,
+            ARGUMENT_BASELINE_FILE,
             PARTIAL_BASELINE_FILE,
         )
     ] + sorted((directory / "provenance").glob("*.json"))
@@ -215,16 +233,20 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
     current_matches = observed == baseline.measurement
     if not current_matches:
         report["evaluation"]["regressions"].append(
-            "v2: measurement differs from argument-guards-v1"
+            "v2: measurement differs from mapping-fallback-v1"
         )
     previous = RegressionBaseline.model_validate(
-        read_metadata(directory / PARTIAL_BASELINE_FILE)[0]
+        read_metadata(directory / ARGUMENT_BASELINE_FILE)[0]
     )
+    partial = RegressionBaseline.model_validate(read_metadata(directory / PARTIAL_BASELINE_FILE)[0])
     report.update(
-        fresh_evaluation_schema_version="3.0",
+        fresh_evaluation_schema_version="4.0",
         previous_baseline=previous.name,
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         previous_summary=previous.measurement["summary"],
+        partial_baseline=partial.name,
+        partial_baseline_sha256=previous.previous_baseline_sha256,
+        partial_summary=partial.measurement["summary"],
         active_baseline=baseline.name,
         active_baseline_sha256=canonical_hash(baseline.model_dump()),
         current_analyzer_sha256=baseline.analyzer_sha256,
@@ -250,8 +272,8 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             },
         },
         interpretation=(
-            "Development/regression evaluation with argument-guards-v1; "
-            "original bef99db first run and module-partial-v1 baseline preserved. "
+            "Development/regression evaluation with mapping-fallback-v1; "
+            "original bef99db first run, module-partial-v1 and argument-guards-v1 preserved. "
             "agent-drafted labels, not independent review or runtime failures. "
             "Matching the baseline preserves mistakes; it does not certify safe test skipping."
         ),

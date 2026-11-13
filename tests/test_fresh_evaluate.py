@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from codeimpact.fresh_evaluate import (
+    ARGUMENT_BASELINE_FILE,
     BASELINE_FILE,
     CURRENT_SOURCES,
     PARTIAL_BASELINE_FILE,
@@ -178,20 +179,21 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     report = evaluate_fresh(DATA)
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
-    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 291
+    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 284
+    assert report["partial_summary"]["metrics"]["counts"]["fp"] == 291
     assert report["original_summary"]["metrics"]["counts"]["fn"] == 44
-    assert report["active_baseline"] == "argument-guards-v1"
-    assert report["fresh_evaluation_schema_version"] == "3.0"
+    assert report["active_baseline"] == "mapping-fallback-v1"
+    assert report["fresh_evaluation_schema_version"] == "4.0"
     assert report["evaluation"]["regressions"] == []
     summary = report["summary"]
     assert summary["test_count"] == 581
-    assert summary["selected_count"] == 406
+    assert summary["selected_count"] == 395
     assert summary["label_status_counts"] == {"draft": 6}
     assert summary["metrics"]["counts"] == {
         "tp": 109,
         "fn": 0,
-        "fp": 284,
-        "tn": 166,
+        "fp": 273,
+        "tn": 177,
         "unclassified_recommendations": 13,
     }
     assert summary["unclassified_test_count"] == 22
@@ -207,6 +209,23 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
         assert group["selected"] + group["unselected"] == group["total"]
     descriptor = next(c for c in report["cases"] if c["id"] == "cachetools_descriptor")
     assert descriptor["metrics"]["recall"]["value"] is None  # zero classified positives
+    from codeimpact.real_evaluate import canonical_hash
+
+    previous = json.loads((DATA / ARGUMENT_BASELINE_FILE).read_text())["measurement"]
+    for case in report["evaluation"]["cases"]:
+        cid = case["case"]["id"]
+        if cid != "cachetools_lfu":
+            assert canonical_hash(case["analysis"]) == previous["analysis_sha256"][cid]
+        else:
+            assert (
+                case["results"]["true_positives"]
+                == previous["classifications"][cid]["true_positives"]
+            )
+            assert (
+                case["results"]["unclassified_recommendations"]
+                == previous["classifications"][cid]["unclassified_recommendations"]
+            )
+            assert len(case["results"]["false_positives"]) == 125
 
 
 def test_source_only_review_pack_matches_freeze(monkeypatch):
@@ -306,7 +325,7 @@ def test_preserved_v2_files_are_byte_identical():
     import hashlib
 
     baseline = json.loads((DATA / BASELINE_FILE).read_text())
-    assert len(baseline["historical_files_sha256"]) == 25
+    assert len(baseline["historical_files_sha256"]) == 26
     for relative, expected in baseline["historical_files_sha256"].items():
         assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == expected, relative
     original = json.loads((DATA / "first-run.json").read_text())
@@ -416,6 +435,36 @@ def test_argument_filter_source_hash_is_required(dataset):
         dataset,
         BASELINE_FILE,
         lambda d: d["analyzer_sha256"].pop("src/codeimpact/call_arguments.py"),
+    )
+    with pytest.raises(ValueError, match="source inventory"):
+        evaluate_fresh(dataset)
+
+
+@pytest.mark.parametrize("field", ["measurement", "explanation", "analyzer_sha256"])
+def test_argument_baseline_cannot_be_rewritten(dataset, field, monkeypatch):
+    from codeimpact import fresh_evaluate
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("tampered history reached analysis")
+
+    monkeypatch.setattr(fresh_evaluate, "evaluate_real", forbidden)
+    edit(dataset, ARGUMENT_BASELINE_FILE, lambda d: d.__setitem__(field, {}))
+    with pytest.raises(ValueError, match="Preserved argument baseline changed"):
+        evaluate_fresh(dataset)
+
+
+def test_missing_argument_baseline_is_not_recreated(dataset, tmp_path):
+    path = dataset / ARGUMENT_BASELINE_FILE
+    path.unlink()
+    assert main(["--corpus", str(dataset), "--output", str(tmp_path / "result.json")]) == 2
+    assert not path.exists()
+
+
+def test_mapping_filter_source_hash_is_required(dataset):
+    edit(
+        dataset,
+        BASELINE_FILE,
+        lambda d: d["analyzer_sha256"].pop("src/codeimpact/mapping_protocols.py"),
     )
     with pytest.raises(ValueError, match="source inventory"):
         evaluate_fresh(dataset)

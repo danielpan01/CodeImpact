@@ -151,17 +151,25 @@ Bounded module-level `functools.partial` binding repaired **all 44 Slugify misse
 while initially adding seven false positives. That intermediate baseline remains
 preserved: **109 TP, 291 FP, 0 FN, 159 TN; 413/581 selected**.
 
-Bounded argument-sensitive call filtering now removes **exactly those seven false
-positives**, retaining all affected selections. Current results are **109 TP, 284 FP,
-0 FN, 166 TN; 406/581 selected**, including **13 of 22 uncertain definitions**.
-Draft-label precision is 109/393 (27.74%); recall is 109/109 (100%). Known
+Bounded argument-sensitive call filtering removed **exactly those seven false
+positives**, retaining all affected selections: **109 TP, 284 FP, 0 FN, 166 TN;
+406/581 selected**. That baseline remains preserved. Known
 `allow_unicode=True` bypasses and early type-validation exits can filter resolved
 call paths. Unknown/mutated arguments and other module/import fallback remain
-conservative. Existing Slugify and Cachetools fallback mistakes remain recorded.
+conservative.
 
-All original snapshots, labels, provenance, discrepancy annotations and both prior
+Bounded mapping fallback now removes **11 unrelated FIFO/LRU/RR recommendations**
+from the LFU case. Current results are **109 TP, 273 FP, 0 FN, 177 TN; 395/581
+selected**, including **13 of 22 uncertain definitions**. Draft-label precision is
+109/382 (28.53%); recall is 109/109 (100%). Unknown receivers, shared mixins,
+class-stored callables and initialization effects retain conservative evidence.
+The other five v2 cases are unchanged; 125 LFU, 31 descriptor and 117 Slugify false
+positives remain. [Review status and exact controls](docs/MAPPING_FALLBACK_REVIEW.md)
+record independent human review as pending.
+
+All original snapshots, labels, provenance, discrepancy annotations and all three prior
 v2 baselines are unchanged. The separate
-[`argument-guards-v1` baseline](corpus/real-v2/baselines/argument-guards-v1.json)
+[`mapping-fallback-v1` baseline](corpus/real-v2/baselines/mapping-fallback-v1.json)
 records current source hashes, results and remaining mistakes. The offline gate
 verifies both historical receipts and the active baseline; it never accepts drift
 automatically. V2 is **development/regression data**, not unseen validation. Labels
@@ -182,7 +190,7 @@ npm run install:browsers
 npm run test:e2e
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The local milestone 3 configuration adds Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) preserves observed local results and distinguishes them from remote CI runs.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The merged milestone 3 configuration includes Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs.
 
 ## Scope & next steps
 
@@ -191,16 +199,18 @@ CodeImpact is a developer review tool. Static Python analysis is incomplete for 
 [Frontend milestones 1 and 2](docs/FRONTEND_ROADMAP.md) merged in
 [PR #7](https://github.com/danielpan01/CodeImpact/pull/7) and
 [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after CI passed.
-Milestone 3 is implemented locally: shared light/dark themes, saved appearance,
+Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9) after
+CI passed: shared light/dark themes, saved appearance,
 touch/focus refinements, clearer error recovery and same-snapshot retry, plus
-cross-browser release checks and refreshed screenshots. The new changes remain
-unstaged/uncommitted. Filtering and themes change only the display; exports retain
-the complete report. Analyzer behavior and all evaluation baselines are unchanged.
+cross-browser release checks and refreshed screenshots. Filtering and themes change
+only the display; exports retain the complete report.
 The owner waived the separate developer walkthrough; no independent usability study
 or accessibility certification is claimed.
 
-Independent review of both real-source datasets and bounded protocol-aware fallback
-narrowing remain on the roadmap, motivated by the Cachetools mistakes. General
+The next build-plan milestone is implemented locally on `codex/mapping-fallback`,
+with new changes unstaged/uncommitted. Independent review of both real-source
+datasets remains pending. Fresh evaluation and a developer pilot follow in the
+[build plan](docs/BUILD_PLAN.md). General
 dynamic dispatch and further fallback precision remain separate work. Worker isolation and hosted deployment remain later milestones. GitHub App authorization for
 private repositories, persisted jobs, and cross-request caching are not implemented.
 See the [build plan](docs/BUILD_PLAN.md).
