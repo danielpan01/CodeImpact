@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-13** (America/New_York).
+Checked on **2026-11-14** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -106,7 +106,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | certifi | ==2026.10.23 | 2026.10.23 | >=3.7 |
 | click | ==8.5.0 | 8.5.1 | >=3.10 |
 | coverage | ==7.17.2 | 7.17.3 | >=3.11 |
-| fastapi | ==0.162.0 | 0.162.7 | >=3.11 |
+| fastapi | ==0.162.0 | 0.163.0 | >=3.11 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
 | httpx | ==0.28.1 | 0.28.1 | >=3.8 |
