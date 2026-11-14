@@ -25,6 +25,9 @@ export function TestsView({
   setControls: (controls: TestControls) => void;
 }) {
   const visible = reviewTests(report.recommendations, controls);
+  const hasTests = report.nodes.some(
+    (node) => node.kind === "test" && !report.removed.includes(node.id),
+  );
   const ranks = new Map(
     report.recommendations.map((r, index) => [r.symbol, index + 1]),
   );
@@ -48,9 +51,11 @@ export function TestsView({
     return (
       <div className="empty-state">
         <Icon name="tests" />
-        <h3>No tests recommended</h3>
+        <h3>{hasTests ? "No tests recommended" : "No tests discovered"}</h3>
         <p>
-          No recommendation does not establish that tests are safe to skip.
+          {hasTests
+            ? "No recommendation does not establish that tests are safe to skip."
+            : "No test definitions matched discovery in the current snapshot. Look for test_ functions in test_*.py or *_test.py files."}{" "}
           Review the changed code and keep the full suite as your merge gate.
         </p>
         <button className="primary" onClick={onChanges}>

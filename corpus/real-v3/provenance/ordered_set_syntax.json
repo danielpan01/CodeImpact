@@ -1,0 +1,319 @@
+{
+  "base": {
+    "commit": {
+      "message": "Merge pull request #87 from kkirsche/patch-2\n\nSimplify `_is_atomic` to use single isinstance call",
+      "parents": [
+        {
+          "sha": "fe878ca074eee070c8c2ab985449e0c0610074b8"
+        },
+        {
+          "sha": "7051265bf82e7230020328fb7e83636ee692e44a"
+        }
+      ],
+      "sha": "8c837171201e3d089630e8b67645cb813b57c8dd",
+      "tree": {
+        "sha": "e7c0164fc97250b04ee2603caf88158ef67c97a5"
+      }
+    },
+    "license": {
+      "path": "MIT-LICENSE",
+      "sha256": "0cf8f55f36dc1306b3fe89bf29e29a0c742f279f038d149244319e593ab16ca4",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2012-2022 Elia Robyn Lake\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "ordered_set/__init__.py": "8ed5ace48d81cbecf7fe3510933593a409b488df23f4e7c50790a7296944192b",
+      "setup.py": "9d2e313b2c672c53673e49330f7b2a27c4f88c8071f192605bab932ee9b72047",
+      "test/test_ordered_set.py": "258ab39fd0970ccbe6c064ad1d03e0673e4e4bf9ea3f705bf874252b071fa094"
+    },
+    "tree": {
+      "sha": "e7c0164fc97250b04ee2603caf88158ef67c97a5",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".codecov.yml",
+          "sha": "ccdf45e4f15434c1509afba16892f9835898cc57",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "e741de34afcca31c895a5975b2bb74daf8ceadf5",
+          "size": 44,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".flake8",
+          "sha": "7da1f9608ee1595463f3aefec0e087e57ca6c49f",
+          "size": 31,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "b54cd70152c6864eec2b3bbecb59bd635a310576",
+          "size": 93,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".mailmap",
+          "sha": "7ed74a2c4bb5e99ec8f11e6c6dc1b65aa2c8f184",
+          "size": 507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "c4eb738662ad33c4072efad9646f852ac8c5c43b",
+          "size": 2034,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MIT-LICENSE",
+          "sha": "02185ee4960b4fc7f1ac4a9bb6fc0990084f91c0",
+          "size": 1064,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "f66fadda0fcc01ed03c8153d121a50f65c0ad6f5",
+          "size": 4310,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "ordered_set",
+          "sha": "a6545785a7b0202c53fce42151ef10f36dead735",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set/__init__.py",
+          "sha": "bdd593a74edc81aa94f3685927976419198fb740",
+          "size": 17110,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a15e706691f9aeebfda773e7900bdd07188a8235",
+          "size": 1020,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pytest.ini",
+          "sha": "5b6acac3c142497e4acb35ad5a3e5f3f95fac713",
+          "size": 100,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "c38f2e9fdffbdb8743223c060b1e6acc64dc466b",
+          "size": 708,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "test",
+          "sha": "0acc99755f748b69a76234851ebb058d6dddb254",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "test/test_ordered_set.py",
+          "sha": "6efe0a94810d23631ffde24171103fcc2ea03094",
+          "size": 11114,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "ea2f87dc175ade2c7526e579a6748d51c76e5536",
+          "size": 90,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/rspeer/ordered-set/commit/b6bb881ea69c8ddde087691c1bfd5e37952ca928",
+  "head": {
+    "commit": {
+      "message": "Fix the missing parenthesis in f-string",
+      "parents": [
+        {
+          "sha": "8c837171201e3d089630e8b67645cb813b57c8dd"
+        }
+      ],
+      "sha": "b6bb881ea69c8ddde087691c1bfd5e37952ca928",
+      "tree": {
+        "sha": "8f4ad5990f3318a7c5d8a83c954af6b8598d8380"
+      }
+    },
+    "license": {
+      "path": "MIT-LICENSE",
+      "sha256": "0cf8f55f36dc1306b3fe89bf29e29a0c742f279f038d149244319e593ab16ca4",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2012-2022 Elia Robyn Lake\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "ordered_set/__init__.py": "a21e47c38a0fde4ca3c935bfe1946b8973ba94d5da3392a893b24178b7cf4e25",
+      "setup.py": "9d2e313b2c672c53673e49330f7b2a27c4f88c8071f192605bab932ee9b72047",
+      "test/test_ordered_set.py": "258ab39fd0970ccbe6c064ad1d03e0673e4e4bf9ea3f705bf874252b071fa094"
+    },
+    "tree": {
+      "sha": "8f4ad5990f3318a7c5d8a83c954af6b8598d8380",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".codecov.yml",
+          "sha": "ccdf45e4f15434c1509afba16892f9835898cc57",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "e741de34afcca31c895a5975b2bb74daf8ceadf5",
+          "size": 44,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".flake8",
+          "sha": "7da1f9608ee1595463f3aefec0e087e57ca6c49f",
+          "size": 31,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "b54cd70152c6864eec2b3bbecb59bd635a310576",
+          "size": 93,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".mailmap",
+          "sha": "7ed74a2c4bb5e99ec8f11e6c6dc1b65aa2c8f184",
+          "size": 507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "c4eb738662ad33c4072efad9646f852ac8c5c43b",
+          "size": 2034,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MIT-LICENSE",
+          "sha": "02185ee4960b4fc7f1ac4a9bb6fc0990084f91c0",
+          "size": 1064,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "f66fadda0fcc01ed03c8153d121a50f65c0ad6f5",
+          "size": 4310,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "ordered_set",
+          "sha": "f97bf2a22dd0799010510675af5c4668f635a81c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set/__init__.py",
+          "sha": "a3798ab3cd42d6b0caf2789163debedf5f03cb25",
+          "size": 17111,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a15e706691f9aeebfda773e7900bdd07188a8235",
+          "size": 1020,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pytest.ini",
+          "sha": "5b6acac3c142497e4acb35ad5a3e5f3f95fac713",
+          "size": 100,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "c38f2e9fdffbdb8743223c060b1e6acc64dc466b",
+          "size": 708,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "test",
+          "sha": "0acc99755f748b69a76234851ebb058d6dddb254",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "test/test_ordered_set.py",
+          "sha": "6efe0a94810d23631ffde24171103fcc2ea03094",
+          "size": 11114,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "ea2f87dc175ade2c7526e579a6748d51c76e5536",
+          "size": 90,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "ordered_set_syntax",
+  "label_review": {
+    "author": "Codex (agent draft, November 14, 2026)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "bfee4b6be5ef0e239fe30ac5478abd02c7e9d3dd8c9d65a057a2d1b8a1b9de39",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "rspeer/ordered-set",
+  "schema_version": "1.0",
+  "selection_reason": "Localized malformed f-string repair tests invalid-to-valid source and module import effects.",
+  "warnings": []
+}

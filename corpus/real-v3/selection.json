@@ -1,0 +1,626 @@
+{
+  "cases": [
+    {
+      "base": "21f536815328987631d374421d928aab2255e3da",
+      "head": "fde429d40d82057d2507c657b9a7bbd30e369aa8",
+      "id": "iso8601_errors",
+      "license": "MIT",
+      "reason": "Localized validator exception behavior; existing parser and timezone tests provide controls.",
+      "repository": "micktwomey/pyiso8601"
+    },
+    {
+      "base": "406db6f23ffbf6815a320c30be070b89d28e2974",
+      "head": "21f536815328987631d374421d928aab2255e3da",
+      "id": "iso8601_validator",
+      "license": "MIT",
+      "reason": "Public validator addition and changed validation tests, including package export changes.",
+      "repository": "micktwomey/pyiso8601"
+    },
+    {
+      "base": "1969b3a06a9ff06d023863e388cf8af01978d297",
+      "head": "e32443bb7dc1ba91a15336b5baab908d25f4b93a",
+      "id": "inflection_title",
+      "license": "MIT",
+      "reason": "Localized Unicode title capitalization fix with unchanged sibling string functions.",
+      "repository": "jpvanhal/inflection"
+    },
+    {
+      "base": "2d2d37951f6c8871d27a1c74a2c0c1fe6a9354fb",
+      "head": "1969b3a06a9ff06d023863e388cf8af01978d297",
+      "id": "inflection_rules",
+      "license": "MIT",
+      "reason": "Plural/singular rule-table edit exercises module data dependencies versus sibling functions.",
+      "repository": "jpvanhal/inflection"
+    },
+    {
+      "base": "8c837171201e3d089630e8b67645cb813b57c8dd",
+      "head": "b6bb881ea69c8ddde087691c1bfd5e37952ca928",
+      "id": "ordered_set_syntax",
+      "license": "MIT",
+      "reason": "Localized malformed f-string repair tests invalid-to-valid source and module import effects.",
+      "repository": "rspeer/ordered-set"
+    },
+    {
+      "base": "34f08cef01e5a555c8441ac0bfd9d950ed823164",
+      "head": "1f93c9d7376dec495e1573c9c02837bce96e1c9f",
+      "id": "ordered_set_pop",
+      "license": "MIT",
+      "reason": "Indexed pop API change with existing pop tests and unrelated collection controls.",
+      "repository": "rspeer/ordered-set"
+    }
+  ],
+  "exclusions": [
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #39 from micktwomey/update-build-env",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "00c9262b9ad141f287b3263be7f2244fa01988c2"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Update development environment",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "c9b45e09dadfd8da5098d2dbd1f4e4533d929ca9"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Release 2.1.0",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "c147acc8952bf279a38d5cab1f80be71735a10cf"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #33 from micktwomey/python-3.12",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "2a4a78d85159ab6dc38461fc8499941720b643a5"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Add readthedocs configuration",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "15104f3a5b2a4c2ac90ed1199a3a0cc38da37c44"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump dependencies and use official python 3.12 release in github actions",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "55cc57057c7ddb253f51f50fccc40ffdb6238f11"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #31 from micktwomey/bump-poetry-lock",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "c28cb09cd1291c880bd46365b4eed0cc825f77c8"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Update poetry lock",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "55e229dbdfbfcd8e35a530b7961a77faedca6a23"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Fixup CHANGELOG release links",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "2f3b230359ffe75fe8cbdba99824e8d6a8f71b8c"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Add version links to CHANGELOG.md",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "c4020e136764444ca72403ce1a3249a9f645c26a"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Switch to ruff for linting",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "dd2268b0941e2f4cd31b6ce1a3d7365731656cce"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Release 2.0.0",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "0c56e9b3122e2e86db481283d26d43b67e6db00e"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Re-lock poetry lock file",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "3ebb054ae8848fb1b4c08767292c90c783ac624a"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Switch to CHANGELOG.md for changelogs",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "7af51f6272d87b5d4efe1f5f2198a050331ef726"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Update pre-commit dependencies",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "23d7949727dc41ad55c73a2581a8c479bec51c7b"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Add devenv for development",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "4a79a97b48f56aa581742ebb007e654a12b552de"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump dependencies",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "95f06e32fc8669d8baffb97667043ed1327f1d5e"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Test Python 3.12-dev",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "96765716a4bc7762ad5433586534b834ceba886c"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Add assertion to test_fixedoffset_eq and bump test dependencies",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "9911ae2d83e5f6374697bce2d961302e4cf53483"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump certifi from 2022.9.24 to 2022.12.7",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "7b343b27611b60bd6d4d7be368bedd038e4a2aa6"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Freshen up the README and docs",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "bac0dd9363a3c95eba5b033aa93c2c274915c1a7"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Drop Python 3.6 support",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "3b883c3ec9cf7e4aeea6486cdd0012dafb2da5df"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Release 1.1.0",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "e3b4ed3deb40bdff78339281590a841d14811ee0"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: missed a comma",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "56da11c09b1026e65a248c12a53c6ada94766751"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Update license years",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "406db6f23ffbf6815a320c30be070b89d28e2974"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Add an `__all__` to `__init.py__`",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "46baabb7c6b3619d9ac8efd90aebaeb32d25b97d"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Remove branch filter from pull requests",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "4ddd936799b42548afffe62f7daefa9ee75d2c27"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Add missing py.typed file",
+      "repository": "micktwomey/pyiso8601",
+      "revision": "c8ac7857bcd2a95f09199b8fdd0834d598234ab6"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Fix version",
+      "repository": "patrys/httmock",
+      "revision": "98269075d0c36a0e87e2b6b7ad9c6a16622aba58"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Fix setup classifiers",
+      "repository": "patrys/httmock",
+      "revision": "d41ef1b134b95f6d0809771fd0ba30418d099048"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #63 from jpmelos/fix-http-version-missing",
+      "repository": "patrys/httmock",
+      "revision": "ce2aa78ad928a6c4632c7fb29b114a881acedf08"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Add tests",
+      "repository": "patrys/httmock",
+      "revision": "8d73512142db8af99b047f65ab5b4b779a23b2a2"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Add res.raw.version for responses",
+      "repository": "patrys/httmock",
+      "revision": "66e79a2ddd4371cb8fc71a1218bec96a081e7fee"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #62 from ddeka2910/master",
+      "repository": "patrys/httmock",
+      "revision": "d75f32af901ed50b9778723ec20e839ea1c01cca"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Add architecture ppc64le to travis build",
+      "repository": "patrys/httmock",
+      "revision": "bb32d35ea64eb5005bacc77579e396166c1c8e7e"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #61 from derekschrock/tests",
+      "repository": "patrys/httmock",
+      "revision": "977b87cac2ea128e33c6c113b715d19a4c5e97a1"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: tests: fix pytest DeprecationWarning messages",
+      "repository": "patrys/httmock",
+      "revision": "e09c7ec692b15e2c7f0fae0d7fbe4983f9f156f3"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #60 from koobs/patch-2",
+      "repository": "patrys/httmock",
+      "revision": "55089eef09d15315747b8ee5484588393ee119fb"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Enable (actually) Python 3.8",
+      "repository": "patrys/httmock",
+      "revision": "9effcff9772b659626c2c054560d0f9b0639acc3"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Enable testing on Python 3.7 and 3.8",
+      "repository": "patrys/httmock",
+      "revision": "03755bd562d858c8bfe4971678c79f470625d2d6"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #58 from dplyakin/persistent-cookies",
+      "repository": "patrys/httmock",
+      "revision": "a35a35d46d2c0d11b97afb74b9aa8b9eacdc8a48"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Prevent session cookies from overwriting",
+      "repository": "patrys/httmock",
+      "revision": "2f037b7d192ad213704f4f5eaca2403d258551ca"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: 1.3.0 maintenance release",
+      "repository": "patrys/httmock",
+      "revision": "4b8e0654f07e61bb44ca62e813a2ee05e7e0acae"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #54 from jsenin/master",
+      "repository": "patrys/httmock",
+      "revision": "90899beeb86253ac18de58ed05539b4e691dbbc0"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Added request history to remember_call decorator",
+      "repository": "patrys/httmock",
+      "revision": "9aa14f4ae372b09865ff8ca2d29670219114b86e"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #52 from cclauss/patch-1",
+      "repository": "patrys/httmock",
+      "revision": "b18bdce6d5d39fffcb27e678c77c49ae4774c0d9"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Make explicit support for both Python 2 and 3",
+      "repository": "patrys/httmock",
+      "revision": "de76be4bd8f449f1970dedc0b9b85ae6364e9cbe"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Update .travis.yml",
+      "repository": "patrys/httmock",
+      "revision": "7e40518f5b471f7f8df95fdafc33303bfd604441"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Update README.md",
+      "repository": "patrys/httmock",
+      "revision": "4ea9419300b1d7fddcacbd13d69757bca3b020c1"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #50 from wieslander/master",
+      "repository": "patrys/httmock",
+      "revision": "e86724582ea0c50b43af22514e754117633bfb67"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Set response.encoding to the charset from the Content-Type header.",
+      "repository": "patrys/httmock",
+      "revision": "24877bafbd2f7e146c4484c320e9393c5f86c77b"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: 1.2.6",
+      "repository": "patrys/httmock",
+      "revision": "67dffa231e0fb24a47b931f1054b8b9f39061b8d"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #44 from garetht/session-cookie-fix",
+      "repository": "patrys/httmock",
+      "revision": "d738fa5a5963d8c8c7613f7679d44a03486ca545"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Merge pull request #42 from gmmephisto/pr-master-remember-calls",
+      "repository": "patrys/httmock",
+      "revision": "99253dae95eecfadcbd3e98cd6aec0a6bde0660a"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Drop python3.2 support & enable python3.5",
+      "repository": "patrys/httmock",
+      "revision": "6a342f03e42f7e3970aae5f942353f268b6c2489"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Use IDNA-compatible hostnames in tests",
+      "repository": "patrys/httmock",
+      "revision": "d58a2e913c8eff0c694db3155dfcda943e756fd4"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Remove deprecated '--use-mirrors' option for pip",
+      "repository": "patrys/httmock",
+      "revision": "ec5b4f7510d53e30d73ebed01796029ed68d5f68"
+    },
+    {
+      "reason": "Repository excluded before capture: pinned LICENSE declares Apache-2.0, outside current MIT/BSD-3-Clause corpus scope. Tests in tests.py also fall outside current discovery naming. Title: Added decorator for remembering call count",
+      "repository": "patrys/httmock",
+      "revision": "988d4557d611a98ff4f529ffcb1c316c8e1546c4"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #93 from MarcinKonowalczyk/patch-1",
+      "repository": "rspeer/ordered-set",
+      "revision": "9dfc91c27c0c56df2536036bec4a5b3f717ef2ba"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #90 from hvox/master",
+      "repository": "rspeer/ordered-set",
+      "revision": "9669ecf8bed7c04ce0edaa91f083616eb9bf4346"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: covariant type",
+      "repository": "rspeer/ordered-set",
+      "revision": "c9a5a363cad0c6f9f365492debb5d13781638696"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #87 from kkirsche/patch-2",
+      "repository": "rspeer/ordered-set",
+      "revision": "8c837171201e3d089630e8b67645cb813b57c8dd"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #88 from kkirsche/patch-3",
+      "repository": "rspeer/ordered-set",
+      "revision": "fe878ca074eee070c8c2ab985449e0c0610074b8"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #86 from kkirsche/patch-1",
+      "repository": "rspeer/ordered-set",
+      "revision": "2250b23ba1fa5c49def0c60dc088fa060aff15b0"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Use f-strings instead of legacy formatting style",
+      "repository": "rspeer/ordered-set",
+      "revision": "614633e92732569684bbc3fafeaab7c40aa436e3"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Simplify `_is_atomic` to use single isinstance call",
+      "repository": "rspeer/ordered-set",
+      "revision": "7051265bf82e7230020328fb7e83636ee692e44a"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Fix incorrect use of `Any`",
+      "repository": "rspeer/ordered-set",
+      "revision": "88f99835fd8a74bb1ff61e6eb9bc2505ed81a644"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Added a changelog",
+      "repository": "rspeer/ordered-set",
+      "revision": "457a1ec89660f6491ea36b05b44e55dc42f6a873"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: use personal email in setup.py",
+      "repository": "rspeer/ordered-set",
+      "revision": "d921651b2737f5cfe711868fab558a8ef79e26ca"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update classifiers in pyproject.toml",
+      "repository": "rspeer/ordered-set",
+      "revision": "29e3a82e64e296ec6af0bd5b1b511a014f441867"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update authors section",
+      "repository": "rspeer/ordered-set",
+      "revision": "7822e4bbed970747bf9193749c81e4dcc05a1a05"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update the README",
+      "repository": "rspeer/ordered-set",
+      "revision": "d25e130401abdbdd0eec3e0ecbcb96db0b39750b"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update some metadata",
+      "repository": "rspeer/ordered-set",
+      "revision": "557c429e29d716fd69ff385a54d11e595264211f"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: try using Flit instead",
+      "repository": "rspeer/ordered-set",
+      "revision": "2a49243c77d526c935341749a366762edc17aecd"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: include additional files in sdist",
+      "repository": "rspeer/ordered-set",
+      "revision": "3289508e1b69f37f0edf3753fd2a4ef109cfd443"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update python versions, fix some types",
+      "repository": "rspeer/ordered-set",
+      "revision": "34f2cba9f9509909506adeff51ddebac6060bf1b"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: convert to poetry",
+      "repository": "rspeer/ordered-set",
+      "revision": "b66acd85e80e1efe0262083c36f45ce5ff344506"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #64 from kairi003/feature/pop_with_index",
+      "repository": "rspeer/ordered-set",
+      "revision": "4d74bee9bdfdc28df2564596398656f98cbe767b"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #68 from LuminosoInsight/fix-py3.5-types",
+      "repository": "rspeer/ordered-set",
+      "revision": "e68b99a21ddfdf391bb890ff46f14a65ef96fd94"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update version to 4.0.2",
+      "repository": "rspeer/ordered-set",
+      "revision": "a7908a10d95ba02b814ec698b8c15adcd0bedc4c"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: fix",
+      "repository": "rspeer/ordered-set",
+      "revision": "aab63e3313b801435986910a9656282a1a72c26b"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: restore compatibility with Python 3.5",
+      "repository": "rspeer/ordered-set",
+      "revision": "bf1a873b455908abc07083e054b83e3b86df4658"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #65 from LuminosoInsight/remove-type-stubs",
+      "repository": "rspeer/ordered-set",
+      "revision": "f46a8eea1959e8974ad78ed04985019f567286fb"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: update __version__ to 4.0.1",
+      "repository": "rspeer/ordered-set",
+      "revision": "9c2ae63129ade135ccb26bd2b2fc45e85019dae9"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: fix packaging, remove vestiges of type stubs",
+      "repository": "rspeer/ordered-set",
+      "revision": "c948b6a106eaa0e98399f9f2d926c063dffee44a"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #61 from LuminosoInsight/py3-inline-types",
+      "repository": "rspeer/ordered-set",
+      "revision": "34f08cef01e5a555c8441ac0bfd9d950ed823164"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Fix typing errors",
+      "repository": "jpvanhal/inflection",
+      "revision": "88eefaacf7d0caaa701af7c8ab2d0ab3f17086f1"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Remove universal wheel, python 2 is unsupported (#66)",
+      "repository": "jpvanhal/inflection",
+      "revision": "04e4591a891f382fdbfa0e1bee1f09289b5cbf58"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Moved the metadata into setup.cfg and started extraction of a version from git tags.",
+      "repository": "jpvanhal/inflection",
+      "revision": "80d8405cacf058eb0cb582b8b8a2236cd3043f55"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Added all required type hints for strict typing",
+      "repository": "jpvanhal/inflection",
+      "revision": "b396149e2bc59873f76d1f5fb7f512d95b9a354d"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump version to 0.5.1",
+      "repository": "jpvanhal/inflection",
+      "revision": "b00d4d348b32ef5823221b20ee4cbd1d2d924462"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Added editorconfig",
+      "repository": "jpvanhal/inflection",
+      "revision": "ae8b5da12115225521cefa7bde537cd1c937126a"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: fix: type hint config so they are available to mypy",
+      "repository": "jpvanhal/inflection",
+      "revision": "5f22a6fd3b3c65ed2e7035402fe3d7c50cfc00a2"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump version to 0.5.0",
+      "repository": "jpvanhal/inflection",
+      "revision": "66624651e4866b103bc12b9e8f4756936b11939f"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Add type hints (#45)",
+      "repository": "jpvanhal/inflection",
+      "revision": "83a5b16920ce66982c42b07379eca3948870d991"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Comment out unused html_static_path from doc",
+      "repository": "jpvanhal/inflection",
+      "revision": "c750ea0136899bd8c5af5b73989554d84749a624"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump version to 0.4.0",
+      "repository": "jpvanhal/inflection",
+      "revision": "8fb7669820caafbd4e6e31a2fa6171ed886b1506"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Bump copyright year",
+      "repository": "jpvanhal/inflection",
+      "revision": "3a049f152d0f80ad957eaec43ef076a777ede5e9"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Use HTTPS for the project url",
+      "repository": "jpvanhal/inflection",
+      "revision": "769cf7b47fde883e4b44cec3adf8944bd62f7363"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Move Changelog to GitHub releases",
+      "repository": "jpvanhal/inflection",
+      "revision": "518119231fc8beabf21f8c24c66379443b35063c"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Add PyPy 3 support",
+      "repository": "jpvanhal/inflection",
+      "revision": "2d2d37951f6c8871d27a1c74a2c0c1fe6a9354fb"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Drop PyPy support",
+      "repository": "jpvanhal/inflection",
+      "revision": "88a0a5fe0abffc37b11ee6d45eef7d8f48102250"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: Fix doctest blocks in docstrings",
+      "repository": "jpvanhal/inflection",
+      "revision": "1d6c78f96a4497252eb2e4fb794c1347317dcd62"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Allow to pass arguments to pytest command in tox",
+      "repository": "jpvanhal/inflection",
+      "revision": "e5fd209d7b08735937f64591e8cca507dd2112c8"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Drop Python 3.4 support",
+      "repository": "jpvanhal/inflection",
+      "revision": "351a0f5a8d6637f594c3b31eb7a4d104e20c0541"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Drop support for Python 2.7",
+      "repository": "jpvanhal/inflection",
+      "revision": "a826dac7a562e67881ab704adbef45440566836e"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #42 from rciorba/test_on_37_and_38",
+      "repository": "jpvanhal/inflection",
+      "revision": "f7458f0a60e9b16bfc95ba44a769101bf76177eb"
+    },
+    {
+      "reason": "Packaging, documentation, release or development-environment change outside functional source focus; commit metadata inspected. Title: add 3.7 and 3.8 as supported versions",
+      "repository": "jpvanhal/inflection",
+      "revision": "09efb13343ad07f4013d31f95b3a07da83b7ad81"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge pull request #34 from hugovk/patch-1",
+      "repository": "jpvanhal/inflection",
+      "revision": "ad195ab72b193b57bb4cf68396c4cd8a62f1fe6c"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Use SVG badge",
+      "repository": "jpvanhal/inflection",
+      "revision": "fe684577b1c393cf4d2dc5b5029fe40ecaf7f641"
+    },
+    {
+      "reason": "Merge copy or combined change; prefer bounded original first-parent changes. Commit metadata inspected. Title: Merge branch 'hugovk-update-versions'",
+      "repository": "jpvanhal/inflection",
+      "revision": "62158bb716c09474c2c0ddd0557ad2cdc3683af0"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Upgrade Python syntax with pyupgrade",
+      "repository": "jpvanhal/inflection",
+      "revision": "bc7323e51911687ef30caf67d47934b43b6f6508"
+    },
+    {
+      "reason": "Typing, compatibility, testing or representation cleanup outside the selected bounded behavior changes; commit metadata inspected. Title: Replace function call with set literal",
+      "repository": "jpvanhal/inflection",
+      "revision": "5427ff038d91827077ae0f511368de2ba682d3bf"
+    },
+    {
+      "reason": "Additional candidate outside the two-change sample; only commit metadata inspected, not rejected based on analyzer behavior. Title: Add Python 3.6, drop EOL 2.6 and 3.3",
+      "repository": "jpvanhal/inflection",
+      "revision": "2dfa5f645a8a213eb899e254185c0f0fb10f818c"
+    }
+  ],
+  "policy": "Pre-analysis purposive sample: two bounded functional changes each across three previously unused MIT repositories. Source-only selection, complete supported trees, explicit metadata exclusions and no analyzer-informed replacement. HTTMock excluded for unsupported license; historical changes and repeated test definitions are not independent or representative samples. See PROTOCOL.md.",
+  "schema_version": "1.0"
+}

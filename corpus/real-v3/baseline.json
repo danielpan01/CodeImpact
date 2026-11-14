@@ -1,0 +1,118 @@
+{
+  "annotations": {
+    "inflection_rules": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "test_inflection.py::test_camelize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls camelize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls camelize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_camelize_with_underscores": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls camelize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_dasherize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls dasherize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_humanize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls humanize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_ordinal": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls ordinal with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_ordinalize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls ordinalize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls parameterize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_and_normalize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls parameterize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_custom_separator": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls parameterize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_multi_character_separator": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls parameterize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_no_separator": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls parameterize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_pluralize_empty_string": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. The literal empty input returns before pluralize reads PLURALS; no rule-table dependency on this path.",
+          "test_inflection.py::test_titleize": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls titleize with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_uncountability": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Parameters come from unchanged UNCOUNTABLES. Both pluralize and singularize return on these entries before consulting the edited rule tables.",
+          "test_inflection.py::test_underscore": "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control. Calls underscore with unchanged test data. These paths do not depend on the edited PLURALS/SINGULARS tables or changed singular/plural parameter data; shared module import alone does not establish this dependency."
+        }
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "Aggregate fallback from changed module rule data and test parameter data selects this unrelated or early-return control."
+      ]
+    },
+    "inflection_title": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "test_inflection.py::test_camelize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls camelize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls camelize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_camelize_with_underscores": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls camelize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_dasherize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls dasherize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_humanize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls humanize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_ordinal": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls ordinal with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_ordinalize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls ordinalize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls parameterize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_and_normalize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls parameterize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_custom_separator": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls parameterize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_multi_character_separator": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls parameterize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_parameterize_with_no_separator": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls parameterize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_pluralize_empty_string": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_pluralize_plural": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_pluralize_plurals": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_pluralize_singular": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_singularize_plural": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls singularize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_tableize": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls tableize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_uncountability": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize, singularize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_uncountable_word_is_not_greedy": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls pluralize, singularize with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency.",
+          "test_inflection.py::test_underscore": "Changed module-level titleize parameter data retains conservative fallback to unrelated tests. Calls underscore with unchanged test data. These paths do not depend on titleize or its changed parameter table; shared module import alone does not establish this dependency."
+        }
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "Changed module-level titleize parameter data retains conservative fallback to unrelated tests."
+      ]
+    },
+    "iso8601_errors": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition."
+      ]
+    },
+    "iso8601_validator": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "iso8601/test_iso8601.py::test_fixedoffset_eq": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Compares unchanged FixedOffset objects; does not use the validator.",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Timezone-aware generated strings go to unchanged parse_date; no dependency on is_iso8601.",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Generated datetime strings go to unchanged parse_date; no validator call in this test or parse_date.",
+          "iso8601/test_iso8601.py::test_iso8601_regex": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Calls unchanged ISO8601_REGEX.match directly; does not call is_iso8601.",
+          "iso8601/test_iso8601.py::test_parse_no_timezone_different_default": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Calls unchanged parse_date with a FixedOffset default; parse_date does not call is_iso8601.",
+          "iso8601/test_iso8601.py::test_parse_utc_different_default": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Calls unchanged parse_date with an explicit offset; it has no dependency on is_iso8601."
+        }
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls."
+      ]
+    },
+    "ordered_set_pop": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "Thirty test-shaped definitions in test.py are outside filename discovery, including test_pop. Zero discovered tests gives no measured recall; omitted definitions are not true negatives."
+      ]
+    },
+    "ordered_set_syntax": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "The base module has a syntax error. All discovered test labels concern module loadability, not observed runtime failures or per-method reachability."
+      ]
+    }
+  },
+  "first_run_sha256": "ac103070e211c2a06de19428817b50bd28fb18cd790e53ae25f180569cf5c50e",
+  "name": "first-run",
+  "schema_version": "1.0"
+}

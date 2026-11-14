@@ -20,6 +20,7 @@ from codeimpact.github import (
     ObjectID,
     Repository,
     Tree,
+    TreeEntry,
     public_repository,
 )
 from codeimpact.models import Snapshot
@@ -41,6 +42,21 @@ def sha256(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def select_license(tree: Tree) -> TreeEntry:
+    """Require one explicit ordinary root license, including Ordered Set's filename."""
+    licenses = [
+        entry
+        for entry in tree.tree
+        if entry.path in {"LICENSE.txt", "LICENSE.rst", "LICENSE", "MIT-LICENSE"}
+    ]
+    if len(licenses) != 1:
+        raise ValueError("Capture requires one explicit root license; review this repository")
+    entry = licenses[0]
+    if entry.type != "blob" or entry.mode not in {"100644", "100755"}:
+        raise ValueError("License must be an ordinary blob")
+    return entry
+
+
 async def capture(client, selected):
     Selected.model_validate(selected)
     reader = GitHubReader(client)
@@ -60,14 +76,7 @@ async def capture(client, selected):
         tree = await reader.get(
             f"/repos/{repository}/git/trees/{commit.tree.sha}?recursive=1", Tree
         )
-        licenses = [
-            entry for entry in tree.tree if entry.path in {"LICENSE.txt", "LICENSE.rst", "LICENSE"}
-        ]
-        if len(licenses) != 1:
-            raise ValueError("Capture requires one explicit root license; review this repository")
-        license_entry = licenses[0]
-        if license_entry.type != "blob" or license_entry.mode not in {"100644", "100755"}:
-            raise ValueError("License must be an ordinary blob")
+        license_entry = select_license(tree)
         await reader.blob(repository, license_entry)
         license_raw = reader.blobs[license_entry.sha]
         request[side] = snapshot.model_dump()

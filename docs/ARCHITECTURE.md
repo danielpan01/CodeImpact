@@ -600,7 +600,7 @@ identical. Metadata retains its 4 MB per-file / 20 MB total bounds, including
 all three versioned baseline files. Writes remain atomic and cannot target the dataset. Only
 existing elapsed timing is excluded from comparisons.
 
-CI runs all three offline evaluation commands against pinned data. Historical dataset
+The workflow now runs all four offline evaluation commands against pinned data. Historical dataset
 bytes, authored/v1 stable reports and all three prior v2 measurements have preservation tests.
 Hashes establish recorded integrity, not independent review or authenticated authorship.
 V2 remains development/regression data. See [v2 results](REAL_EVALUATION_V2.md).
@@ -643,6 +643,26 @@ recommendations keep their scores, distances, reason categories and revision pre
 Twenty-two now use existing import paths after unrelated class paths are filtered;
 each path remains valid. The five other v2 analyses are identical to the argument
 baseline. See [source-only review notes](MAPPING_FALLBACK_REVIEW.md) for limits and status.
+
+## Fresh-repository evaluation v3
+
+`holdout_evaluate.py` adds a separate **1.0** wrapper around the existing real-source
+evaluator. It validates a pre-analysis freeze of 31 input files, nine engine files
+and a preservation receipt for all 72 historical corpus files. The first measurement
+retains selected IDs, classifications, counts and stable analysis hashes. A separate
+annotation overlay records the first mistakes without rewriting frozen cases or labels.
+Replay rejects drift and validates typed evidence through the existing evaluator;
+the original dataset/evaluation schemas and analyzer report 2.0 stay unchanged.
+Per-file metadata limits and a combined 20 MB budget cover the added receipts.
+
+A source-only head audit inventories test-shaped functions outside filename or
+compound-statement discovery and reports unparseable files. It is not runtime test
+collection. Outside-discovery definitions remain separate from metric denominators;
+zero discovered tests yields undefined precision/recall. The dashboard derives its
+empty-state wording from nonremoved test nodes; no report schema change is needed.
+`scripts/prepare_pilot.py` exports two validated snapshot requests as JSON data,
+refusing to replace an existing output directory. Human pilot status is deferred,
+not inferred from browser tests. See [v3 results](REAL_EVALUATION_V3.md).
 
 ## Public GitHub ingestion
 

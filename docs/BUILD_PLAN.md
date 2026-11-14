@@ -1,8 +1,9 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — November 12, 2026
+## Active roadmap — November 14, 2026
 
-**Frontend milestones 1–3 are merged; bounded mapping fallback is implemented locally.** The redesign priority
+**Frontend milestones 1–3 and bounded mapping fallback are merged. Milestone 5 is
+implemented locally; the human pilot is deferred.** The redesign priority
 comes from the owner's request after the evaluation v2 and bounded call-filtering
 work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
@@ -11,8 +12,10 @@ The visual foundation merged in [PR #7](https://github.com/danielpan01/CodeImpac
 after CI passed; interaction refinement merged in
 [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after its CI passed.
 Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9) after
-CI passed. The owner waived its separate developer walkthrough. The new analyzer
-work remains unstaged/uncommitted on `codex/mapping-fallback`. See VALIDATION.md for
+CI passed. The owner waived its separate developer walkthrough. The bounded mapping
+work merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10),
+commit `25b58040ede56918755a6a83277de98408f3dcb9`, with post-merge CI passing.
+Milestone 5 work remains unstaged/uncommitted on `codex/fresh-evaluation-pilot`. See VALIDATION.md for
 observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label review.
 
 | Order | Milestone | What the user will notice | Completion evidence |
@@ -20,15 +23,18 @@ observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label revi
 | 1 — merged | Frontend foundation and complete analysis workspace | A distinct visual identity, readable typography, compact input controls, clear navigation and coordinated Map, Tests, Changes and evidence views | Real API data; inspected desktop/tablet/phone captures; 50 browser checks and 653 Python tests pass; all three evaluations unchanged |
 | 2 — merged | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; 74 browser checks and CI passed |
 | 3 — merged | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, 134 browser checks and CI passed; unchanged evaluations; separate walkthrough waived |
-| 4 — implemented locally; human review pending | Review labels and narrow Cachetools fallback | Eleven fewer unrelated FIFO/LRU/RR recommendations in the LFU case | Source-only controls recorded; all affected/uncertain selections retained; all three prior v2 baselines preserved; new mapping baseline and required checks |
-| 5 | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Selection/labels frozen before analysis; results and usability feedback documented |
+| 4 — code merged; human review pending | Review labels and narrow Cachetools fallback | Eleven fewer unrelated FIFO/LRU/RR recommendations in the LFU case | Source-only controls recorded; all affected/uncertain selections retained; all three prior v2 baselines preserved; new mapping baseline and required checks |
+| 5 — implemented locally; human pilot deferred by owner | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Six changes frozen before analysis; 84/90 selected, 41 TP / 43 FP / 0 FN / 6 TN; 30 definitions outside discovery; walkthrough ready, no human feedback claimed |
 | 6 | Performance, isolation and hosted pilot | A dependable shareable service within explicit limits | Measured runtime/memory, bounded workers, access controls and deployment verification |
 
 Milestones 1–3 form the frontend redesign program. Milestone 1 includes light tokens,
 Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
 phone/tablet navigation. Milestone 2 adds test filtering/sorting, graph focus and
 source coloring. Milestone 3 completes themes and responsive recovery/focus polish.
-The next implementation milestone is fresh evaluation and a developer pilot.
+Milestone 5 technical work is implemented; the owner deferred human participation.
+The next implementation milestone is performance measurement and isolation, followed
+by a hosted pilot when requirements justify it. See [REAL_EVALUATION_V3.md](REAL_EVALUATION_V3.md)
+and [DEVELOPER_PILOT.md](DEVELOPER_PILOT.md).
 Independent label review remains pending; do not represent regression results as unseen accuracy.
 Preserve existing analyzer behavior, report
 contracts, corpus bytes and all baselines throughout these frontend milestones.
@@ -222,7 +228,7 @@ measurements and obtain human label review before broader accuracy claims. Slugi
 remaining 117 fallback false positives, fixture injection and runtime imports also
 remain open; the current call-path filter does not solve those mechanisms.
 
-## Bounded mapping fallback — implemented locally November 12, 2026
+## Bounded mapping fallback — merged in PR #10
 
 Body-only mapping edits can exclude known unrelated receivers from aggregate module
 fallback. Eleven FIFO/LRU/RR controls leave the LFU recommendation list; all six
@@ -234,6 +240,20 @@ reason labels are invented; retained scores are unchanged and all fallback paths
 The new `mapping-fallback-v1` receipt preserves the original, partial and argument
 baselines. Human label review is **pending**, with no reviewer or approval invented;
 see [MAPPING_FALLBACK_REVIEW.md](MAPPING_FALLBACK_REVIEW.md). Remaining LFU mistakes
-(125), descriptor fallback (31) and Slugify fallback (117) stay recorded. The next
-milestone must freeze unused changes/labels before analysis and record actual pilot
-participation; this milestone does not supply independent accuracy or usability evidence.
+(125), descriptor fallback (31) and Slugify fallback (117) stay recorded. The subsequent
+fresh evaluation freezes unused changes/labels before analysis.
+Human participation remains deferred; neither milestone supplies independent
+accuracy or human usability evidence.
+
+## Fresh evaluation and pilot preparation — November 14, 2026
+
+Six unused changes across three repositories were labeled and frozen against the
+merged PR #10 engine before measurement. Results: 41 TP, 43 FP, 0 FN, 6 TN;
+84/90 discovered definitions selected. Ordered Set also has 30 test-shaped functions
+outside discovery; that case has undefined recall, not a perfect score. All labels
+remain drafts. The first result and its mistakes are preserved in a separate v3
+gate; all 72 historical corpus files and the three previous reports are unchanged.
+The dashboard explains zero discovery and the two-case walkthrough is prepared.
+The owner deferred the human pilot; no participant feedback was collected.
+See REAL_EVALUATION_V3.md and VALIDATION.md. These changes are unstaged/uncommitted;
+PR #10 remains the latest merged milestone recorded here.

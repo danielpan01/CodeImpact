@@ -54,7 +54,7 @@ test("upload handles valid empty snapshots and invalid input", async ({
     "Empty repository",
   );
   await expect(
-    page.getByRole("heading", { name: "No tests recommended" }),
+    page.getByRole("heading", { name: "No tests discovered" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByText("No symbols match this view.")).toBeVisible();

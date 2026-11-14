@@ -149,10 +149,10 @@ test("zero recommendations explicitly lead to changed code without claiming safe
     ),
   });
   await expect(
-    page.getByRole("heading", { name: "No tests recommended" }),
+    page.getByRole("heading", { name: "No tests discovered" }),
   ).toBeVisible();
   await expect(
-    page.getByText(/No recommendation does not establish/),
+    page.getByText(/No test definitions matched discovery/),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Review changed code" })

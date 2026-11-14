@@ -451,10 +451,10 @@ test("reduced motion, empty results and map recovery remain usable", async ({
     head: { files: {} },
   });
   await expect(
-    page.getByRole("heading", { name: "No tests recommended" }),
+    page.getByRole("heading", { name: "No tests discovered" }),
   ).toBeVisible();
   await expect(
-    page.getByText(/No recommendation does not establish/),
+    page.getByText(/No test definitions matched discovery/),
   ).toBeVisible();
   await page.getByRole("button", { name: "Review changed code" }).click();
   await expect(
@@ -525,4 +525,99 @@ test("dark mixed and deleted evidence stays explicit during source review", asyn
   await expect(
     page.getByRole("region", { name: "Before source" }),
   ).toContainText("def f()");
+});
+
+test("fresh cases distinguish undiscovered tests from unselected tests", async ({
+  page,
+}, testInfo) => {
+  const fixture = JSON.parse(
+    await readFile(
+      new URL(
+        "../../corpus/real-v3/cases/ordered_set_pop.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  await dark(page);
+  const report = await upload(page, fixture.request);
+  expect(report.nodes.filter((node) => node.kind === "test")).toHaveLength(0);
+  await expect(
+    page.getByRole("heading", { name: "No tests discovered" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/test_ functions in test_\*\.py or \*_test\.py/),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/keep the full suite as your merge gate/),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("no-tests-discovered.png"),
+    fullPage: true,
+  });
+  expect(await exported(page)).toEqual(report);
+  await page.getByRole("button", { name: "Review changed code" }).click();
+  await page.getByRole("button", { name: /modified.*OrderedSet.pop/ }).click();
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("def pop(self, index=-1)");
+  await noOverflow(page);
+  await page.getByRole("button", { name: "New analysis", exact: true }).click();
+  const unchanged = {
+    files: { "test_control.py": "def test_control():\n    assert True\n" },
+  };
+  await upload(page, {
+    base: unchanged,
+    head: unchanged,
+    label: "Unchanged discovered test",
+  });
+  await expect(
+    page.getByRole("heading", { name: "No tests recommended" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/No recommendation does not establish/),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/No test definitions matched discovery/),
+  ).toHaveCount(0);
+  await noOverflow(page);
+});
+
+test("fresh titleize case supports the prepared pilot flow", async ({
+  page,
+}) => {
+  const fixture = JSON.parse(
+    await readFile(
+      new URL(
+        "../../corpus/real-v3/cases/inflection_title.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  const report = await upload(page, fixture.request);
+  await page
+    .getByRole("searchbox", { name: "Search tests" })
+    .fill("test_titleize");
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  await page.locator(".test-row").click();
+  await expect(page.locator(".detail-content")).toContainText(
+    "Resolved call path",
+  );
+  await page.getByRole("button", { name: "Focus path in Map" }).click();
+  const recommendation = report.recommendations.find((r) =>
+    r.symbol.endsWith("::test_titleize"),
+  )!;
+  await expect(page.locator(".react-flow__node")).toHaveCount(
+    recommendation.evidence_path.length,
+  );
+  await page.getByRole("button", { name: "Inspect test", exact: true }).click();
+  await openChangedCode(page);
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText(".title()");
+  expect(await exported(page)).toEqual(report);
+  await noOverflow(page);
 });

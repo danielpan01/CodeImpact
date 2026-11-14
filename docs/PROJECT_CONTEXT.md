@@ -1,6 +1,6 @@
 # CodeImpact project context
 
-## Current priority — November 12, 2026
+## Current priority — November 14, 2026
 
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
@@ -13,8 +13,8 @@ and themes/responsive recovery in [PR #9](https://github.com/danielpan01/CodeImp
 commit `1dbec1bd1051b2ced15a5bd10aa980e768f07cca`, after CI passed. The owner waived
 milestone 3's separate developer walkthrough; it was not performed.
 
-The next [build-plan](BUILD_PLAN.md) milestone is implemented locally on
-`codex/mapping-fallback`, with all new edits unstaged/uncommitted. Bounded mapping
+The bounded mapping milestone merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10),
+commit `25b58040ede56918755a6a83277de98408f3dcb9`, with post-merge CI passing. Bounded mapping
 fallback removes 11 unrelated FIFO/LRU/RR recommendations from the LFU case while
 retaining every affected and uncertain selection. V2 is 109 TP / 273 FP / 0 FN / 177 TN,
 395/581 selected, including 13/22 uncertain definitions. Authored/v1 reports and
@@ -24,8 +24,16 @@ intact. Analysis report 2.0 and dashboard contracts are unchanged; only the sepa
 fresh evaluation wrapper advances to 4.0.
 
 Human source-label review remains pending; [review notes](MAPPING_FALLBACK_REVIEW.md)
-record the source-only controls without claiming approval. Fresh evaluation and a
-developer pilot are next, with unused selections/labels frozen before measurement.
+record the source-only controls without claiming approval. Milestone 5 is implemented locally on `codex/fresh-evaluation-pilot`:
+six unused changes, frozen draft labels and first measurements, an offline v3
+replay gate and reproducible walkthrough inputs. V3 selects 84/90 discovered tests:
+41 TP / 43 FP / 0 FN / 6 TN; 30 more test-shaped functions are outside discovery.
+The analyzer and all 72 historical corpus files/three report outputs are unchanged.
+The dashboard distinguishes no discovered tests from no recommendations.
+The owner deferred the human developer pilot on November 14; materials are prepared,
+with no participant feedback claimed. All new changes stay unstaged and uncommitted.
+See REAL_EVALUATION_V3.md and DEVELOPER_PILOT.md. Performance/isolation is next;
+hosting remains conditional on demonstrated requirements.
 Remaining LFU, descriptor, Slugify, fixture and runtime-import limitations stay open.
 See VALIDATION.md for observed checks. Hosting and infrastructure follow a demonstrated
 pilot need.
