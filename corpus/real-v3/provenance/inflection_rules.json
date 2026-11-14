@@ -1,0 +1,304 @@
+{
+  "base": {
+    "commit": {
+      "message": "Add PyPy 3 support",
+      "parents": [
+        {
+          "sha": "88a0a5fe0abffc37b11ee6d45eef7d8f48102250"
+        }
+      ],
+      "sha": "2d2d37951f6c8871d27a1c74a2c0c1fe6a9354fb",
+      "tree": {
+        "sha": "d4f8bcf400b80b1d664deab4298f36624a003b6b"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+      "spdx": "MIT",
+      "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "da6b382a0a45b77ef5f283dfa12930ddbc94103255b30756d044d4eb74febbac",
+      "inflection.py": "3eeadd908156ae9ef339e936174b9188ec5a4e4f5316796d1dc47ef256d7f034",
+      "setup.py": "06d79ea24231b7704b43e2818965655f4db62f76878b835956276f640c2e1ef8",
+      "test_inflection.py": "e51684829e647084e9a79dbbd7c745df31c951547a4afc4335ceca56459a5814"
+    },
+    "tree": {
+      "sha": "d4f8bcf400b80b1d664deab4298f36624a003b6b",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "70a2f245644c5c6d3caa1206e3b7f2efa6cb2c49",
+          "size": 64,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "eb7c289273aff46aca88db7c3e38873590284e48",
+          "size": 166,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "e57c310bff1a74a6a1ec2c351906bb211f7f9766",
+          "size": 881,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "f4dd54947f8d2afbc29065c722ee51b4f576807e",
+          "size": 1062,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "7e094fe79853a45f5f124f1072b90ffffdc5a7bf",
+          "size": 87,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "c85001d31d2635defe693bd06d8b23b9c8dad844",
+          "size": 846,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "2ef88784623aee31861b5c95938944742b91a47c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "09a346ca5bbe97b6e57c53ee19957d254337aea1",
+          "size": 5580,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "70dfd58909fba930d9aaeb4f0caee62d118eb782",
+          "size": 7973,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "69ea2bb91194b001be7c653b4cbb866c5dc9bde1",
+          "size": 1149,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "inflection.py",
+          "sha": "0d67de4ef22f4873264c1cb88b6633db9e98c8e5",
+          "size": 11169,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "7424ff6b2b8a24650c0eabc799c2cf85255cf975",
+          "size": 20,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "5fa502ff35520b6a80ee6c2d53c2088e3fd70651",
+          "size": 112,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "70349bf4c4a15f5933299128908a430f0ab4f0fc",
+          "size": 1180,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_inflection.py",
+          "sha": "0865def310ae35a3b4de2c649b2f1f6af9964302",
+          "size": 11921,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "0e64736a79cf4d4331ed96ed755c32408d123b36",
+          "size": 167,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/jpvanhal/inflection/commit/1969b3a06a9ff06d023863e388cf8af01978d297",
+  "head": {
+    "commit": {
+      "message": "Fixed \"passerby\" pluralized as \"passerbys\" and not \"passersby\"",
+      "parents": [
+        {
+          "sha": "2d2d37951f6c8871d27a1c74a2c0c1fe6a9354fb"
+        }
+      ],
+      "sha": "1969b3a06a9ff06d023863e388cf8af01978d297",
+      "tree": {
+        "sha": "a01f38e75eb5bbd59839aa3186c455c0bbc48d00"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+      "spdx": "MIT",
+      "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "da6b382a0a45b77ef5f283dfa12930ddbc94103255b30756d044d4eb74febbac",
+      "inflection.py": "827baa36dbe8a542d56318d6ea6308c8f02d4e0bff1e647c899fbd1100a6682d",
+      "setup.py": "06d79ea24231b7704b43e2818965655f4db62f76878b835956276f640c2e1ef8",
+      "test_inflection.py": "0ab1d5503a9ff28235fabbb2e6523a99f3a883527dfcaa6b0872879d462c74b5"
+    },
+    "tree": {
+      "sha": "a01f38e75eb5bbd59839aa3186c455c0bbc48d00",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "70a2f245644c5c6d3caa1206e3b7f2efa6cb2c49",
+          "size": 64,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "eb7c289273aff46aca88db7c3e38873590284e48",
+          "size": 166,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGES.rst",
+          "sha": "e57c310bff1a74a6a1ec2c351906bb211f7f9766",
+          "size": 881,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "f4dd54947f8d2afbc29065c722ee51b4f576807e",
+          "size": 1062,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "7e094fe79853a45f5f124f1072b90ffffdc5a7bf",
+          "size": 87,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "c85001d31d2635defe693bd06d8b23b9c8dad844",
+          "size": 846,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "2ef88784623aee31861b5c95938944742b91a47c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "09a346ca5bbe97b6e57c53ee19957d254337aea1",
+          "size": 5580,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "70dfd58909fba930d9aaeb4f0caee62d118eb782",
+          "size": 7973,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "69ea2bb91194b001be7c653b4cbb866c5dc9bde1",
+          "size": 1149,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "inflection.py",
+          "sha": "35ae77939202b948b20f877fdeacf118e5c18cb4",
+          "size": 11243,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "7424ff6b2b8a24650c0eabc799c2cf85255cf975",
+          "size": 20,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "5fa502ff35520b6a80ee6c2d53c2088e3fd70651",
+          "size": 112,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "70349bf4c4a15f5933299128908a430f0ab4f0fc",
+          "size": 1180,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_inflection.py",
+          "sha": "2834747a11719e47cfc93b2d8872f42894afff91",
+          "size": 11952,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "0e64736a79cf4d4331ed96ed755c32408d123b36",
+          "size": 167,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "inflection_rules",
+  "label_review": {
+    "author": "Codex (agent draft, November 14, 2026)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "06a2d53a2397dc754219ac7538efdec41fdb5ebc1c264b835c1e9062a8d4f0e1",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "jpvanhal/inflection",
+  "schema_version": "1.0",
+  "selection_reason": "Plural/singular rule-table edit exercises module data dependencies versus sibling functions.",
+  "warnings": []
+}

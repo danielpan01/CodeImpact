@@ -2230,3 +2230,97 @@ Ignored local evidence: `reports/mapping-before/`, `mapping-red.log`,
 `mapping-browser.log`, `mapping-baseline.log` and `mapping-preservation.json`.
 The next build-plan milestone is fresh evaluation and a developer pilot; pending
 source-label review and the remaining known mistakes carry forward explicitly.
+
+## Milestone 5: fresh evaluation and pilot preparation — November 14, 2026
+
+Implemented locally on `codex/fresh-evaluation-pilot`, based on
+`25b58040ede56918755a6a83277de98408f3dcb9`. The roadmap now records bounded mapping
+fallback as merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10).
+Its [post-merge CI run](https://github.com/danielpan01/CodeImpact/actions/runs/43376818685)
+passed. The new milestone 5 work is unstaged/uncommitted; its CI configuration has
+been exercised locally, not claimed as a new remote CI run.
+
+### Fresh selection, measurement and limits
+
+Before analysis, a protocol and six previously unused changes across PyISO8601,
+Inflection and Ordered Set were selected by source/commit inspection. HTTMock was
+excluded before capture for its Apache license, outside the existing corpus license
+scope. Complete supported Python trees were captured as JSON strings with Git
+object receipts and original MIT notices. Ordered Set's `MIT-LICENSE` required a
+bounded capture-helper extension; no engine changes were made. No upstream source,
+installation script, tests or pickle payload was imported or executed.
+
+All 90 discovered head definitions were labeled from source before the first run:
+41 affected, 49 unaffected, zero uncertain. The 31-file freeze includes the review
+pack, selection, protocol, provenance, discovery inventory and preservation receipt,
+plus hashes of the nine unchanged engine files. All labels remain **agent drafts**;
+independent source-label review is pending. Hashes attest to recorded integrity,
+not independent authorship, timing or accuracy.
+
+First measurement: **84/90 discovered definitions selected; 41 TP / 43 FP / 0 FN /
+6 TN**. Draft-label precision is 41/84 (48.81%); recall is 41/41 (100%) only within
+that discovery inventory. Inflection contributes 37 false positives; ISO validator
+addition contributes six. The Ordered Set syntax repair contributes 30 positives
+through module loadability, not 30 observed failing executions.
+
+The older Ordered Set pop case retains **30 test-shaped functions outside discovery**
+in `test.py`, including the direct pop test. It has zero discovered definitions;
+precision/recall are undefined, and those functions are not counted as true negatives
+or uncertain labels. This finding motivated the dashboard's **No tests discovered**
+state, distinct from **No tests recommended**, with naming guidance and changed-code
+navigation. Selection, evidence and analyzer schemas/behavior are unchanged.
+
+The original first report hash, complete stable measurement and three initial
+false-positive discrepancy failures are preserved. A separate `baseline.json`
+records the mistakes without changing the frozen cases. V3 adds its own wrapper
+schema **1.0**, retaining dataset/evaluation 1.0, analysis 2.0 and v2 wrapper 4.0.
+See [REAL_EVALUATION_V3.md](REAL_EVALUATION_V3.md) for per-case/repository counts.
+
+### Checks and observed recovery
+
+Environment: macOS arm64, Python 3.12.0, Node 24.2.0, existing pinned dependencies.
+
+| Check | Observed result |
+| --- | --- |
+| V3 integrity/failure tests | **40 passed**, including exact first-report reproduction, source-only discovery, receipt/label/engine drift, symlink/traversal rejection, metadata budget, invalid evidence, offline execution and safe pilot exports |
+| `make check` | Passed: Ruff lint/format, strict mypy, **765 Python tests**, TypeScript and Vite production build |
+| `make evaluate` | Passed; 23 TP / 0 FP / 2 FN / 32 TN, plus 2 uncertain selections; stable report unchanged |
+| `make evaluate-real` | Passed; 45 TP / 0 FP / 0 FN / 123 TN, plus 11/33 uncertain selections; stable report unchanged |
+| `make evaluate-real-v2` | Passed; 109 TP / 273 FP / 0 FN / 177 TN, plus 13/22 uncertain selections; stable report and all prior baselines unchanged |
+| `make evaluate-real-v3` | Passed; exact first measurement, recorded mistakes and typed evidence reproduced |
+| `cd web && npm run test:e2e` | **144 passed**, Chromium desktop/phone and Firefox/WebKit desktop/phone release checks |
+| `make pilot` | Prepared the two validated JSON snapshot uploads in ignored `reports/developer-pilot/`; no analysis or upstream execution during export |
+| Visual review | Inspected desktop and WebKit phone captures of the discovery-limit state; readable text, intact navigation and no clipping |
+| Preservation | All 72 pre-existing corpus files and three stable report files byte-identical; all original engine files unchanged |
+| Documentation and Git | Relative links checked, `git diff --check` passed, index empty and HEAD unchanged |
+
+Overall statement coverage was 94%; this is not analyzer accuracy. The first
+sandboxed browser attempt aborted every browser before tests started. The approved
+macOS sandbox exception allowed the required suite to run with isolated test
+servers. A targeted run then exposed an incorrect test assumption about a whole-file
+preview: previews stop at 120 lines. The walkthrough and test now select
+`OrderedSet.pop` explicitly. The final full browser suite passed with that correction.
+Non-failing Starlette/httpx deprecation and Node color-environment warnings remain.
+
+Stable report SHA-256 values:
+
+- Authored: `4b877c9b23cc8b44bf9a679ba799b2fdb63e702b4b5d3466800e06ea0547d77b`.
+- V1: `258ab743f6af677e714d238e9e1f3fd099f090a7e65ec3bd0c61b1e144992cae`.
+- V2: `e4cd3fe60b1728dccfb5abc6326b998815f7f3d477314638a1fbcf520397b254`.
+- Original v3 first report: `82ff0de3eeadad1bd0a8725ca00b3800f06a9f3e868934e8a0e59b3289d1f2a8`.
+- V3 replay wrapper: `fc831956188fd545315aa3f9a7c981b562b555b256563bf1b38ebb809f52c6a4`.
+
+### Human pilot status
+
+**Deferred by the owner on November 14, 2026.** The reproducible
+[walkthrough and blank feedback record](DEVELOPER_PILOT.md) are ready, with normal
+evidence navigation and the discovery-limit task covered by automated browsers.
+No participant, feedback, completion time or independent usability finding is
+invented. Source-label review remains pending separately. Performance measurement,
+worker isolation and any hosted pilot remain milestone 6 work.
+
+Ignored local evidence includes `reports/milestone5-before/`, `milestone5-capture/`,
+`milestone5-tests-final.log`, `milestone5-check.log`, `milestone5-evaluations.log`,
+`milestone5-browser.log`, `milestone5-pilot.log`, `real-v3-first-run.json`,
+`real-v3-evaluation.json`, `developer-pilot/` and the browser captures under
+`web/test-results/`. These are local observations, not a new remote CI result.

@@ -1,0 +1,291 @@
+{
+  "base": {
+    "commit": {
+      "message": "Merge pull request #61 from LuminosoInsight/py3-inline-types\n\nMove type annotations inline, dropping support for python < 3.5",
+      "parents": [
+        {
+          "sha": "10e7efd6e4ccf9401a4b53e8f8426bc28cdee71f"
+        },
+        {
+          "sha": "e7ed41087b3e46fcd5849ca693272374f16b8128"
+        }
+      ],
+      "sha": "34f08cef01e5a555c8441ac0bfd9d950ed823164",
+      "tree": {
+        "sha": "f4deaa8434a14fa5eb4fe44d15f7b84c2c6949d2"
+      }
+    },
+    "license": {
+      "path": "MIT-LICENSE",
+      "sha256": "4ef444eea51250171dd2896cef080d7f7cc31042565bb92fed60d1c92acc0411",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2018 Luminoso Technologies, Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "ordered_set.py": "078b31f5cfc54ecfb0fb4d5089906623708818f9574999db4b7563a0c4b570ab",
+      "setup.py": "68858d3f714eb3a2df0be62d1f44e2bc7d3b22f1516a63f11ebbc3a43c27ce74",
+      "test.py": "121ad5a2a9c00cb814f961036e5e2df564359054bf2ce1910e8629b5fb160932"
+    },
+    "tree": {
+      "sha": "f4deaa8434a14fa5eb4fe44d15f7b84c2c6949d2",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".codecov.yml",
+          "sha": "ccdf45e4f15434c1509afba16892f9835898cc57",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "e741de34afcca31c895a5975b2bb74daf8ceadf5",
+          "size": 44,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "46ee454a62245e232726415c10ad1e1b721688f8",
+          "size": 87,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".mailmap",
+          "sha": "c0a858044604c4aad5a7b2f3faa65db6f0ad28ab",
+          "size": 344,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Jenkinsfile",
+          "sha": "bfc1b03cf47a2fb2e741979e104dc98b899d3e84",
+          "size": 86,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "6e8545bfe14603ea94b3f7c239675f421f591144",
+          "size": 55,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MIT-LICENSE",
+          "sha": "25117ef4f1e01063bc0794e7d68e7e9b2decb73e",
+          "size": 1071,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "8494bba8272b3dc860bc9b934cc2f67395c892df",
+          "size": 4256,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set.py",
+          "sha": "27d8954a0931faee8ca9e69896b686894c5b065c",
+          "size": 16200,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "py.typed",
+          "sha": "1242d43277017748bbbf3d0a104ec4cf78245822",
+          "size": 27,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pytest.ini",
+          "sha": "2771e8085249c7d1542f833374936902d59ca123",
+          "size": 160,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "52e79821f4b2fd25cb571110f0b47b57ac594f28",
+          "size": 67,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "bed4af3bc095707b0982f386c8bee2874bffa01b",
+          "size": 1215,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test.py",
+          "sha": "d0f9b80dd7258ba21df87d67e0379447bf3d7a4f",
+          "size": 11116,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "187a47338fce66a2630982e50da82d939d29d639",
+          "size": 101,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/rspeer/ordered-set/commit/1f93c9d7376dec495e1573c9c02837bce96e1c9f",
+  "head": {
+    "commit": {
+      "message": "add \"index\" argument to pop method\n\nAdded \"index\" argument to pop method to select items to pop.\nMaintained KeyError if set is empty for compatibility.",
+      "parents": [
+        {
+          "sha": "34f08cef01e5a555c8441ac0bfd9d950ed823164"
+        }
+      ],
+      "sha": "1f93c9d7376dec495e1573c9c02837bce96e1c9f",
+      "tree": {
+        "sha": "f251492ae7629c6d4aae3345663b39d61b04feea"
+      }
+    },
+    "license": {
+      "path": "MIT-LICENSE",
+      "sha256": "4ef444eea51250171dd2896cef080d7f7cc31042565bb92fed60d1c92acc0411",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2018 Luminoso Technologies, Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "ordered_set.py": "53848672c58ea410b79bf760c4b21bd1bf1881632ceec8fbb64f2b00cbe53dfc",
+      "setup.py": "68858d3f714eb3a2df0be62d1f44e2bc7d3b22f1516a63f11ebbc3a43c27ce74",
+      "test.py": "121ad5a2a9c00cb814f961036e5e2df564359054bf2ce1910e8629b5fb160932"
+    },
+    "tree": {
+      "sha": "f251492ae7629c6d4aae3345663b39d61b04feea",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".codecov.yml",
+          "sha": "ccdf45e4f15434c1509afba16892f9835898cc57",
+          "size": 54,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "e741de34afcca31c895a5975b2bb74daf8ceadf5",
+          "size": 44,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "46ee454a62245e232726415c10ad1e1b721688f8",
+          "size": 87,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".mailmap",
+          "sha": "c0a858044604c4aad5a7b2f3faa65db6f0ad28ab",
+          "size": 344,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Jenkinsfile",
+          "sha": "bfc1b03cf47a2fb2e741979e104dc98b899d3e84",
+          "size": 86,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "6e8545bfe14603ea94b3f7c239675f421f591144",
+          "size": 55,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MIT-LICENSE",
+          "sha": "25117ef4f1e01063bc0794e7d68e7e9b2decb73e",
+          "size": 1071,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "8494bba8272b3dc860bc9b934cc2f67395c892df",
+          "size": 4256,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "ordered_set.py",
+          "sha": "ce0f851d349c0389b3d556b953a9fd63438b0672",
+          "size": 16267,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "py.typed",
+          "sha": "1242d43277017748bbbf3d0a104ec4cf78245822",
+          "size": 27,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pytest.ini",
+          "sha": "2771e8085249c7d1542f833374936902d59ca123",
+          "size": 160,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "52e79821f4b2fd25cb571110f0b47b57ac594f28",
+          "size": 67,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "bed4af3bc095707b0982f386c8bee2874bffa01b",
+          "size": 1215,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test.py",
+          "sha": "d0f9b80dd7258ba21df87d67e0379447bf3d7a4f",
+          "size": 11116,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "187a47338fce66a2630982e50da82d939d29d639",
+          "size": 101,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "ordered_set_pop",
+  "label_review": {
+    "author": "Codex (agent draft, November 14, 2026)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "c1b7b469b5b27e9284c6f6b8acdf2caffa968023960f8ccc27d284499df1d972",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "rspeer/ordered-set",
+  "schema_version": "1.0",
+  "selection_reason": "Indexed pop API change with existing pop tests and unrelated collection controls.",
+  "warnings": []
+}

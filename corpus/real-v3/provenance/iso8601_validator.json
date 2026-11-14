@@ -1,0 +1,462 @@
+{
+  "base": {
+    "commit": {
+      "message": "Update license years",
+      "parents": [
+        {
+          "sha": "46baabb7c6b3619d9ac8efd90aebaeb32d25b97d"
+        }
+      ],
+      "sha": "406db6f23ffbf6815a320c30be070b89d28e2974",
+      "tree": {
+        "sha": "89acfd46be3516fff7bdd7eb4c410c6e232c9ba4"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "709621812ed29c7dc2195ec751a67b1a6e7e0a0ce619c8d31335f84d86d6647c",
+      "docs/example.py": "cf0e0911ef5b791edb86e5e3dc91a1223fa625c6f9c87f8e4ed5ca5f77b8b0c4",
+      "iso8601/__init__.py": "9c40506dda6c1e9960d464aabd871343e9fd5bba6ca10b659348702599bce60f",
+      "iso8601/iso8601.py": "73498c4960cb451025ccdb08a581e2deb2dfed7e812d72e6ee913cd5d129e432",
+      "iso8601/test_iso8601.py": "99755964bf3de4e1ebb8fc07baebc833fe43993c05e7b2cb168b6b75ed913bd1",
+      "noxfile.py": "8523c96701d0adcebf0a73452aeb5dc8e36f6b296552122fb36c1a5635a9ec39"
+    },
+    "tree": {
+      "sha": "89acfd46be3516fff7bdd7eb4c410c6e232c9ba4",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "d5364c95bf6af5bcc7ff7216c0f9c208381213b4",
+          "size": 181,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".envrc",
+          "sha": "00b9718909b5f063afe1f2054c895fc3a53bb150",
+          "size": 428,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "1d223175f9aec71e6f5676d17fc9df15f53aabaf",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "1a8198c7ff5d9fbbcec8aac2b4e8df3c666a5920",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-app.yml",
+          "sha": "d1ff15661f6106840468720ac5b864676d44b300",
+          "size": 1222,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "87f6e0a140431da8ab8f0bf3e36e9d37dde42e03",
+          "size": 77,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "7fadc8585d974c328f10949a37e43df6b190a773",
+          "size": 641,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".tool-versions",
+          "sha": "4b0f9845f9c500023906b612b91ef7c55d485816",
+          "size": 53,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "1137166fa3841c0a88a2dc6882be47d55eadc15e",
+          "size": 1065,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "2f05190b397fa116e9837489fc653fe671214913",
+          "size": 281,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "e9506310f30932a0ad1a2fd47ff206f519886a30",
+          "size": 8830,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "1e5d13a8d173a859df06e56df7d00687c7a188be",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/.gitignore",
+          "sha": "e35d8850c9688b1ce82711694692cc574a799396",
+          "size": 7,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "2d8a955a09728d4d2564eb8cf42411384641a438",
+          "size": 6774,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "2aa97b7dbbbf22fbd8a410181ce7348086a363b8",
+          "size": 8500,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/example.py",
+          "sha": "41364961e2a1cd7d52517ff808576c819d436a5f",
+          "size": 159,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "81a02bafcb3848442ed0a055d1315a68dd716831",
+          "size": 2015,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "ff40e3b652d781da732374029ed6b806ae148016",
+          "size": 6707,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "8bf99eea17b90fed0e74497351a2aa58d22fa957",
+          "size": 16,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "iso8601",
+          "sha": "05168e293bb653fc7027f2ecddb9034eb46a0e99",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/__init__.py",
+          "sha": "e403a3dfd27bfd65d490a06a6015f838f2af73de",
+          "size": 124,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/iso8601.py",
+          "sha": "2e05f0fd79fa4d15b023a8a87464f1c849c7bf3d",
+          "size": 4623,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/test_iso8601.py",
+          "sha": "586e7a9a286fb23943acf1f629d7489b0a3ca64d",
+          "size": 10420,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "noxfile.py",
+          "sha": "3a20f1734e092a17f04ba9778bee741f34d6d574",
+          "size": 936,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "poetry.lock",
+          "sha": "98e05623c78b6fa401e9f2ff9f5bbb4195260be6",
+          "size": 81430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a2ee47679bf3447f31df57cafaa653e280788396",
+          "size": 758,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/micktwomey/pyiso8601/commit/21f536815328987631d374421d928aab2255e3da",
+  "head": {
+    "commit": {
+      "message": "Add is_iso8601() function",
+      "parents": [
+        {
+          "sha": "406db6f23ffbf6815a320c30be070b89d28e2974"
+        }
+      ],
+      "sha": "21f536815328987631d374421d928aab2255e3da",
+      "tree": {
+        "sha": "dcedc4a04cb8284dee591c3a7069e414599a65d9"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "docs/conf.py": "709621812ed29c7dc2195ec751a67b1a6e7e0a0ce619c8d31335f84d86d6647c",
+      "docs/example.py": "cf0e0911ef5b791edb86e5e3dc91a1223fa625c6f9c87f8e4ed5ca5f77b8b0c4",
+      "iso8601/__init__.py": "1f66004ea3fb5d85c236aadfb16e93f7a79677e196c69eca694f890c28f4c7e3",
+      "iso8601/iso8601.py": "e1cd09662637f975dd56a3b5e3ecd955011988f9bd795ce262f7f83eb75fb49c",
+      "iso8601/test_iso8601.py": "bf0627f703febe21f1b45faf9da2c955a886bf74a9541d937babaf4367d4764e",
+      "noxfile.py": "8523c96701d0adcebf0a73452aeb5dc8e36f6b296552122fb36c1a5635a9ec39"
+    },
+    "tree": {
+      "sha": "dcedc4a04cb8284dee591c3a7069e414599a65d9",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "d5364c95bf6af5bcc7ff7216c0f9c208381213b4",
+          "size": 181,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".envrc",
+          "sha": "00b9718909b5f063afe1f2054c895fc3a53bb150",
+          "size": 428,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "1d223175f9aec71e6f5676d17fc9df15f53aabaf",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "1a8198c7ff5d9fbbcec8aac2b4e8df3c666a5920",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-app.yml",
+          "sha": "d1ff15661f6106840468720ac5b864676d44b300",
+          "size": 1222,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "87f6e0a140431da8ab8f0bf3e36e9d37dde42e03",
+          "size": 77,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "7fadc8585d974c328f10949a37e43df6b190a773",
+          "size": 641,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".tool-versions",
+          "sha": "4b0f9845f9c500023906b612b91ef7c55d485816",
+          "size": 53,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "1137166fa3841c0a88a2dc6882be47d55eadc15e",
+          "size": 1065,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "2f05190b397fa116e9837489fc653fe671214913",
+          "size": 281,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "d457de73acff43c96710e7f9140d20d6be9f231f",
+          "size": 8937,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "686f3ae74fd56039abee6256efa0717b2999a403",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/.gitignore",
+          "sha": "e35d8850c9688b1ce82711694692cc574a799396",
+          "size": 7,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "2d8a955a09728d4d2564eb8cf42411384641a438",
+          "size": 6774,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "2aa97b7dbbbf22fbd8a410181ce7348086a363b8",
+          "size": 8500,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/example.py",
+          "sha": "41364961e2a1cd7d52517ff808576c819d436a5f",
+          "size": 159,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "ac1cfb718a14b5299ff84220448eb1e603d9933c",
+          "size": 2053,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "ff40e3b652d781da732374029ed6b806ae148016",
+          "size": 6707,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "8bf99eea17b90fed0e74497351a2aa58d22fa957",
+          "size": 16,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "iso8601",
+          "sha": "ecfc13939d01bea06f185bb8a8a0a812e2ad6dc8",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/__init__.py",
+          "sha": "2fbf96088a6c003f6312d59e6cfb484c4bba7449",
+          "size": 149,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/iso8601.py",
+          "sha": "d822f10662b50049184e93e255463462f7dca4e4",
+          "size": 4980,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "iso8601/test_iso8601.py",
+          "sha": "7e33df650f317901ac7d9b5c119e7c4661afcef7",
+          "size": 10523,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "noxfile.py",
+          "sha": "3a20f1734e092a17f04ba9778bee741f34d6d574",
+          "size": 936,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "poetry.lock",
+          "sha": "98e05623c78b6fa401e9f2ff9f5bbb4195260be6",
+          "size": 81430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a2ee47679bf3447f31df57cafaa653e280788396",
+          "size": 758,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "iso8601_validator",
+  "label_review": {
+    "author": "Codex (agent draft, November 14, 2026)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "1a8505dca9133aeb4312f6133ebc9942e65a62f3ea8fb92267bbadc5f5381604",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "micktwomey/pyiso8601",
+  "schema_version": "1.0",
+  "selection_reason": "Public validator addition and changed validation tests, including package export changes.",
+  "warnings": []
+}

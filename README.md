@@ -37,7 +37,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Inspectable reports** | Exportable JSON, source-export disclosure, exact analyzed GitHub revisions, and expandable before/after/mixed evidence. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
-| **Fresh-source regression gates** | Replays six additional changes from three previously unused repositories with a preserved first measurement and explicitly versioned regression baselines, checking source, label, evidence and result drift in CI. |
+| **Fresh-source regression gates** | Replays v2 and v3 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
 
@@ -178,6 +178,21 @@ remain agent drafted, with no upstream tests executed. See
 [source-only review pack](corpus/real-v2/REVIEW.md). Keep the full test suite as the
 merge gate; these measurements do not establish that omitted tests are safe.
 
+### Fresh-repository evaluation v3
+
+`make evaluate-real-v3` replays six unused changes from PyISO8601, Inflection and
+Ordered Set, frozen before analysis against merged PR #10. First results:
+**84/90 discovered definitions selected; 41 TP, 43 FP, 0 FN, 6 TN**. Draft-label
+precision is 48.81%; recall is 100% only within that discovered inventory.
+Thirty more test functions in `test.py` fall outside discovery and the metrics.
+The dashboard now explains that zero-discovery state explicitly. The analyzer and
+all historical baselines remain unchanged; all labels still await independent review.
+See [results and limitations](docs/REAL_EVALUATION_V3.md).
+
+The owner deferred the human developer pilot. `make pilot` prepares two snapshot
+uploads for the [walkthrough](docs/DEVELOPER_PILOT.md); no participant feedback is
+claimed. This milestone's changes remain local and uncommitted.
+
 ## Quality checks
 
 ```sh
@@ -185,12 +200,13 @@ make check
 make evaluate
 make evaluate-real
 make evaluate-real-v2
+make evaluate-real-v3
 cd web
 npm run install:browsers
 npm run test:e2e
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all three offline evaluations, and desktop/mobile browser tests. The merged milestone 3 configuration includes Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all four offline evaluations, and desktop/mobile browser tests. The local milestone 5 configuration adds the v3 replay gate. The merged milestone 3 configuration includes Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs.
 
 ## Scope & next steps
 
@@ -207,12 +223,13 @@ only the display; exports retain the complete report.
 The owner waived the separate developer walkthrough; no independent usability study
 or accessibility certification is claimed.
 
-The next build-plan milestone is implemented locally on `codex/mapping-fallback`,
-with new changes unstaged/uncommitted. Independent review of both real-source
-datasets remains pending. Fresh evaluation and a developer pilot follow in the
-[build plan](docs/BUILD_PLAN.md). General
-dynamic dispatch and further fallback precision remain separate work. Worker isolation and hosted deployment remain later milestones. GitHub App authorization for
-private repositories, persisted jobs, and cross-request caching are not implemented.
+Bounded mapping fallback merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10)
+with post-merge CI passing. Fresh evaluation v3 and pilot preparation are implemented
+locally on `codex/fresh-evaluation-pilot`, with changes unstaged/uncommitted. Human
+source-label review remains pending and the developer pilot is deferred by the owner.
+Performance measurement, worker isolation and a hosted pilot form milestone 6;
+GitHub App authorization, persisted jobs and cross-request caching are not implemented.
+General dynamic dispatch and further fallback precision remain separate work.
 See the [build plan](docs/BUILD_PLAN.md).
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

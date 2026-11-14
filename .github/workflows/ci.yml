@@ -23,6 +23,8 @@ jobs:
         run: make evaluate-real
       - name: Offline fresh-source v2 evaluation
         run: make evaluate-real-v2
+      - name: Offline fresh-source v3 evaluation
+        run: make evaluate-real-v3
       - run: npx playwright install --with-deps chromium firefox webkit
         working-directory: web
         env:
