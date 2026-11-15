@@ -2432,3 +2432,17 @@ The preceding section preserves the November 14 local validation record. The
 publication gate, including the address-space integration test skipped on macOS,
 all four evaluation replays, local-server verification and the 154 browser checks.
 No live host or human pilot is part of this publication.
+
+The first PR CI run passed all 811 Python tests (including the Linux-only limit)
+and 154 browser checks. Its duplicate push run caught a WebKit phone theme race:
+another tab could change the saved theme between the initial read and listener
+registration. A deterministic regression reproduced the missed update locally.
+Theme synchronization now subscribes and re-reads the preference during layout;
+an in-memory explicit choice still works when storage is unavailable. The ordinary
+cross-tab test also waits for the second tab's controls before exercising updates.
+The focused startup, cross-tab and unavailable-storage checks passed across all
+five browser projects (15 checks). The new regression expands the full browser
+suite to 159 checks. The final local rerun passed all 159 browser checks,
+`make check` (810 Python tests, one Linux-only skip, lint/types/build), frontend
+formatting and `make verify-pilot`. All preservation hashes still match. The linked
+PR checks track the final publication result.

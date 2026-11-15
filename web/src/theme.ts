@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 export type Theme = "light" | "dark";
 const preferenceKey = "codeimpact.theme";
@@ -18,7 +18,7 @@ export function useTheme() {
     () => savedTheme() ?? systemTheme(),
   );
   // Storage is optional: private/restricted browser contexts still get both themes.
-  const [explicit, setExplicit] = useState(() => savedTheme() !== null);
+  const explicit = useRef(false);
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
@@ -26,30 +26,35 @@ export function useTheme() {
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", theme === "dark" ? "#111722" : "#172236");
   }, [theme]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const followSystem = () => {
-      if (!explicit) setTheme(systemTheme());
+      if (!explicit.current) setTheme(systemTheme());
+    };
+    const reconcile = () => {
+      const stored = savedTheme();
+      explicit.current = stored !== null;
+      setTheme(stored ?? systemTheme());
     };
     const sync = (event: StorageEvent) => {
-      if (event.key !== preferenceKey && event.key !== null) return;
-      const stored = savedTheme();
-      setExplicit(stored !== null);
-      setTheme(stored ?? systemTheme());
+      if (event.key === preferenceKey || event.key === null) reconcile();
     };
     media.addEventListener("change", followSystem);
     window.addEventListener("storage", sync);
+    // Another tab may have written after the initial render read the preference.
+    // Subscribe first, then reconcile before the controls become interactive.
+    reconcile();
     return () => {
       media.removeEventListener("change", followSystem);
       window.removeEventListener("storage", sync);
     };
-  }, [explicit]);
+  }, []);
   return {
     theme,
     toggleTheme: () => {
       const next = theme === "light" ? "dark" : "light";
       setTheme(next);
-      setExplicit(true);
+      explicit.current = true;
       try {
         localStorage.setItem(preferenceKey, next);
       } catch {

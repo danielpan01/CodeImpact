@@ -411,7 +411,11 @@ the separate snapshot-pair input schema.
 `theme.ts` follows the OS color scheme until an explicit preference is chosen. The
 `codeimpact.theme` local-storage value contains only `light` or `dark`; storage errors
 fall back to in-memory state. A small HTML bootstrap applies appearance before React
-paints, and storage events synchronize open tabs. Theme changes affect CSS and React
+paints, and storage events synchronize open tabs. Layout-time subscription followed
+by a fresh preference read closes the startup gap where another tab could change
+storage before the listener was attached. An explicit in-memory choice remains
+independent of listener setup, so unavailable storage does not reset it.
+Theme changes affect CSS and React
 Flow color mode, not report objects, selected IDs or exports. No report/source storage
 is added. Reduced-motion CSS disables transitions; compact layouts use larger touch
 targets. Focus tracking retains an active inspector when a desktop viewport becomes
