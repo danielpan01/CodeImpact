@@ -2421,3 +2421,14 @@ Ignored local evidence: `reports/milestone6-before/`, `milestone6-check.log`,
 `milestone6-evaluations.log`, `milestone6-browser.log`, `milestone6-pilot-smoke.log`,
 `milestone6-benchmark.log` and `web/test-results/`. Published-intent measurement and
 preservation receipts live outside the historical corpus in `benchmarks/`.
+
+## Milestone 6 publication — November 15, 2026
+
+The owner authorized pushing and merging milestone 6 while keeping live hosting
+deferred. The implementation was committed, rebased over the November 15 daily-health
+report, and pushed in [PR #12](https://github.com/danielpan01/CodeImpact/pull/12).
+The preceding section preserves the November 14 local validation record. The
+[PR checks](https://github.com/danielpan01/CodeImpact/pull/12/checks) record the Linux
+publication gate, including the address-space integration test skipped on macOS,
+all four evaluation replays, local-server verification and the 154 browser checks.
+No live host or human pilot is part of this publication.

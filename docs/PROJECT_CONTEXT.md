@@ -42,7 +42,8 @@ The built UI and API run from one origin; keys stay in browser memory only. Six-
 measurements and local deployment verification are documented in PERFORMANCE.md,
 DEPLOYMENT.md and VALIDATION.md. All 106 historical corpus files and the 16 existing
 engine/model/ingestion/evaluation modules apart from the API remain byte-identical.
-The owner authorized publication on November 15 while reaffirming the November 14
+The owner authorized publication in [PR #12](https://github.com/danielpan01/CodeImpact/pull/12)
+on November 15 while reaffirming the November 14
 live-hosting deferral: prepare and verify locally. There is no deployed URL,
 database, queue, durable-job layer, individual-account system or new human feedback.
 Remaining LFU, descriptor, Slugify, fixture and runtime-import limitations stay open.

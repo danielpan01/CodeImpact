@@ -17,7 +17,8 @@ work merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10),
 commit `25b58040ede56918755a6a83277de98408f3dcb9`, with post-merge CI passing.
 Milestone 5 merged in [PR #11](https://github.com/danielpan01/CodeImpact/pull/11),
 commit `02598a155bda061b56d03a0fcee161e13df10e89`, with post-merge CI passing.
-Milestone 6 completes local deployment preparation without a live host. See VALIDATION.md for
+Milestone 6 completes local deployment preparation without a live host; its release
+is tracked in [PR #12](https://github.com/danielpan01/CodeImpact/pull/12). See VALIDATION.md for
 observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label review.
 
 | Order | Milestone | What the user will notice | Completion evidence |
@@ -275,6 +276,6 @@ has median wall time 1.12 seconds and maximum worker peak RSS 85.1 MiB on this M
 These figures are local observations, not multi-user capacity or accuracy claims.
 
 Local HTTP and desktop/phone browser checks verify deployment preparation. Linux
-hard address-space enforcement still needs its configured Linux test run; this Mac
-verifies the RSS watchdog and CPU/wall limits. The owner explicitly deferred live
+hard address-space enforcement has a dedicated Linux CI test; this Mac verifies
+the RSS watchdog and CPU/wall limits. The owner explicitly deferred live
 hosting and reaffirmed that deferral when authorizing publication on November 15.

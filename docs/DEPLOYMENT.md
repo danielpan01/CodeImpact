@@ -67,8 +67,9 @@ This is process/resource isolation, **not an OS security sandbox**: workers shar
 host user and filesystem and have no network namespace restriction. The analyzed
 repository is never executed or imported. RSS sampling can miss brief peaks; the
 Linux address-space cap is a different metric from resident memory. macOS does not
-use `RLIMIT_AS` here. The Linux-specific integration test is skipped on this Mac;
-the configured Linux CI gate must verify it after publication. No container runtime
+use `RLIMIT_AS` here. The Linux-specific integration test is skipped on this Mac
+and runs in Linux CI; see [PR #12 checks](https://github.com/danielpan01/CodeImpact/pull/12/checks)
+for the publication result. No container runtime
 was available for a local Linux/container deployment check.
 
 ## Verification and recovery
