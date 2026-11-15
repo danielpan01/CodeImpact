@@ -2324,3 +2324,100 @@ Ignored local evidence includes `reports/milestone5-before/`, `milestone5-captur
 `milestone5-browser.log`, `milestone5-pilot.log`, `real-v3-first-run.json`,
 `real-v3-evaluation.json`, `developer-pilot/` and the browser captures under
 `web/test-results/`. These are local observations, not a new remote CI result.
+
+## Milestone 5 publication — November 14, 2026
+
+At the owner's explicit request, milestone 5 was committed, rebased over the two
+intervening daily-health documentation commits, pushed as
+`799055a2bb6b5a5753f0447c6e48626d76e0b5fa`, and squash merged in
+[PR #11](https://github.com/danielpan01/CodeImpact/pull/11). Merge commit:
+`02598a155bda061b56d03a0fcee161e13df10e89`. Both PR and branch checks passed before
+merge. The [post-merge CI run](https://github.com/danielpan01/CodeImpact/actions/runs/43648104444)
+also passed, including all four evaluations and 144 browser checks. The preceding
+milestone 5 section records its earlier local state. No human pilot was performed.
+
+## Milestone 6: performance, isolation and local deployment — November 14, 2026
+
+Implemented on `codex/performance-isolation-pilot` from the PR #11 merge. Only
+milestone 5 was published. These milestone 6 changes remain unstaged/uncommitted;
+their new CI configuration has not run remotely. The owner requested local
+deployment preparation and verification and explicitly deferred live hosting.
+
+### What changed
+
+The API uses disposable Python worker processes with JSON IPC, a sanitized
+environment, wall/CPU/RSS/output budgets, cancellation and deterministic cleanup.
+It keeps the existing engine, schemas, source handling and recommendation evidence.
+Service controls authorize/admit before body buffering, bound upload/response time,
+cancel on disconnect and release capacity after failures. Readiness probes a real
+worker, and structured request logs contain only request ID, route, status and time.
+
+The pilot launcher requires a shared key, serves the built UI and API together,
+and defaults to loopback. Its public demo needs no key. The dashboard's password
+field stays in React memory, clears on reload/user action, and uses the existing
+theme tokens and a minimum 44-pixel touch target. No source/report storage, durable
+job layer, queue, database, individual-account system or GitHub App was added.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for exact settings and operation.
+
+### Observed checks
+
+Environment: macOS 26.6.2 arm64, Python 3.12.0, Node 24.2.0. Added pinned psutil
+7.2.2 and its typing package; no analyzed repository dependencies were installed.
+
+| Check | Observed result |
+| --- | --- |
+| `make check` | Passed: Ruff lint/format, strict mypy over 21 modules, **810 Python tests**, TypeScript and Vite build; **one Linux-only test skipped** |
+| Worker failure/lifecycle coverage | Wall timeout, RSS exhaustion, CPU limit, output overflow, malformed/failed reply, spawn/monitor failure, cancellation/shutdown during spawn, reaping and a successful subsequent request |
+| Access/admission coverage | Authorization before body reads, duplicate/wrong credentials, rate and concurrency limits, health availability, slow upload/response, disconnect cancellation, source-free errors/logs and static-file boundaries |
+| `make evaluate` | Passed; unchanged 23 TP / 0 FP / 2 FN / 32 TN plus two uncertain selections |
+| `make evaluate-real` | Passed; unchanged 45 TP / 0 FP / 0 FN / 123 TN plus 11/33 uncertain selections |
+| `make evaluate-real-v2` | Passed; unchanged 109 TP / 273 FP / 0 FN / 177 TN plus 13/22 uncertain selections |
+| `make evaluate-real-v3` | Passed; unchanged 41 TP / 43 FP / 0 FN / 6 TN, 84/90 selected and 30 definitions outside discovery |
+| `make verify-pilot` | Passed against a real built loopback server: readiness/assets/public demo, unauthorized rejection, exact frozen authorized report, no saved-report endpoint and server cleanup |
+| `cd web && npm run test:e2e` | **154 passed**, including ten production-build pilot checks across Chromium desktop/phone and Firefox/WebKit desktop/phone |
+| Frontend formatting | `npm run format:check` passed |
+| Measurement | Six fixed inputs, one warmup and ten measured fresh workers each; stable report hashes and valid evidence paths in all runs |
+| Preservation | All **106 corpus files** and **16 existing non-API Python modules** byte-identical; all four stable reports byte-identical |
+| Remote state | PR #11 merged with post-merge CI passing; no milestone 6 publication or deployed URL |
+
+Overall statement coverage remains 94%; it is not analyzer accuracy. The existing
+Starlette/httpx deprecation warning remains non-failing. Browser execution used the
+approved macOS sandbox exception because sandboxed browser processes aborted before
+tests started. Early checks caught shared test-client rate exhaustion, a TypeScript
+header-fixture type, and an incorrect assertion that the intentionally hidden mobile
+status badge was visible. Test factories now explicitly use higher automation limits;
+production defaults have dedicated checks. Visual review then caught the unstyled
+password field; it now shares the established input style and the full suite passed.
+Final lifecycle review also covered shutdown while a child is still starting; a
+late child is reaped instead of beginning an analysis after the runner has closed.
+
+Desktop light/dark and Chromium/WebKit phone pilot captures were inspected for
+readability, wrapping, focus and clipping. The new browser checks verify key removal,
+reload, same-snapshot retry, storage/URL/report non-disclosure and public demo recovery.
+There is no human usability or accessibility certification claim.
+
+### Measurements and preservation
+
+[PERFORMANCE.md](PERFORMANCE.md) and the [raw receipt](../benchmarks/milestone6.json)
+record every sample and source/input hash. The largest measured case, Cachetools LFU,
+had median wall time **1,120.9 ms**, nearest-rank P95 **1,140.8 ms**, and maximum worker
+OS peak RSS **85.1 MiB**. This is a small sequential local sample, not production
+capacity, network latency or improved accuracy. No speedup claim is made.
+
+The [preservation receipt](../benchmarks/preservation.json) records 122 protected
+files and the four pre-work report hashes. The post-work report hashes are exactly
+the authored/v1/v2/v3 replay values listed in milestone 5 above. Core analyzer,
+models, ingestion, CLI and evaluators were not edited. Historical first measurements,
+baseline variants, labels and review status remain intact; no new baseline is needed.
+
+The RSS watchdog and CPU/wall limits were exercised on this Mac. The Linux
+`RLIMIT_AS` integration test is configured for Linux CI but skipped locally; no Linux
+or container deployment is claimed. Resource-limited processes are not an OS security
+sandbox. Live hosting and the separate human pilot remain owner-deferred; independent
+source-label review remains pending. Local deployment verification fulfills the
+owner's revised milestone scope without claiming an actual hosted service.
+
+Ignored local evidence: `reports/milestone6-before/`, `milestone6-check.log`,
+`milestone6-evaluations.log`, `milestone6-browser.log`, `milestone6-pilot-smoke.log`,
+`milestone6-benchmark.log` and `web/test-results/`. Published-intent measurement and
+preservation receipts live outside the historical corpus in `benchmarks/`.

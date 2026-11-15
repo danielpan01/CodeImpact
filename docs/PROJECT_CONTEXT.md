@@ -1,6 +1,6 @@
 # CodeImpact project context
 
-## Current priority — November 14, 2026
+## Current priority — November 15, 2026
 
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
@@ -24,16 +24,27 @@ intact. Analysis report 2.0 and dashboard contracts are unchanged; only the sepa
 fresh evaluation wrapper advances to 4.0.
 
 Human source-label review remains pending; [review notes](MAPPING_FALLBACK_REVIEW.md)
-record the source-only controls without claiming approval. Milestone 5 is implemented locally on `codex/fresh-evaluation-pilot`:
+record the source-only controls without claiming approval. Milestone 5 merged in
+[PR #11](https://github.com/danielpan01/CodeImpact/pull/11), commit
+`02598a155bda061b56d03a0fcee161e13df10e89`, with post-merge CI passing:
 six unused changes, frozen draft labels and first measurements, an offline v3
 replay gate and reproducible walkthrough inputs. V3 selects 84/90 discovered tests:
 41 TP / 43 FP / 0 FN / 6 TN; 30 more test-shaped functions are outside discovery.
 The analyzer and all 72 historical corpus files/three report outputs are unchanged.
 The dashboard distinguishes no discovered tests from no recommendations.
 The owner deferred the human developer pilot on November 14; materials are prepared,
-with no participant feedback claimed. All new changes stay unstaged and uncommitted.
-See REAL_EVALUATION_V3.md and DEVELOPER_PILOT.md. Performance/isolation is next;
-hosting remains conditional on demonstrated requirements.
+with no participant feedback claimed. See REAL_EVALUATION_V3.md and DEVELOPER_PILOT.md.
+
+Milestone 6's local scope is complete: disposable
+analysis workers, wall/CPU/RSS/output limits, admission before body buffering,
+shared-key access for submitted code, a public demo, readiness and source-free logs.
+The built UI and API run from one origin; keys stay in browser memory only. Six-case
+measurements and local deployment verification are documented in PERFORMANCE.md,
+DEPLOYMENT.md and VALIDATION.md. All 106 historical corpus files and the 16 existing
+engine/model/ingestion/evaluation modules apart from the API remain byte-identical.
+The owner authorized publication on November 15 while reaffirming the November 14
+live-hosting deferral: prepare and verify locally. There is no deployed URL,
+database, queue, durable-job layer, individual-account system or new human feedback.
 Remaining LFU, descriptor, Slugify, fixture and runtime-import limitations stay open.
 See VALIDATION.md for observed checks. Hosting and infrastructure follow a demonstrated
 pilot need.

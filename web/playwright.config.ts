@@ -26,6 +26,17 @@ export default defineConfig({
       url: `http://127.0.0.1:${webPort}`,
       reuseExistingServer: false,
     },
+    {
+      command:
+        "npm run build && ../.venv/bin/python -m codeimpact.serve --port 8003 --static-dir dist",
+      env: {
+        CODEIMPACT_ACCESS_KEY: "browser-test-only-pilot-key-with-32-characters",
+        CODEIMPACT_REQUESTS_PER_MINUTE: "600",
+        CODEIMPACT_CONCURRENCY: "8",
+      },
+      url: "http://127.0.0.1:8003/ready",
+      reuseExistingServer: false,
+    },
   ],
   projects: [
     {
@@ -46,17 +57,17 @@ export default defineConfig({
     },
     {
       name: "firefox",
-      testMatch: "**/release.spec.ts",
+      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
-      testMatch: "**/release.spec.ts",
+      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
       use: { ...devices["Desktop Safari"] },
     },
     {
       name: "webkit-phone",
-      testMatch: "**/release.spec.ts",
+      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
       use: { ...devices["iPhone 13"] },
     },
   ],

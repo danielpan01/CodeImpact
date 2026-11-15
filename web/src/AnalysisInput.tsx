@@ -12,6 +12,9 @@ export function AnalysisInput({
   inputRef,
   snapshotButtonRef,
   invalidPR,
+  accessRequired,
+  accessKey,
+  setAccessKey,
 }: {
   busy: boolean;
   prUrl: string;
@@ -23,8 +26,12 @@ export function AnalysisInput({
   inputRef: RefObject<HTMLInputElement | null>;
   snapshotButtonRef: RefObject<HTMLButtonElement | null>;
   invalidPR: boolean;
+  accessRequired: boolean;
+  accessKey: string;
+  setAccessKey: (key: string) => void;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const keyInput = useRef<HTMLInputElement>(null);
   return (
     <section className="analysis-input" aria-label="New analysis">
       <div className="input-heading">
@@ -46,6 +53,41 @@ export function AnalysisInput({
           </button>
         )}
       </div>
+      {accessRequired && (
+        <div className="pilot-access">
+          <div>
+            <label htmlFor="pilot-key">Pilot access key</label>
+            <p id="pilot-key-help">
+              For your own analyses. Kept only in this tab’s memory; the demo is
+              public.
+            </p>
+          </div>
+          <input
+            id="pilot-key"
+            ref={keyInput}
+            type="password"
+            value={accessKey}
+            onChange={(event) => setAccessKey(event.target.value)}
+            maxLength={256}
+            autoComplete="off"
+            spellCheck={false}
+            aria-describedby="pilot-key-help"
+            disabled={busy}
+          />
+          {accessKey && (
+            <button
+              className="secondary"
+              disabled={busy}
+              onClick={() => {
+                setAccessKey("");
+                keyInput.current?.focus();
+              }}
+            >
+              Clear key
+            </button>
+          )}
+        </div>
+      )}
       <form
         className="pr-form"
         aria-label="Analyze a public GitHub pull request"

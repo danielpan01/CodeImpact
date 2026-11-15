@@ -25,6 +25,18 @@ type View = "tests" | "graph" | "changes";
 function App() {
   const { theme, toggleTheme } = useTheme();
   const [report, setReport] = useState<Report | null>(null);
+  const [accessKey, setAccessKey] = useState("");
+  const [accessRequired, setAccessRequired] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/config", { signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((config) => {
+        if (config?.access_required) setAccessRequired(true);
+      })
+      .catch(() => {}); // A failed config request must not prevent the public demo.
+    return () => controller.abort();
+  }, []);
   const [kind, setKind] = useState<"demo" | "snapshots" | "github">("demo");
   const [selected, setSelected] = useState<string | null>(null);
   const [selectedChange, setSelectedChange] = useState<string | null>(null);
@@ -159,6 +171,7 @@ function App() {
             ? "/api/analyze"
             : "/api/demo",
         githubUrl ? { url: githubUrl } : body,
+        accessKey,
       );
       if (version !== requestVersion.current) return;
       setReport(next);
@@ -182,6 +195,8 @@ function App() {
       if (version !== requestVersion.current) return;
       setError(e instanceof Error ? e.message : "Could not load analysis");
       setErrorKind(e instanceof AnalysisError ? e.kind : "response");
+      if (e instanceof AnalysisError && e.kind === "access")
+        setAccessRequired(true);
       setFocusRequest({ target: "error" });
     } finally {
       if (version === requestVersion.current) setBusy(false);
@@ -267,7 +282,7 @@ function App() {
         <span className="nav-context">Developer workspace</span>
         <div className="top-actions">
           <span className="local-status">
-            <i /> Local analysis
+            <i /> {accessRequired ? "Pilot service" : "Local analysis"}
           </span>
           <button
             className="theme-toggle"
@@ -350,6 +365,7 @@ function App() {
                   {
                     network: "Connection unavailable",
                     limited: "Request temporarily limited",
+                    access: "Pilot access required",
                     input: "Check your analysis input",
                     response: "Analysis could not complete",
                   }[errorKind]
@@ -404,6 +420,9 @@ function App() {
             inputRef={prInput}
             snapshotButtonRef={snapshotButton}
             invalidPR={!!error && !snapshotError && errorKind === "input"}
+            accessRequired={accessRequired}
+            accessKey={accessKey}
+            setAccessKey={setAccessKey}
             onClose={
               report
                 ? () => {
