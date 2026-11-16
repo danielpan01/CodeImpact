@@ -438,6 +438,18 @@ row ranks, scores and the exported report remain unchanged. Unknown explanation
 strings get an explicit Other category. Hidden selections retain their inspector.
 New analyses reset both test and map controls.
 
+Analysis diagnostics are also presentation-only. `diagnostics.ts` classifies an
+allowlist of exact producer formats, confirming file/symbol associations against
+report nodes or source files. Unsupported or ambiguous text stays General /
+unclassified; skipped-source summaries remain report-wide. Occurrence indices keep
+duplicate strings distinct, category/file ordering is deterministic, and original
+order is retained within groups. Literal case-insensitive search examines complete
+messages before filtering or paging. `AnalysisDiagnostics` preserves controls and
+expansion across view changes and resets them for each analysis request. Large
+groups have explicit 50-note pages; no raw text is truncated. No inferred severity,
+revision, source link or grouping metadata enters the schema or JSON export. See
+[supported formats and count semantics](FRONTEND_MILESTONE8B.md).
+
 Focused maps use the recommendation's exact `evidence_path` and `evidence_edges`,
 including module nodes regardless of the overview toggle. No edges are synthesized.
 Focus stays pinned while inspecting a dependency. Wider screens lay paths left to

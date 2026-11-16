@@ -1,6 +1,9 @@
 import type { CSSProperties } from "react";
 
 const paths = {
+  info: "M12 11v6m0-10v.1M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0",
+  search: "M16 16l5 5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0",
+  chevron: "m9 5 7 7-7 7",
   alert: "m12 3 10 18H2L12 3Zm0 6v5m0 3v.1",
   impact:
     "M8 6h8M6 8v8m2 2h8M18 8v8M8 8l8 8M8 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0M20 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0M8 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0M20 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0",

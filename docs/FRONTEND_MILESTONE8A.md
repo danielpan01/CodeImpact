@@ -1,10 +1,17 @@
 # Milestone 8A — visual character and component refinement
 
 Implemented locally on November 15, 2026, on top of PR #12 and the existing
-uncommitted roadmap/phone-spacing review. Publication remains the owner's task.
+uncommitted roadmap/phone-spacing review. This is the original implementation record;
+the subsequent publication is noted below.
 This is a presentation change to the working React application. Analyzer behavior,
 API/report contracts, evidence paths, source limits and evaluation baselines are
 unchanged. No dependencies, hosting or authentication features were added.
+
+Publication update: merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13),
+`e7e4c37`, with post-merge CI passing. The entry test was split into separate viewport
+cases to avoid a CI-only combined timeout; see VALIDATION.md. The implementation
+and 174-test records below describe the original local milestone, not current
+publication status. [Milestone 8B](FRONTEND_MILESTONE8B.md) follows this design.
 
 ## Visual decisions
 

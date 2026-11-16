@@ -57,17 +57,29 @@ export default defineConfig({
     },
     {
       name: "firefox",
-      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
+      testMatch: [
+        "**/release.spec.ts",
+        "**/pilot.spec.ts",
+        "**/diagnostics.spec.ts",
+      ],
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
-      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
+      testMatch: [
+        "**/release.spec.ts",
+        "**/pilot.spec.ts",
+        "**/diagnostics.spec.ts",
+      ],
       use: { ...devices["Desktop Safari"] },
     },
     {
       name: "webkit-phone",
-      testMatch: ["**/release.spec.ts", "**/pilot.spec.ts"],
+      testMatch: [
+        "**/release.spec.ts",
+        "**/pilot.spec.ts",
+        "**/diagnostics.spec.ts",
+      ],
       use: { ...devices["iPhone 13"] },
     },
   ],

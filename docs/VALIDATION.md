@@ -2580,3 +2580,116 @@ trace is under `reports/pr13-ci-failure/`. These remain ignored local artifacts.
 The fix remains unstaged and uncommitted; GitHub verification of it requires the
 owner to commit and push it to the existing PR branch. The failing CI runs above
 describe `244d608`, not the local follow-up.
+
+## Milestone 8B diagnostics — November 15, 2026
+
+Started from clean `main` at `e7e4c37aa149381c3a92324040337ee50d5e7a00`, merged
+[PR #13](https://github.com/danielpan01/CodeImpact/pull/13). Its
+[post-merge run](https://github.com/danielpan01/CodeImpact/actions/runs/43788431424)
+passed. The earlier 8A implementation/timeout records above remain historical;
+8B's new local changes are unstaged and uncommitted. No existing uncommitted work
+was present or discarded. Starting status, patch, tracked hashes and protected
+hashes were saved in `reports/milestone8b-before/` before editing.
+
+The flat warnings list is now a lossless diagnostics browser: exact-format category
+classification, report-validated file grouping, literal complete-text search,
+optional category/file controls, matching/total occurrence counts, expandable groups
+and explicit 50-note pages. Unknown/ambiguous messages and duplicates remain
+accessible. Search covers collapsed groups and all pages. Existing selection,
+evidence, graph and summary behavior is unchanged; export still serializes the
+full original report. New analyses reset diagnostics state. See
+[the rules and visual receipt](FRONTEND_MILESTONE8B.md) for supported formats and
+fallback behavior, complete count semantics, before/after images and limitations.
+
+Fresh API analysis confirmed **2 demo notes** and **3,128 LFU notes / 139 LFU
+recommendations**. LFU groups are 2 scope, 3 imports, 2,988 unresolved calls and
+135 dynamic calls; every returned occurrence is accounted for. The prior desktop
+flat list was 90,210 px tall; the new collapsed-category overview is 543 px. Complete
+entries remain reachable through disclosure and paging. These are local UI
+measurements, not analyzer improvements or production performance claims.
+
+### Observed final checks
+
+| Command / check | Actual result |
+| --- | --- |
+| `make check` | **810 passed**, **1 expected Linux-only RLIMIT_AS skip**, 1 non-failing Starlette/httpx deprecation warning; Ruff lint/format, mypy (21 modules), TypeScript and production build passed |
+| `make evaluate` | Passed; **23 TP / 0 FP / 2 FN / 32 TN**, 2 uncertain selections; exact existing discrepancies retained |
+| `make evaluate-real` | Passed; **45 TP / 0 FP / 0 FN / 123 TN**, 11 uncertain selections; baseline unchanged |
+| `make evaluate-real-v2` | Passed; **109 TP / 273 FP / 0 FN / 177 TN**, 13 uncertain selections, 395/581 selected; baseline unchanged |
+| `make evaluate-real-v3` | Passed; **41 TP / 43 FP / 0 FN / 6 TN**, 84/90 discovered definitions selected; the 30 outside-discovery definitions remain outside that denominator |
+| `make verify-pilot` | Passed: readiness, built UI, public demo, protected analysis, frozen report equality and no report storage |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e` | **248 passed**, no failures or skips, across the existing five projects |
+| Focused diagnostics browser run | **40 passed** across Chromium desktop/phone, Firefox and WebKit desktop/phone |
+| Pure presentation cases | 7 classification/filtering/immutability cases, included in both Chromium projects in the full suite |
+| `git diff --check` | Passed |
+
+Regression-first evidence: the original flat-list UI failed the new duplicate/literal
+search/export case because the search control did not exist. Initial implementation
+runs found overly broad dropdown accessible names and WebKit rendering the new
+selects below 44 px. Explicit names and 48 px heights fixed those failures; assertions
+were retained. The initial failing run was stopped after enough evidence identified
+the label issue. The final complete suite above supersedes intermediate runs.
+Node color-environment warnings remain non-failing. No required check is blocked.
+
+Browser tests cover recognized/unknown notes, duplicate counts, literal regex-like
+text, Unicode and multiline content, full HTML-like text without script/image
+execution, combined filters, no matches/reset, empty notes, entries after the first
+50, focus when paging, retained filters/expansion across all views, reset on a new
+report, accurate totals and full unchanged exports while filtered. LFU is exercised
+from the pinned snapshot through the real API. Existing public PR/mock transport,
+snapshot upload, Tests search/filter/sort, Map navigation, changed source,
+mixed/deleted evidence, Back/Escape/focus, themes, reduced motion, phone first-result
+and pilot access checks remain green.
+
+Before/after inspection covered 1440×900, 768×1024, 390×844 and 360×844 in both themes.
+The 16 demo/LFU records and 12 synthetic empty/unknown/long/no-match records report no
+page overflow or JavaScript errors. Screenshots were inspected in each size/theme;
+the small-report controls were simplified after visual review. Keyboard order,
+visible focus, disclosure states and 44 px minimum targets are covered by the new
+browser cases. This is not independent usability review, screen-reader certification
+or a comprehensive rendered-accessibility audit. Milestone 8C remains future work.
+
+### Preservation and local receipts
+
+All **144 protected files/artifacts** remain byte-identical to the starting state:
+106 corpus files, 21 Python source modules, two benchmark receipts, ten saved report
+artifacts, two Python project/dependency files and three frontend dependency/type
+files. This covers analyzer/scoring/discovery, resource limits, schemas, labels,
+provenance and historical baselines. All four freshly generated stable evaluation
+outputs match their starting hashes exactly; their established serializers already
+omit elapsed time. The captured API demo/LFU reports match before/after with only
+`stats.elapsed_ms` excluded. Full export equality includes the actual elapsed value
+of each loaded report. The preexisting phone-first-result regression is unchanged.
+
+Receipts: `reports/milestone8b-{check,evaluations,pilot,format,browser}.log`,
+`milestone8b-red.log`, `milestone8b-diagnostics-final.log`,
+`milestone8b-preservation.json`, and `milestone8b-before/` / `milestone8b-after/`.
+Nine representative screenshots are retained under `docs/media/milestone8b/`.
+Other local captures/scripts remain ignored; no new screenshot-comparison pipeline
+or dependencies were introduced. README, architecture, frontend roadmap, build plan,
+project context and this validation history reflect the actual local/merged status.
+
+Preview: `CODEIMPACT_WEB_PORT=5183 CODEIMPACT_API_PORT=8013 make dev`, then open
+http://127.0.0.1:5183 and Load demo → Analysis scope & limitations. An LFU snapshot
+upload is prepared locally as `reports/milestone8b-lfu-snapshots.json`. The next
+frontend task is **8C**; analyzer milestone 7 remains separate. Live hosting and the
+human pilot remain deferred. No commits, staging, pushes, PRs or merges were performed
+for 8B.
+
+### Milestone 8B publication recheck — November 15, 2026
+
+The owner subsequently authorized committing, pushing and merging the current
+changes. The implementation-stage status above records the earlier handoff.
+Before publication, the full checks were rerun: `make check` passed with **810
+Python tests**, the same expected Linux-only skip and non-failing deprecation
+warning, plus lint, formatting, types and the production build. All **248 browser
+checks** passed without failures or skips. All four offline evaluations matched
+their existing baselines, and `make verify-pilot` passed. Frontend formatting,
+documentation link targets and diff whitespace checks passed. All **144 protected
+files/artifacts** still match the original hashes. No application correction was
+needed during this recheck; current roadmap wording was prepared for publication.
+
+Local logs: `reports/premerge-8b-check.log`, `premerge-8b-browser.log`,
+`premerge-8b-evaluations.log` and `premerge-8b-pilot.log`. These are local results;
+GitHub check and merge status is recorded on the publication pull request.

@@ -17,6 +17,7 @@ import { TestsView } from "./TestsView";
 import { DependencyMap } from "./DependencyMap";
 import { ChangesView } from "./ChangesView";
 import { EvidenceInspector } from "./EvidenceInspector";
+import { AnalysisDiagnostics } from "./AnalysisDiagnostics";
 import { defaultTestControls } from "./test-review";
 import type { Viewport } from "@xyflow/react";
 import { useTheme } from "./theme";
@@ -563,19 +564,7 @@ function App() {
                 headingRef={evidenceHeading}
               />
             </div>
-            <details className="limitations">
-              <summary>
-                Analysis scope & limitations{" "}
-                <span>{report.warnings.length} notes</span>
-              </summary>
-              <p>
-                Static Python analysis is incomplete. A missing dependency path
-                does not establish safety.
-              </p>
-              {report.warnings.map((w) => (
-                <p key={w}>{w}</p>
-              ))}
-            </details>
+            <AnalysisDiagnostics key={requestVersion.current} report={report} />
           </>
         ) : (
           <div id="review-workspace" />

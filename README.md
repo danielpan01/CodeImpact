@@ -14,7 +14,7 @@ CodeImpact turns a code change into an inspectable dependency graph and a priori
 
 ![CodeImpact Tests workspace and evidence inspector](docs/media/milestone8a/after-desktop-light-tests.png)
 
-*The refined workspace opens in Tests, with rounded shared controls, a distinct evidence surface and a saved light/dark preference. [Entry screen](docs/media/milestone8a/after-desktop-light-entry.png) · [Dark theme](docs/media/milestone8a/after-desktop-dark-tests.png) · [Focused map](docs/media/milestone8a/after-desktop-dark-map.png) · [Before/after and verification](docs/FRONTEND_MILESTONE8A.md). Milestone 8A is implemented locally and remains uncommitted.*
+*The refined workspace opens in Tests, with rounded shared controls, a distinct evidence surface and a saved light/dark preference. [Entry screen](docs/media/milestone8a/after-desktop-light-entry.png) · [Dark theme](docs/media/milestone8a/after-desktop-dark-tests.png) · [Focused map](docs/media/milestone8a/after-desktop-dark-map.png) · [Before/after and verification](docs/FRONTEND_MILESTONE8A.md). Milestone 8A merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13). Milestone 8B adds searchable analysis diagnostics; see [grouping, counts and verification](docs/FRONTEND_MILESTONE8B.md).*
 
 A change to `discount(total)` can affect an unchanged API test through `test_create_order → create_order → checkout → discount`. CodeImpact makes that relationship visible, then lets you inspect each dependency and the changed code.
 
@@ -35,6 +35,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
 | **Review workspace** | Light/dark themes, compact report context, searchable/filterable Tests with deterministic sorting, focused evidence paths in Map, syntax-colored before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
 | **Inspectable reports** | Exportable JSON, source-export disclosure, exact analyzed GitHub revisions, and expandable before/after/mixed evidence. |
+| **Readable analysis notes** | Lossless category/file grouping, literal full-text search, filters and explicit paging; every original warning occurrence remains in exports. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
 | **Fresh-source regression gates** | Replays v2 and v3 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
@@ -242,10 +243,11 @@ cross-request caching are not implemented.
 General dynamic dispatch and further fallback precision remain separate work.
 The [November 15 repository review](docs/REPOSITORY_REVIEW.md) confirms the implemented
 roadmap and records a phone-layout refinement. The next analyzer milestone is bounded
-test-discovery coverage, motivated by v3's 30 omitted definitions; UI work next adds
-a more distinctive visual design with rounder controls, stronger typography and
-richer surfaces, followed by clearer large-report diagnostics and visual regression
-gates. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+test-discovery coverage, motivated by v3's 30 omitted definitions. Visual refinement
+8A merged in PR #13, including the phone regression and CI timeout fix. Milestone
+8B adds searchable, grouped diagnostics without changing report data.
+The next frontend step is **8C: pinned visual comparison and rendered-accessibility
+gates**. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.
