@@ -48,11 +48,10 @@ function NoteEntries({
             key={note.id}
             data-note-index={note.id}
           >
-            <span
-              className="note-number"
-              aria-label={`Original note ${note.id + 1}`}
-            >
-              #{note.id + 1}
+            <span className="note-number">
+              <span className="visually-hidden">Original note </span>
+              <span aria-hidden="true">#</span>
+              {note.id + 1}
             </span>
             <div>
               <p className="diagnostic-text">{note.text}</p>

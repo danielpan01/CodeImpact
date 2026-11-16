@@ -2,26 +2,32 @@
 
 ## Current priority — November 15, 2026
 
-Milestone 8A, the repository-review/phone-spacing work and its browser timeout fix
-merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13), commit
-`e7e4c37aa149381c3a92324040337ee50d5e7a00`. Post-merge CI passed. Milestone 8B
-starts from that clean `main` checkout; there were no preexisting uncommitted edits.
+Milestone 8A merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13).
+Milestone 8B merged in [PR #14](https://github.com/danielpan01/CodeImpact/pull/14),
+commit `c967862fd7152c6d2883d5289b762ea24b67857d`; its PR, branch and post-merge CI
+checks passed. Milestone 8C started from that clean checkout with no user edits.
 
-**8B is implemented.** Analysis diagnostics now
-provide category/file grouping, complete literal search, optional category/file
-filters, matching/total counts and explicit 50-note pages. Original warning strings,
-duplicates, report/export data and review state are preserved. Classification uses
-an allowlist of existing producer formats and confirmed report file/symbol identities;
-unknown formats remain General / unclassified. A new report resets diagnostics state.
-See [FRONTEND_MILESTONE8B.md](FRONTEND_MILESTONE8B.md) for rules, before/after evidence
-and limitations, and [VALIDATION.md](VALIDATION.md) for observed checks.
+**8C is implemented on `codex/frontend-milestone-8c`; merge is pending.** Sixteen individually
+reviewed screenshot baselines and 48 rendered WCAG A/AA scans use fixed local
+reports. The canonical Linux ARM64/Ubuntu/font image is pinned by digest, with
+Playwright 1.65.0 and Chromium revision 1254. The owner authorized a local Colima
+runtime for matching Linux verification; this does not deploy or host CodeImpact.
+Defect probes fail, recovery checks pass and repeated canonical comparisons are
+stable. The new CI job runs on publication; consult Actions for its remote results. See
+[FRONTEND_MILESTONE8C.md](FRONTEND_MILESTONE8C.md) and [VALIDATION.md](VALIDATION.md).
 
-The merged 8A visual language and phone first-result regression remain intact.
-No analyzer, discovery, resource limit, schema, corpus, label, baseline or dependency
-changed. **8C visual/accessibility gates are the next frontend step**; analyzer
-milestone 7 remains separate. The active [build plan](BUILD_PLAN.md) specifies
-milestones 7–13 and conditional later work. Live hosting and the human pilot remain
-owner-deferred; independent source-label review is still pending.
+Small fixes give visible navigation counts complete accessible names, name source
+regions and zoom controls correctly, expose original note numbers as text and
+improve graph attribution contrast. The 8A visual direction, 8B lossless grouping,
+search/filter/paging/state and complete exports remain intact. Historical screenshots,
+analyzer behavior, schemas, corpus inputs/labels/provenance and baselines are preserved.
+Automated accessibility coverage is partial; graph/clipped-content contrast still
+has manual-review findings. No independent usability or screen-reader review is claimed.
+
+**Next: bounded analyzer milestone 7**, following the active [build plan](BUILD_PLAN.md).
+Live hosting and the human pilot remain owner-deferred; independent source-label
+review remains pending. The owner authorized committing and pushing 8C on November 15; no new merge
+authorization was given.
 
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit

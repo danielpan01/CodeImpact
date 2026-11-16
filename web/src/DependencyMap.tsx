@@ -410,7 +410,13 @@ export function DependencyMap({
             jumpTo={jumpTo}
           />
           <Background color="var(--graph-grid)" gap={22} />
-          <Controls showInteractive={false} showFitView={false} />
+          <div role="group" aria-label="Map zoom controls">
+            <Controls
+              aria-label=""
+              showInteractive={false}
+              showFitView={false}
+            />
+          </div>
         </ReactFlow>
         {!graph.nodes.length && (
           <div className="empty-graph">

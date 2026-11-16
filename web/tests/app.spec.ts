@@ -22,7 +22,7 @@ test("demo graph and explanation show real backend results", async ({
   await page.getByLabel("Search symbols").fill("test_health");
   await expect(page.locator(".react-flow__node")).toHaveCount(1);
   await expect(page.locator(".react-flow__node")).toHaveClass(/unaffected/);
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(3);
   await page.getByRole("button", { name: /test_create_order/ }).click();
   await expect(page.locator(".evidence-path li")).toHaveCount(4);
@@ -104,7 +104,7 @@ test("local import corpus upload shows resolved evidence and exports scoped impo
   expect(response.status()).toBe(200);
   const report: Report = await response.json();
   await expect(page.locator(".analysis-label")).toContainText("local_import");
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(1);
   await page.getByRole("button", { name: /test_read/ }).click();
   await expect(page.locator(".detail-content")).toContainText(
@@ -176,7 +176,7 @@ test("rebound module import keeps graph evidence without selecting the unrelated
   await expect(page.locator(".analysis-label")).toContainText(
     "module_rebinding",
   );
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(1);
   await expect(page.locator(".test-row")).toContainText("test_price");
   await expect(page.locator(".detail-content")).toContainText(
@@ -431,7 +431,7 @@ test("method edits retain conservative evidence without selecting unrelated cons
   expect(report.recommendations.map((r) => r.symbol)).toEqual([
     "test_widget.py::test_price",
   ]);
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(1);
   await expect(page.locator(".detail-content")).toContainText(
     "Conservative module/import dependency",
@@ -485,7 +485,7 @@ test("constructor overrides exclude unrelated tests while default users keep evi
     "engine.py::Engine",
   ]);
   expect(report.recommendations[0].path_revision).toBe("both");
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(1);
   await expect(page.locator(".detail-content")).toContainText(
     "Resolved call path",

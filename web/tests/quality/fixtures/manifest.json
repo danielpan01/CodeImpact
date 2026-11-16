@@ -1,0 +1,30 @@
+{
+  "demo": {
+    "input": "src/codeimpact/demo.py",
+    "input_sha256": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "report_sha256": "4a849712db28295cb9d849b0bb574a293836c385ee9811c74cb771e72a0d968e",
+    "recommendations": 3,
+    "warnings": 2
+  },
+  "mixed": {
+    "input": "tests/fixtures/mixed-revisions.json",
+    "input_sha256": "7e7fd95b7550a2c6cbbb6b896a776fef36c160a7f8b3c2e4f3b2bfb2bba5dcff",
+    "report_sha256": "9791a8dab88ab9ea7a06ee707ea17b01c7778534ea42ee1ffd053f9fc35960f9",
+    "recommendations": 1,
+    "warnings": 2
+  },
+  "large": {
+    "input": "corpus/real-v2/cases/cachetools_lfu.json",
+    "input_sha256": "dd68060522a505edf268181b3034ce0da45ed44957d7308bd95bc13e6d234bd7",
+    "report_sha256": "1f035ea1b166b9fc4ccf6ef3f858bf76492e5116ce1c874030419b05c3a50752",
+    "recommendations": 139,
+    "warnings": 3128
+  },
+  "zero-discovery": {
+    "input": "corpus/real-v3/cases/ordered_set_pop.json",
+    "input_sha256": "9cdc403e96287e9e47b2a829d95b83fd9b00ec55f128842e7923cfc7e51fbee5",
+    "report_sha256": "de5dac489f8bb7bf3c70829a0f2ae621265e1dd102e0d1cd474449696b4e5997",
+    "recommendations": 0,
+    "warnings": 166
+  }
+}

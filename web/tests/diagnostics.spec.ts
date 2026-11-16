@@ -101,7 +101,12 @@ test("diagnostics page every occurrence and preserve controls across views, then
     page.getByRole("button", { name: "Next notes", exact: true }),
   ).toBeDisabled();
   for (const view of ["Map", "Changes", "Tests"])
-    await page.getByRole("button", { name: view, exact: true }).click();
+    await page
+      .getByRole("button", {
+        name: view === "Map" ? "Map" : new RegExp(`^${view} \\d+$`),
+        exact: true,
+      })
+      .click();
   await expect(page.locator(".diagnostic-text")).toHaveText(
     report.warnings.slice(50, 57),
   );

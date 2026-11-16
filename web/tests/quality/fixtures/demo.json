@@ -1,0 +1,998 @@
+{
+  "changed": [
+    "shop/pricing.py::<module>",
+    "shop/pricing.py::discount"
+  ],
+  "changes": [
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "shop/pricing.py",
+      "status": "modified",
+      "symbol": "shop/pricing.py::<module>"
+    },
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "shop/pricing.py",
+      "status": "modified",
+      "symbol": "shop/pricing.py::discount"
+    }
+  ],
+  "edges": [
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "shop/api.py:1 imports shop.cart"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "shop/api.py:1 imports shop.cart"
+        }
+      ],
+      "id": "e6f3c56f21bc10a855073ac38ac8166456ab50662a3d2ed7142bd1a496803ce6",
+      "kind": "import",
+      "revision": "both",
+      "source": "shop/api.py::<module>",
+      "target": "shop/cart.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "bfa2977a4fff42d1d917ab0398b5e323e75b6876c92a430b1466815679f7a702",
+      "kind": "module",
+      "revision": "both",
+      "source": "shop/api.py::create_order",
+      "target": "shop/api.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "text": "shop/api.py:4 calls checkout"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "shop/api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "text": "shop/api.py:4 calls checkout"
+        }
+      ],
+      "id": "a6fe8e1ce744ae1ba9be8e1c837f648b3919e56e71ec3c822b3b6b546c98229c",
+      "kind": "call",
+      "revision": "both",
+      "source": "shop/api.py::create_order",
+      "target": "shop/cart.py::checkout"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "shop/cart.py:1 imports shop.pricing"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "shop/cart.py:1 imports shop.pricing"
+        }
+      ],
+      "id": "7972267eafec6d53f7da364ccdd80672842103ddc73d6d0f68120e994e54fde6",
+      "kind": "import",
+      "revision": "both",
+      "source": "shop/cart.py::<module>",
+      "target": "shop/pricing.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "0c910597889337efd5cf246f60ed950ed61c721a18e750f36480a781c7063694",
+      "kind": "module",
+      "revision": "both",
+      "source": "shop/cart.py::checkout",
+      "target": "shop/cart.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "shop/cart.py:4 calls discount"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "shop/cart.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "shop/cart.py:4 calls discount"
+        }
+      ],
+      "id": "5ce884fdae0e5a6bf37fd5ef53a7cfe48af084cea0b918324a2e37f7af1171ae",
+      "kind": "call",
+      "revision": "both",
+      "source": "shop/cart.py::checkout",
+      "target": "shop/pricing.py::discount"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d5c9a583ec1eeb444516b88e18d0691e65d08629660568d36a31c237d92f0e3a",
+      "kind": "module",
+      "revision": "both",
+      "source": "shop/health.py::health",
+      "target": "shop/health.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e019205df4ee8b183c16e32b4bf63c00d0167338456a9b6aa1a48d69f56b1b6e",
+      "kind": "module",
+      "revision": "both",
+      "source": "shop/pricing.py::discount",
+      "target": "shop/pricing.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "text": "tests/test_api.py:1 imports shop.api"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/api.py"
+          },
+          "text": "tests/test_api.py:1 imports shop.api"
+        }
+      ],
+      "id": "d34cd43403b7e0e79e25004ee00f6080a2c5d4baefa7f96f9bef96c9beed7369",
+      "kind": "import",
+      "revision": "both",
+      "source": "tests/test_api.py::<module>",
+      "target": "shop/api.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/api.py"
+          },
+          "text": "tests/test_api.py:4 calls create_order"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/api.py"
+          },
+          "text": "tests/test_api.py:4 calls create_order"
+        }
+      ],
+      "id": "1d281fa58d3988e079d66986b72d247c00d6d3923ee755574bd53d5d61189099",
+      "kind": "call",
+      "revision": "both",
+      "source": "tests/test_api.py::test_create_order",
+      "target": "shop/api.py::create_order"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_api.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_api.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_api.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "175263af8e24daacae0d9abc65e566c85b93342b58c36ae04c7d45d2e42dd444",
+      "kind": "module",
+      "revision": "both",
+      "source": "tests/test_api.py::test_create_order",
+      "target": "tests/test_api.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "tests/test_cart.py:1 imports shop.cart"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "shop/cart.py"
+          },
+          "text": "tests/test_cart.py:1 imports shop.cart"
+        }
+      ],
+      "id": "f17fa951c44bca97036197b522b31cf708325829d038a7f7b2ecba6aeeb64118",
+      "kind": "import",
+      "revision": "both",
+      "source": "tests/test_cart.py::<module>",
+      "target": "shop/cart.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "text": "tests/test_cart.py:4 calls checkout"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "shop/cart.py"
+          },
+          "text": "tests/test_cart.py:4 calls checkout"
+        }
+      ],
+      "id": "53604229cd82a424f36f7387f6320216ae2b9ed03355c46ddcfef1694c12eb1d",
+      "kind": "call",
+      "revision": "both",
+      "source": "tests/test_cart.py::test_checkout",
+      "target": "shop/cart.py::checkout"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_cart.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_cart.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_cart.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "64b1b53ed50fe9529ccb7344ffdc33ac0bc2a1da90024d3ffcb2e836ce63ae31",
+      "kind": "module",
+      "revision": "both",
+      "source": "tests/test_cart.py::test_checkout",
+      "target": "tests/test_cart.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "tests/test_health.py:1 imports shop.health"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "tests/test_health.py:1 imports shop.health"
+        }
+      ],
+      "id": "8ecc6fa199ee2f0bec9b7ed5dd2985b6c2b0ab115a044287525878328478a6da",
+      "kind": "import",
+      "revision": "both",
+      "source": "tests/test_health.py::<module>",
+      "target": "shop/health.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "tests/test_health.py:4 calls health"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/health.py"
+          },
+          "text": "tests/test_health.py:4 calls health"
+        }
+      ],
+      "id": "71c6fc9410e38c527a5b7fca15f0fbebd16bf62ec0f495c687b1347750cf276b",
+      "kind": "call",
+      "revision": "both",
+      "source": "tests/test_health.py::test_health",
+      "target": "shop/health.py::health"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_health.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_health.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_health.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "f5168fbd3a8dbde4414d1f36d1a60015c3f2f5d27fd8abbcd5747f35bb91d208",
+      "kind": "module",
+      "revision": "both",
+      "source": "tests/test_health.py::test_health",
+      "target": "tests/test_health.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "tests/test_pricing.py:1 imports shop.pricing"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "tests/test_pricing.py:1 imports shop.pricing"
+        }
+      ],
+      "id": "4f87a76a3145fbb4f625a3f6ce8a7864755f7c46e9ed934eb8e383513827a0b2",
+      "kind": "import",
+      "revision": "both",
+      "source": "tests/test_pricing.py::<module>",
+      "target": "shop/pricing.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "tests/test_pricing.py:4 calls discount"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 4,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "shop/pricing.py"
+          },
+          "text": "tests/test_pricing.py:4 calls discount"
+        }
+      ],
+      "id": "64174ddd2450956b7eca1fbb9002cf4c7a310d50c3375b1ceadd8c2c1f029628",
+      "kind": "call",
+      "revision": "both",
+      "source": "tests/test_pricing.py::test_discount",
+      "target": "shop/pricing.py::discount"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 4,
+            "line": 3,
+            "path": "tests/test_pricing.py"
+          },
+          "target_location": {
+            "end_line": 4,
+            "line": 1,
+            "path": "tests/test_pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "ec75a1a9c213b9b01d1491fb956bd43a931a9fac47d9fd2306543434c22f5a93",
+      "kind": "module",
+      "revision": "both",
+      "source": "tests/test_pricing.py::test_discount",
+      "target": "tests/test_pricing.py::<module>"
+    }
+  ],
+  "impacted": [
+    "shop/api.py::<module>",
+    "shop/api.py::create_order",
+    "shop/cart.py::<module>",
+    "shop/cart.py::checkout",
+    "tests/test_api.py::<module>",
+    "tests/test_api.py::test_create_order",
+    "tests/test_cart.py::<module>",
+    "tests/test_cart.py::test_checkout",
+    "tests/test_pricing.py::<module>",
+    "tests/test_pricing.py::test_discount"
+  ],
+  "label": "Checkout service · discount 10% → 15%",
+  "nodes": [
+    {
+      "end_line": 4,
+      "id": "shop/api.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "shop.api",
+      "path": "shop/api.py"
+    },
+    {
+      "end_line": 4,
+      "id": "shop/api.py::create_order",
+      "kind": "function",
+      "line": 3,
+      "name": "create_order",
+      "path": "shop/api.py"
+    },
+    {
+      "end_line": 4,
+      "id": "shop/cart.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "shop.cart",
+      "path": "shop/cart.py"
+    },
+    {
+      "end_line": 4,
+      "id": "shop/cart.py::checkout",
+      "kind": "function",
+      "line": 3,
+      "name": "checkout",
+      "path": "shop/cart.py"
+    },
+    {
+      "end_line": 2,
+      "id": "shop/health.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "shop.health",
+      "path": "shop/health.py"
+    },
+    {
+      "end_line": 2,
+      "id": "shop/health.py::health",
+      "kind": "function",
+      "line": 1,
+      "name": "health",
+      "path": "shop/health.py"
+    },
+    {
+      "end_line": 2,
+      "id": "shop/pricing.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "shop.pricing",
+      "path": "shop/pricing.py"
+    },
+    {
+      "end_line": 2,
+      "id": "shop/pricing.py::discount",
+      "kind": "function",
+      "line": 1,
+      "name": "discount",
+      "path": "shop/pricing.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_api.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "tests.test_api",
+      "path": "tests/test_api.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_api.py::test_create_order",
+      "kind": "test",
+      "line": 3,
+      "name": "test_create_order",
+      "path": "tests/test_api.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_cart.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "tests.test_cart",
+      "path": "tests/test_cart.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_cart.py::test_checkout",
+      "kind": "test",
+      "line": 3,
+      "name": "test_checkout",
+      "path": "tests/test_cart.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_health.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "tests.test_health",
+      "path": "tests/test_health.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_health.py::test_health",
+      "kind": "test",
+      "line": 3,
+      "name": "test_health",
+      "path": "tests/test_health.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_pricing.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "tests.test_pricing",
+      "path": "tests/test_pricing.py"
+    },
+    {
+      "end_line": 4,
+      "id": "tests/test_pricing.py::test_discount",
+      "kind": "test",
+      "line": 3,
+      "name": "test_discount",
+      "path": "tests/test_pricing.py"
+    }
+  ],
+  "recommendations": [
+    {
+      "distance": 1,
+      "evidence_edges": [
+        "64174ddd2450956b7eca1fbb9002cf4c7a310d50c3375b1ceadd8c2c1f029628"
+      ],
+      "evidence_path": [
+        "tests/test_pricing.py::test_discount",
+        "shop/pricing.py::discount"
+      ],
+      "path_revision": "both",
+      "reason": "Resolved call path",
+      "score": 82,
+      "symbol": "tests/test_pricing.py::test_discount"
+    },
+    {
+      "distance": 2,
+      "evidence_edges": [
+        "53604229cd82a424f36f7387f6320216ae2b9ed03355c46ddcfef1694c12eb1d",
+        "5ce884fdae0e5a6bf37fd5ef53a7cfe48af084cea0b918324a2e37f7af1171ae"
+      ],
+      "evidence_path": [
+        "tests/test_cart.py::test_checkout",
+        "shop/cart.py::checkout",
+        "shop/pricing.py::discount"
+      ],
+      "path_revision": "both",
+      "reason": "Resolved call path",
+      "score": 72,
+      "symbol": "tests/test_cart.py::test_checkout"
+    },
+    {
+      "distance": 3,
+      "evidence_edges": [
+        "1d281fa58d3988e079d66986b72d247c00d6d3923ee755574bd53d5d61189099",
+        "a6fe8e1ce744ae1ba9be8e1c837f648b3919e56e71ec3c822b3b6b546c98229c",
+        "5ce884fdae0e5a6bf37fd5ef53a7cfe48af084cea0b918324a2e37f7af1171ae"
+      ],
+      "evidence_path": [
+        "tests/test_api.py::test_create_order",
+        "shop/api.py::create_order",
+        "shop/cart.py::checkout",
+        "shop/pricing.py::discount"
+      ],
+      "path_revision": "both",
+      "reason": "Resolved call path",
+      "score": 62,
+      "symbol": "tests/test_api.py::test_create_order"
+    }
+  ],
+  "removed": [],
+  "schema_version": "2.0",
+  "source_files": [
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": "def discount(total):\n    return total * 0.15\n"
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "def discount(total):\n    return total * 0.10\n"
+      },
+      "path": "shop/pricing.py"
+    }
+  ],
+  "stats": {
+    "changed": 2,
+    "edges": 20,
+    "elapsed_ms": 12.5,
+    "files_base": 8,
+    "files_head": 8,
+    "impacted": 10,
+    "recommended_tests": 3,
+    "symbols": 16
+  },
+  "warnings": [
+    "Risk scores prioritize review; they are not calibrated failure probabilities.",
+    "Static analysis is incomplete: dynamic dispatch, fixtures, reflection, re-exports, inheritance and runtime imports may hide dependencies. Keep the full test suite as a gate."
+  ]
+}

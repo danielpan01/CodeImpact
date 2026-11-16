@@ -1,0 +1,3 @@
+# Generated full reports use the fixture generator's stable JSON serialization.
+# states.ts verifies their recorded SHA-256 hashes before running any UI gate.
+tests/quality/fixtures/*.json

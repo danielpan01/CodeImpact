@@ -21,7 +21,7 @@ async function upload(page: Page, request: unknown): Promise<Report> {
   const result = await response;
   expect(result.status()).toBe(200);
   await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
+    page.getByRole("button", { name: /^Tests \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
   return result.json();
 }
@@ -105,7 +105,7 @@ test("test search, sort and reset retain selection and expanded evidence by keyb
     "test_discount",
   ]);
   await page.getByRole("button", { name: "Map", exact: true }).click();
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.getByLabel("Sort tests")).toHaveValue("name");
   await showEvidence(page);
   await expect(page.locator(".revision-evidence").first()).toHaveAttribute(
@@ -113,7 +113,7 @@ test("test search, sort and reset retain selection and expanded evidence by keyb
     "",
   );
   await openChangedCode(page);
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await page.getByRole("button", { name: "Reset tests" }).click();
   expect(
     await page
@@ -162,7 +162,7 @@ for (const caseId of ["slugify_ascii", "slugify_boundary", "cachetools_lfu"]) {
     await expect(
       page.getByRole("region", { name: "Selected changed code" }),
     ).toContainText(selected.evidence_path.at(-1)!.split("::")[1]);
-    await page.getByRole("button", { name: "Tests", exact: true }).click();
+    await page.getByRole("button", { name: /^Tests \d+$/ }).click();
     await expect(page.locator(".test-row[aria-pressed=true]")).toHaveAttribute(
       "data-symbol",
       selected.symbol,
@@ -285,7 +285,7 @@ test("long focused paths can jump to their endpoint and preserve viewport across
   const transform = await page
     .locator(".react-flow__viewport")
     .getAttribute("style");
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.locator(".react-flow__viewport")).toHaveAttribute(
     "style",
@@ -303,7 +303,7 @@ test("syntax coloring remains escaped text with unchanged line content", async (
     base: { files: {} },
     head: { files: { "message.py": source } },
   });
-  await page.getByRole("button", { name: "Changes", exact: true }).click();
+  await page.getByRole("button", { name: /^Changes \d+$/ }).click();
   const code = page.getByRole("region", { name: "After source" });
   expect(
     (await code.locator(".source-line > code").allTextContents()).join(""),

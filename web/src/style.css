@@ -138,6 +138,14 @@
   --path-outline: #a6bcff66;
 }
 
+/* Keep third-party attribution legible over the graph's dotted surface. */
+.react-flow__attribution {
+  background: var(--panel);
+}
+.react-flow__attribution a {
+  color: var(--muted);
+}
+
 * {
   box-sizing: border-box;
 }
