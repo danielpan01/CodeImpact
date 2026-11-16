@@ -2536,3 +2536,47 @@ Final local receipts: `reports/milestone8a-check-final.log`,
 `milestone8a-preservation.json`, and the `milestone8a-before/` / `milestone8a-after/`
 capture directories. These are local artifacts, not a claim of CI publication or
 new screenshot-comparison infrastructure.
+
+## PR #13 browser timeout follow-up — November 15, 2026
+
+The owner committed milestone 8A as `244d608` and opened
+[PR #13](https://github.com/danielpan01/CodeImpact/pull/13). Both the
+[pull-request run](https://github.com/danielpan01/CodeImpact/actions/runs/43784016835)
+and [push run](https://github.com/danielpan01/CodeImpact/actions/runs/43784012008)
+failed in the browser step: **173 passed, 1 failed** in each run. The new entry
+refinement test exceeded its **30-second total test timeout** in `webkit-phone`.
+This was not a workflow timeout. The PR run's trace shows successful checks through
+four complete viewport/theme pairs and the fifth viewport's light theme, before
+the timeout interrupted the next theme switch. The push run exhausted the same
+budget earlier, while loading another viewport. No preceding assertion failed.
+Both runs passed `make check`, all four evaluations and `make verify-pilot`; the
+Linux PR run passed **811 Python tests** with one non-failing deprecation warning.
+
+The local fix parameterizes the five entry viewport cases into separate tests,
+each with an isolated page and the unchanged default timeout. Both themes,
+keyboard order, close/focus restoration, 44 px controls, overflow and loaded report
+assertions remain in every case. No retries, increased timeouts or relaxed
+assertions were added. The full suite now contains **194 cases** because each of
+five browser projects runs five entry cases instead of one. Application code,
+analyzer behavior and the existing phone-first-result regression are unchanged.
+
+Focused verification: `npm run test:e2e -- --project=webkit-phone --grep
+'entry refinement' --repeat-each=3 --workers=2` passed **15/15** locally.
+The full `npm run test:e2e -- --workers=2` run passed **194/194** with no skips
+or failures across the existing five browser projects. Two workers match the
+observed GitHub runs. Formatting and `git diff --check` passed; all **138 protected
+files/artifacts** match the saved pre-milestone hashes, including stable evaluation
+reports. The original phone-first-result test is byte-for-byte unchanged.
+`make check` passed locally: **810 Python tests**, **1 expected Linux-only
+address-space skip**, one non-failing Starlette/httpx deprecation warning, Ruff
+lint/format, mypy (21 modules), TypeScript and production build. The four evaluation
+commands and standalone pilot verification were not rerun for this test-only
+follow-up; their passing CI results above cover the unchanged application code.
+
+Local receipts: `reports/pr13-ci-fix-focused.log`, `pr13-ci-fix-browser.log`,
+`pr13-ci-fix-check.log` and `pr13-ci-fix-preservation.json`; the downloaded failing
+trace is under `reports/pr13-ci-failure/`. These remain ignored local artifacts.
+
+The fix remains unstaged and uncommitted; GitHub verification of it requires the
+owner to commit and push it to the existing PR branch. The failing CI runs above
+describe `244d608`, not the local follow-up.

@@ -96,19 +96,21 @@ async function comfortableControls(page: Page) {
   }
 }
 
-test("entry refinement keeps input, alternatives and close usable across sizes", async ({
-  page,
-  browserName,
-}) => {
-  // WebKit on macOS uses Option-Tab to include buttons in keyboard navigation.
-  const tabKey = browserName === "webkit" ? "Alt+Tab" : "Tab";
-  for (const [width, height] of [
-    [1440, 900],
-    [1280, 800],
-    [768, 1024],
-    [390, 844],
-    [360, 844],
-  ]) {
+// Each viewport gets an isolated page and its own default timeout. Combining all
+// five sizes exceeded 30 seconds on CI's mobile WebKit despite passing assertions.
+for (const [width, height] of [
+  [1440, 900],
+  [1280, 800],
+  [768, 1024],
+  [390, 844],
+  [360, 844],
+]) {
+  test(`entry refinement keeps input, alternatives and close usable at ${width}×${height}`, async ({
+    page,
+    browserName,
+  }) => {
+    // WebKit uses Option-Tab to include buttons in keyboard navigation.
+    const tabKey = browserName === "webkit" ? "Alt+Tab" : "Tab";
     await page.setViewportSize({ width, height });
     await loadDemo(page);
     for (const theme of ["light", "dark"]) {
@@ -141,8 +143,8 @@ test("entry refinement keeps input, alternatives and close usable across sizes",
       await expect(page.locator(".test-row")).toHaveCount(3);
     }
     await themeButton(page).click();
-  }
-});
+  });
+}
 
 test("desktop review controls keep full hit areas and reduced-motion focus", async ({
   page,
