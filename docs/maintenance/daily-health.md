@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-15** (America/New_York).
+Checked on **2026-11-16** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -22,7 +22,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: SECURITY.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/cases/ | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real-v2/baselines/lfu-callback-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/mapping-fallback-v1.json | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real-v2/baselines/test-discovery-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
@@ -33,20 +35,28 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | README.md: docs/BUILD_PLAN.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/CORPUS.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/FRONTEND_MILESTONE8A.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/FRONTEND_ROADMAP.md#visual-direction | PASS | Local target exists; fragment not checked |
+| README.md: docs/LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/before-desktop.png | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/milestone3-dark-changes.png | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/milestone3-dark-map.png | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/milestone3-dark-tests.png | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/milestone3-light-tests.png | PASS | Local target exists; fragment not checked |
-| README.md: docs/media/milestone3-mobile-evidence.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone8a/after-desktop-dark-map.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone8a/after-desktop-dark-tests.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone8a/after-desktop-light-entry.png | PASS | Local target exists; fragment not checked |
+| README.md: docs/media/milestone8a/after-desktop-light-tests.png | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/portfolio-banner.svg | PASS | Local target exists; fragment not checked |
 | README.md: src/codeimpact/ | PASS | Local target exists; fragment not checked |
 | README.md: tests/ | PASS | Local target exists; fragment not checked |
@@ -54,21 +64,43 @@ Generated automatically by the daily project health workflow. This is a maintena
 | CONTRIBUTING.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/milestone6.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/preservation.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../corpus/real-v3/baselines/test-discovery-v1-labels.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/empty-phone-light.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/milestone7-empty-phone-light.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/milestone7-zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: FRONTEND_MILESTONE8A.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-desktop.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-mobile.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/changes.png | PASS | Local target exists; fragment not checked |
@@ -124,12 +156,14 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | packaging | ==26.3 | 26.3 | >=3.9 |
 | pathspec | ==1.1.1 | 1.1.1 | >=3.9 |
 | pluggy | ==1.7.0 | 1.7.0 | >=3.10 |
+| psutil | ==7.2.2 | 7.2.2 | >=3.6 |
 | pydantic | ==2.14.3 | 2.14.3 | >=3.10 |
 | pydantic_core | ==2.50.4 | 2.50.4 | >=3.10 |
 | pytest-cov | ==7.1.0 | 7.1.0 | >=3.9 |
 | pytest | ==9.2.0 | 9.2.0 | >=3.10 |
 | ruff | ==0.17.4 | 0.17.5 | >=3.7 |
 | starlette | ==1.10.0 | 1.10.0 | >=3.11 |
+| types-psutil | ==7.2.2.20261111 | 7.2.2.20261111 | >=3.10 |
 | typing-inspection | ==0.4.5 | 0.4.5 | >=3.10 |
 | typing_extensions | ==4.16.0 | 4.16.0 | >=3.9 |
 | uvicorn | ==0.54.0 | 0.54.0 | >=3.10 |
