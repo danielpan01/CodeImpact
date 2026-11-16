@@ -17,7 +17,7 @@ test("entry, initial Tests, and reopening inputs by keyboard retain the report",
   await demo.focus();
   await demo.press("Enter");
   await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
+    page.getByRole("button", { name: /^Tests \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect(
     page.getByRole("form", { name: "Analyze a public GitHub pull request" }),
@@ -42,7 +42,7 @@ test("entry, initial Tests, and reopening inputs by keyboard retain the report",
   await expect(reopen).toBeFocused();
   await expect(page.locator(".detail-content h3")).toHaveText("test_checkout");
   await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
+    page.getByRole("button", { name: /^Tests \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
 });
 
@@ -73,7 +73,7 @@ test("selection and expanded evidence persist across Map, Tests and changed code
   await expect(page.locator(".detail-content h3")).toHaveText(
     "test_create_order",
   );
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(
     page.getByRole("button", { name: /test_create_order/ }),
   ).toHaveAttribute("aria-pressed", "true");

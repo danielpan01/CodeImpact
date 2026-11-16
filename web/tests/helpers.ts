@@ -4,7 +4,7 @@ export async function loadDemo(page: Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Load demo", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
+    page.getByRole("button", { name: /^Tests \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
 }
 export async function openAnalysis(page: Page) {
@@ -19,7 +19,7 @@ export async function openAnalysis(page: Page) {
   }
 }
 export async function showEvidence(page: Page) {
-  await page.getByRole("button", { name: "Tests", exact: true }).waitFor();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).waitFor();
   const trigger = page.getByRole("button", {
     name: "View evidence",
     exact: true,

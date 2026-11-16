@@ -1,0 +1,6070 @@
+{
+  "changed": [
+    "ordered_set.py::<module>",
+    "ordered_set.py::OrderedSet",
+    "ordered_set.py::OrderedSet.pop"
+  ],
+  "changes": [
+    {
+      "after": {
+        "end_line": 512,
+        "line": 1
+      },
+      "before": {
+        "end_line": 511,
+        "line": 1
+      },
+      "path": "ordered_set.py",
+      "status": "modified",
+      "symbol": "ordered_set.py::<module>"
+    },
+    {
+      "after": {
+        "end_line": 512,
+        "line": 51
+      },
+      "before": {
+        "end_line": 511,
+        "line": 51
+      },
+      "path": "ordered_set.py",
+      "status": "modified",
+      "symbol": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": {
+        "end_line": 251,
+        "line": 233
+      },
+      "before": {
+        "end_line": 250,
+        "line": 233
+      },
+      "path": "ordered_set.py",
+      "status": "modified",
+      "symbol": "ordered_set.py::OrderedSet.pop"
+    }
+  ],
+  "edges": [
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e3e35502d2779a47bdd5c3e49b6dab0fe3c4a610ca8bfcd85fd3af33f6f05af9",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 354,
+            "line": 352,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 353,
+            "line": 351,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "fa4c3bff3610a2e18ed1f8836142c5c686b4f76e39a9f9bca15cc662575eb171",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__and__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 163,
+            "line": 153,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 163,
+            "line": 153,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "af72b1bfb86ef95527c7f7b876a95af2e9db3e3e35f1e34f91ff96819b8e85f7",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__contains__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 331,
+            "line": 305,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 330,
+            "line": 304,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e397ed18081fa23eef28185ecd4329f90f196fb86f4bf5c5877149406e8f8003",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__eq__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 116,
+            "line": 87,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 116,
+            "line": 87,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "44f3bc12ff2068fefb25f576c9a4917dbb85cd76edf615a05eb1ab2fde5dd77b",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__getitem__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 145,
+            "line": 135,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 145,
+            "line": 135,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "54e5a83fcfad63cd1070affefa95f55fa37c3a61a7efe7b7126029bc434689a1",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__getstate__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 65,
+            "line": 61,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 65,
+            "line": 61,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "982e70d67416a308c859b98a661109c88cc48f32bd044e43fe127d2e82397811",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__init__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 290,
+            "line": 284,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 289,
+            "line": 283,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "5669927428cd7837b363e05a421b031b672b1bf54af8673e4ab62da406dc505f",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__iter__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 77,
+            "line": 67,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 77,
+            "line": 67,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "85dcf649a355def01c120b140638074e06deb622b187f8cad20f5536a5e5bef4",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__len__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 303,
+            "line": 300,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 302,
+            "line": 299,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "5d2306a7d664d175cb3b37c10db27d9319cef10be52f39b726d6dca1777122be",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__repr__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 298,
+            "line": 292,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 297,
+            "line": 291,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "53bd004ec4d74a26d1790f387febc2e88f7db9150f21bf4d4ae5288107844aeb",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__reversed__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 151,
+            "line": 147,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 151,
+            "line": 147,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "679ef8069864d0a50cdd14df928d6976b8be9007928caa66e4ea0df45ebf5881",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.__setstate__",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 458,
+            "line": 452,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 457,
+            "line": 451,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "de223a1bfc24b47602aba66c612fe736c46af63f9a15e68bb4a2e198c9bd6327",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet._update_items",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 182,
+            "line": 165,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 182,
+            "line": 165,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "859dcd896d403108fa1ecb10483c5ffadf0a15d3454d35ad4348e3b37ea2bcc6",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.add",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 282,
+            "line": 277,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 281,
+            "line": 276,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "791d15f281e6eaa1bb3eb4f1404d5ed2ccc89b831d68eb132065d0f9ccf5a641",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.clear",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 130,
+            "line": 118,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 130,
+            "line": 118,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "67d22530a95e23026567a6497f012bea2f6e95e366a9ebeeb95dd9a095bfead2",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.copy",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 398,
+            "line": 378,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 397,
+            "line": 377,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "0da87790e4c37c9a5a08c252573fd7281620e3bf2af85044a3181e3100dc05d3",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.difference",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 479,
+            "line": 460,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 478,
+            "line": 459,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "4c187eaa1136c9e56f1a6f3bc8a5e39008b482b3114ea7a9824c072740e318d8",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.difference_update",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 275,
+            "line": 253,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 274,
+            "line": 252,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "be9386c9a5eda9c23afb74ff297e6d5a92011dc77216142042a36a524d77c648",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.discard",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 227,
+            "line": 212,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 227,
+            "line": 212,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "f926e37ee822719139b2728fc3b3bb1f3a561620ebb11fc236de474e998dbbcb",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.index",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 225,
+            "line": 225,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 48,
+            "line": 32,
+            "path": "ordered_set.py"
+          },
+          "text": "ordered_set.py:225 calls _is_atomic"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 225,
+            "line": 225,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 48,
+            "line": 32,
+            "path": "ordered_set.py"
+          },
+          "text": "ordered_set.py:225 calls _is_atomic"
+        }
+      ],
+      "id": "b5186a2727875befa4d155125d77074162293a0df8f965572b85f06056e770af",
+      "kind": "call",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.index",
+      "target": "ordered_set.py::_is_atomic"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 376,
+            "line": 356,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 375,
+            "line": 355,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d7d2af2168791542e33c7c383725c3b5f947e1c612e9627f287239fc7b1eef92",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.intersection",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 494,
+            "line": 481,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 493,
+            "line": 480,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "1eaabe9787712057d512404e643f9d563c67f3d676ec90b8f2e67d45f9472d6a",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.intersection_update",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 414,
+            "line": 400,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 413,
+            "line": 399,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "4a87769b5cefcbe9e026b0781cdfff07cd5b2a61b4c73531b3fdce206efbcef5",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.issubset",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 430,
+            "line": 416,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 429,
+            "line": 415,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "726e9e2cd8f80f864fc4f3504e05722b9ec53e8800165674d403de80f12eea2b",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.issuperset",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 251,
+            "line": 233,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 250,
+            "line": 233,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "4095615ec117406ed83dedbef0f848543b05dedf343696d1115c1b56a428a379",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.pop",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 450,
+            "line": 432,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 449,
+            "line": 431,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "fe8c023f1c634fff88cc18341ffd84d33015eff6d899e0829e04182a04e8ce50",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.symmetric_difference",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 512,
+            "line": 496,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 511,
+            "line": 495,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "035bcaea7a9de59cbb3d58672081f448ff8f60448a58648609fa8d35ce076940",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.symmetric_difference_update",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 350,
+            "line": 333,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 349,
+            "line": 332,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "2d7c18b8742eca8ea3f4804dc541afe1045390c14ada93ce5221e05be750736a",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.union",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 206,
+            "line": 186,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 206,
+            "line": 186,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "5470fc88d793d19e8edec37d1c7622640e9ea484f77932cf10f0ee41a324d60a",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::OrderedSet.update",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 48,
+            "line": 32,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 48,
+            "line": 32,
+            "path": "ordered_set.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "4c17a94045b0e3fec7b3e39a703f8fdf5330e3ce69fd5954b48fe48f0bb57eb5",
+      "kind": "module",
+      "revision": "both",
+      "source": "ordered_set.py::_is_atomic",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 10,
+            "line": 10,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:10 imports ordered_set"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 10,
+            "line": 10,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 1,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:10 imports ordered_set"
+        }
+      ],
+      "id": "0f9b67e204494dca0b7fdb3c95adbe01e6fa0755c637d1973a5398535cbe7faa",
+      "kind": "import",
+      "revision": "both",
+      "source": "test.py::<module>",
+      "target": "ordered_set.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 75,
+            "line": 58,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 75,
+            "line": 58,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "dabaaf2dfae9eb2960817408e7bb16b02879986a2a2570fcfc15741057a514b9",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::FancyIndexTester",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 75,
+            "line": 73,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 75,
+            "line": 73,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "15452cdec89ca65c02b6e878c2b7bbfe64f34d27c94e83ee0f1a831e4bcc3952",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::FancyIndexTester.__eq__",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 71,
+            "line": 70,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 71,
+            "line": 70,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e14d14bf0eafac7d4923594e9f2e2f1967df496d7cde7adf71b06aceb3dfdff6",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::FancyIndexTester.__index__",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 65,
+            "line": 64,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 65,
+            "line": 64,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "f7d3dd1555bf70abde14f8c96773aa52e726553f614c562aa688320384909d89",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::FancyIndexTester.__init__",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 68,
+            "line": 67,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 68,
+            "line": 67,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "26754b553b9cfc028b13975b7e6fd9dfefbafe96fcfbf1574a58187d41a9803e",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::FancyIndexTester.__iter__",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 286,
+            "line": 286,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:286 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 287,
+            "line": 287,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:287 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 291,
+            "line": 291,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:291 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 292,
+            "line": 292,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:292 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 296,
+            "line": 296,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:296 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 297,
+            "line": 297,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:297 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 301,
+            "line": 301,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:301 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 302,
+            "line": 302,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:302 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 309,
+            "line": 309,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:309 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 310,
+            "line": 310,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:310 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 286,
+            "line": 286,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:286 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 287,
+            "line": 287,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:287 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 291,
+            "line": 291,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:291 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 292,
+            "line": 292,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:292 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 296,
+            "line": 296,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:296 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 297,
+            "line": 297,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:297 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 301,
+            "line": 301,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:301 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 302,
+            "line": 302,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:302 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 309,
+            "line": 309,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:309 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 310,
+            "line": 310,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:310 calls OrderedSet"
+        }
+      ],
+      "id": "d53c0c6ce7fe12dd90b186b42f02ba7e921f8af37bc5c60c4cd41d56278f439d",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::_operator_consistency_testdata",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "fc7a9507095dbd32ba6d1206b59f5f72045832c46aa0335ed9e6d51a45788157",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::_operator_consistency_testdata",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 262,
+            "line": 255,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 262,
+            "line": 255,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "414612dceb219563ab389a770b33015bef551fc38bd3bf59f9252e533e9d3995",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::allsame_",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "261f8d4d3af6d14d7a2ad06614b8de8e2f5deb46db1491b257732152e374cf1d",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::check_results_",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 272,
+            "line": 272,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 262,
+            "line": 255,
+            "path": "test.py"
+          },
+          "text": "test.py:272 calls allsame_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 272,
+            "line": 272,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 262,
+            "line": 255,
+            "path": "test.py"
+          },
+          "text": "test.py:272 calls allsame_"
+        }
+      ],
+      "id": "d4ce2142f384d40d6371e265d353a03d77350698c489fbb2b66627cbbb0fb94e",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::check_results_",
+      "target": "test.py::allsame_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 33,
+            "line": 33,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:33 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 34,
+            "line": 34,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:34 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 37,
+            "line": 37,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:37 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 38,
+            "line": 38,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:38 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 39,
+            "line": 39,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:39 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 33,
+            "line": 33,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:33 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 34,
+            "line": 34,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:34 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 37,
+            "line": 37,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:37 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 38,
+            "line": 38,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:38 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 39,
+            "line": 39,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:39 calls OrderedSet"
+        }
+      ],
+      "id": "1619c2ac49b57de165e56b1cd3bf3fc3784e9d5ca33bec28990765b0a8edcd4f",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_binary_operations",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 39,
+            "line": 32,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 39,
+            "line": 32,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "cce1478e5efec27ea601950347dd21e7b3101b79e23ea577e1cba6d8853b58e2",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_binary_operations",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 380,
+            "line": 380,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:380 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 381,
+            "line": 381,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:381 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 380,
+            "line": 380,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:380 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 381,
+            "line": 381,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:381 calls OrderedSet"
+        }
+      ],
+      "id": "ab8352bf6025fa6a2d001b3ecf6f5bc8c1105fc51f772696934b0c1a70781703",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_bitwise_and_consistency",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 387,
+            "line": 378,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 387,
+            "line": 378,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d16c784b1e9f2dc18f1addef2d359f429149557c5fcd887b742049e2dfeb3b5d",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_bitwise_and_consistency",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 387,
+            "line": 387,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:387 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 387,
+            "line": 387,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:387 calls check_results_"
+        }
+      ],
+      "id": "09673daf1c011ff22a2e93e881965a19c5ac5028e3e51da296d2acdfb9f36a63",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_bitwise_and_consistency",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 131,
+            "line": 131,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:131 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 135,
+            "line": 135,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:135 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 131,
+            "line": 131,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:131 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 135,
+            "line": 135,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:135 calls OrderedSet"
+        }
+      ],
+      "id": "29db466e570a56c55ccd2ae2cf0737030f8900daf493e68de9a2e0c4f0f15b78",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_clear",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 135,
+            "line": 130,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 135,
+            "line": 130,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e38e3858230723b6cef0be31372f52dd9aca141e56978dadb3585d2258e5bbfd",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_clear",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 214,
+            "line": 214,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:214 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 215,
+            "line": 215,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:215 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 219,
+            "line": 219,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:219 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 214,
+            "line": 214,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:214 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 215,
+            "line": 215,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:215 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 219,
+            "line": 219,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:219 calls OrderedSet"
+        }
+      ],
+      "id": "948f66c403600427f5851344e281e89e384806fcc82d7355f1e9fe2086473cba",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_comparisons",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 219,
+            "line": 212,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 219,
+            "line": 212,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "a609a692484759002b2d010b06345d7956fef72810e99627a0817b31d99df302",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_comparisons",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 20,
+            "line": 20,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:20 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 20,
+            "line": 20,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:20 calls OrderedSet"
+        }
+      ],
+      "id": "6c017526331bb7d51aaed1a6b2969179b4903b8a0077a6af7cc6dfcc8cdef15d",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_empty_pickle",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 22,
+            "line": 19,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 22,
+            "line": 19,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "41fb2557accb96c8d28080bec3ae320876012bcca8d956cd68b3df393786151c",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_empty_pickle",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 179,
+            "line": 179,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:179 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 179,
+            "line": 179,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:179 calls OrderedSet"
+        }
+      ],
+      "id": "3df40725859d84d8784cbecd9b8ee889422bdadbe701ca4a3aac8e0a7c4db5e3",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_empty_repr",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 180,
+            "line": 178,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 180,
+            "line": 178,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "c896a6a2a7a18a9e2767d189220e3e410b8bcaa11d7f96ce69e10f521774d482",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_empty_repr",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 184,
+            "line": 184,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:184 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 184,
+            "line": 184,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:184 calls OrderedSet"
+        }
+      ],
+      "id": "eeb27fdfc94df27b711d6d76ef210ec036aa44ca127479c00722ed897df2c392",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_eq_wrong_type",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 185,
+            "line": 183,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 185,
+            "line": 183,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "67d3cdb2d5f64d56f6bc6e175a1797f24ca7ac9afdf018c194cf2b926684db77",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_eq_wrong_type",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 79,
+            "line": 79,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:79 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 79,
+            "line": 79,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:79 calls OrderedSet"
+        }
+      ],
+      "id": "52704a3c6b45c39bc46014fcfe96959620a0d919a68e71b9f2737f29bbc66b5b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_fancy_index_class",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 81,
+            "line": 78,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 81,
+            "line": 78,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "03bf77cddcb4f675bfdf51cdcec3205af9f38a4a7ff856aff3c7980488a7033c",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_fancy_index_class",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 80,
+            "line": 80,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 75,
+            "line": 58,
+            "path": "test.py"
+          },
+          "text": "test.py:80 calls FancyIndexTester"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 80,
+            "line": 80,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 75,
+            "line": 58,
+            "path": "test.py"
+          },
+          "text": "test.py:80 calls FancyIndexTester"
+        }
+      ],
+      "id": "b7b834bb1dd82ea18653ca7defbabf9c404a713abe213ae10c9583b3bee3826b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_fancy_index_class",
+      "target": "test.py::FancyIndexTester"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 166,
+            "line": 166,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:166 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 166,
+            "line": 166,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:166 calls OrderedSet"
+        }
+      ],
+      "id": "6e9c84bdf888e27d697e41b1ff3b53c05f5d6dbeb9cac4325eb57d14ad2c9870",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_getitem_type_error",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 168,
+            "line": 165,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 168,
+            "line": 165,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "10efb8701cf81078e32da57b8b236a7c03972d321c00dad2ca383ceb72383b54",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_getitem_type_error",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 43,
+            "line": 43,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:43 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 50,
+            "line": 50,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:50 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 51,
+            "line": 51,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:51 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 43,
+            "line": 43,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:43 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 50,
+            "line": 50,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:50 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 51,
+            "line": 51,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:51 calls OrderedSet"
+        }
+      ],
+      "id": "4c2d0a2e9a620167e6a8e81057afad45a5c518e598314748d629e8205ce0d14b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_indexing",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 55,
+            "line": 42,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 55,
+            "line": 42,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "bd62d998416545cf74fe4fa3867845ca6ca12656b84e8802c525efbfe99dc310",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_indexing",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 332,
+            "line": 324,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 332,
+            "line": 324,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "35efbe8f0f057d5af53daa13394a219d07737755beed7d06e71d0675e5dc8afc",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_difference",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 325,
+            "line": 325,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:325 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 325,
+            "line": 325,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:325 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "0fbfacb047384fa98cb9095fe1c06096db6449377ba6bc3b745c91c796fc87b2",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_difference",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 332,
+            "line": 330,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:330 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 332,
+            "line": 330,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:330 calls check_results_"
+        }
+      ],
+      "id": "6f5d529119cf497fb099e16eda7f25c56f75600d2d0561567b1a1a4cea625e81",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_difference",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 375,
+            "line": 371,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 375,
+            "line": 371,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "f486fcf862e0578a5986a54cc42ae26a6d28e78b9fb2e297e09adef3b5d44a36",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_disjoint",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 372,
+            "line": 372,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:372 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 372,
+            "line": 372,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:372 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "ac7b95bb7d78f48cff2b34f9f1386a8212a25512817631315303e05b8d62509d",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_disjoint",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 375,
+            "line": 375,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:375 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 375,
+            "line": 375,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:375 calls check_results_"
+        }
+      ],
+      "id": "a5f2e899598a0ae3314ed12d647994e5733acf327b320e8b9c9622995bac2f17",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_disjoint",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 321,
+            "line": 315,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 321,
+            "line": 315,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d8bba73fbfc167ec42c92bcacf381ee43f4f77b43d040cb9c3df4453326bacc0",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_isect",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 316,
+            "line": 316,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:316 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 316,
+            "line": 316,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:316 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "d2df2175c72e0ef58eb9a210b3a5de72ec688f0bd1fa457a32b63adb968ea0a4",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_isect",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 321,
+            "line": 321,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:321 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 321,
+            "line": 321,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:321 calls check_results_"
+        }
+      ],
+      "id": "d707fd6573905873fafae8254c4e29daa9ceb0410e2c858a7363ec40a9af3135",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_isect",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 358,
+            "line": 353,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 358,
+            "line": 353,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "56385334f472bff50ee14cf9ed6ac51d04dbefc940726b9a18622962aad06675",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_subset",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 354,
+            "line": 354,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:354 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 354,
+            "line": 354,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:354 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "cda290512e594e08412410344e9069063d126947888f0b5558be41e6a614a30f",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_subset",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 358,
+            "line": 358,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:358 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 358,
+            "line": 358,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:358 calls check_results_"
+        }
+      ],
+      "id": "6ebe6dbb2f76cc0bb530b2adc72e321ea2ea4d4175ce33989b6eeda50629a51d",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_subset",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 368,
+            "line": 361,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 368,
+            "line": 361,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "465189a3adc98b36de44eba3099550f1dacc7310a394ad88ae3957fd6d046ccd",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_superset",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 362,
+            "line": 362,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:362 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 362,
+            "line": 362,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:362 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "24418fb63f4c765fcc185bd84921369425647b9f6f8ce7478f44a4df0167b36b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_superset",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 368,
+            "line": 366,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:366 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 368,
+            "line": 366,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:366 calls check_results_"
+        }
+      ],
+      "id": "f91471884d3c4e3508cc049512789cb08e938d99a7c89eb9c876de8eb1b32b07",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_superset",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 350,
+            "line": 344,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 350,
+            "line": 344,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e6099e87f137973e1159a15e60a8aee4a8763fcee9fffd27550cd154dd9060f4",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_union",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 345,
+            "line": 345,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:345 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 345,
+            "line": 345,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:345 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "98c19fb8b20daa4b120b9acbd1bb661c479268b1ca2b99add12fa4acadde593b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_union",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 350,
+            "line": 350,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:350 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 350,
+            "line": 350,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:350 calls check_results_"
+        }
+      ],
+      "id": "aaeb194eca48c5f044c503395b6dfa4ed8a5630ff1ac7edc23b9c9d11e814fbc",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_union",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 341,
+            "line": 335,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 341,
+            "line": 335,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "525b62941e78727f3dc91e36ee6f3f05a98d88d5f867dd88f710fbf9b19aa778",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_xor",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 336,
+            "line": 336,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:336 calls _operator_consistency_testdata"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 336,
+            "line": 336,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 312,
+            "line": 281,
+            "path": "test.py"
+          },
+          "text": "test.py:336 calls _operator_consistency_testdata"
+        }
+      ],
+      "id": "ef0c980c97730773aaac9a6e0c0386c4920ecd48d7d6defa47740f993cd5a3ef",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_xor",
+      "target": "test.py::_operator_consistency_testdata"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 341,
+            "line": 341,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:341 calls check_results_"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 341,
+            "line": 341,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 278,
+            "line": 265,
+            "path": "test.py"
+          },
+          "text": "test.py:341 calls check_results_"
+        }
+      ],
+      "id": "5e91544f936d2751a934c54f8e1400fef0d10c1d679ccbed8bbaad3feb6fe28b",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_operator_consistency_xor",
+      "target": "test.py::check_results_"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 26,
+            "line": 26,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:26 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 28,
+            "line": 28,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:28 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 26,
+            "line": 26,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:26 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 28,
+            "line": 28,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:28 calls OrderedSet"
+        }
+      ],
+      "id": "f85a49a867798516fa027eaee83bc80655578fe0cae0f18a2f566b112ff89bc8",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_order",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 29,
+            "line": 25,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 29,
+            "line": 25,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "c4874e09f30449d4cc9b643dd126b3e8ef1018d1ee1f70cae596791692ee30ff",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_order",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 190,
+            "line": 190,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:190 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 191,
+            "line": 191,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:191 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 192,
+            "line": 192,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:192 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 193,
+            "line": 193,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:193 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 190,
+            "line": 190,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:190 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 191,
+            "line": 191,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:191 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 192,
+            "line": 192,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:192 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 193,
+            "line": 193,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:193 calls OrderedSet"
+        }
+      ],
+      "id": "947d160d92cabb19d838b9accc07e203c3e08798289d42b9bdcc33c5444c0ded",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_ordered_equality",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 193,
+            "line": 188,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 193,
+            "line": 188,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d3d1edf9e33728d49defd730cac5cc907f95cdbae8f6f9575985c7e7cd92d51c",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_ordered_equality",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 198,
+            "line": 198,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:198 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 200,
+            "line": 200,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:200 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 201,
+            "line": 201,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:201 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 203,
+            "line": 203,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:203 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 204,
+            "line": 204,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:204 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 208,
+            "line": 208,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:208 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 209,
+            "line": 209,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:209 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 198,
+            "line": 198,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:198 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 200,
+            "line": 200,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:200 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 201,
+            "line": 201,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:201 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 203,
+            "line": 203,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:203 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 204,
+            "line": 204,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:204 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 208,
+            "line": 208,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:208 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 209,
+            "line": 209,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:209 calls OrderedSet"
+        }
+      ],
+      "id": "e08efc757889a347de2e38f4c0ceee90718ba49099e9da0ccf70fb8ac1f79a7d",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_ordered_inequality",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 209,
+            "line": 196,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 209,
+            "line": 196,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "7bc749a74778f04d7a832a20cbdce33941cddee65f3771a1c61e8aa9d2964e7b",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_ordered_inequality",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 85,
+            "line": 85,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:85 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 85,
+            "line": 85,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:85 calls OrderedSet"
+        }
+      ],
+      "id": "197a2c8bfd5a8d37e088b09f0b32121a74f1436c197201cdb7f79fc1e2f455fb",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_pandas_compat",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 87,
+            "line": 84,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 87,
+            "line": 84,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "9359c2d9e1aab9e878233a52227fab79748080686fdbf9e73cf50efefbede6f8",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_pandas_compat",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 14,
+            "line": 14,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:14 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 14,
+            "line": 14,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:14 calls OrderedSet"
+        }
+      ],
+      "id": "5e7e2e300f17b69b166576593d1c052c8e8bbc7654ede42a710d042dcfbaf3ac",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_pickle",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 16,
+            "line": 13,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 16,
+            "line": 13,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "aaf37acbe598075b27eb7478e8930b82b5705d0ad9fc890d595ee4956eba0685",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_pickle",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 154,
+            "line": 154,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:154 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 154,
+            "line": 154,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:154 calls OrderedSet"
+        }
+      ],
+      "id": "3627d0bbf5b5a5fa149621e72b4a8faa210afcd0e1c7225f945b18273431906f",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_pop",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 162,
+            "line": 153,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 162,
+            "line": 153,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "144382e70eb1017ec76fee711abaf78d03714d01e1fc60640582e5ac4bbf0f7c",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_pop",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 99,
+            "line": 99,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:99 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 104,
+            "line": 104,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:104 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 99,
+            "line": 99,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:99 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 104,
+            "line": 104,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:104 calls OrderedSet"
+        }
+      ],
+      "id": "1631dcd448b8987c036723435407915533080d4e17313db6602ede2c68249df9",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_remove",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 120,
+            "line": 98,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 120,
+            "line": 98,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "e57f4a682c9c870dcdb09e1f2fbbb9d8d0fd6d966b1500ee79e0db1b60565a44",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_remove",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 125,
+            "line": 125,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:125 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 125,
+            "line": 125,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:125 calls OrderedSet"
+        }
+      ],
+      "id": "7daeca23187693515016d497bfcc7e6cc5ffcf54dcc7627b06559da7349fecfc",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_remove_error",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 127,
+            "line": 123,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 127,
+            "line": 123,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "0d643fe7e2e4fda0fa72c5c9c236fa4e883e34d59adc4dd8a82e5555947c689b",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_remove_error",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 91,
+            "line": 91,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:91 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 91,
+            "line": 91,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:91 calls OrderedSet"
+        }
+      ],
+      "id": "07903ca5a4c061faafa0e881e61796d2fbe6598624f70fe20cfd258fc5cc647c",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_tuples",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 95,
+            "line": 90,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 95,
+            "line": 90,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "22ff71e329b17fcb0ec1916c4dc879b217ada62b3c537fc9380e3f9579f41520",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_tuples",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 224,
+            "line": 224,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:224 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 225,
+            "line": 225,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:225 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 227,
+            "line": 227,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:227 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 228,
+            "line": 228,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:228 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 229,
+            "line": 229,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:229 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 233,
+            "line": 233,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:233 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 237,
+            "line": 237,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:237 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 238,
+            "line": 238,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:238 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 239,
+            "line": 239,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:239 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 224,
+            "line": 224,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:224 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 225,
+            "line": 225,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:225 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 227,
+            "line": 227,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:227 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 228,
+            "line": 228,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:228 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 229,
+            "line": 229,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:229 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 233,
+            "line": 233,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:233 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 237,
+            "line": 237,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:237 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 238,
+            "line": 238,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:238 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 239,
+            "line": 239,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:239 calls OrderedSet"
+        }
+      ],
+      "id": "aea1adc1c580513867bb3c9cd42300bdf65539608c3e51cdddb927a1807146e4",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_unordered_equality",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 239,
+            "line": 222,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 239,
+            "line": 222,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "dc0ebd58d0ab6cfa9a4b95f31df3fa0ac661970ee3ee1641645c2ebde057bbb8",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_unordered_equality",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 243,
+            "line": 243,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:243 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 244,
+            "line": 244,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:244 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 246,
+            "line": 246,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:246 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 247,
+            "line": 247,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:247 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 248,
+            "line": 248,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:248 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 252,
+            "line": 252,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:252 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 243,
+            "line": 243,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:243 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 244,
+            "line": 244,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:244 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 246,
+            "line": 246,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:246 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 247,
+            "line": 247,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:247 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 248,
+            "line": 248,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:248 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 252,
+            "line": 252,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:252 calls OrderedSet"
+        }
+      ],
+      "id": "449fd3cdc1d1113c14f38b1300ac0bee76e6e5e8faad09462e608f5e18dd6db4",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_unordered_inequality",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 252,
+            "line": 242,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 252,
+            "line": 242,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "6c42ecd8b7833108db09777ea1afb30ed8a57498bf3224e3171640fe735c262d",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_unordered_inequality",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 139,
+            "line": 139,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:139 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 146,
+            "line": 146,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:146 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 139,
+            "line": 139,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:139 calls OrderedSet"
+        },
+        {
+          "location": {
+            "end_line": 146,
+            "line": 146,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:146 calls OrderedSet"
+        }
+      ],
+      "id": "314ffd507132986268b4398ee77db70c08060d93e2b9c4815963d1cb454faa21",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_update",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 150,
+            "line": 138,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 150,
+            "line": 138,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "f1b84dab351273c1daecb85c6d8c225f77b081eb01358ee2b26a92cc8c799251",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_update",
+      "target": "test.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 172,
+            "line": 172,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 512,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:172 calls OrderedSet"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 172,
+            "line": 172,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 511,
+            "line": 51,
+            "path": "ordered_set.py"
+          },
+          "text": "test.py:172 calls OrderedSet"
+        }
+      ],
+      "id": "ffe3c8e95d290e0d2d5c0b6f77d8b522b115bb649419e2dd56d5fc6a860c0b8a",
+      "kind": "call",
+      "revision": "both",
+      "source": "test.py::test_update_value_error",
+      "target": "ordered_set.py::OrderedSet"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 175,
+            "line": 171,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 175,
+            "line": 171,
+            "path": "test.py"
+          },
+          "target_location": {
+            "end_line": 387,
+            "line": 1,
+            "path": "test.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "68c78289e911218bdd5197529232c30a9c7140cd077136c02f723033f08ad69a",
+      "kind": "module",
+      "revision": "both",
+      "source": "test.py::test_update_value_error",
+      "target": "test.py::<module>"
+    }
+  ],
+  "impacted": [
+    "test.py::<module>",
+    "test.py::test_pop"
+  ],
+  "label": "ordered_set_pop",
+  "nodes": [
+    {
+      "end_line": 512,
+      "id": "ordered_set.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "ordered_set",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 512,
+      "id": "ordered_set.py::OrderedSet",
+      "kind": "class",
+      "line": 51,
+      "name": "OrderedSet",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 354,
+      "id": "ordered_set.py::OrderedSet.__and__",
+      "kind": "function",
+      "line": 352,
+      "name": "OrderedSet.__and__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 163,
+      "id": "ordered_set.py::OrderedSet.__contains__",
+      "kind": "function",
+      "line": 153,
+      "name": "OrderedSet.__contains__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 331,
+      "id": "ordered_set.py::OrderedSet.__eq__",
+      "kind": "function",
+      "line": 305,
+      "name": "OrderedSet.__eq__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 116,
+      "id": "ordered_set.py::OrderedSet.__getitem__",
+      "kind": "function",
+      "line": 87,
+      "name": "OrderedSet.__getitem__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 145,
+      "id": "ordered_set.py::OrderedSet.__getstate__",
+      "kind": "function",
+      "line": 135,
+      "name": "OrderedSet.__getstate__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 65,
+      "id": "ordered_set.py::OrderedSet.__init__",
+      "kind": "function",
+      "line": 61,
+      "name": "OrderedSet.__init__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 290,
+      "id": "ordered_set.py::OrderedSet.__iter__",
+      "kind": "function",
+      "line": 284,
+      "name": "OrderedSet.__iter__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 77,
+      "id": "ordered_set.py::OrderedSet.__len__",
+      "kind": "function",
+      "line": 67,
+      "name": "OrderedSet.__len__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 303,
+      "id": "ordered_set.py::OrderedSet.__repr__",
+      "kind": "function",
+      "line": 300,
+      "name": "OrderedSet.__repr__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 298,
+      "id": "ordered_set.py::OrderedSet.__reversed__",
+      "kind": "function",
+      "line": 292,
+      "name": "OrderedSet.__reversed__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 151,
+      "id": "ordered_set.py::OrderedSet.__setstate__",
+      "kind": "function",
+      "line": 147,
+      "name": "OrderedSet.__setstate__",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 458,
+      "id": "ordered_set.py::OrderedSet._update_items",
+      "kind": "function",
+      "line": 452,
+      "name": "OrderedSet._update_items",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 182,
+      "id": "ordered_set.py::OrderedSet.add",
+      "kind": "function",
+      "line": 165,
+      "name": "OrderedSet.add",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 282,
+      "id": "ordered_set.py::OrderedSet.clear",
+      "kind": "function",
+      "line": 277,
+      "name": "OrderedSet.clear",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 130,
+      "id": "ordered_set.py::OrderedSet.copy",
+      "kind": "function",
+      "line": 118,
+      "name": "OrderedSet.copy",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 398,
+      "id": "ordered_set.py::OrderedSet.difference",
+      "kind": "function",
+      "line": 378,
+      "name": "OrderedSet.difference",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 479,
+      "id": "ordered_set.py::OrderedSet.difference_update",
+      "kind": "function",
+      "line": 460,
+      "name": "OrderedSet.difference_update",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 275,
+      "id": "ordered_set.py::OrderedSet.discard",
+      "kind": "function",
+      "line": 253,
+      "name": "OrderedSet.discard",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 227,
+      "id": "ordered_set.py::OrderedSet.index",
+      "kind": "function",
+      "line": 212,
+      "name": "OrderedSet.index",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 376,
+      "id": "ordered_set.py::OrderedSet.intersection",
+      "kind": "function",
+      "line": 356,
+      "name": "OrderedSet.intersection",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 494,
+      "id": "ordered_set.py::OrderedSet.intersection_update",
+      "kind": "function",
+      "line": 481,
+      "name": "OrderedSet.intersection_update",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 414,
+      "id": "ordered_set.py::OrderedSet.issubset",
+      "kind": "function",
+      "line": 400,
+      "name": "OrderedSet.issubset",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 430,
+      "id": "ordered_set.py::OrderedSet.issuperset",
+      "kind": "function",
+      "line": 416,
+      "name": "OrderedSet.issuperset",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 251,
+      "id": "ordered_set.py::OrderedSet.pop",
+      "kind": "function",
+      "line": 233,
+      "name": "OrderedSet.pop",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 450,
+      "id": "ordered_set.py::OrderedSet.symmetric_difference",
+      "kind": "function",
+      "line": 432,
+      "name": "OrderedSet.symmetric_difference",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 512,
+      "id": "ordered_set.py::OrderedSet.symmetric_difference_update",
+      "kind": "function",
+      "line": 496,
+      "name": "OrderedSet.symmetric_difference_update",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 350,
+      "id": "ordered_set.py::OrderedSet.union",
+      "kind": "function",
+      "line": 333,
+      "name": "OrderedSet.union",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 206,
+      "id": "ordered_set.py::OrderedSet.update",
+      "kind": "function",
+      "line": 186,
+      "name": "OrderedSet.update",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 48,
+      "id": "ordered_set.py::_is_atomic",
+      "kind": "function",
+      "line": 32,
+      "name": "_is_atomic",
+      "path": "ordered_set.py"
+    },
+    {
+      "end_line": 33,
+      "id": "setup.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "setup",
+      "path": "setup.py"
+    },
+    {
+      "end_line": 387,
+      "id": "test.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "test",
+      "path": "test.py"
+    },
+    {
+      "end_line": 75,
+      "id": "test.py::FancyIndexTester",
+      "kind": "class",
+      "line": 58,
+      "name": "FancyIndexTester",
+      "path": "test.py"
+    },
+    {
+      "end_line": 75,
+      "id": "test.py::FancyIndexTester.__eq__",
+      "kind": "function",
+      "line": 73,
+      "name": "FancyIndexTester.__eq__",
+      "path": "test.py"
+    },
+    {
+      "end_line": 71,
+      "id": "test.py::FancyIndexTester.__index__",
+      "kind": "function",
+      "line": 70,
+      "name": "FancyIndexTester.__index__",
+      "path": "test.py"
+    },
+    {
+      "end_line": 65,
+      "id": "test.py::FancyIndexTester.__init__",
+      "kind": "function",
+      "line": 64,
+      "name": "FancyIndexTester.__init__",
+      "path": "test.py"
+    },
+    {
+      "end_line": 68,
+      "id": "test.py::FancyIndexTester.__iter__",
+      "kind": "function",
+      "line": 67,
+      "name": "FancyIndexTester.__iter__",
+      "path": "test.py"
+    },
+    {
+      "end_line": 312,
+      "id": "test.py::_operator_consistency_testdata",
+      "kind": "function",
+      "line": 281,
+      "name": "_operator_consistency_testdata",
+      "path": "test.py"
+    },
+    {
+      "end_line": 262,
+      "id": "test.py::allsame_",
+      "kind": "function",
+      "line": 255,
+      "name": "allsame_",
+      "path": "test.py"
+    },
+    {
+      "end_line": 278,
+      "id": "test.py::check_results_",
+      "kind": "function",
+      "line": 265,
+      "name": "check_results_",
+      "path": "test.py"
+    },
+    {
+      "end_line": 39,
+      "id": "test.py::test_binary_operations",
+      "kind": "function",
+      "line": 32,
+      "name": "test_binary_operations",
+      "path": "test.py"
+    },
+    {
+      "end_line": 387,
+      "id": "test.py::test_bitwise_and_consistency",
+      "kind": "function",
+      "line": 378,
+      "name": "test_bitwise_and_consistency",
+      "path": "test.py"
+    },
+    {
+      "end_line": 135,
+      "id": "test.py::test_clear",
+      "kind": "function",
+      "line": 130,
+      "name": "test_clear",
+      "path": "test.py"
+    },
+    {
+      "end_line": 219,
+      "id": "test.py::test_comparisons",
+      "kind": "function",
+      "line": 212,
+      "name": "test_comparisons",
+      "path": "test.py"
+    },
+    {
+      "end_line": 22,
+      "id": "test.py::test_empty_pickle",
+      "kind": "function",
+      "line": 19,
+      "name": "test_empty_pickle",
+      "path": "test.py"
+    },
+    {
+      "end_line": 180,
+      "id": "test.py::test_empty_repr",
+      "kind": "function",
+      "line": 178,
+      "name": "test_empty_repr",
+      "path": "test.py"
+    },
+    {
+      "end_line": 185,
+      "id": "test.py::test_eq_wrong_type",
+      "kind": "function",
+      "line": 183,
+      "name": "test_eq_wrong_type",
+      "path": "test.py"
+    },
+    {
+      "end_line": 81,
+      "id": "test.py::test_fancy_index_class",
+      "kind": "function",
+      "line": 78,
+      "name": "test_fancy_index_class",
+      "path": "test.py"
+    },
+    {
+      "end_line": 168,
+      "id": "test.py::test_getitem_type_error",
+      "kind": "function",
+      "line": 165,
+      "name": "test_getitem_type_error",
+      "path": "test.py"
+    },
+    {
+      "end_line": 55,
+      "id": "test.py::test_indexing",
+      "kind": "function",
+      "line": 42,
+      "name": "test_indexing",
+      "path": "test.py"
+    },
+    {
+      "end_line": 332,
+      "id": "test.py::test_operator_consistency_difference",
+      "kind": "function",
+      "line": 324,
+      "name": "test_operator_consistency_difference",
+      "path": "test.py"
+    },
+    {
+      "end_line": 375,
+      "id": "test.py::test_operator_consistency_disjoint",
+      "kind": "function",
+      "line": 371,
+      "name": "test_operator_consistency_disjoint",
+      "path": "test.py"
+    },
+    {
+      "end_line": 321,
+      "id": "test.py::test_operator_consistency_isect",
+      "kind": "function",
+      "line": 315,
+      "name": "test_operator_consistency_isect",
+      "path": "test.py"
+    },
+    {
+      "end_line": 358,
+      "id": "test.py::test_operator_consistency_subset",
+      "kind": "function",
+      "line": 353,
+      "name": "test_operator_consistency_subset",
+      "path": "test.py"
+    },
+    {
+      "end_line": 368,
+      "id": "test.py::test_operator_consistency_superset",
+      "kind": "function",
+      "line": 361,
+      "name": "test_operator_consistency_superset",
+      "path": "test.py"
+    },
+    {
+      "end_line": 350,
+      "id": "test.py::test_operator_consistency_union",
+      "kind": "function",
+      "line": 344,
+      "name": "test_operator_consistency_union",
+      "path": "test.py"
+    },
+    {
+      "end_line": 341,
+      "id": "test.py::test_operator_consistency_xor",
+      "kind": "function",
+      "line": 335,
+      "name": "test_operator_consistency_xor",
+      "path": "test.py"
+    },
+    {
+      "end_line": 29,
+      "id": "test.py::test_order",
+      "kind": "function",
+      "line": 25,
+      "name": "test_order",
+      "path": "test.py"
+    },
+    {
+      "end_line": 193,
+      "id": "test.py::test_ordered_equality",
+      "kind": "function",
+      "line": 188,
+      "name": "test_ordered_equality",
+      "path": "test.py"
+    },
+    {
+      "end_line": 209,
+      "id": "test.py::test_ordered_inequality",
+      "kind": "function",
+      "line": 196,
+      "name": "test_ordered_inequality",
+      "path": "test.py"
+    },
+    {
+      "end_line": 87,
+      "id": "test.py::test_pandas_compat",
+      "kind": "function",
+      "line": 84,
+      "name": "test_pandas_compat",
+      "path": "test.py"
+    },
+    {
+      "end_line": 16,
+      "id": "test.py::test_pickle",
+      "kind": "function",
+      "line": 13,
+      "name": "test_pickle",
+      "path": "test.py"
+    },
+    {
+      "end_line": 162,
+      "id": "test.py::test_pop",
+      "kind": "function",
+      "line": 153,
+      "name": "test_pop",
+      "path": "test.py"
+    },
+    {
+      "end_line": 120,
+      "id": "test.py::test_remove",
+      "kind": "function",
+      "line": 98,
+      "name": "test_remove",
+      "path": "test.py"
+    },
+    {
+      "end_line": 127,
+      "id": "test.py::test_remove_error",
+      "kind": "function",
+      "line": 123,
+      "name": "test_remove_error",
+      "path": "test.py"
+    },
+    {
+      "end_line": 95,
+      "id": "test.py::test_tuples",
+      "kind": "function",
+      "line": 90,
+      "name": "test_tuples",
+      "path": "test.py"
+    },
+    {
+      "end_line": 239,
+      "id": "test.py::test_unordered_equality",
+      "kind": "function",
+      "line": 222,
+      "name": "test_unordered_equality",
+      "path": "test.py"
+    },
+    {
+      "end_line": 252,
+      "id": "test.py::test_unordered_inequality",
+      "kind": "function",
+      "line": 242,
+      "name": "test_unordered_inequality",
+      "path": "test.py"
+    },
+    {
+      "end_line": 150,
+      "id": "test.py::test_update",
+      "kind": "function",
+      "line": 138,
+      "name": "test_update",
+      "path": "test.py"
+    },
+    {
+      "end_line": 175,
+      "id": "test.py::test_update_value_error",
+      "kind": "function",
+      "line": 171,
+      "name": "test_update_value_error",
+      "path": "test.py"
+    }
+  ],
+  "recommendations": [],
+  "removed": [],
+  "schema_version": "2.0",
+  "source_files": [
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": "\"\"\"\nAn OrderedSet is a custom MutableSet that remembers its order, so that every\nentry has an index that can be looked up. It can also act like a Sequence.\n\nBased on a recipe originally posted to ActiveState Recipes by Raymond Hettiger,\nand released under the MIT license.\n\"\"\"\nimport itertools as it\nfrom typing import (\n    Any,\n    Dict,\n    Iterable,\n    Iterator,\n    List,\n    MutableSet,\n    Optional,\n    Sequence,\n    Set,\n    TypeVar,\n    Union,\n    overload,\n)\n\nSLICE_ALL = slice(None)\n__version__ = \"4.0\"\n\n\nT = TypeVar(\"T\")\nSetLike = Union[Sequence[T], Set[T]]\n\n\ndef _is_atomic(obj: Any) -> bool:\n    \"\"\"\n    Returns True for objects which are iterable but should not be iterated in\n    the context of indexing an OrderedSet.\n\n    When we index by an iterable, usually that means we're being asked to look\n    up a list of things.\n\n    However, in the case of the .index() method, we shouldn't handle strings\n    and tuples like other iterables. They're not sequences of things to look\n    up, they're the single, atomic thing we're trying to find.\n\n    As an example, oset.index('hello') should give the index of 'hello' in an\n    OrderedSet of strings. It shouldn't give the indexes of each individual\n    character.\n    \"\"\"\n    return isinstance(obj, str) or isinstance(obj, tuple)\n\n\nclass OrderedSet(MutableSet[T], Sequence[T]):\n    \"\"\"\n    An OrderedSet is a custom MutableSet that remembers its order, so that\n    every entry has an index that can be looked up.\n\n    Example:\n        >>> OrderedSet([1, 1, 2, 3, 2])\n        OrderedSet([1, 2, 3])\n    \"\"\"\n\n    def __init__(self, iterable: Optional[Iterable[T]] = None):\n        self.items = []  # type: List[T]\n        self.map = {}  # type: Dict[T, int]\n        if iterable is not None:\n            self |= iterable\n\n    def __len__(self):\n        \"\"\"\n        Returns the number of unique elements in the ordered set\n\n        Example:\n            >>> len(OrderedSet([]))\n            0\n            >>> len(OrderedSet([1, 2]))\n            2\n        \"\"\"\n        return len(self.items)\n\n    @overload\n    def __getitem__(self, index: Sequence[int]) -> List[T]:\n        ...\n\n    @overload\n    def __getitem__(self, index: slice) -> \"OrderedSet[T]\":\n        ...\n\n    def __getitem__(self, index: int) -> T:\n        \"\"\"\n        Get the item at a given index.\n\n        If `index` is a slice, you will get back that slice of items, as a\n        new OrderedSet.\n\n        If `index` is a list or a similar iterable, you'll get a list of\n        items corresponding to those indices. This is similar to NumPy's\n        \"fancy indexing\". The result is not an OrderedSet because you may ask\n        for duplicate indices, and the number of elements returned should be\n        the number of elements asked for.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset[1]\n            2\n        \"\"\"\n        if isinstance(index, slice) and index == SLICE_ALL:\n            return self.copy()\n        elif isinstance(index, Iterable):\n            return [self.items[i] for i in index]\n        elif isinstance(index, slice) or hasattr(index, \"__index__\"):\n            result = self.items[index]\n            if isinstance(result, list):\n                return self.__class__(result)\n            else:\n                return result\n        else:\n            raise TypeError(\"Don't know how to index an OrderedSet by %r\" % index)\n\n    def copy(self) -> \"OrderedSet[T]\":\n        \"\"\"\n        Return a shallow copy of this object.\n\n        Example:\n            >>> this = OrderedSet([1, 2, 3])\n            >>> other = this.copy()\n            >>> this == other\n            True\n            >>> this is other\n            False\n        \"\"\"\n        return self.__class__(self)\n\n    # Define the gritty details of how an OrderedSet is serialized as a pickle.\n    # We leave off type annotations, because the only code that should interact\n    # with these is a generalized tool such as pickle.\n    def __getstate__(self):\n        if len(self) == 0:\n            # In pickle, the state can't be an empty list.\n            # We need to return a truthy value, or else __setstate__ won't be run.\n            #\n            # This could have been done more gracefully by always putting the state\n            # in a tuple, but this way is backwards- and forwards- compatible with\n            # previous versions of OrderedSet.\n            return (None,)\n        else:\n            return list(self)\n\n    def __setstate__(self, state):\n        if state == (None,):\n            self.__init__([])\n        else:\n            self.__init__(state)\n\n    def __contains__(self, key: Any) -> bool:\n        \"\"\"\n        Test if the item is in this ordered set.\n\n        Example:\n            >>> 1 in OrderedSet([1, 3, 2])\n            True\n            >>> 5 in OrderedSet([1, 3, 2])\n            False\n        \"\"\"\n        return key in self.map\n\n    def add(self, key: T) -> int:\n        \"\"\"\n        Add `key` as an item to this OrderedSet, then return its index.\n\n        If `key` is already in the OrderedSet, return the index it already\n        had.\n\n        Example:\n            >>> oset = OrderedSet()\n            >>> oset.append(3)\n            0\n            >>> print(oset)\n            OrderedSet([3])\n        \"\"\"\n        if key not in self.map:\n            self.map[key] = len(self.items)\n            self.items.append(key)\n        return self.map[key]\n\n    append = add\n\n    def update(self, sequence: SetLike[T]) -> int:\n        \"\"\"\n        Update the set with the given iterable sequence, then return the index\n        of the last element inserted.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.update([3, 1, 5, 1, 4])\n            4\n            >>> print(oset)\n            OrderedSet([1, 2, 3, 5, 4])\n        \"\"\"\n        item_index = 0\n        try:\n            for item in sequence:\n                item_index = self.add(item)\n        except TypeError:\n            raise ValueError(\n                \"Argument needs to be an iterable, got %s\" % type(sequence)\n            )\n        return item_index\n\n    @overload\n    def index(self, key: T) -> int:\n        ...\n\n    def index(self, key: Sequence[T]) -> List[int]:\n        \"\"\"\n        Get the index of a given entry, raising an IndexError if it's not\n        present.\n\n        `key` can be an iterable of entries that is not a string, in which case\n        this returns a list of indices.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.index(2)\n            1\n        \"\"\"\n        if isinstance(key, Iterable) and not _is_atomic(key):\n            return [self.index(subkey) for subkey in key]\n        return self.map[key]\n\n    # Provide some compatibility with pd.Index\n    get_loc = index\n    get_indexer = index\n\n    def pop(self, index=-1) -> T:\n        \"\"\"\n        Remove and return item at index (default last).\n\n        Raises KeyError if the set is empty.\n        Raises IndexError if index is out of range.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.pop()\n            3\n        \"\"\"\n        if not self.items:\n            raise KeyError(\"Set is empty\")\n\n        elem = self.items[index]\n        del self.items[index]\n        del self.map[elem]\n        return elem\n\n    def discard(self, key: T) -> None:\n        \"\"\"\n        Remove an element.  Do not raise an exception if absent.\n\n        The MutableSet mixin uses this to implement the .remove() method, which\n        *does* raise an error when asked to remove a non-existent item.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.discard(2)\n            >>> print(oset)\n            OrderedSet([1, 3])\n            >>> oset.discard(2)\n            >>> print(oset)\n            OrderedSet([1, 3])\n        \"\"\"\n        if key in self:\n            i = self.map[key]\n            del self.items[i]\n            del self.map[key]\n            for k, v in self.map.items():\n                if v >= i:\n                    self.map[k] = v - 1\n\n    def clear(self) -> None:\n        \"\"\"\n        Remove all items from this OrderedSet.\n        \"\"\"\n        del self.items[:]\n        self.map.clear()\n\n    def __iter__(self) -> Iterator[T]:\n        \"\"\"\n        Example:\n            >>> list(iter(OrderedSet([1, 2, 3])))\n            [1, 2, 3]\n        \"\"\"\n        return iter(self.items)\n\n    def __reversed__(self) -> Iterator[T]:\n        \"\"\"\n        Example:\n            >>> list(reversed(OrderedSet([1, 2, 3])))\n            [3, 2, 1]\n        \"\"\"\n        return reversed(self.items)\n\n    def __repr__(self) -> str:\n        if not self:\n            return \"%s()\" % (self.__class__.__name__,)\n        return \"%s(%r)\" % (self.__class__.__name__, list(self))\n\n    def __eq__(self, other: Any) -> bool:\n        \"\"\"\n        Returns true if the containers have the same items. If `other` is a\n        Sequence, then order is checked, otherwise it is ignored.\n\n        Example:\n            >>> oset = OrderedSet([1, 3, 2])\n            >>> oset == [1, 3, 2]\n            True\n            >>> oset == [1, 2, 3]\n            False\n            >>> oset == [2, 3]\n            False\n            >>> oset == OrderedSet([3, 2, 1])\n            False\n        \"\"\"\n        if isinstance(other, Sequence):\n            # Check that this OrderedSet contains the same elements, in the\n            # same order, as the other object.\n            return list(self) == list(other)\n        try:\n            other_as_set = set(other)\n        except TypeError:\n            # If `other` can't be converted into a set, it's not equal.\n            return False\n        else:\n            return set(self) == other_as_set\n\n    def union(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Combines all unique items.\n        Each items order is defined by its first appearance.\n\n        Example:\n            >>> oset = OrderedSet.union(OrderedSet([3, 1, 4, 1, 5]), [1, 3], [2, 0])\n            >>> print(oset)\n            OrderedSet([3, 1, 4, 5, 2, 0])\n            >>> oset.union([8, 9])\n            OrderedSet([3, 1, 4, 5, 2, 0, 8, 9])\n            >>> oset | {10}\n            OrderedSet([3, 1, 4, 5, 2, 0, 10])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        containers = map(list, it.chain([self], sets))\n        items = it.chain.from_iterable(containers)\n        return cls(items)\n\n    def __and__(self, other: SetLike[T]) -> \"OrderedSet[T]\":\n        # the parent implementation of this is backwards\n        return self.intersection(other)\n\n    def intersection(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Returns elements in common between all sets. Order is defined only\n        by the first set.\n\n        Example:\n            >>> oset = OrderedSet.intersection(OrderedSet([0, 1, 2, 3]), [1, 2, 3])\n            >>> print(oset)\n            OrderedSet([1, 2, 3])\n            >>> oset.intersection([2, 4, 5], [1, 2, 3, 4])\n            OrderedSet([2])\n            >>> oset.intersection()\n            OrderedSet([1, 2, 3])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        if sets:\n            common = set.intersection(*map(set, sets))\n            items = (item for item in self if item in common)\n        else:\n            items = self\n        return cls(items)\n\n    def difference(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Returns all elements that are in this set but not the others.\n\n        Example:\n            >>> OrderedSet([1, 2, 3]).difference(OrderedSet([2]))\n            OrderedSet([1, 3])\n            >>> OrderedSet([1, 2, 3]).difference(OrderedSet([2]), OrderedSet([3]))\n            OrderedSet([1])\n            >>> OrderedSet([1, 2, 3]) - OrderedSet([2])\n            OrderedSet([1, 3])\n            >>> OrderedSet([1, 2, 3]).difference()\n            OrderedSet([1, 2, 3])\n        \"\"\"\n        cls = self.__class__\n        if sets:\n            other = set.union(*map(set, sets))\n            items = (item for item in self if item not in other)\n        else:\n            items = self\n        return cls(items)\n\n    def issubset(self, other: SetLike[T]) -> bool:\n        \"\"\"\n        Report whether another set contains this set.\n\n        Example:\n            >>> OrderedSet([1, 2, 3]).issubset({1, 2})\n            False\n            >>> OrderedSet([1, 2, 3]).issubset({1, 2, 3, 4})\n            True\n            >>> OrderedSet([1, 2, 3]).issubset({1, 4, 3, 5})\n            False\n        \"\"\"\n        if len(self) > len(other):  # Fast check for obvious cases\n            return False\n        return all(item in other for item in self)\n\n    def issuperset(self, other: SetLike[T]) -> bool:\n        \"\"\"\n        Report whether this set contains another set.\n\n        Example:\n            >>> OrderedSet([1, 2]).issuperset([1, 2, 3])\n            False\n            >>> OrderedSet([1, 2, 3, 4]).issuperset({1, 2, 3})\n            True\n            >>> OrderedSet([1, 4, 3, 5]).issuperset({1, 2, 3})\n            False\n        \"\"\"\n        if len(self) < len(other):  # Fast check for obvious cases\n            return False\n        return all(item in self for item in other)\n\n    def symmetric_difference(self, other: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Return the symmetric difference of two OrderedSets as a new set.\n        That is, the new set will contain all elements that are in exactly\n        one of the sets.\n\n        Their order will be preserved, with elements from `self` preceding\n        elements from `other`.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.symmetric_difference(other)\n            OrderedSet([4, 5, 9, 2])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        diff1 = cls(self).difference(other)\n        diff2 = cls(other).difference(self)\n        return diff1.union(diff2)\n\n    def _update_items(self, items: list) -> None:\n        \"\"\"\n        Replace the 'items' list of this OrderedSet with a new one, updating\n        self.map accordingly.\n        \"\"\"\n        self.items = items\n        self.map = {item: idx for (idx, item) in enumerate(items)}\n\n    def difference_update(self, *sets: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to remove items from one or more other sets.\n\n        Example:\n            >>> this = OrderedSet([1, 2, 3])\n            >>> this.difference_update(OrderedSet([2, 4]))\n            >>> print(this)\n            OrderedSet([1, 3])\n\n            >>> this = OrderedSet([1, 2, 3, 4, 5])\n            >>> this.difference_update(OrderedSet([2, 4]), OrderedSet([1, 4, 6]))\n            >>> print(this)\n            OrderedSet([3, 5])\n        \"\"\"\n        items_to_remove = set()  # type: Set[T]\n        for other in sets:\n            items_as_set = set(other)  # type: Set[T]\n            items_to_remove |= items_as_set\n        self._update_items([item for item in self.items if item not in items_to_remove])\n\n    def intersection_update(self, other: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to keep only items in another set, preserving\n        their order in this set.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.intersection_update(other)\n            >>> print(this)\n            OrderedSet([1, 3, 7])\n        \"\"\"\n        other = set(other)\n        self._update_items([item for item in self.items if item in other])\n\n    def symmetric_difference_update(self, other: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to remove items from another set, then\n        add items from the other set that were not present in this set.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.symmetric_difference_update(other)\n            >>> print(this)\n            OrderedSet([4, 5, 9, 2])\n        \"\"\"\n        items_to_add = [item for item in other if item not in self]\n        items_to_remove = set(other)\n        self._update_items(\n            [item for item in self.items if item not in items_to_remove] + items_to_add\n        )\n"
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "\"\"\"\nAn OrderedSet is a custom MutableSet that remembers its order, so that every\nentry has an index that can be looked up. It can also act like a Sequence.\n\nBased on a recipe originally posted to ActiveState Recipes by Raymond Hettiger,\nand released under the MIT license.\n\"\"\"\nimport itertools as it\nfrom typing import (\n    Any,\n    Dict,\n    Iterable,\n    Iterator,\n    List,\n    MutableSet,\n    Optional,\n    Sequence,\n    Set,\n    TypeVar,\n    Union,\n    overload,\n)\n\nSLICE_ALL = slice(None)\n__version__ = \"4.0\"\n\n\nT = TypeVar(\"T\")\nSetLike = Union[Sequence[T], Set[T]]\n\n\ndef _is_atomic(obj: Any) -> bool:\n    \"\"\"\n    Returns True for objects which are iterable but should not be iterated in\n    the context of indexing an OrderedSet.\n\n    When we index by an iterable, usually that means we're being asked to look\n    up a list of things.\n\n    However, in the case of the .index() method, we shouldn't handle strings\n    and tuples like other iterables. They're not sequences of things to look\n    up, they're the single, atomic thing we're trying to find.\n\n    As an example, oset.index('hello') should give the index of 'hello' in an\n    OrderedSet of strings. It shouldn't give the indexes of each individual\n    character.\n    \"\"\"\n    return isinstance(obj, str) or isinstance(obj, tuple)\n\n\nclass OrderedSet(MutableSet[T], Sequence[T]):\n    \"\"\"\n    An OrderedSet is a custom MutableSet that remembers its order, so that\n    every entry has an index that can be looked up.\n\n    Example:\n        >>> OrderedSet([1, 1, 2, 3, 2])\n        OrderedSet([1, 2, 3])\n    \"\"\"\n\n    def __init__(self, iterable: Optional[Iterable[T]] = None):\n        self.items = []  # type: List[T]\n        self.map = {}  # type: Dict[T, int]\n        if iterable is not None:\n            self |= iterable\n\n    def __len__(self):\n        \"\"\"\n        Returns the number of unique elements in the ordered set\n\n        Example:\n            >>> len(OrderedSet([]))\n            0\n            >>> len(OrderedSet([1, 2]))\n            2\n        \"\"\"\n        return len(self.items)\n\n    @overload\n    def __getitem__(self, index: Sequence[int]) -> List[T]:\n        ...\n\n    @overload\n    def __getitem__(self, index: slice) -> \"OrderedSet[T]\":\n        ...\n\n    def __getitem__(self, index: int) -> T:\n        \"\"\"\n        Get the item at a given index.\n\n        If `index` is a slice, you will get back that slice of items, as a\n        new OrderedSet.\n\n        If `index` is a list or a similar iterable, you'll get a list of\n        items corresponding to those indices. This is similar to NumPy's\n        \"fancy indexing\". The result is not an OrderedSet because you may ask\n        for duplicate indices, and the number of elements returned should be\n        the number of elements asked for.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset[1]\n            2\n        \"\"\"\n        if isinstance(index, slice) and index == SLICE_ALL:\n            return self.copy()\n        elif isinstance(index, Iterable):\n            return [self.items[i] for i in index]\n        elif isinstance(index, slice) or hasattr(index, \"__index__\"):\n            result = self.items[index]\n            if isinstance(result, list):\n                return self.__class__(result)\n            else:\n                return result\n        else:\n            raise TypeError(\"Don't know how to index an OrderedSet by %r\" % index)\n\n    def copy(self) -> \"OrderedSet[T]\":\n        \"\"\"\n        Return a shallow copy of this object.\n\n        Example:\n            >>> this = OrderedSet([1, 2, 3])\n            >>> other = this.copy()\n            >>> this == other\n            True\n            >>> this is other\n            False\n        \"\"\"\n        return self.__class__(self)\n\n    # Define the gritty details of how an OrderedSet is serialized as a pickle.\n    # We leave off type annotations, because the only code that should interact\n    # with these is a generalized tool such as pickle.\n    def __getstate__(self):\n        if len(self) == 0:\n            # In pickle, the state can't be an empty list.\n            # We need to return a truthy value, or else __setstate__ won't be run.\n            #\n            # This could have been done more gracefully by always putting the state\n            # in a tuple, but this way is backwards- and forwards- compatible with\n            # previous versions of OrderedSet.\n            return (None,)\n        else:\n            return list(self)\n\n    def __setstate__(self, state):\n        if state == (None,):\n            self.__init__([])\n        else:\n            self.__init__(state)\n\n    def __contains__(self, key: Any) -> bool:\n        \"\"\"\n        Test if the item is in this ordered set.\n\n        Example:\n            >>> 1 in OrderedSet([1, 3, 2])\n            True\n            >>> 5 in OrderedSet([1, 3, 2])\n            False\n        \"\"\"\n        return key in self.map\n\n    def add(self, key: T) -> int:\n        \"\"\"\n        Add `key` as an item to this OrderedSet, then return its index.\n\n        If `key` is already in the OrderedSet, return the index it already\n        had.\n\n        Example:\n            >>> oset = OrderedSet()\n            >>> oset.append(3)\n            0\n            >>> print(oset)\n            OrderedSet([3])\n        \"\"\"\n        if key not in self.map:\n            self.map[key] = len(self.items)\n            self.items.append(key)\n        return self.map[key]\n\n    append = add\n\n    def update(self, sequence: SetLike[T]) -> int:\n        \"\"\"\n        Update the set with the given iterable sequence, then return the index\n        of the last element inserted.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.update([3, 1, 5, 1, 4])\n            4\n            >>> print(oset)\n            OrderedSet([1, 2, 3, 5, 4])\n        \"\"\"\n        item_index = 0\n        try:\n            for item in sequence:\n                item_index = self.add(item)\n        except TypeError:\n            raise ValueError(\n                \"Argument needs to be an iterable, got %s\" % type(sequence)\n            )\n        return item_index\n\n    @overload\n    def index(self, key: T) -> int:\n        ...\n\n    def index(self, key: Sequence[T]) -> List[int]:\n        \"\"\"\n        Get the index of a given entry, raising an IndexError if it's not\n        present.\n\n        `key` can be an iterable of entries that is not a string, in which case\n        this returns a list of indices.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.index(2)\n            1\n        \"\"\"\n        if isinstance(key, Iterable) and not _is_atomic(key):\n            return [self.index(subkey) for subkey in key]\n        return self.map[key]\n\n    # Provide some compatibility with pd.Index\n    get_loc = index\n    get_indexer = index\n\n    def pop(self) -> T:\n        \"\"\"\n        Remove and return the last element from the set.\n\n        Raises KeyError if the set is empty.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.pop()\n            3\n        \"\"\"\n        if not self.items:\n            raise KeyError(\"Set is empty\")\n\n        elem = self.items[-1]\n        del self.items[-1]\n        del self.map[elem]\n        return elem\n\n    def discard(self, key: T) -> None:\n        \"\"\"\n        Remove an element.  Do not raise an exception if absent.\n\n        The MutableSet mixin uses this to implement the .remove() method, which\n        *does* raise an error when asked to remove a non-existent item.\n\n        Example:\n            >>> oset = OrderedSet([1, 2, 3])\n            >>> oset.discard(2)\n            >>> print(oset)\n            OrderedSet([1, 3])\n            >>> oset.discard(2)\n            >>> print(oset)\n            OrderedSet([1, 3])\n        \"\"\"\n        if key in self:\n            i = self.map[key]\n            del self.items[i]\n            del self.map[key]\n            for k, v in self.map.items():\n                if v >= i:\n                    self.map[k] = v - 1\n\n    def clear(self) -> None:\n        \"\"\"\n        Remove all items from this OrderedSet.\n        \"\"\"\n        del self.items[:]\n        self.map.clear()\n\n    def __iter__(self) -> Iterator[T]:\n        \"\"\"\n        Example:\n            >>> list(iter(OrderedSet([1, 2, 3])))\n            [1, 2, 3]\n        \"\"\"\n        return iter(self.items)\n\n    def __reversed__(self) -> Iterator[T]:\n        \"\"\"\n        Example:\n            >>> list(reversed(OrderedSet([1, 2, 3])))\n            [3, 2, 1]\n        \"\"\"\n        return reversed(self.items)\n\n    def __repr__(self) -> str:\n        if not self:\n            return \"%s()\" % (self.__class__.__name__,)\n        return \"%s(%r)\" % (self.__class__.__name__, list(self))\n\n    def __eq__(self, other: Any) -> bool:\n        \"\"\"\n        Returns true if the containers have the same items. If `other` is a\n        Sequence, then order is checked, otherwise it is ignored.\n\n        Example:\n            >>> oset = OrderedSet([1, 3, 2])\n            >>> oset == [1, 3, 2]\n            True\n            >>> oset == [1, 2, 3]\n            False\n            >>> oset == [2, 3]\n            False\n            >>> oset == OrderedSet([3, 2, 1])\n            False\n        \"\"\"\n        if isinstance(other, Sequence):\n            # Check that this OrderedSet contains the same elements, in the\n            # same order, as the other object.\n            return list(self) == list(other)\n        try:\n            other_as_set = set(other)\n        except TypeError:\n            # If `other` can't be converted into a set, it's not equal.\n            return False\n        else:\n            return set(self) == other_as_set\n\n    def union(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Combines all unique items.\n        Each items order is defined by its first appearance.\n\n        Example:\n            >>> oset = OrderedSet.union(OrderedSet([3, 1, 4, 1, 5]), [1, 3], [2, 0])\n            >>> print(oset)\n            OrderedSet([3, 1, 4, 5, 2, 0])\n            >>> oset.union([8, 9])\n            OrderedSet([3, 1, 4, 5, 2, 0, 8, 9])\n            >>> oset | {10}\n            OrderedSet([3, 1, 4, 5, 2, 0, 10])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        containers = map(list, it.chain([self], sets))\n        items = it.chain.from_iterable(containers)\n        return cls(items)\n\n    def __and__(self, other: SetLike[T]) -> \"OrderedSet[T]\":\n        # the parent implementation of this is backwards\n        return self.intersection(other)\n\n    def intersection(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Returns elements in common between all sets. Order is defined only\n        by the first set.\n\n        Example:\n            >>> oset = OrderedSet.intersection(OrderedSet([0, 1, 2, 3]), [1, 2, 3])\n            >>> print(oset)\n            OrderedSet([1, 2, 3])\n            >>> oset.intersection([2, 4, 5], [1, 2, 3, 4])\n            OrderedSet([2])\n            >>> oset.intersection()\n            OrderedSet([1, 2, 3])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        if sets:\n            common = set.intersection(*map(set, sets))\n            items = (item for item in self if item in common)\n        else:\n            items = self\n        return cls(items)\n\n    def difference(self, *sets: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Returns all elements that are in this set but not the others.\n\n        Example:\n            >>> OrderedSet([1, 2, 3]).difference(OrderedSet([2]))\n            OrderedSet([1, 3])\n            >>> OrderedSet([1, 2, 3]).difference(OrderedSet([2]), OrderedSet([3]))\n            OrderedSet([1])\n            >>> OrderedSet([1, 2, 3]) - OrderedSet([2])\n            OrderedSet([1, 3])\n            >>> OrderedSet([1, 2, 3]).difference()\n            OrderedSet([1, 2, 3])\n        \"\"\"\n        cls = self.__class__\n        if sets:\n            other = set.union(*map(set, sets))\n            items = (item for item in self if item not in other)\n        else:\n            items = self\n        return cls(items)\n\n    def issubset(self, other: SetLike[T]) -> bool:\n        \"\"\"\n        Report whether another set contains this set.\n\n        Example:\n            >>> OrderedSet([1, 2, 3]).issubset({1, 2})\n            False\n            >>> OrderedSet([1, 2, 3]).issubset({1, 2, 3, 4})\n            True\n            >>> OrderedSet([1, 2, 3]).issubset({1, 4, 3, 5})\n            False\n        \"\"\"\n        if len(self) > len(other):  # Fast check for obvious cases\n            return False\n        return all(item in other for item in self)\n\n    def issuperset(self, other: SetLike[T]) -> bool:\n        \"\"\"\n        Report whether this set contains another set.\n\n        Example:\n            >>> OrderedSet([1, 2]).issuperset([1, 2, 3])\n            False\n            >>> OrderedSet([1, 2, 3, 4]).issuperset({1, 2, 3})\n            True\n            >>> OrderedSet([1, 4, 3, 5]).issuperset({1, 2, 3})\n            False\n        \"\"\"\n        if len(self) < len(other):  # Fast check for obvious cases\n            return False\n        return all(item in self for item in other)\n\n    def symmetric_difference(self, other: SetLike[T]) -> \"OrderedSet[T]\":\n        \"\"\"\n        Return the symmetric difference of two OrderedSets as a new set.\n        That is, the new set will contain all elements that are in exactly\n        one of the sets.\n\n        Their order will be preserved, with elements from `self` preceding\n        elements from `other`.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.symmetric_difference(other)\n            OrderedSet([4, 5, 9, 2])\n        \"\"\"\n        cls = self.__class__ if isinstance(self, OrderedSet) else OrderedSet\n        diff1 = cls(self).difference(other)\n        diff2 = cls(other).difference(self)\n        return diff1.union(diff2)\n\n    def _update_items(self, items: list) -> None:\n        \"\"\"\n        Replace the 'items' list of this OrderedSet with a new one, updating\n        self.map accordingly.\n        \"\"\"\n        self.items = items\n        self.map = {item: idx for (idx, item) in enumerate(items)}\n\n    def difference_update(self, *sets: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to remove items from one or more other sets.\n\n        Example:\n            >>> this = OrderedSet([1, 2, 3])\n            >>> this.difference_update(OrderedSet([2, 4]))\n            >>> print(this)\n            OrderedSet([1, 3])\n\n            >>> this = OrderedSet([1, 2, 3, 4, 5])\n            >>> this.difference_update(OrderedSet([2, 4]), OrderedSet([1, 4, 6]))\n            >>> print(this)\n            OrderedSet([3, 5])\n        \"\"\"\n        items_to_remove = set()  # type: Set[T]\n        for other in sets:\n            items_as_set = set(other)  # type: Set[T]\n            items_to_remove |= items_as_set\n        self._update_items([item for item in self.items if item not in items_to_remove])\n\n    def intersection_update(self, other: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to keep only items in another set, preserving\n        their order in this set.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.intersection_update(other)\n            >>> print(this)\n            OrderedSet([1, 3, 7])\n        \"\"\"\n        other = set(other)\n        self._update_items([item for item in self.items if item in other])\n\n    def symmetric_difference_update(self, other: SetLike[T]) -> None:\n        \"\"\"\n        Update this OrderedSet to remove items from another set, then\n        add items from the other set that were not present in this set.\n\n        Example:\n            >>> this = OrderedSet([1, 4, 3, 5, 7])\n            >>> other = OrderedSet([9, 7, 1, 3, 2])\n            >>> this.symmetric_difference_update(other)\n            >>> print(this)\n            OrderedSet([4, 5, 9, 2])\n        \"\"\"\n        items_to_add = [item for item in other if item not in self]\n        items_to_remove = set(other)\n        self._update_items(\n            [item for item in self.items if item not in items_to_remove] + items_to_add\n        )\n"
+      },
+      "path": "ordered_set.py"
+    }
+  ],
+  "stats": {
+    "changed": 3,
+    "edges": 111,
+    "elapsed_ms": 12.5,
+    "files_base": 3,
+    "files_head": 3,
+    "impacted": 2,
+    "recommended_tests": 0,
+    "symbols": 71
+  },
+  "warnings": [
+    "Dynamic call: ordered_set.py:447",
+    "Dynamic call: ordered_set.py:448",
+    "Dynamic call: ordered_set.py:449",
+    "Dynamic call: test.py:144",
+    "Dynamic call: test.py:150",
+    "Dynamic call: test.py:228",
+    "Dynamic call: test.py:229",
+    "Dynamic call: test.py:247",
+    "Dynamic call: test.py:248",
+    "Dynamic call: test.py:274",
+    "Dynamic call: test.py:357",
+    "Dynamic call: test.py:365",
+    "Dynamic call: test.py:81",
+    "Risk scores prioritize review; they are not calibrated failure probabilities.",
+    "Static analysis is incomplete: dynamic dispatch, fixtures, reflection, re-exports, inheritance and runtime imports may hide dependencies. Keep the full test suite as a gate.",
+    "Unresolved call AssertionError: test.py:273",
+    "Unresolved call KeyError: ordered_set.py:245",
+    "Unresolved call KeyError: ordered_set.py:246",
+    "Unresolved call TypeError: ordered_set.py:116",
+    "Unresolved call TypeError: test.py:71",
+    "Unresolved call ValueError: ordered_set.py:203",
+    "Unresolved call all: ordered_set.py:413",
+    "Unresolved call all: ordered_set.py:414",
+    "Unresolved call all: ordered_set.py:429",
+    "Unresolved call all: ordered_set.py:430",
+    "Unresolved call all: test.py:262",
+    "Unresolved call cls: ordered_set.py:349",
+    "Unresolved call cls: ordered_set.py:350",
+    "Unresolved call cls: ordered_set.py:375",
+    "Unresolved call cls: ordered_set.py:376",
+    "Unresolved call cls: ordered_set.py:397",
+    "Unresolved call cls: ordered_set.py:398",
+    "Unresolved call cls: ordered_set.py:447",
+    "Unresolved call cls: ordered_set.py:448",
+    "Unresolved call cls: ordered_set.py:449",
+    "Unresolved call collections.OrderedDict: test.py:233",
+    "Unresolved call collections.OrderedDict: test.py:252",
+    "Unresolved call collections.deque: test.py:193",
+    "Unresolved call collections.deque: test.py:208",
+    "Unresolved call collections.deque: test.py:209",
+    "Unresolved call data1.copy: test.py:317",
+    "Unresolved call data1.copy: test.py:326",
+    "Unresolved call data1.copy: test.py:337",
+    "Unresolved call data1.copy: test.py:346",
+    "Unresolved call data1.copy: test.py:382",
+    "Unresolved call data1.difference: test.py:329",
+    "Unresolved call data1.intersection: test.py:320",
+    "Unresolved call data1.intersection: test.py:374",
+    "Unresolved call data1.intersection: test.py:386",
+    "Unresolved call data1.isdisjoint: test.py:373",
+    "Unresolved call data1.issubset: test.py:356",
+    "Unresolved call data1.issuperset: test.py:364",
+    "Unresolved call data1.symmetric_difference: test.py:340",
+    "Unresolved call data1.union: test.py:349",
+    "Unresolved call diff1.union: ordered_set.py:449",
+    "Unresolved call diff1.union: ordered_set.py:450",
+    "Unresolved call enumerate: ordered_set.py:457",
+    "Unresolved call enumerate: ordered_set.py:458",
+    "Unresolved call eq: test.py:262",
+    "Unresolved call frozenset: test.py:225",
+    "Unresolved call frozenset: test.py:244",
+    "Unresolved call hasattr: ordered_set.py:109",
+    "Unresolved call isinstance: ordered_set.py:105",
+    "Unresolved call isinstance: ordered_set.py:107",
+    "Unresolved call isinstance: ordered_set.py:109",
+    "Unresolved call isinstance: ordered_set.py:111",
+    "Unresolved call isinstance: ordered_set.py:225",
+    "Unresolved call isinstance: ordered_set.py:320",
+    "Unresolved call isinstance: ordered_set.py:321",
+    "Unresolved call isinstance: ordered_set.py:346",
+    "Unresolved call isinstance: ordered_set.py:347",
+    "Unresolved call isinstance: ordered_set.py:369",
+    "Unresolved call isinstance: ordered_set.py:370",
+    "Unresolved call isinstance: ordered_set.py:446",
+    "Unresolved call isinstance: ordered_set.py:447",
+    "Unresolved call isinstance: ordered_set.py:48",
+    "Unresolved call isinstance: test.py:277",
+    "Unresolved call it.chain.from_iterable: ordered_set.py:348",
+    "Unresolved call it.chain.from_iterable: ordered_set.py:349",
+    "Unresolved call it.chain: ordered_set.py:347",
+    "Unresolved call it.chain: ordered_set.py:348",
+    "Unresolved call it.combinations: test.py:276",
+    "Unresolved call iter: ordered_set.py:289",
+    "Unresolved call iter: ordered_set.py:290",
+    "Unresolved call iter: test.py:237",
+    "Unresolved call iter: test.py:238",
+    "Unresolved call iter: test.py:239",
+    "Unresolved call iter: test.py:257",
+    "Unresolved call iter: test.py:68",
+    "Unresolved call map: ordered_set.py:347",
+    "Unresolved call map: ordered_set.py:348",
+    "Unresolved call map: ordered_set.py:371",
+    "Unresolved call map: ordered_set.py:372",
+    "Unresolved call map: ordered_set.py:393",
+    "Unresolved call map: ordered_set.py:394",
+    "Unresolved call next: test.py:259",
+    "Unresolved call pickle.dumps: test.py:15",
+    "Unresolved call pickle.dumps: test.py:21",
+    "Unresolved call pickle.loads: test.py:15",
+    "Unresolved call pickle.loads: test.py:21",
+    "Unresolved call pytest.raises: test.py:126",
+    "Unresolved call pytest.raises: test.py:162",
+    "Unresolved call pytest.raises: test.py:167",
+    "Unresolved call pytest.raises: test.py:173",
+    "Unresolved call pytest.raises: test.py:54",
+    "Unresolved call random.Random: test.py:306",
+    "Unresolved call repr: test.py:180",
+    "Unresolved call result1.difference_update: test.py:327",
+    "Unresolved call result1.intersection_update: test.py:318",
+    "Unresolved call result1.intersection_update: test.py:383",
+    "Unresolved call result1.symmetric_difference_update: test.py:338",
+    "Unresolved call result1.update: test.py:347",
+    "Unresolved call reversed: ordered_set.py:297",
+    "Unresolved call reversed: ordered_set.py:298",
+    "Unresolved call reversed: test.py:29",
+    "Unresolved call rng.randint: test.py:309",
+    "Unresolved call rng.randint: test.py:310",
+    "Unresolved call self.__class__: ordered_set.py:112",
+    "Unresolved call self.__class__: ordered_set.py:130",
+    "Unresolved call self.__init__: ordered_set.py:149",
+    "Unresolved call self.__init__: ordered_set.py:151",
+    "Unresolved call self._update_items: ordered_set.py:478",
+    "Unresolved call self._update_items: ordered_set.py:479",
+    "Unresolved call self._update_items: ordered_set.py:493",
+    "Unresolved call self._update_items: ordered_set.py:494",
+    "Unresolved call self._update_items: ordered_set.py:509",
+    "Unresolved call self._update_items: ordered_set.py:510",
+    "Unresolved call self.add: ordered_set.py:201",
+    "Unresolved call self.copy: ordered_set.py:106",
+    "Unresolved call self.index: ordered_set.py:226",
+    "Unresolved call self.intersection: ordered_set.py:353",
+    "Unresolved call self.intersection: ordered_set.py:354",
+    "Unresolved call self.items.append: ordered_set.py:181",
+    "Unresolved call self.map.clear: ordered_set.py:281",
+    "Unresolved call self.map.clear: ordered_set.py:282",
+    "Unresolved call self.map.items: ordered_set.py:272",
+    "Unresolved call self.map.items: ordered_set.py:273",
+    "Unresolved call set.intersection: ordered_set.py:371",
+    "Unresolved call set.intersection: ordered_set.py:372",
+    "Unresolved call set.union: ordered_set.py:393",
+    "Unresolved call set.union: ordered_set.py:394",
+    "Unresolved call set1.add: test.py:93",
+    "Unresolved call set1.clear: test.py:132",
+    "Unresolved call set1.copy: test.py:45",
+    "Unresolved call set1.copy: test.py:48",
+    "Unresolved call set1.discard: test.py:119",
+    "Unresolved call set1.discard: test.py:120",
+    "Unresolved call set1.get_indexer: test.py:87",
+    "Unresolved call set1.get_loc: test.py:86",
+    "Unresolved call set1.index: test.py:109",
+    "Unresolved call set1.index: test.py:110",
+    "Unresolved call set1.index: test.py:111",
+    "Unresolved call set1.index: test.py:52",
+    "Unresolved call set1.index: test.py:53",
+    "Unresolved call set1.index: test.py:55",
+    "Unresolved call set1.index: test.py:94",
+    "Unresolved call set1.pop: test.py:155",
+    "Unresolved call set1.pop: test.py:158",
+    "Unresolved call set1.remove: test.py:101",
+    "Unresolved call set1.remove: test.py:102",
+    "Unresolved call set1.remove: test.py:127",
+    "Unresolved call set1.update: test.py:140",
+    "Unresolved call set1.update: test.py:175",
+    "Unresolved call set2.update: test.py:147",
+    "Unresolved call tuple: test.py:218",
+    "Unresolved call type: ordered_set.py:204"
+  ]
+}

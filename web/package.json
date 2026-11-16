@@ -8,7 +8,12 @@
     "build": "tsc --noEmit && vite build",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "install:browsers": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium firefox webkit",
-    "format:check": "prettier --check src tests *.ts *.json"
+    "format:check": "prettier --check src tests scripts *.ts *.json",
+    "test:visual": "node scripts/quality.mjs visual",
+    "test:visual:update": "node scripts/quality.mjs update",
+    "test:visual:preview": "node scripts/quality.mjs preview",
+    "test:a11y": "node scripts/quality.mjs a11y",
+    "quality:container": "node scripts/quality-container.mjs"
   },
   "dependencies": {
     "@xyflow/react": "12.12.1",
@@ -16,7 +21,8 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.0",
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.65.0",
     "@types/node": "^24.19.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

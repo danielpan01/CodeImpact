@@ -48,7 +48,7 @@ test("changes open from a recommendation and keep its explanation", async ({
     page.getByRole("region", { name: "Change explorer" }),
   ).toBeFocused();
   await expect(
-    page.getByRole("button", { name: "Changes", exact: true }),
+    page.getByRole("button", { name: /^Changes \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect(
     page.getByRole("region", { name: "Before source" }),
@@ -75,18 +75,16 @@ test("changes open from a recommendation and keep its explanation", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(page.locator(".test-row")).toHaveCount(3);
   await page.getByRole("button", { name: "Map", exact: true }).click();
   await expect(page.getByTestId("dependency-graph")).toBeVisible();
   await page.keyboard.press("Shift+Tab");
-  await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
-  ).toBeFocused();
+  await expect(page.getByRole("button", { name: /^Tests \d+$/ })).toBeFocused();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   await expect(
-    page.getByRole("button", { name: "Changes", exact: true }),
+    page.getByRole("button", { name: /^Changes \d+$/ }),
   ).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(
@@ -188,7 +186,7 @@ test("mixed revision path is visible while reviewing deleted code", async ({
 
 test("parse failures and bounded previews are explicit", async ({ page }) => {
   await upload(page, { "a.py": "VALUE =\n" }, { "a.py": "# fixed\n" });
-  await page.getByRole("button", { name: "Changes", exact: true }).click();
+  await page.getByRole("button", { name: /^Changes \d+$/ }).click();
   await expect(
     page.getByRole("region", { name: "Before source" }),
   ).toContainText("Could not parse");
@@ -204,7 +202,7 @@ test("parse failures and bounded previews are explicit", async ({ page }) => {
     "x".repeat(16000) +
     "'\n";
   await upload(page, {}, { "large.py": large });
-  await page.getByRole("button", { name: "Changes", exact: true }).click();
+  await page.getByRole("button", { name: /^Changes \d+$/ }).click();
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("Preview truncated");
@@ -248,7 +246,7 @@ test("module fallback, comment controls and report-version recovery", async ({
     "test_a.py:2",
   );
   await upload(page, { "a.py": "" }, { "a.py": "# comment only\n" });
-  await page.getByRole("button", { name: "Changes", exact: true }).click();
+  await page.getByRole("button", { name: /^Changes \d+$/ }).click();
   await expect(
     page.getByText("No semantic changes in these snapshots."),
   ).toBeVisible();
@@ -283,7 +281,7 @@ test("preview character budget includes line breaks and export preserves full so
   page.on("request", (request) => {
     if (request.url().includes("/api/")) previewRequests.push(request.url());
   });
-  await page.getByRole("button", { name: "Changes", exact: true }).click();
+  await page.getByRole("button", { name: /^Changes \d+$/ }).click();
   const after = page.getByRole("region", { name: "After source" });
   await expect(after).toContainText("Preview truncated");
   // Count source text and rendered newlines, excluding the generated truncation marker.

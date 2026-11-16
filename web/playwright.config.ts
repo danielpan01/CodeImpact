@@ -6,6 +6,8 @@ const webPort = 5174;
 
 export default defineConfig({
   testDir: "./tests",
+  testIgnore: "**/quality/**",
+  outputDir: "test-results/e2e",
   use: {
     baseURL: `http://127.0.0.1:${webPort}`,
     colorScheme: "light",

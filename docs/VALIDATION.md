@@ -2693,3 +2693,161 @@ needed during this recheck; current roadmap wording was prepared for publication
 Local logs: `reports/premerge-8b-check.log`, `premerge-8b-browser.log`,
 `premerge-8b-evaluations.log` and `premerge-8b-pilot.log`. These are local results;
 GitHub check and merge status is recorded on the publication pull request.
+
+## Milestone 8C — rendered UI gates, November 15, 2026
+
+Started from clean `main` at `c967862fd7152c6d2883d5289b762ea24b67857d`, merged
+[PR #14](https://github.com/danielpan01/CodeImpact/pull/14). Its final branch and PR
+checks passed; the [post-merge run](https://github.com/danielpan01/CodeImpact/actions/runs/43795661155)
+also completed successfully before the new implementation was verified. Starting
+status/commit, the empty existing patch and file hashes are retained under
+`reports/milestone8c-before/`. No preexisting user changes were present or discarded.
+
+The new local implementation adds 16 reviewed screenshot comparisons and 48 axe
+rendered-accessibility cases, an explicit baseline-update command, isolated failure
+artifacts, fixed complete report fixtures and a separate CI job. The canonical
+Linux ARM64 image pins Ubuntu/font dependencies by digest and installs the exact
+locked Playwright 1.65.0 Chromium 158.0.8127.18, revision 1254. Tests run with network
+disabled and read-only expected images. The owner authorized installation of a
+local Colima/Docker test runtime after inspection found no existing one. See
+[FRONTEND_MILESTONE8C.md](FRONTEND_MILESTONE8C.md) for the image digest, commands,
+fixture provenance, complete screenshot matrix and update/artifact policy.
+
+The only report fixture normalization is `stats.elapsed_ms = 12.5`; no content is
+masked. Threshold is 0.1 per pixel with zero differing pixels allowed, zero retries,
+and explicit failure for missing expectations. Every initial/final baseline was
+inspected. Inspection improved the empty, mixed-evidence and phone-first-screen
+captures before acceptance; it did not hide application content or broaden tolerance.
+Historical 8A/8B documentation images are unchanged.
+
+### Observed checks
+
+| Command / check | Actual final result |
+| --- | --- |
+| `make check` | **810 passed, 1 expected Linux-only RLIMIT_AS skip**, 1 non-failing Starlette/httpx deprecation warning; 94% statement coverage; Ruff lint/format (53 files), mypy (21 modules), TypeScript and production build passed |
+| `make evaluate` | Passed; **23 TP / 0 FP / 2 FN / 32 TN**, 2 uncertain selections; stable report unchanged |
+| `make evaluate-real` | Passed; **45 TP / 0 FP / 0 FN / 123 TN**, 11 uncertain selections; stable report unchanged |
+| `make evaluate-real-v2` | Passed; **109 TP / 273 FP / 0 FN / 177 TN**, 13 uncertain selections, 395/581 selected; stable report unchanged |
+| `make evaluate-real-v3` | Passed; **41 TP / 43 FP / 0 FN / 6 TN**, 84/90 discovered definitions selected; 30 outside-discovery definitions remain outside that denominator |
+| `make verify-pilot` | Passed: readiness, static UI, public demo, protected analyses, exact frozen report and no report storage |
+| `cd web && npm run format:check` | Passed, including the new test configs and scripts |
+| `cd web && npm run test:e2e` | **248 passed**, no failures/skips, all five existing browser projects |
+| Canonical `npm run test:visual`, through `CODEIMPACT_DOCKER_CONTEXT=colima-codeimpact npm run quality:container -- visual` | **16 passed twice consecutively** after the final corrections (11.4 s and 10.5 s); zero retries/updates |
+| Canonical `npm run test:a11y`, through the same wrapper with `a11y` | **48 passed**, zero violations in the configured WCAG A/AA scope; 43.1 s |
+| Native macOS `npm run test:a11y` | **48 passed**, 52.2 s; supplemental, not a canonical pixel comparison |
+| Focused phone-first-result and diagnostics-state regressions | **10 passed** across all five browser projects |
+| `git diff --check` | Passed |
+
+Existing API/mock public-PR, snapshot/demo/export, search/filter/sort/counts,
+selection/expansion, graph focus/fit/reset/pan/zoom, source limits, mixed/deleted
+revisions, Back/Escape/focus restoration, phone/tablet/long paths, theme/reduced
+motion, 44 px controls and built pilot access coverage all remain. Existing browser
+selectors were updated to match the corrected full Tests/Changes accessible names;
+assertions were not removed or relaxed. The phone-first-result test body is
+byte-identical to the starting version.
+
+### Failure and recovery evidence
+
+- Normal comparison with no initial entry baseline: **1 expected failure** and
+  **zero expected files created**. Missing expectations cannot silently pass CI.
+- Native macOS `npm run test:visual` and `CI=1 npm run test:visual:update` both
+  rejected execution as intended; canonical wrappers are required for comparisons,
+  and CI cannot approve baselines. These guard checks are expected failures, not
+  blocked canonical tests.
+- `QUALITY_PROBE=visual` on the desktop light entry: **1 expected failure**, exactly
+  **5,825 differing pixels** after changing the primary button to square/magenta in
+  test DOM. Expected/actual/diff images and a trace were retained. All 16 baseline
+  hashes remained identical before/after this probe. Recovery passed all 16 cases.
+- `QUALITY_PROBE=a11y` on the same entry: **1 expected failure**, rule `button-name`,
+  after removing only the button's accessible name in test DOM. Complete affected
+  element/rule details were retained. Recovery passed all 48 cases.
+- The initial native scan had **36 failing / 12 passing cases** due to the same
+  navigation label/count mismatch. Including the visible counts in accessible names
+  fixed it. No violation-count allowance or rule exclusion was introduced.
+- Reviewing axe incomplete results also corrected unsupported labels on source
+  `pre` elements, note-number spans and the library's generic controls wrapper.
+  Named source regions, explanatory note text and a named zoom group preserve the
+  existing visible UI. The attribution link now uses opaque shared surface/text
+  tokens. Only its Map screenshot needed an intentional appearance update.
+- An early concurrent behavioral run removed the default shared output directory,
+  interrupting one baseline capture. Behavioral results now use `test-results/e2e`;
+  canonical/native quality results each have separate directories. The corrected
+  full suites and repeats passed. No retry or timing allowance conceals that issue.
+
+Failure artifacts were copied to `reports/milestone8c-proofs/` before passing runs
+replaced normal outputs. Probe flags exist only in test code and were absent from
+final runs. Production code contains no deliberate defects. Fixture and baseline
+updates are explicit developer actions; the normal CI job uses neither.
+
+### Accessibility and visual limits
+
+Axe 4.14.0 scans the full page with `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` and
+`wcag22aa`. No app region is excluded and no rule is disabled. AAA/best-practice
+rules and manual assistive-technology assessment are outside this automated scope.
+All final violations are zero. Complete results still retain **six incomplete
+color-contrast assessments**: transformed Map labels in four size/theme states,
+and a partly clipped inspector label in the two desktop deleted-source states.
+These are not silently promoted to passes or hidden by an exception list.
+
+Agent review of the live local preview exercised keyboard input → Analyze PR →
+snapshot → demo actions, visible focus, named source focus, Map zoom and phone
+Escape/focus restoration in both themes. Measured actual rendered Map text/background
+pairs were at least **4.96:1 light / 7.14:1 dark**. The complete phone evidence trails
+were visually inspected. Reflow at 720×450 was inspected as the layout-viewport
+equivalent of 1440×900 at 200%; an OS-level browser-zoom study was not performed.
+These checks do not resolve every overlapping/scrolling graph contrast case. Manual
+contrast and assistive-technology assessment remain coverage limits, not disabled
+automated rules. No screen-reader testing, independent usability review or
+accessibility certification is claimed.
+
+Only pinned Chromium has pixel expectations. Firefox/WebKit, tablet and 360-pixel
+phone coverage remain behavioral; the 16-image matrix deliberately avoids every
+state/size/theme/browser combination. Visual fixtures do not replace real integration
+checks or prove analyzer correctness. Full upstream source stays data and is never
+executed, imported, installed or checked out.
+
+### Preservation and handoff
+
+All **186 protected files/artifacts** match their starting SHA-256 values:
+**106 corpus files, 21 Python source modules, 44 historical media files, ten saved
+report artifacts, two benchmark receipts, two Python dependency/project files and
+the frontend report types**. All four newly generated stable evaluation reports
+match their original bytes. This preserves analyzer/discovery/scoring/limits,
+schema/stable IDs, evidence, labels, provenance and every historical baseline.
+The sole new npm library is pinned axe; the existing installed Playwright version
+is now exact-pinned without changing its version. Full exports remain unchanged.
+
+Local receipts include `reports/milestone8c-{check,evaluations,pilot,format,browser}.log`,
+`milestone8c-visual-{defect,recovery,final,final-repeat}.log`,
+`milestone8c-{a11y-defect,a11y-recovery,a11y-final,native-a11y-final}.log`,
+`milestone8c-preservation.json`, `milestone8c-canonical-environment.txt`,
+`milestone8c-manual-review.json` and `milestone8c-proofs/`. The current artifact root
+is `web/test-results/quality/`; reviewed expected images are committed-source
+candidates under `web/tests/quality/baselines/`.
+
+The new GitHub workflow has been prepared but **has not run remotely for these
+uncommitted changes**. Local canonical results are not a remote CI claim. No
+remaining required local check is blocked. Changes are unstaged/uncommitted, with
+no commit, push, PR or merge performed. README, frontend roadmap, build plan,
+project context and the new gate receipt reflect that boundary.
+
+Local preview: `CODEIMPACT_WEB_PORT=5185 CODEIMPACT_API_PORT=8015 make dev`, then
+http://127.0.0.1:5185. API health and the real demo were verified. Recommended next
+work is the roadmap's bounded **milestone 7 test-discovery policy**, with original
+baselines retained and new measurements versioned. Live hosting and the human pilot
+remain owner-deferred.
+The Colima test VM was stopped after verification; installed tools and cached
+image remain available. The separate native local application preview remains up.
+
+
+### Milestone 8C publication preparation — November 15, 2026
+
+The owner subsequently requested a push of the completed milestone. Publication
+uses `codex/frontend-milestone-8c`, keeping `main` unchanged. The unstaged/uncommitted
+wording above records the earlier implementation handoff. The existing final check
+logs were rechecked before publication; no application/test changes followed those
+passing runs. All 186 protected files/artifacts still match their original hashes,
+and the final whitespace check passes. Current documentation now distinguishes
+implementation completion, branch publication and merge status. Remote Actions
+results belong to the pushed commit; local results alone are not a remote pass.
+No new PR or merge was authorized in this push request.

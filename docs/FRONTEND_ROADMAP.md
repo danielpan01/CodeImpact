@@ -12,10 +12,12 @@ for observed checks and [REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for the Nov
 Milestone **8A merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13)**,
 including the CI timeout correction; its post-merge checks passed. It supplies the
 rounded controls, entry composition, connected-node identity and coordinated surfaces.
-See [the visual receipt](FRONTEND_MILESTONE8A.md). **8B is implemented**:
+See [the visual receipt](FRONTEND_MILESTONE8A.md). **8B merged in [PR #14](https://github.com/danielpan01/CodeImpact/pull/14)**:
 lossless category/file diagnostics, full-text search, filters, explicit paging and
 retained review state. See [the diagnostics receipt](FRONTEND_MILESTONE8B.md).
-**8C visual/accessibility gates are next**.
+**8C is implemented on `codex/frontend-milestone-8c`**: 16 reviewed canonical image comparisons
+and 48 rendered WCAG A/AA scans. See [the gate receipt](FRONTEND_MILESTONE8C.md).
+Check that branch’s Actions results before merging; bounded analyzer milestone 7 is next.
 
 ## Product goal
 
@@ -289,7 +291,7 @@ reduced-motion support and all report/export data. Include before/after evidence
 and explain specific visual decisions; passing tests alone cannot demonstrate
 that the result feels less generic.
 
-### Milestone 8B: readable diagnostics — implemented
+### Milestone 8B: readable diagnostics — merged in PR #14
 
 The working UI groups all original warning occurrences by supported category and
 confirmed file, with full-text literal search, category/file filters where useful,
@@ -299,12 +301,17 @@ identities. Empty notes and no filter matches are distinct states. Controls and
 expansion survive view navigation; a new report resets them. Exports are unchanged.
 See [rules, screenshots and verification](FRONTEND_MILESTONE8B.md).
 
-### Milestone 8C: regression protection — next frontend step
+### Milestone 8C: regression protection — implemented; merge pending
 
-Establish deterministic screenshot comparisons in a pinned CI browser/font
-environment and add rendered-accessibility checks. Current screenshots are review
-evidence, not pixel-difference gates or accessibility certification. Keep this
-separate from the completed diagnostics presentation work.
+Sixteen reviewed screenshots now form failing comparison gates in a pinned Linux
+ARM64/Ubuntu/Chromium/font environment. Forty-eight full-page axe scans cover both
+themes and desktop/phone workflows. Explicit defect probes fail and recovery runs
+pass; normal CI cannot create or update expected images. Small accessible-name,
+region/group and attribution fixes preserve the 8A design and 8B data/behavior.
+See [coverage, commands, artifacts and limitations](FRONTEND_MILESTONE8C.md).
+Historical documentation images remain unchanged. Publication checks are recorded
+in Actions separately from these local results. Neither establishes accessibility
+certification or independent user review.
 
 Maintain these standards in every future UI change:
 
@@ -314,8 +321,9 @@ Maintain these standards in every future UI change:
   Preserve sticky view navigation and the return path from evidence on phones.
 - Keep semantic colors and shape/text cues consistent in both themes. New UI must
   pass contrast/focus checks and respect reduced motion; do not infer certification.
-- Use fixed-input screenshot comparison gates at desktop, tablet and phone sizes,
-  in a pinned CI environment. Keep before/after artifacts and review intended diffs.
+- Maintain the bounded desktop/phone screenshot matrix in the pinned environment;
+  retain tablet and narrow-phone behavioral checks. Add a new image only for a
+  demonstrated coverage gap. Keep failure artifacts and review intended diffs.
 - Test the full report, empty/zero-discovery/error states, mixed/deleted evidence,
   long lists and the pilot access flow. Exports must preserve full underlying data.
 - Make large diagnostics manageable through display-only grouping and filtering.
@@ -324,9 +332,9 @@ Maintain these standards in every future UI change:
 - Measure real rendering bottlenecks before adopting virtualization or a new layout
   engine. Preserve stable symbol/edge identity and exact selected evidence paths.
 
-The visual refresh is merged and grouped diagnostics are implemented.
-Pixel-comparison gates and comprehensive rendered-accessibility scanning remain
-planned for 8C. Current
-automated checks include semantic colors, focus, theme behavior, touch targets and
-cross-browser workflows.
+The visual refresh and grouped diagnostics are merged. Milestone 8C now implements
+pixel comparisons and scoped rendered-accessibility gates locally. Existing semantic
+color, focus, theme, touch-target and cross-browser workflow checks are retained.
+Some graph/clipped-content contrast checks still require manual assessment; no
+comprehensive accessibility audit is claimed.
 Agent visual inspection does not substitute for independent user feedback.

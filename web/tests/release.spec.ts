@@ -25,7 +25,7 @@ async function upload(page: Page, request: unknown): Promise<Report> {
   const response = await result;
   expect(response.status()).toBe(200);
   await expect(
-    page.getByRole("button", { name: "Tests", exact: true }),
+    page.getByRole("button", { name: /^Tests \d+$/ }),
   ).toHaveAttribute("aria-pressed", "true");
   return response.json();
 }
@@ -172,7 +172,7 @@ test("desktop review controls keep full hit areas and reduced-motion focus", asy
     await source.focus();
     await expect(source).toBeFocused();
     await noOverflow(page);
-    await page.getByRole("button", { name: "Tests", exact: true }).click();
+    await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   }
 });
 
@@ -307,7 +307,7 @@ test("theme switching preserves filters, full exports, expanded evidence and map
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("0.15");
-  await page.getByRole("button", { name: "Tests", exact: true }).click();
+  await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   await expect(
     page.getByRole("searchbox", { name: "Search tests" }),
   ).toHaveValue("create_order");
@@ -368,7 +368,7 @@ test("compact keyboard navigation, Escape and touch targets stay usable in both 
     }
     await openChangedCode(page);
     await noOverflow(page);
-    await page.getByRole("button", { name: "Tests", exact: true }).click();
+    await page.getByRole("button", { name: /^Tests \d+$/ }).click();
   }
   await page.setViewportSize({ width: 1440, height: 900 });
   const sourceLocation = page.locator(".revision-evidence summary").first();

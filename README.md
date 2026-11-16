@@ -214,9 +214,13 @@ make verify-pilot
 cd web
 npm run install:browsers
 npm run test:e2e
+npm run format:check
+# Canonical Linux ARM64 visual/accessibility gates (Docker required):
+npm run quality:container -- visual
+npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all four offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all four offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 
@@ -245,9 +249,11 @@ The [November 15 repository review](docs/REPOSITORY_REVIEW.md) confirms the impl
 roadmap and records a phone-layout refinement. The next analyzer milestone is bounded
 test-discovery coverage, motivated by v3's 30 omitted definitions. Visual refinement
 8A merged in PR #13, including the phone regression and CI timeout fix. Milestone
-8B adds searchable, grouped diagnostics without changing report data.
-The next frontend step is **8C: pinned visual comparison and rendered-accessibility
-gates**. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+8B merged in PR #14 with searchable, grouped diagnostics and unchanged report data.
+**8C is implemented:** pinned visual comparisons, rendered-accessibility
+gates and narrowly scoped semantic fixes. Publication uses
+`codex/frontend-milestone-8c`; check Actions for that branch’s remote results.
+Merge status is separate from the recorded local verification. Bounded analyzer milestone **7** is next. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

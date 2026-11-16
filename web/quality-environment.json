@@ -1,0 +1,9 @@
+{
+  "baseImage": "mcr.microsoft.com/playwright:v1.64.1-noble@sha256:f609973e8fd93f38a5ddfd706a65805294247dae8d81b2541c0afe2787746197",
+  "platform": "linux/arm64",
+  "playwright": "1.65.0",
+  "chromium": "158.0.8127.18",
+  "browserRevision": "1254",
+  "os": "Ubuntu 24.04",
+  "baselineDirectory": "tests/quality/baselines"
+}

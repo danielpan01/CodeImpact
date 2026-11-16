@@ -452,13 +452,12 @@ function App() {
                   <button
                     key={id}
                     aria-pressed={view === id}
-                    aria-label={label}
                     onClick={() => changeView(id)}
                   >
                     <Icon name={icon} />
                     {label}
                     {id !== "graph" && (
-                      <span className="view-count" aria-hidden="true">
+                      <span className="view-count">
                         {id === "tests"
                           ? report.recommendations.length
                           : report.changes.length}

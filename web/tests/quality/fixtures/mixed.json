@@ -1,0 +1,521 @@
+{
+  "changed": [
+    "a.py::<module>",
+    "a.py::f",
+    "bridge.py::<module>",
+    "test_bridge.py::<module>"
+  ],
+  "changes": [
+    {
+      "after": {
+        "end_line": 1,
+        "line": 1
+      },
+      "before": {
+        "end_line": 1,
+        "line": 1
+      },
+      "path": "a.py",
+      "status": "modified",
+      "symbol": "a.py::<module>"
+    },
+    {
+      "after": null,
+      "before": {
+        "end_line": 1,
+        "line": 1
+      },
+      "path": "a.py",
+      "status": "removed",
+      "symbol": "a.py::f"
+    },
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "bridge.py",
+      "status": "modified",
+      "symbol": "bridge.py::<module>"
+    },
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "test_bridge.py",
+      "status": "modified",
+      "symbol": "test_bridge.py::<module>"
+    }
+  ],
+  "edges": [
+    {
+      "after": [],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "a.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "a.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "d939a0e77da6dc85c230e94af344aee03588e3c4cfc012f4dedcf21a8c9d83fd",
+      "kind": "module",
+      "revision": "before",
+      "source": "a.py::f",
+      "target": "a.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "a0550aec4584a3ff41a1802167156d705e2c2395757743efc5fd263ec28c42bc",
+      "kind": "module",
+      "revision": "both",
+      "source": "b.py::f",
+      "target": "b.py::<module>"
+    },
+    {
+      "after": [],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "a.py"
+          },
+          "text": "bridge.py:1 imports a"
+        }
+      ],
+      "id": "e5c06d3a6364603fc5727073f845713ebe0872025b6743c211037598100f26d2",
+      "kind": "import",
+      "revision": "before",
+      "source": "bridge.py::<module>",
+      "target": "a.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "bridge.py:1 imports b"
+        }
+      ],
+      "before": [],
+      "id": "ff8d7dd39c83afd36a16331627fde35fbae8e8c7cfffca4c348f27f6a0c092ae",
+      "kind": "import",
+      "revision": "after",
+      "source": "bridge.py::<module>",
+      "target": "b.py::<module>"
+    },
+    {
+      "after": [],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "a.py"
+          },
+          "text": "bridge.py:2 calls f"
+        }
+      ],
+      "id": "e0751ff1331f7ad598a8dba2b8f55d84568d669ae55b26bb6c404ad3e687cc02",
+      "kind": "call",
+      "revision": "before",
+      "source": "bridge.py::g",
+      "target": "a.py::f"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "bridge.py:2 calls f"
+        }
+      ],
+      "before": [],
+      "id": "b9405a5975f05b760f26c22880522e7fe698b1a0121a26641392a0664a438592",
+      "kind": "call",
+      "revision": "after",
+      "source": "bridge.py::g",
+      "target": "b.py::f"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "bridge.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "bridge.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "b4513f05a94e68a809ac0d95aaada4e65e94ad03085b80c2e4412df07d028e33",
+      "kind": "module",
+      "revision": "both",
+      "source": "bridge.py::g",
+      "target": "bridge.py::<module>"
+    },
+    {
+      "after": [],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "test_bridge.py:1 imports b"
+        }
+      ],
+      "id": "d49fb56be663de354ce3f3baaa78dcfa56e1419a9d802b0d12486cd03099d3b9",
+      "kind": "import",
+      "revision": "before",
+      "source": "test_bridge.py::<module>",
+      "target": "b.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "bridge.py"
+          },
+          "text": "test_bridge.py:1 imports bridge"
+        }
+      ],
+      "before": [],
+      "id": "bd6645150bd25253556f50c8069381665b8dfa0c752aa85dd0c7420415805346",
+      "kind": "import",
+      "revision": "after",
+      "source": "test_bridge.py::<module>",
+      "target": "bridge.py::<module>"
+    },
+    {
+      "after": [],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "b.py"
+          },
+          "text": "test_bridge.py:2 calls g"
+        }
+      ],
+      "id": "67705aebeaf90f932dc25d0c5fe25f434bf4712076c66ebbc42e74e61545769c",
+      "kind": "call",
+      "revision": "before",
+      "source": "test_bridge.py::test_g",
+      "target": "b.py::f"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "bridge.py"
+          },
+          "text": "test_bridge.py:2 calls g"
+        }
+      ],
+      "before": [],
+      "id": "f252b5e99775a4776aef3b8425a6d9fce28eaafc2ad73a20ce5ae4a58df6f4a1",
+      "kind": "call",
+      "revision": "after",
+      "source": "test_bridge.py::test_g",
+      "target": "bridge.py::g"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "test_bridge.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 2,
+            "path": "test_bridge.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "test_bridge.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "660163a86300aedc7bdb9d98c8ba0789466898503af9ccca52dbe7f65743eea2",
+      "kind": "module",
+      "revision": "both",
+      "source": "test_bridge.py::test_g",
+      "target": "test_bridge.py::<module>"
+    }
+  ],
+  "impacted": [
+    "bridge.py::g",
+    "test_bridge.py::test_g"
+  ],
+  "label": "Mixed revisions and a removed function",
+  "nodes": [
+    {
+      "end_line": 1,
+      "id": "a.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "a",
+      "path": "a.py"
+    },
+    {
+      "end_line": 1,
+      "id": "a.py::f",
+      "kind": "function",
+      "line": 1,
+      "name": "f",
+      "path": "a.py"
+    },
+    {
+      "end_line": 1,
+      "id": "b.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "b",
+      "path": "b.py"
+    },
+    {
+      "end_line": 1,
+      "id": "b.py::f",
+      "kind": "function",
+      "line": 1,
+      "name": "f",
+      "path": "b.py"
+    },
+    {
+      "end_line": 2,
+      "id": "bridge.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "bridge",
+      "path": "bridge.py"
+    },
+    {
+      "end_line": 2,
+      "id": "bridge.py::g",
+      "kind": "function",
+      "line": 2,
+      "name": "g",
+      "path": "bridge.py"
+    },
+    {
+      "end_line": 2,
+      "id": "test_bridge.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "test_bridge",
+      "path": "test_bridge.py"
+    },
+    {
+      "end_line": 2,
+      "id": "test_bridge.py::test_g",
+      "kind": "test",
+      "line": 2,
+      "name": "test_g",
+      "path": "test_bridge.py"
+    }
+  ],
+  "recommendations": [
+    {
+      "distance": 2,
+      "evidence_edges": [
+        "f252b5e99775a4776aef3b8425a6d9fce28eaafc2ad73a20ce5ae4a58df6f4a1",
+        "e0751ff1331f7ad598a8dba2b8f55d84568d669ae55b26bb6c404ad3e687cc02"
+      ],
+      "evidence_path": [
+        "test_bridge.py::test_g",
+        "bridge.py::g",
+        "a.py::f"
+      ],
+      "path_revision": "mixed",
+      "reason": "Resolved call path",
+      "score": 71,
+      "symbol": "test_bridge.py::test_g"
+    }
+  ],
+  "removed": [
+    "a.py::f"
+  ],
+  "schema_version": "2.0",
+  "source_files": [
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": ""
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "def f(): return 1\n"
+      },
+      "path": "a.py"
+    },
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": "from b import f\ndef g(): return f()\n"
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "from a import f\ndef g(): return f()\n"
+      },
+      "path": "bridge.py"
+    },
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": "from bridge import g\ndef test_g(): return g()\n"
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "from b import f as g\ndef test_g(): return g()\n"
+      },
+      "path": "test_bridge.py"
+    }
+  ],
+  "stats": {
+    "changed": 4,
+    "edges": 12,
+    "elapsed_ms": 12.5,
+    "files_base": 4,
+    "files_head": 4,
+    "impacted": 2,
+    "recommended_tests": 1,
+    "symbols": 8
+  },
+  "warnings": [
+    "Risk scores prioritize review; they are not calibrated failure probabilities.",
+    "Static analysis is incomplete: dynamic dispatch, fixtures, reflection, re-exports, inheritance and runtime imports may hide dependencies. Keep the full test suite as a gate."
+  ]
+}

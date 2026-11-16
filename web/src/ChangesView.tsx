@@ -65,7 +65,11 @@ function SourcePane({
           )}
           {!canShow && <p>Symbol absent in this parsed revision.</p>}
           {preview.length > 0 && (
-            <pre tabIndex={0} aria-label={`${label} code, scroll to read`}>
+            <pre
+              role="region"
+              tabIndex={0}
+              aria-label={`${label} code, scroll to read`}
+            >
               {preview.map((line, index) => (
                 <span
                   className="source-line"
