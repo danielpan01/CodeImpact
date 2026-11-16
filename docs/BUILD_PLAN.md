@@ -1,55 +1,167 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — November 15, 2026
+## Active roadmap — reviewed November 15, 2026
 
-**The technical scope of milestones 1–6 is complete. Live hosting and the human
-pilot remain deferred by the owner.** The redesign priority
-comes from the owner's request after the evaluation v2 and bounded call-filtering
-work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
-`f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
-delivery sequence and acceptance criteria are in [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md).
-The visual foundation merged in [PR #7](https://github.com/danielpan01/CodeImpact/pull/7)
-after CI passed; interaction refinement merged in
-[PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after its CI passed.
-Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9) after
-CI passed. The owner waived its separate developer walkthrough. The bounded mapping
-work merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10),
-commit `25b58040ede56918755a6a83277de98408f3dcb9`, with post-merge CI passing.
-Milestone 5 merged in [PR #11](https://github.com/danielpan01/CodeImpact/pull/11),
-commit `02598a155bda061b56d03a0fcee161e13df10e89`, with post-merge CI passing.
-Milestone 6 completes local deployment preparation without a live host; its release
-is tracked in [PR #12](https://github.com/danielpan01/CodeImpact/pull/12). See VALIDATION.md for
-observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label review.
+**Milestones 1–6 match their implemented technical scope. The product still has
+explicit coverage, accuracy and release-readiness work.** Live hosting and the human
+pilot remain owner-deferred; independent source-label review remains pending.
+Do not interpret completion of local deployment preparation as a hosted release.
 
-| Order | Milestone | What the user will notice | Completion evidence |
+Reviewed reference: `8d9661f1640619741ed25e570911bea838198666` on `main`, merged in
+[PR #12](https://github.com/danielpan01/CodeImpact/pull/12). Its
+[post-merge quality run](https://github.com/danielpan01/CodeImpact/actions/runs/43778102565)
+passed. The [repository and UI review](REPOSITORY_REVIEW.md) distinguishes this
+reference from the new local review changes and records actual verification.
+
+### Completed foundation
+
+| Milestone | Status against roadmap | Evidence / remaining boundary |
+| --- | --- | --- |
+| 1. Frontend foundation | Merged, PR #7 | Shared design tokens, real input workflows, Tests-first workspace and coordinated evidence |
+| 2. Review interactions | Merged, PR #8 | Test search/filter/sort, exact-path graph focus, file/symbol navigation and source coloring |
+| 3. Frontend release polish | Merged, PR #9 | Light/dark themes, responsive focus/recovery and cross-browser checks; separate human walkthrough waived |
+| 4. Mapping fallback | Code merged, PR #10 | Eleven false positives removed; broader LFU/descriptor work and independent label review remain |
+| 5. Fresh v3 evaluation | Merged, PR #11 | Frozen six-case evaluation, discovery audit and pilot materials; human pilot deferred |
+| 6. Local deployment preparation | Merged, PR #12 | Disposable bounded workers, access/admission controls, performance receipt and built-server checks; live hosting deferred |
+
+Current measured limits matter more than a milestone count: authored data retains
+two misses; v2 retains 273 false positives; v3 retains 43 false positives and **30
+source test definitions outside discovery**. The zero discovered false-negative
+count in v3 does not cover those 30 definitions. All labels still require independent
+review. Preserve the historical datasets and measurements through subsequent work.
+
+The November 15 review also makes a bounded phone-spacing improvement: the complete
+first demo recommendation is visible without scrolling at 360×844 and 390×844 in
+both themes, with all controls and report data retained. This is a local refinement,
+not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.md.
+
+### Next milestones, in order
+
+| Order | Milestone | Why now | Done when |
 | --- | --- | --- | --- |
-| 1 — merged | Frontend foundation and complete analysis workspace | A distinct visual identity, readable typography, compact input controls, clear navigation and coordinated Map, Tests, Changes and evidence views | Real API data; inspected desktop/tablet/phone captures; 50 browser checks and 653 Python tests pass; all three evaluations unchanged |
-| 2 — merged | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; 74 browser checks and CI passed |
-| 3 — merged | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, 134 browser checks and CI passed; unchanged evaluations; separate walkthrough waived |
-| 4 — code merged; human review pending | Review labels and narrow Cachetools fallback | Eleven fewer unrelated FIFO/LRU/RR recommendations in the LFU case | Source-only controls recorded; all affected/uncertain selections retained; all three prior v2 baselines preserved; new mapping baseline and required checks |
-| 5 — merged; human pilot deferred by owner | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | PR #11 and post-merge CI passed; six frozen changes, 84/90 selected, 41 TP / 43 FP / 0 FN / 6 TN; 30 definitions outside discovery; walkthrough ready, no human feedback claimed |
-| 6 — local scope complete; live hosting deferred by owner | Performance, isolation and pilot deployment preparation | A built local service with access-key entry, public demo and explicit resource limits | Six-case runtime/RSS receipt, disposable bounded workers, admission/access controls, real local HTTP and built-UI verification; no deployed URL claimed |
+| 7 | Bounded test-discovery coverage and explicit scope | V3 excludes 30 definitions in `test.py`, including a direct `test_pop` call | Supported filename policy is explicit; discovered/outside-scope inventories are auditable; new evidence and baseline are versioned without rewriting the original v3 result |
+| 8 | Visual character, large-report diagnostics and UI quality gates | The owner wants rounder controls and a less bland, more distinctive interface; the LFU example exposes 3,128 raw notes and visual comparison gates are missing | A visible refresh improves controls, typography, surfaces and identity; grouped diagnostics and visual/accessibility checks protect the result |
+| 9A | Cachetools fallback refinement | 125 LFU-case false positives remain after the mapping fix | One bounded source pattern is supported with unknown/shared-mixin controls; measured improvements preserve affected/uncertain selections |
+| 9B | Descriptor and Slugify fallback refinement | Separate mechanisms account for 31 descriptor and 117 Slugify false positives | Each mechanism has its own regression-first milestone and versioned measurement; no blanket suppression of module/import evidence |
+| 9C | Module-data dependency refinement | V3 records 37 Inflection and six ISO validator false positives | Supported data/export changes are distinguished using source evidence; initialization side effects remain conservative |
+| 10 | Fresh evaluation and reviewed-label release evidence | Existing cases will have informed the next fixes | Unused changes and labels are frozen before evaluation; discovery coverage is included; independent review status and remaining mistakes are recorded honestly |
+| 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
+| 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
+| 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
 
-Milestones 1–3 form the frontend redesign program. Milestone 1 includes light tokens,
-Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
-phone/tablet navigation. Milestone 2 adds test filtering/sorting, graph focus and
-source coloring. Milestone 3 completes themes and responsive recovery/focus polish.
-Milestone 5 technical work is merged; the owner deferred human participation.
-Milestone 6's local scope is complete. See [PERFORMANCE.md](PERFORMANCE.md) for the
-measured bounds and [DEPLOYMENT.md](DEPLOYMENT.md) for the verified launch procedure.
-The next deployment step needs an owner-selected host, TLS/secrets and verification
-on that host; it is explicitly deferred, not a completed hosted pilot. No queue,
-database or durable-job layer is justified by the current synchronous pilot.
-The prepared human walkthrough remains in [DEVELOPER_PILOT.md](DEVELOPER_PILOT.md).
-Independent label review remains pending; do not represent regression results as unseen accuracy.
-Preserve existing analyzer behavior, report
-contracts, corpus bytes and all baselines throughout these frontend milestones.
-Independent source-label review can proceed alongside frontend work. Known analysis
-limitations remain visible; visual polish must not suggest stronger accuracy.
+Milestone 8 continues with 8B as the next frontend priority, independently of
+milestone 7 and alongside source-label review; it must not change analyzer behavior.
+Milestone 7 is the recommended next analyzer task. Do not start all of
+milestone 9 as one large rewrite. Reassess priority after every recorded result.
 
-The following sections retain the original build strategy and historical milestone
-records. Their time estimates and earlier “next” items are historical; the ordered
-roadmap above is the current priority.
+### Milestone 7: bounded test-discovery coverage
+
+1. Inspect the existing filename/symbol rules and the frozen v3 discovery audit.
+   Specify a small supported policy, starting with literal `test.py` as motivated
+   by Ordered Set. Do not run pytest collection, import project configuration,
+   install upstream dependencies or execute source.
+2. Add failing tests for supported names, excluded utility files, nested/class
+   definitions, duplicate names, before/head differences and deleted tests.
+   Avoid interpreting every `test_` function in arbitrary production code as a test.
+3. Draft source-based affected/unaffected/uncertain labels for newly included
+   definitions before examining recommendations. Preserve the original 30-entry
+   outside-discovery inventory and all original v3 labels/receipts.
+4. Implement the smallest bounded change. Report the discovery policy and distinguish
+   zero discovered tests, no recommended tests, and known unsupported definitions.
+   Any report-contract extension must be explicit, versioned and exercised by the UI.
+5. Preserve every old baseline and add a deliberately reviewed current baseline.
+   Keep original versus expanded-denominator metrics separate. Do not call a newly
+   discovered test affected solely because it was previously omitted.
+6. Run focused regressions, all four evaluations, full checks, pilot verification
+   and browser tests. Verify stable IDs, evidence, deleted-symbol behavior and
+   determinism. Document what discovery still cannot see.
+
+### Milestone 8: visual character, diagnostics and UI quality
+
+The owner wants a less generic appearance with rounder buttons and more character.
+Deliver the visual refresh first, then diagnostics and automated protection. Keep
+the warm light/graphite dark foundation while improving surface contrast, typography,
+action hierarchy and a recognizable CodeImpact identity. Apply the detailed direction in
+[FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md#visual-direction) and the delivery slices in
+[FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md#ongoing-professional-ui-quality).
+
+- **8A — Visual refresh (implemented locally):** introduce consistent rounded controls (10–12 px starting
+  target), softer outer panels, stronger headings and clear primary/secondary actions.
+  Refine the wordmark and a small dependency-graph motif. Reduce repeated boxed
+  sections, use purposeful surface tints, and coordinate Tests, Map, Changes and
+  evidence. Improve empty/loading/error states and restrained interaction feedback.
+  Verify before/after desktop, tablet and phone screens in both themes. A radius-only
+  adjustment does not complete this slice.
+- **8B — Diagnostics:** group the thousands of raw diagnostics by category/file with
+  counts, search and expandable complete entries. Keep raw warnings in exports and preserve exact
+  evidence; do not make unknowns disappear to improve presentation.
+- **8C — Quality gates:** establish screenshot comparison baselines for the refined
+  UI on a pinned CI browser/font environment. Current screenshots document appearances;
+  they are not a failing pixel-difference gate. Use fixed inputs and mask only
+  documented volatile timing. Add rendered-accessibility checks alongside these gates.
+- Retain the phone first-result regression and 44-pixel interactive controls.
+  Exercise long names, zero discovery, zero recommendations, mixed/deleted source,
+  large maps, failure recovery and the built pilot access flow in both themes.
+- Complete manual keyboard/zoom review alongside the rendered-accessibility scan.
+  Existing token-contrast/focus checks remain useful but are not a full audit or
+  certification. Record real screen-reader review only if performed.
+- Keep new discovery-scope communication readable when milestone 7 introduces it.
+  Explain measured coverage without implying that priority is failure probability.
+
+Acceptance is a working UI and reviewed before/after evidence, not a collection of
+screenshots or new design tokens alone. Keep the current production build and all
+application/evaluation checks green. Do not add fictitious history, team activity,
+completion percentages or unsupported backend actions.
+
+Milestone 8A is now implemented and verified in the local working tree, without
+analyzer changes or publication. The [visual receipt](FRONTEND_MILESTONE8A.md)
+records before/after captures, entry/workspace/evidence/source refinements and
+observed checks. The existing roadmap and phone-spacing edits are preserved.
+**8B is the next frontend task; 8C follows it.** Milestone 7 remains the next analyzer
+task and was not bundled into this visual work.
+
+### Later analyzer and evaluation work
+
+For every 9-series milestone, choose one source pattern, add failing regressions,
+retain unknown/rebound/side-effect controls, preserve original labels and baseline
+files, and record changes in a new measurement. An improvement must not remove
+valid affected paths merely to reduce selection size. Heuristic scores are not
+probabilities. Fixture injection and runtime imports remain separate authored
+limitations; prioritize them after new evidence establishes a bounded useful scope.
+
+Milestone 10 must include test-discovery coverage in its denominators and retain
+uncertain/outside-policy cases. Reserve its unused examples before tuning. Source-only
+review packs support independent review; no reviewed ground truth or runtime failure
+claim is valid without separate evidence. Human source-label review is pending and
+can proceed whenever an actual reviewer is available; it is distinct from the
+owner-deferred usability pilot.
+
+### Deployment and product decision gates
+
+Live hosting and human participation stay deferred until the owner explicitly
+resumes them. Current work may prepare checklists and local tests without claiming
+those gates are complete. Before a hosted pilot, validate the exact Linux deployment,
+TLS and secrets, host memory limits, source/log retention, readiness, worker cleanup,
+concurrent requests and service-wide rate limits. Measure latency and memory under
+representative pilot load. Existing single-machine sequential timings are not an SLO
+or a capacity claim; the workers are resource-isolated processes, not an OS sandbox.
+
+Keep the public fixture demo and owner-controlled pilot access small. Add individual
+identity/private GitHub authorization only with a defined permission and revocation
+model. Add report storage only with ownership, retention/deletion and source privacy
+requirements. Add queues/caching only after measured latency or usage requires them.
+No database, queue or new framework is an automatic next step.
+
+### Completion rule for future work
+
+Run focused tests plus `make check`, `make evaluate`, `make evaluate-real`,
+`make evaluate-real-v2`, `make evaluate-real-v3`, `make verify-pilot`, and
+`cd web && npm run test:e2e` for application changes. Include frontend formatting
+for UI work. Verify relevant determinism and unchanged historical receipts, update
+actual results, and leave changes unstaged/uncommitted for the owner's publication.
+
+Historical sections below are retained as historical records. Their old “next”
+items and time estimates do not override the active sequence above.
 
 ## Original build strategy and milestone history
 

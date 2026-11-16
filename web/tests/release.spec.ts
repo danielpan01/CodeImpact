@@ -44,6 +44,136 @@ async function noOverflow(page: Page) {
   ).toBe(true);
 }
 
+test("phone review shows the first complete recommendation without scrolling", async ({
+  page,
+}) => {
+  for (const width of [360, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await loadDemo(page);
+    for (const theme of ["light", "dark"]) {
+      if (theme === "dark") await dark(page);
+      const row = page.getByRole("button", {
+        name: /test_discount.*Heuristic/,
+      });
+      await expect(row).toBeInViewport({ ratio: 1 });
+      expect(await page.evaluate(() => scrollY)).toBe(0);
+      await expect(
+        page.getByRole("searchbox", { name: "Search tests" }),
+      ).toBeVisible();
+      await expect(
+        page.getByLabel("Explanation", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByLabel("Sort tests", { exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText("Export includes source code")).toBeVisible();
+      await noOverflow(page);
+    }
+    await page.getByRole("button", { name: "Switch to light theme" }).click();
+  }
+});
+
+async function comfortableControls(page: Page) {
+  const controls = await page
+    .locator(
+      '.primary, .secondary, .icon-button, .theme-toggle, .text-button, .view-toggle button, .change-row, .react-flow__controls-button, input[type="url"], .test-toolbar input, select',
+    )
+    .evaluateAll((elements) =>
+      elements
+        .filter((el) => el.getClientRects().length)
+        .map((el) => {
+          const { width, height } = el.getBoundingClientRect();
+          return {
+            name: el.getAttribute("aria-label") ?? el.textContent,
+            width,
+            height,
+          };
+        }),
+    );
+  for (const control of controls) {
+    expect(control.height, String(control.name)).toBeGreaterThanOrEqual(44);
+    expect(control.width, String(control.name)).toBeGreaterThanOrEqual(44);
+  }
+}
+
+test("entry refinement keeps input, alternatives and close usable across sizes", async ({
+  page,
+  browserName,
+}) => {
+  // WebKit on macOS uses Option-Tab to include buttons in keyboard navigation.
+  const tabKey = browserName === "webkit" ? "Alt+Tab" : "Tab";
+  for (const [width, height] of [
+    [1440, 900],
+    [1280, 800],
+    [768, 1024],
+    [390, 844],
+    [360, 844],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await loadDemo(page);
+    for (const theme of ["light", "dark"]) {
+      if (theme === "dark") await dark(page);
+      await page
+        .getByRole("button", { name: "New analysis", exact: true })
+        .click();
+      const input = page.getByLabel("Analyze a GitHub pull request", {
+        exact: true,
+      });
+      await expect(input).toBeFocused();
+      await input.press(tabKey);
+      await expect(
+        page.getByRole("button", { name: "Analyze PR", exact: true }),
+      ).toBeFocused();
+      await page.keyboard.press(tabKey);
+      await expect(
+        page.getByRole("button", { name: "Analyze snapshots", exact: true }),
+      ).toBeFocused();
+      await page.keyboard.press(tabKey);
+      await expect(
+        page.getByRole("button", { name: "Load demo", exact: true }),
+      ).toBeFocused();
+      await comfortableControls(page);
+      await noOverflow(page);
+      await page.getByRole("button", { name: "Close analysis input" }).click();
+      await expect(
+        page.getByRole("button", { name: "New analysis", exact: true }),
+      ).toBeFocused();
+      await expect(page.locator(".test-row")).toHaveCount(3);
+    }
+    await themeButton(page).click();
+  }
+});
+
+test("desktop review controls keep full hit areas and reduced-motion focus", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await loadDemo(page);
+  for (const theme of ["light", "dark"]) {
+    if (theme === "dark") await dark(page);
+    await comfortableControls(page);
+    const search = page.getByRole("searchbox", { name: "Search tests" });
+    await search.focus();
+    expect(
+      await search.evaluate((el) => getComputedStyle(el).outlineStyle),
+    ).toBe("solid");
+    expect(
+      await search.evaluate((el) => getComputedStyle(el).transitionDuration),
+    ).toBe("0s");
+    await page.getByRole("button", { name: "Focus path in Map" }).click();
+    await expect(page.locator(".react-flow__node")).toHaveCount(2);
+    await comfortableControls(page);
+    await page.getByRole("button", { name: "Open changed code" }).click();
+    await comfortableControls(page);
+    const source = page.getByLabel("After code, scroll to read");
+    await source.focus();
+    await expect(source).toBeFocused();
+    await noOverflow(page);
+    await page.getByRole("button", { name: "Tests", exact: true }).click();
+  }
+});
+
 test("theme follows the system until chosen, persists, and synchronizes between tabs", async ({
   page,
   context,
@@ -395,6 +525,9 @@ test("semantic text colors and focus indicators meet contrast checks in both the
     if (theme === "dark") await dark(page);
     const pairs = [
       ["ink", "panel"],
+      ["ink", "inspector"],
+      ["muted", "inspector"],
+      ["accent", "inspector"],
       ["muted", "panel"],
       ["muted", "page"],
       ["subtle", "panel-muted"],

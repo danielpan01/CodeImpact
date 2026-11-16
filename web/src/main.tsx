@@ -275,9 +275,11 @@ function App() {
       <header className="topbar">
         <a className="brand" href="/" aria-label="CodeImpact home">
           <span className="brand-mark">
-            <Icon name="branch" />
+            <Icon name="impact" />
           </span>
-          CodeImpact
+          <span>
+            Code<span className="brand-emphasis">Impact</span>
+          </span>
         </a>
         <span className="nav-context">Developer workspace</span>
         <div className="top-actions">
@@ -359,6 +361,7 @@ function App() {
         )}
         {error && (
           <div className="error" role="alert" tabIndex={-1} ref={errorMessage}>
+            <Icon name="alert" />
             <div>
               <strong>
                 {
@@ -509,11 +512,6 @@ function App() {
                           : "Before and after · exact analyzed source"}
                     </p>
                   </div>
-                  {view === "tests" && (
-                    <span className="badge">
-                      {report.recommendations.length} tests
-                    </span>
-                  )}
                 </div>
                 {view === "tests" ? (
                   <TestsView

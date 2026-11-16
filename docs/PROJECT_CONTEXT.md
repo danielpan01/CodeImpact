@@ -2,6 +2,27 @@
 
 ## Current priority — November 15, 2026
 
+The repository review starts from merged PR #12 (`8d9661f1640619741ed25e570911bea838198666`),
+whose post-merge CI passed. Technical milestones 1–6 match their local scope. The
+active [build plan](BUILD_PLAN.md) now specifies milestones 7–13: bounded discovery
+coverage, a distinctive UI refresh followed by diagnostics/quality gates, isolated
+fallback improvements, fresh evaluation, and conditional pilot/deployment/integration
+work. Live hosting and the human pilot
+remain owner-deferred; independent source-label review remains pending.
+See [REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for actual findings. The review's
+phone-spacing refinement and documentation are local, unstaged/uncommitted changes;
+they are not part of the merged PR #12 result.
+
+Milestone 8A now implements that visual direction locally: 12 px shared control
+corners, a connected-node wordmark, split entry layout, stronger sentence-case
+hierarchy, warm results/slate evidence surfaces, graphite dark theme, numbered
+trails and refined source/state styling. The preexisting roadmap and phone-spacing
+changes are preserved; all changes remain unstaged/uncommitted. No analyzer,
+discovery, report contract, corpus, baseline or dependency changed.
+See [FRONTEND_MILESTONE8A.md](FRONTEND_MILESTONE8A.md) for the before/after receipt and
+[VALIDATION.md](VALIDATION.md) for checks. Next frontend work is 8B diagnostics,
+then 8C visual/accessibility gates; analyzer milestone 7 remains separate.
+
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. Earlier implementation-status paragraphs

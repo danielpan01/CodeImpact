@@ -36,11 +36,37 @@ export function AnalysisInput({
     <section className="analysis-input" aria-label="New analysis">
       <div className="input-heading">
         <div>
+          <span className="entry-mark">
+            <Icon name="impact" />
+          </span>
           <span className="eyebrow">Python change analysis</span>
           <h1>Start with a change.</h1>
           <p>
             Find the tests that deserve attention, then follow the evidence.
           </p>
+          <ol className="entry-workflow" aria-label="Review workflow">
+            <li>
+              <Icon name="tests" />
+              <span>
+                <strong>Prioritize tests</strong>
+                <small>Start with a reason, not a guess.</small>
+              </span>
+            </li>
+            <li>
+              <Icon name="map" />
+              <span>
+                <strong>Trace dependencies</strong>
+                <small>Follow the path to what changed.</small>
+              </span>
+            </li>
+            <li>
+              <Icon name="code" />
+              <span>
+                <strong>Inspect the source</strong>
+                <small>Compare both analyzed revisions.</small>
+              </span>
+            </li>
+          </ol>
         </div>
         {onClose && (
           <button
@@ -53,118 +79,120 @@ export function AnalysisInput({
           </button>
         )}
       </div>
-      {accessRequired && (
-        <div className="pilot-access">
-          <div>
-            <label htmlFor="pilot-key">Pilot access key</label>
-            <p id="pilot-key-help">
-              For your own analyses. Kept only in this tab’s memory; the demo is
-              public.
-            </p>
+      <div className="input-body">
+        {accessRequired && (
+          <div className="pilot-access">
+            <div>
+              <label htmlFor="pilot-key">Pilot access key</label>
+              <p id="pilot-key-help">
+                For your own analyses. Kept only in this tab’s memory; the demo
+                is public.
+              </p>
+            </div>
+            <input
+              id="pilot-key"
+              ref={keyInput}
+              type="password"
+              value={accessKey}
+              onChange={(event) => setAccessKey(event.target.value)}
+              maxLength={256}
+              autoComplete="off"
+              spellCheck={false}
+              aria-describedby="pilot-key-help"
+              disabled={busy}
+            />
+            {accessKey && (
+              <button
+                className="secondary"
+                disabled={busy}
+                onClick={() => {
+                  setAccessKey("");
+                  keyInput.current?.focus();
+                }}
+              >
+                Clear key
+              </button>
+            )}
           </div>
-          <input
-            id="pilot-key"
-            ref={keyInput}
-            type="password"
-            value={accessKey}
-            onChange={(event) => setAccessKey(event.target.value)}
-            maxLength={256}
-            autoComplete="off"
-            spellCheck={false}
-            aria-describedby="pilot-key-help"
-            disabled={busy}
-          />
-          {accessKey && (
+        )}
+        <form
+          className="pr-form"
+          aria-label="Analyze a public GitHub pull request"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onPR();
+          }}
+        >
+          <label htmlFor="pr-url">Analyze a GitHub pull request</label>
+          <p id="pr-help">
+            Public GitHub PRs with Python source. Read as data; never executed.
+          </p>
+          <div className="pr-input-row">
+            <input
+              id="pr-url"
+              ref={inputRef}
+              type="url"
+              required
+              maxLength={300}
+              placeholder="https://github.com/owner/repo/pull/123"
+              aria-describedby="pr-help"
+              aria-invalid={invalidPR || undefined}
+              value={prUrl}
+              onChange={(event) => setPrUrl(event.target.value)}
+              disabled={busy}
+              spellCheck={false}
+            />
+            <button className="primary" type="submit" disabled={busy}>
+              Analyze PR <Icon name="arrow" />
+            </button>
+          </div>
+        </form>
+        <div className="input-alternatives">
+          <div>
+            <Icon name="upload" />
+            <div>
+              <strong>Have a snapshot pair?</strong>
+              <p>Upload before / after Python files as JSON.</p>
+            </div>
             <button
+              ref={snapshotButtonRef}
               className="secondary"
               disabled={busy}
-              onClick={() => {
-                setAccessKey("");
-                keyInput.current?.focus();
-              }}
+              onClick={() => fileInput.current?.click()}
             >
-              Clear key
+              Analyze snapshots
             </button>
-          )}
+            <input
+              className="visually-hidden"
+              ref={fileInput}
+              aria-label="Upload snapshot JSON"
+              type="file"
+              accept=".json,application/json"
+              disabled={busy}
+              tabIndex={-1}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) onUpload(file);
+                event.target.value = "";
+              }}
+            />
+          </div>
+          <div>
+            <Icon name="impact" />
+            <div>
+              <strong>Explore the checkout demo</strong>
+              <p>A discount change, three tests, traceable paths.</p>
+            </div>
+            <button className="secondary" disabled={busy} onClick={onDemo}>
+              Load demo
+            </button>
+          </div>
         </div>
-      )}
-      <form
-        className="pr-form"
-        aria-label="Analyze a public GitHub pull request"
-        onSubmit={(event) => {
-          event.preventDefault();
-          onPR();
-        }}
-      >
-        <label htmlFor="pr-url">Analyze a GitHub pull request</label>
-        <p id="pr-help">
-          Public GitHub PRs with Python source. Read as data; never executed.
+        <p className="input-footnote">
+          <Icon name="shield" /> Static evidence guides review. Keep the full
+          test suite as your merge gate.
         </p>
-        <div className="pr-input-row">
-          <input
-            id="pr-url"
-            ref={inputRef}
-            type="url"
-            required
-            maxLength={300}
-            placeholder="https://github.com/owner/repo/pull/123"
-            aria-describedby="pr-help"
-            aria-invalid={invalidPR || undefined}
-            value={prUrl}
-            onChange={(event) => setPrUrl(event.target.value)}
-            disabled={busy}
-            spellCheck={false}
-          />
-          <button className="primary" type="submit" disabled={busy}>
-            Analyze PR <Icon name="arrow" />
-          </button>
-        </div>
-      </form>
-      <div className="input-alternatives">
-        <div>
-          <Icon name="upload" />
-          <div>
-            <strong>Have a snapshot pair?</strong>
-            <p>Upload before / after Python files as JSON.</p>
-          </div>
-          <button
-            ref={snapshotButtonRef}
-            className="secondary"
-            disabled={busy}
-            onClick={() => fileInput.current?.click()}
-          >
-            Analyze snapshots
-          </button>
-          <input
-            className="visually-hidden"
-            ref={fileInput}
-            aria-label="Upload snapshot JSON"
-            type="file"
-            accept=".json,application/json"
-            disabled={busy}
-            tabIndex={-1}
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) onUpload(file);
-              event.target.value = "";
-            }}
-          />
-        </div>
-        <div>
-          <Icon name="branch" />
-          <div>
-            <strong>Explore the checkout demo</strong>
-            <p>A discount change, three tests, traceable paths.</p>
-          </div>
-          <button className="secondary" disabled={busy} onClick={onDemo}>
-            Load demo
-          </button>
-        </div>
       </div>
-      <p className="input-footnote">
-        <Icon name="shield" /> Static evidence guides review. Keep the full test
-        suite as your merge gate.
-      </p>
     </section>
   );
 }

@@ -2446,3 +2446,93 @@ suite to 159 checks. The final local rerun passed all 159 browser checks,
 `make check` (810 Python tests, one Linux-only skip, lint/types/build), frontend
 formatting and `make verify-pilot`. All preservation hashes still match. The linked
 PR checks track the final publication result.
+
+## Repository and UI review — November 15, 2026
+
+Reviewed clean local `main` at `8d9661f1640619741ed25e570911bea838198666`, matching
+GitHub `main` and merged [PR #12](https://github.com/danielpan01/CodeImpact/pull/12).
+The [post-merge CI run](https://github.com/danielpan01/CodeImpact/actions/runs/43778102565)
+completed successfully. Milestones 1–6 match their implemented technical scope;
+human label review is pending and live hosting/the human pilot remain owner-deferred.
+
+The [repository review](REPOSITORY_REVIEW.md) records the evidence, remaining discovery
+and fallback limitations, visual observations and next priorities. BUILD_PLAN now
+specifies milestones 7–13; FRONTEND_ROADMAP includes current verification commands
+and ongoing professional design standards.
+
+A new phone-layout regression failed before the CSS change: only about 6% of the
+first demo recommendation was in the 360×844 viewport. Reduced spacing and removal
+of a redundant mobile heading now show the entire row at both 360×844 and 390×844,
+in both themes, without scrolling or removing controls. The five-project focused
+run passed, followed by **164 passing full browser checks**. Existing touch/focus,
+theme, large-report, mixed/deleted-source and protected pilot checks remain intact.
+Desktop light/dark, graph/code review, tablet and phone states were inspected; no
+JavaScript console errors were reported in the manual session. This is agent review,
+not a human usability study or complete accessibility certification.
+
+Other observed checks: `make check` passed (**810 Python tests**, one Linux-only
+skip, lint/format/types and production build); all **four evaluations** matched;
+`make verify-pilot` passed; frontend formatting passed. The final browser run rebuilt
+the final CSS. The existing deprecation/color-environment warnings are non-failing.
+All **139 protected files/artifacts** match the pre-review hashes: 106 corpus files,
+21 Python modules, two benchmark receipts and ten saved report artifacts. No analyzer,
+scoring, report contract, source label or historical baseline changed.
+
+Logs and screenshots are listed in REPOSITORY_REVIEW.md. These local UI/documentation
+changes remain unstaged/uncommitted; the merged CI result above does not claim to
+cover them. Documentation links and diff checks pass; no hosting was performed.
+
+## Milestone 8A visual refinement — November 15, 2026
+
+Implemented in the local working tree over PR #12 and the existing repository-review
+edits. [The visual receipt](FRONTEND_MILESTONE8A.md) records design decisions,
+before/after screenshots, inspected states and limitations. The README, build plan,
+frontend roadmap and project context distinguish this local implementation from
+merged history. Milestones 8B/8C remain future work; live hosting remains deferred.
+
+| Required check | Observed final result |
+| --- | --- |
+| `make check` | Passed: **810 Python tests**, **1 expected Linux-only address-space skip**, 1 non-failing Starlette/httpx deprecation warning; Ruff lint and format, mypy (21 modules), TypeScript and production build passed |
+| `make evaluate` | Passed: **23 TP / 0 FP / 2 FN / 32 TN**, 2 uncertain recommendations; recorded discrepancies unchanged |
+| `make evaluate-real` | Passed: **45 TP / 0 FP / 0 FN / 123 TN**, 11 uncertain recommendations; baseline unchanged |
+| `make evaluate-real-v2` | Passed: **109 TP / 273 FP / 0 FN / 177 TN**, 13 uncertain recommendations; mapping-fallback baseline unchanged |
+| `make evaluate-real-v3` | Passed: **41 TP / 43 FP / 0 FN / 6 TN**; the 30 definitions outside discovery remain outside the metric denominator |
+| `make verify-pilot` | Passed: readiness, built UI, public demo, protected analyses, frozen report equality and no report storage |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e` | **174 passed**, no failures or skips, across the existing five browser projects |
+| `git diff --check` | Passed |
+
+Focused runs: **15 passed** for the retained phone-first-result, keyboard/touch and
+semantic contrast checks; **10 passed** for the new entry/control/reduced-motion
+checks; **10 passed** for the built pilot after the field-size correction. The
+final full browser run includes all of these cases. Existing Node color-environment
+warnings remain non-failing. The first full browser run caught a fractional Firefox
+pilot-field height (43.9999847 px); increasing the field to 48 px fixed it without
+weakening the assertion. An initial Python run was interrupted after 388 passes and
+one skip while the longer offline tests were running; the final complete run above
+supersedes it. No check remains blocked.
+
+Before/after browser inspection covered all five requested viewports in both themes
+with the demo and pinned Cachetools LFU report, plus long identifiers, empty and
+zero-discovery states, deleted/mixed evidence, loading/error recovery and the pilot
+form. Screenshots were inspected and the tablet summary was refined after crowded
+large-value labels were observed. The final capture records show no horizontal page
+overflow or JavaScript page errors. Zoom verification was bounded to 200%-equivalent
+viewport reflow and 2× page-scale zoom; it was not a native browser-menu or
+screen-reader certification. No independent usability review was performed.
+
+All **138 protected files/artifacts** match the task-start hashes: 106 corpus files,
+21 Python source modules, two benchmark receipts, four stable evaluation reports,
+two Python project/dependency files and three frontend dependency/type-contract files.
+The preexisting phone regression is unchanged, and `docs/REPOSITORY_REVIEW.md` is
+byte-identical to its starting uncommitted version. Existing roadmap/README/context/
+validation edits were extended, not discarded. This milestone adds presentation
+changes, browser regressions, documentation and 12 representative screenshots.
+Nothing is staged or committed.
+
+Final local receipts: `reports/milestone8a-check-final.log`,
+`milestone8a-evaluations.log`, `milestone8a-pilot-final.log`,
+`milestone8a-format-final.log`, `milestone8a-browser-final.log`,
+`milestone8a-preservation.json`, and the `milestone8a-before/` / `milestone8a-after/`
+capture directories. These are local artifacts, not a claim of CI publication or
+new screenshot-comparison infrastructure.
