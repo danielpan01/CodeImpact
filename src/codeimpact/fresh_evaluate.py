@@ -36,11 +36,13 @@ PARTIAL_BASELINE_FILE = "baselines/module-partial-v1.json"
 ARGUMENT_BASELINE_FILE = "baselines/argument-guards-v1.json"
 MAPPING_BASELINE_FILE = "baselines/mapping-fallback-v1.json"
 DISCOVERY_BASELINE_FILE = "baselines/test-discovery-v1.json"
-BASELINE_FILE = "baselines/lfu-callback-v1.json"
+LFU_BASELINE_FILE = "baselines/lfu-callback-v1.json"
+BASELINE_FILE = "baselines/descriptor-binding-v1.json"
 PARTIAL_SOURCES = FROZEN_SOURCES | {"src/codeimpact/partial_bindings.py"}
 ARGUMENT_SOURCES = PARTIAL_SOURCES | {"src/codeimpact/call_arguments.py"}
 MAPPING_SOURCES = ARGUMENT_SOURCES | {"src/codeimpact/mapping_protocols.py"}
-CURRENT_SOURCES = MAPPING_SOURCES | {"src/codeimpact/discovery.py"}
+DISCOVERY_SOURCES = MAPPING_SOURCES | {"src/codeimpact/discovery.py"}
+CURRENT_SOURCES = DISCOVERY_SOURCES | {"src/codeimpact/descriptor_binding.py"}
 
 
 class FrozenCase(StrictModel):
@@ -85,6 +87,7 @@ class RegressionBaseline(StrictModel):
         "mapping-fallback-v1",
         "test-discovery-v1",
         "lfu-callback-v1",
+        "descriptor-binding-v1",
     ]
     previous_baseline_sha256: SHA256 | None = None
     explanation: Nonblank
@@ -102,8 +105,9 @@ class RegressionBaseline(StrictModel):
             "module-partial-v1": PARTIAL_SOURCES,
             "argument-guards-v1": ARGUMENT_SOURCES,
             "mapping-fallback-v1": MAPPING_SOURCES,
-            "test-discovery-v1": CURRENT_SOURCES,
-            "lfu-callback-v1": CURRENT_SOURCES,
+            "test-discovery-v1": DISCOVERY_SOURCES,
+            "lfu-callback-v1": DISCOVERY_SOURCES,
+            "descriptor-binding-v1": CURRENT_SOURCES,
         }
         require(
             set(self.analyzer_sha256) == sources[self.name],
@@ -118,9 +122,15 @@ class RegressionBaseline(StrictModel):
 
 def active_baseline(directory: Path, project: Path = PROJECT) -> RegressionBaseline:
     baseline = RegressionBaseline.model_validate(read_metadata(directory / BASELINE_FILE)[0])
-    require(baseline.name == "lfu-callback-v1", "Active baseline name mismatch")
+    require(baseline.name == "descriptor-binding-v1", "Active baseline name mismatch")
     require(
-        file_hash(directory / DISCOVERY_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        file_hash(directory / LFU_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        "Preserved LFU baseline changed",
+    )
+    lfu = RegressionBaseline.model_validate(read_metadata(directory / LFU_BASELINE_FILE)[0])
+    require(lfu.name == "lfu-callback-v1", "LFU baseline name mismatch")
+    require(
+        file_hash(directory / DISCOVERY_BASELINE_FILE) == lfu.previous_baseline_sha256,
         "Preserved discovery baseline changed",
     )
     discovery = RegressionBaseline.model_validate(
@@ -232,6 +242,7 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             "frozen-inputs.json",
             "first-run.json",
             BASELINE_FILE,
+            LFU_BASELINE_FILE,
             DISCOVERY_BASELINE_FILE,
             MAPPING_BASELINE_FILE,
             ARGUMENT_BASELINE_FILE,
@@ -259,22 +270,28 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
     matches = observed == initial.measurement
     current_matches = observed == baseline.measurement
     if not current_matches:
-        report["evaluation"]["regressions"].append("v2: measurement differs from lfu-callback-v1")
+        report["evaluation"]["regressions"].append(
+            "v2: measurement differs from descriptor-binding-v1"
+        )
     argument = RegressionBaseline.model_validate(
         read_metadata(directory / ARGUMENT_BASELINE_FILE)[0]
     )
-    previous = RegressionBaseline.model_validate(
+    previous = RegressionBaseline.model_validate(read_metadata(directory / LFU_BASELINE_FILE)[0])
+    discovery = RegressionBaseline.model_validate(
         read_metadata(directory / DISCOVERY_BASELINE_FILE)[0]
     )
     mapping = RegressionBaseline.model_validate(read_metadata(directory / MAPPING_BASELINE_FILE)[0])
     partial = RegressionBaseline.model_validate(read_metadata(directory / PARTIAL_BASELINE_FILE)[0])
     report.update(
-        fresh_evaluation_schema_version="6.0",
+        fresh_evaluation_schema_version="7.0",
         previous_baseline=previous.name,
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         previous_summary=previous.measurement["summary"],
+        discovery_baseline=discovery.name,
+        discovery_baseline_sha256=previous.previous_baseline_sha256,
+        discovery_summary=discovery.measurement["summary"],
         mapping_baseline=mapping.name,
-        mapping_baseline_sha256=previous.previous_baseline_sha256,
+        mapping_baseline_sha256=discovery.previous_baseline_sha256,
         mapping_summary=mapping.measurement["summary"],
         partial_baseline=partial.name,
         argument_baseline=argument.name,
@@ -307,9 +324,9 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             },
         },
         interpretation=(
-            "Development/regression evaluation with lfu-callback-v1; "
+            "Development/regression evaluation with descriptor-binding-v1; "
             "original bef99db first run, module-partial-v1, argument-guards-v1 "
-            "mapping-fallback-v1 and test-discovery-v1 preserved. "
+            "mapping-fallback-v1, test-discovery-v1 and lfu-callback-v1 preserved. "
             "agent-drafted labels, not independent review or runtime failures. "
             "Matching the baseline preserves mistakes; it does not certify safe test skipping."
         ),
@@ -322,7 +339,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_fresh,
         default_corpus=Path("corpus/real-v2"),
-        default_output=Path("reports/real-v2-lfu-callback-v1-evaluation.json"),
+        default_output=Path("reports/real-v2-descriptor-binding-v1-evaluation.json"),
     )
 
 

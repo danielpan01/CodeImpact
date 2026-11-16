@@ -1,0 +1,35 @@
+{
+  "added_corpus_sha256": {
+    "corpus/real-v2/baselines/descriptor-binding-v1.json": "2797507687a128210f1bfc54c33e122e7dde4883e600d5e97cb48868b048a238",
+    "corpus/real-v3/baselines/descriptor-binding-v1.json": "245d2c163adc7eaa1c6661031a9fe3facf1fb86f3c9aa3e833a14fd6155a292a"
+  },
+  "changed_historical_sources": [
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/fresh_evaluate.py",
+    "src/codeimpact/holdout_evaluate.py"
+  ],
+  "current_sources_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/analyzer.py": "059cba653d12899e89eea0bdea2c8288065fbc0af8cb9de4642963325222affa",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/cli.py": "76761ebb0c31cbecd5f75959ba9f524d8ba05016c72b38cfaefad3142483ed2e",
+    "src/codeimpact/corpus.py": "073619e9c20c8a2cb5b9df77d3bf8fb247490e1f21466dcd45f9120fb72015f5",
+    "src/codeimpact/demo.py": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ebd6854864a3287616e0df3a3a7a834413fa60a58ca85f4ea0f7a3d614cb883b",
+    "src/codeimpact/evaluate.py": "bc9f81bd69dceaf5f4201d2df7202c15f628e0016a6118765e12ddcec623f3c2",
+    "src/codeimpact/fresh_evaluate.py": "02821a28112329666805e3c3c6266beea10d78be30067eda74e77eb4adc803e9",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/holdout_evaluate.py": "9d13f890cf13dea8ecc7bf301dc05b3ee05956739e7434f4499c7aef935b5fe7",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/real_evaluate.py": "8d845b2334306fb343f9f10d6d8c107d57599258aeb52f08064d7ae3b4ee5c7a",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c"
+  },
+  "explanation": "Preserve all milestone 9A corpus and receipt bytes. Pin descriptor binding source, changed replay modules, and the two new baseline receipts.",
+  "name": "descriptor-binding-v1",
+  "previous_receipt_sha256": "ae74421bc2f4fa89edb71a0829e415b7da6718966b477cdba90bc05947f20e81",
+  "schema_version": "1.0"
+}

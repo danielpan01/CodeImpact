@@ -66,6 +66,28 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/lfu-callback-v1.json",
     }
     assert set(latest["current_sources_sha256"]) == set(current["current_sources_sha256"])
+    descriptor = json.loads(
+        (ROOT / "benchmarks/descriptor-binding-v1-preservation.json").read_text()
+    )
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/lfu-callback-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == descriptor["previous_receipt_sha256"]
+    )
+    changed = set(descriptor["changed_historical_sources"])
+    assert changed == {
+        "src/codeimpact/analyzer.py",
+        "src/codeimpact/fresh_evaluate.py",
+        "src/codeimpact/holdout_evaluate.py",
+    }
+    assert set(descriptor["added_corpus_sha256"]) == {
+        "corpus/real-v2/baselines/descriptor-binding-v1.json",
+        "corpus/real-v3/baselines/descriptor-binding-v1.json",
+    }
+    assert set(descriptor["current_sources_sha256"]) == set(latest["current_sources_sha256"]) | {
+        "src/codeimpact/descriptor_binding.py"
+    }
     corpus = {p.relative_to(ROOT).as_posix() for p in (ROOT / "corpus").rglob("*") if p.is_file()}
     historical = {p for p in receipt["files_sha256"] if p.startswith("corpus/")}
     assert len(historical) == 106
@@ -74,11 +96,9 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/test-discovery-v1.json",
         "corpus/real-v3/baselines/test-discovery-v1-labels.json",
     }
-    assert (
-        corpus
-        == historical | current["added_corpus_sha256"].keys() | latest["added_corpus_sha256"].keys()
-    )
-    assert CURRENT_SOURCES <= current["current_sources_sha256"].keys()
+    extensions = (current, latest, descriptor)
+    assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
+    assert CURRENT_SOURCES <= descriptor["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {
         p for p in receipt["files_sha256"] if p.startswith("src/")
     } | {"src/codeimpact/discovery.py"}
@@ -89,15 +109,15 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "src/codeimpact/holdout_evaluate.py",
         "src/codeimpact/real_evaluate.py",
     }
-    for path, expected in receipt["files_sha256"].items():
-        if path not in current["changed_historical_sources"] + latest["changed_historical_sources"]:
+    source_inventories = [
+        receipt["files_sha256"],
+        *(r["current_sources_sha256"] for r in extensions),
+    ]
+    for i, hashes in enumerate(source_inventories):
+        superseded = {p for r in extensions[i:] for p in r["changed_historical_sources"]}
+        for path, expected in hashes.items():
+            if path not in superseded:
+                assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
+    for receipt in extensions:
+        for path, expected in receipt["added_corpus_sha256"].items():
             assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
-    for path, expected in (
-        current["added_corpus_sha256"] | current["current_sources_sha256"]
-    ).items():
-        if path not in latest["changed_historical_sources"]:
-            assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
-    for path, expected in (
-        latest["added_corpus_sha256"] | latest["current_sources_sha256"]
-    ).items():
-        assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
