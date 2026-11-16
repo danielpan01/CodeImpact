@@ -17,7 +17,10 @@ Milestones 8A, 8B and 8C are merged. 8C landed in
 [PR #15](https://github.com/danielpan01/CodeImpact/pull/15), commit
 `7084ab04dd60881a6dde6e91986911f1d9f6ece2`, with
 [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
-Milestone 7 is implemented from that clean checkout.
+Milestone 7 merged in [PR #16](https://github.com/danielpan01/CodeImpact/pull/16)
+at `a4d29a7c7c462c32f0bb7978e45708166b0106b0`; its
+[post-merge checks passed](https://github.com/danielpan01/CodeImpact/actions/runs/43930425754).
+Milestone 9A is implemented; the owner authorized publication on November 16.
 See [the discovery receipt](TEST_DISCOVERY.md) and VALIDATION.md.
 The repository-review reference above remains historical.
 
@@ -33,7 +36,7 @@ The repository-review reference above remains historical.
 | 6. Local deployment preparation | Merged, PR #12 | Disposable bounded workers, access/admission controls, performance receipt and built-server checks; live hosting deferred |
 
 Current measured limits matter more than a milestone count: authored data retains
-two misses; v2 retains 273 false positives; the original v3 result retains 43 false positives and **30 excluded definitions**.
+two misses; v2 retains 272 false positives; the original v3 result retains 43 false positives and **30 excluded definitions**.
 Milestone 7 adds those 30 definitions to a separate current measurement: 85/120
 selected, 42 TP / 43 FP / 0 FN / 23 TN, with 12 uncertain definitions unselected.
 The original 90-definition denominator and its exclusions remain frozen. All labels still require independent
@@ -48,9 +51,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 
 | Order | Milestone | Why now | Done when |
 | --- | --- | --- | --- |
-| 7 — implemented | Bounded test-discovery coverage and explicit scope | Original v3 excluded 30 definitions in `test.py`; current version covers them | Supported filename policy is explicit; discovered/outside-scope inventories are auditable; new evidence and baseline are versioned without rewriting the original v3 result |
+| 7 — merged | Bounded test-discovery coverage and explicit scope | Original v3 excluded 30 definitions in `test.py`; current version covers them | Supported filename policy is explicit; discovered/outside-scope inventories are auditable; new evidence and baseline are versioned without rewriting the original v3 result |
 | 8 — merged | Visual character, large-report diagnostics and UI quality gates | The owner wants rounder controls and a less bland, more distinctive interface; the LFU example exposes 3,128 raw notes and the interface needs durable regression protection | A visible refresh improves controls, typography, surfaces and identity; grouped diagnostics and visual/accessibility checks protect the result |
-| 9A | Cachetools fallback refinement | 125 LFU-case false positives remain after the mapping fix | One bounded source pattern is supported with unknown/shared-mixin controls; measured improvements preserve affected/uncertain selections |
+| 9A — implemented | Cachetools fallback refinement | Literal-raising local callback proof removes one LFU false positive; 124 remain | All six affected/eight uncertain LFU selections and retained evidence preserved; separate `lfu-callback-v1` receipts |
 | 9B | Descriptor and Slugify fallback refinement | Separate mechanisms account for 31 descriptor and 117 Slugify false positives | Each mechanism has its own regression-first milestone and versioned measurement; no blanket suppression of module/import evidence |
 | 9C | Module-data dependency refinement | V3 records 37 Inflection and six ISO validator false positives | Supported data/export changes are distinguished using source evidence; initialization side effects remain conservative |
 | 10 | Fresh evaluation and reviewed-label release evidence | Existing cases will have informed the next fixes | Unused changes and labels are frozen before evaluation; discovery coverage is included; independent review status and remaining mistakes are recorded honestly |
@@ -59,9 +62,11 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
 
 Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
-remain active. **Milestone 7 is implemented** with one filename extension,
+remain active. **Milestone 7 is merged** with one filename extension,
 a pre-analysis source-label draft, separately versioned measurements and preserved
-history. **9A is the next task**. Do not start all of milestone 9 as one rewrite.
+history. **9B is next: one bounded descriptor instance/classmethod mechanism.**
+The owner selected descriptor refinement first; Slugify remains a separate slice.
+Do not start all of milestone 9 as one rewrite.
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
@@ -136,7 +141,10 @@ the API or analyzer. The [diagnostics receipt](FRONTEND_MILESTONE8B.md) document
 supported formats, fallback behavior, screenshots and checks.
 **8C is merged**. Its [verification and update protocol](FRONTEND_MILESTONE8C.md)
 keep 8A/8B evidence intact. Milestone 7 retains these gates and is implemented.
-**Milestone 9A is next**, with independent source-label review still pending.
+**Milestone 9A is implemented**, with independent source-label review still pending.
+See [the bounded callback proof and measurement](LFU_CALLBACK_REVIEW.md).
+Next is a single 9B descriptor mechanism; its 31 draft-label false positives and
+eight uncertain definitions are unchanged. Keep Slugify and module-data work separate.
 
 ### Later analyzer and evaluation work
 

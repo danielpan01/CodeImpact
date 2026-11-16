@@ -93,6 +93,7 @@ class MappingReferences(References):
     def __init__(self, index: "Index"):
         super().__init__(index)
         self.collection_bindings: dict[tuple[str, str], bool] = {}
+        self.exception_bindings: dict[tuple[str, str], bool] = {}
         self.global_writes = {
             name
             for tree in index.syntax.values()
@@ -100,6 +101,131 @@ class MappingReferences(References):
             if isinstance(part, (ast.Global, ast.Nonlocal))
             for name in part.names
         }
+
+    def literal_exception(self, name: str, sid: str) -> bool:
+        """Conservative builtin identity, including enclosing scopes and rebinding."""
+        if name not in {"ValueError", "TypeError", "RuntimeError", "KeyError"}:
+            return False
+        path = self.index.nodes[sid].path
+        key = path, name
+        if key not in self.exception_bindings:
+            safe = name not in self.global_writes
+            for count, part in enumerate(ast.walk(self.index.syntax[f"{path}::<module>"])):
+                if (
+                    count >= MAX_VISITS
+                    or isinstance(part, ast.Name)
+                    and part.id
+                    in {
+                        "__builtins__",
+                        "globals",
+                        "locals",
+                        "vars",
+                        "getattr",
+                        "setattr",
+                        "delattr",
+                        "exec",
+                        "eval",
+                    }
+                    or isinstance(part, ast.Attribute)
+                    and part.attr in {"__dict__", "__builtins__", "getattr", "setattr", "delattr"}
+                    or isinstance(part, ast.Name)
+                    and part.id == name
+                    and isinstance(part.ctx, (ast.Store, ast.Del))
+                    or isinstance(part, (*FUNCTIONS, ast.ClassDef))
+                    and part.name == name
+                    or isinstance(part, ast.arg)
+                    and part.arg == name
+                    or isinstance(part, ast.Attribute)
+                    and part.attr == name
+                    and isinstance(part.ctx, (ast.Store, ast.Del))
+                    or isinstance(part, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar))
+                    and part.name == name
+                    or isinstance(part, ast.MatchMapping)
+                    and part.rest == name
+                    or isinstance(part, (ast.Import, ast.ImportFrom))
+                    and any((a.asname or a.name.split(".")[0]) in {name, "*"} for a in part.names)
+                ):
+                    safe = False
+                    break
+            self.exception_bindings[key] = safe
+        return self.exception_bindings[key]
+
+    def closed_callbacks(self, sid: str, node: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+        """Only literal-raising locals passed directly to plain source constructors.
+
+        This permits the existing negative query to continue; it does not resolve
+        callback dispatch. Aliasing, escaping, mutation and unknown arguments decline.
+        """
+        nested = [
+            n for n in ast.walk(node) if n is not node and isinstance(n, (*FUNCTIONS, ast.ClassDef))
+        ]
+        if not nested:
+            return True
+        names = {n.name for n in nested}
+        if len(names) != len(nested) or names & self.blocked[sid]:
+            return False
+        for fn in nested:
+            if not isinstance(fn, ast.FunctionDef) or fn not in node.body:
+                return False
+            args = [*fn.args.posonlyargs, *fn.args.args, *fn.args.kwonlyargs]
+            args += [a for a in (fn.args.vararg, fn.args.kwarg) if a]
+            if (
+                fn.decorator_list
+                or fn.args.defaults
+                or any(fn.args.kw_defaults)
+                or fn.returns
+                or any(a.annotation for a in args)
+                or getattr(fn, "type_params", None)
+                or len(fn.body) != 1
+            ):
+                return False
+            statement = fn.body[0]
+            if not isinstance(statement, ast.Raise) or statement.cause is not None:
+                return False
+            exc = statement.exc
+            if not (
+                isinstance(exc, ast.Call)
+                and isinstance(exc.func, ast.Name)
+                and self.literal_exception(exc.func.id, sid)
+                and not exc.keywords
+                and len(exc.args) <= 1
+                and all(isinstance(a, ast.Constant) for a in exc.args)
+            ):
+                return False
+        allowed: set[int] = set()
+        used: set[str] = set()
+        for part in own_nodes(node):
+            if (
+                isinstance(part, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar))
+                and part.name in names
+                or isinstance(part, ast.MatchMapping)
+                and part.rest in names
+            ):
+                return False
+            if isinstance(part, (ast.Import, ast.ImportFrom)) and any(
+                (a.asname or a.name.split(".")[0]) in names | {"*"} for a in part.names
+            ):
+                return False
+            if not isinstance(part, ast.Call):
+                continue
+            values = [*part.args, *(k.value for k in part.keywords)]
+            callbacks = [a for a in values if isinstance(a, ast.Name) and a.id in names]
+            if not callbacks:
+                continue
+            target = self.call_target(part.func, sid)
+            if (
+                not target
+                or self.index.nodes[target].kind != "class"
+                or not self.safe_instance(target)
+                or any(k.arg is None for k in part.keywords)
+                or any(not isinstance(a, ast.Constant) and a not in callbacks for a in values)
+            ):
+                return False
+            allowed.update(id(a) for a in callbacks)
+            used.update(a.id for a in callbacks)
+        return used == names and all(
+            id(n) in allowed for n in own_nodes(node) if isinstance(n, ast.Name) and n.id in names
+        )
 
     def collections_name(self, expr: ast.AST, sid: str) -> str | None:
         """Recognize compatible eager stdlib imports without executing them.
@@ -471,8 +597,8 @@ class MappingQuery:
                 for d in node.decorator_list
             ) or any(isinstance(n, (ast.Global, ast.Nonlocal)) for n in ast.walk(node)):
                 return True
-            # Nested callbacks can escape through returned functions/decorators.
-            if any(isinstance(n, (*FUNCTIONS, ast.ClassDef)) for n in list(ast.walk(node))[1:]):
+            # Unsupported nested callbacks can escape or dispatch on unknown arguments.
+            if not self.refs.closed_callbacks(current, node):
                 return True
             callees = {id(p.func) for p in own_nodes(node) if isinstance(p, ast.Call)}
             defaults = {id(p) for p in node.args.defaults}

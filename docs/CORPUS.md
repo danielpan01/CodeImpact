@@ -375,3 +375,13 @@ results are **109 TP / 284 FP / 0 FN / 166 TN**, with **406/581 selected** and t
 labels and selected IDs are retained. Fresh extension 3.0 explicitly separates the
 original, partial and current summaries. Existing module/import fallback remains,
 including 117 Slugify and 167 Cachetools false positives. No labels were reclassified.
+
+## Milestone 9A measurement extension
+
+The authored 25-case and v1 reports remain byte-identical. The v2 and v3 datasets
+add `baselines/lfu-callback-v1.json`; all 109 historical corpus files remain intact.
+The former records exactly one LFU false-positive removal, the latter the unchanged
+expanded v3 measurement with the new engine hash. No source, label, uncertainty,
+provenance, first-run, discovery inventory or old baseline is rewritten.
+Normal evaluation commands use the new strict receipts and distinct output names.
+See [the source proof and exact results](LFU_CALLBACK_REVIEW.md).

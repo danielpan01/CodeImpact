@@ -835,3 +835,22 @@ Provider references: [PR metadata](https://docs.github.com/en/rest/pulls/pulls#g
 References: [Python AST](https://docs.python.org/3/library/ast.html),
 [FastAPI testing](https://fastapi.tiangolo.com/tutorial/testing/),
 [React Flow](https://reactflow.dev/learn), [Vite](https://vite.dev/guide/).
+
+## Milestone 9A: literal-raising local callbacks
+
+`MappingReferences.closed_callbacks` replaces the blanket nested-definition veto
+only for direct synchronous locals with a sole literal builtin-exception raise.
+Whole-module bounded shadowing checks cover assignments, parameters, imports,
+exception handlers and match bindings. Callback uses must be unrebound direct
+arguments to a plain source constructor with literal/qualifying-callback arguments.
+Aliases, escapes, function mutation, decorators, annotations, defaults, effectful
+bodies and unknown arguments decline. Existing mapping receiver, initializer,
+inheritance, before/head and query-budget checks still apply. There are no new
+edges, scoring changes, discovery changes or API fields.
+
+The fresh evaluator advances to wrapper 6.0 and the holdout evaluator to 3.0,
+writing new `real-v2-lfu-callback-v1-evaluation.json` and
+`real-v3-lfu-callback-v1-evaluation.json` outputs. New receipts link the preserved
+`test-discovery-v1` predecessors. V3 is an engine-only replay with identical complete
+measurements. Metadata/source limits and historical integrity checks remain.
+[LFU_CALLBACK_REVIEW.md](LFU_CALLBACK_REVIEW.md) records the proof and exclusions.

@@ -63,3 +63,12 @@ intact. The [validation record](VALIDATION.md) records checks; the
 independent reviewer. Review should include the removed controls, retained LFU
 positives, shared mixin uncertainty and descriptor/version caveats before broader
 accuracy claims. No person has been contacted or credited with that review.
+
+## Milestone 9A follow-up
+
+The historical mapping results above are preserved. A subsequent single-pattern
+extension permits direct literal-raising local callbacks to pass the existing
+mapping proof. It removes one additional RR false positive (138/156 selected,
+124 FPs), preserving every retained evidence field and all affected/uncertain IDs.
+See [LFU_CALLBACK_REVIEW.md](LFU_CALLBACK_REVIEW.md); no other callback, descriptor,
+Slugify or module-data mechanism is included.

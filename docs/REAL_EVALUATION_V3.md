@@ -9,13 +9,23 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-discovery-v1-evaluation.json (current)
+# reports/real-v3-lfu-callback-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current discovery extension — milestone 7
+## Current engine replay — milestone 9A
+
+The full expanded measurement below remains identical, including all six stable
+analysis hashes. New `baselines/lfu-callback-v1.json` records the new mapping engine
+hash, links the preserved discovery baseline and the new v2 receipt, and retains
+the original labels, annotations and discovery audit. Holdout wrapper **3.0** adds
+an explicit previous-baseline link; application report 2.0 is unchanged. Both
+original and discovery-era report filenames are preserved. See
+[the bounded LFU refinement](LFU_CALLBACK_REVIEW.md).
+
+## Preserved discovery extension — milestone 7
 
 Literal `test.py` is now supported. The separate `test-discovery-v1` label draft
 was created before expanded analysis: 1 affected, 17 unaffected, 12 uncertain.
