@@ -3,25 +3,29 @@ import type { Report } from "./types";
 export class AnalysisError extends Error {
   constructor(
     message: string,
-    readonly kind: "network" | "limited" | "input" | "response" = "response",
+    readonly kind:
+      "network" | "limited" | "input" | "response" | "access" = "response",
   ) {
     super(message);
   }
 }
 
-export async function getReport(url: string, body?: unknown): Promise<Report> {
-  const response = await fetch(
-    url,
-    body !== undefined
-      ? {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }
-      : {},
-  ).catch(() => {
+export async function getReport(
+  url: string,
+  body?: unknown,
+  accessKey = "",
+): Promise<Report> {
+  const headers: Record<string, string> = {};
+  if (accessKey && url !== "/api/demo")
+    headers.Authorization = `Bearer ${accessKey}`;
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const response = await fetch(url, {
+    method: body !== undefined ? "POST" : "GET",
+    headers,
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  }).catch(() => {
     throw new AnalysisError(
-      "Cannot reach CodeImpact. Start the local servers, then retry.",
+      "Cannot reach CodeImpact. Check your connection or local servers, then retry.",
       "network",
     );
   });
@@ -33,11 +37,15 @@ export async function getReport(url: string, body?: unknown): Promise<Report> {
         : typeof data?.detail?.message === "string"
           ? data.detail.message
           : `Analysis rejected (${response.status}). Check your snapshot format and limits.`,
-      response.status === 429 || data?.detail?.code === "rate_limited"
-        ? "limited"
-        : response.status === 422 || response.status === 400
-          ? "input"
-          : "response",
+      response.status === 401
+        ? "access"
+        : response.status === 429 ||
+            data?.detail?.code === "rate_limited" ||
+            data?.detail?.code === "busy"
+          ? "limited"
+          : response.status === 422 || response.status === 400
+            ? "input"
+            : "response",
     );
   }
   const report = await response.json().catch(() => {

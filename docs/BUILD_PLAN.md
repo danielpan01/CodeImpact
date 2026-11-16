@@ -1,9 +1,9 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — November 14, 2026
+## Active roadmap — November 15, 2026
 
-**Frontend milestones 1–3 and bounded mapping fallback are merged. Milestone 5 is
-implemented locally; the human pilot is deferred.** The redesign priority
+**The technical scope of milestones 1–6 is complete. Live hosting and the human
+pilot remain deferred by the owner.** The redesign priority
 comes from the owner's request after the evaluation v2 and bounded call-filtering
 work merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
 `f06f72350a552722d91bd529a5ffd0b1d48cc2b5`. The detailed scope, visual direction,
@@ -15,7 +15,10 @@ Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9) 
 CI passed. The owner waived its separate developer walkthrough. The bounded mapping
 work merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10),
 commit `25b58040ede56918755a6a83277de98408f3dcb9`, with post-merge CI passing.
-Milestone 5 work remains unstaged/uncommitted on `codex/fresh-evaluation-pilot`. See VALIDATION.md for
+Milestone 5 merged in [PR #11](https://github.com/danielpan01/CodeImpact/pull/11),
+commit `02598a155bda061b56d03a0fcee161e13df10e89`, with post-merge CI passing.
+Milestone 6 completes local deployment preparation without a live host; its release
+is tracked in [PR #12](https://github.com/danielpan01/CodeImpact/pull/12). See VALIDATION.md for
 observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label review.
 
 | Order | Milestone | What the user will notice | Completion evidence |
@@ -24,17 +27,20 @@ observed checks and MAPPING_FALLBACK_REVIEW.md for the pending source-label revi
 | 2 — merged | Graph, test list and code-review refinement | Focused dependency paths, searchable/filterable test recommendations, legible file navigation and synchronized evidence | Small and large pinned examples; selected IDs and evidence unchanged; 74 browser checks and CI passed |
 | 3 — merged | Responsive polish and frontend release | Light/dark themes, saved appearance, touch/focus refinements and clear loading/error/empty recovery | Both-theme visual matrix, 134 browser checks and CI passed; unchanged evaluations; separate walkthrough waived |
 | 4 — code merged; human review pending | Review labels and narrow Cachetools fallback | Eleven fewer unrelated FIFO/LRU/RR recommendations in the LFU case | Source-only controls recorded; all affected/uncertain selections retained; all three prior v2 baselines preserved; new mapping baseline and required checks |
-| 5 — implemented locally; human pilot deferred by owner | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | Six changes frozen before analysis; 84/90 selected, 41 TP / 43 FP / 0 FN / 6 TN; 30 definitions outside discovery; walkthrough ready, no human feedback claimed |
-| 6 | Performance, isolation and hosted pilot | A dependable shareable service within explicit limits | Measured runtime/memory, bounded workers, access controls and deployment verification |
+| 5 — merged; human pilot deferred by owner | Fresh evaluation and developer pilot | Evidence of behavior on unused changes and an easier workflow for another developer | PR #11 and post-merge CI passed; six frozen changes, 84/90 selected, 41 TP / 43 FP / 0 FN / 6 TN; 30 definitions outside discovery; walkthrough ready, no human feedback claimed |
+| 6 — local scope complete; live hosting deferred by owner | Performance, isolation and pilot deployment preparation | A built local service with access-key entry, public demo and explicit resource limits | Six-case runtime/RSS receipt, disposable bounded workers, admission/access controls, real local HTTP and built-UI verification; no deployed URL claimed |
 
 Milestones 1–3 form the frontend redesign program. Milestone 1 includes light tokens,
 Tests-first navigation, collapsible inputs, reason-led evidence and deliberate
 phone/tablet navigation. Milestone 2 adds test filtering/sorting, graph focus and
 source coloring. Milestone 3 completes themes and responsive recovery/focus polish.
-Milestone 5 technical work is implemented; the owner deferred human participation.
-The next implementation milestone is performance measurement and isolation, followed
-by a hosted pilot when requirements justify it. See [REAL_EVALUATION_V3.md](REAL_EVALUATION_V3.md)
-and [DEVELOPER_PILOT.md](DEVELOPER_PILOT.md).
+Milestone 5 technical work is merged; the owner deferred human participation.
+Milestone 6's local scope is complete. See [PERFORMANCE.md](PERFORMANCE.md) for the
+measured bounds and [DEPLOYMENT.md](DEPLOYMENT.md) for the verified launch procedure.
+The next deployment step needs an owner-selected host, TLS/secrets and verification
+on that host; it is explicitly deferred, not a completed hosted pilot. No queue,
+database or durable-job layer is justified by the current synchronous pilot.
+The prepared human walkthrough remains in [DEVELOPER_PILOT.md](DEVELOPER_PILOT.md).
 Independent label review remains pending; do not represent regression results as unseen accuracy.
 Preserve existing analyzer behavior, report
 contracts, corpus bytes and all baselines throughout these frontend milestones.
@@ -255,5 +261,21 @@ remain drafts. The first result and its mistakes are preserved in a separate v3
 gate; all 72 historical corpus files and the three previous reports are unchanged.
 The dashboard explains zero discovery and the two-case walkthrough is prepared.
 The owner deferred the human pilot; no participant feedback was collected.
-See REAL_EVALUATION_V3.md and VALIDATION.md. These changes are unstaged/uncommitted;
-PR #10 remains the latest merged milestone recorded here.
+See REAL_EVALUATION_V3.md and VALIDATION.md. This technical work merged in PR #11,
+commit `02598a155bda061b56d03a0fcee161e13df10e89`, with post-merge CI passing.
+
+## Performance, isolation and local deployment — November 14, 2026
+
+Milestone 6 leaves the analyzer and all 106 historical corpus files unchanged.
+The API now runs each analysis in a fresh process with wall/CPU/RSS/output bounds,
+reaps failed or cancelled workers, and limits admission before buffering source.
+The built same-origin pilot server requires a shared access key for submitted code,
+keeps the demo public, and exposes readiness and source-free request logs.
+Six fixed inputs have ten measured repetitions each; the largest measured case
+has median wall time 1.12 seconds and maximum worker peak RSS 85.1 MiB on this Mac.
+These figures are local observations, not multi-user capacity or accuracy claims.
+
+Local HTTP and desktop/phone browser checks verify deployment preparation. Linux
+hard address-space enforcement has a dedicated Linux CI test; this Mac verifies
+the RSS watchdog and CPU/wall limits. The owner explicitly deferred live
+hosting and reaffirmed that deferral when authorizing publication on November 15.

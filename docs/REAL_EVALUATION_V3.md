@@ -92,6 +92,6 @@ checks cover the analyze → test → evidence → changed-code flow and discove
 recovery; they do not substitute for participant observations. No human usability
 result, execution benchmark, hosting or new infrastructure is claimed.
 
-See [VALIDATION.md](VALIDATION.md) for observed checks. Milestone 6 remains the next
-build-plan implementation stage: performance measurement and isolation first,
-then a hosted pilot only when its operational requirements are established.
+See [VALIDATION.md](VALIDATION.md) for observed checks. Milestone 6 has completed
+performance measurement, bounded workers and local deployment verification. Live
+hosting remains explicitly deferred; see the current [build plan](BUILD_PLAN.md).

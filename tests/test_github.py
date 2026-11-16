@@ -10,9 +10,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from codeimpact.analyzer import analyze
-from codeimpact.api import app, github_reader
+from codeimpact.api import create_app, github_reader
 from codeimpact.github import GitHubReader
 from codeimpact.models import AnalysisRequest, Snapshot
+from codeimpact.service import ServiceSettings
+
+app = create_app(ServiceSettings(requests_per_minute=600))
 
 URL = "https://github.com/acme/widget/pull/7"
 BASE, HEAD, MERGE, OLD_TREE, NEW_TREE = (letter * 40 for letter in "bcade")

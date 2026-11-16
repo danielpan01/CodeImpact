@@ -25,6 +25,8 @@ jobs:
         run: make evaluate-real-v2
       - name: Offline fresh-source v3 evaluation
         run: make evaluate-real-v3
+      - name: Verify protected local deployment
+        run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit
         working-directory: web
         env:

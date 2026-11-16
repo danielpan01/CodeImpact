@@ -392,7 +392,7 @@ measurable optimization once correctness is stable.
 
 ## Interfaces and UI
 
-`GET /health`, `GET /api/demo`, `GET /api/demo/snapshots`, `POST /api/analyze` and
+`GET /health`, `GET /ready`, `GET /api/config`, `GET /api/demo`, `GET /api/demo/snapshots`, `POST /api/analyze` and
 `POST /api/github/pr` are implemented. OpenAPI is at `/docs`. All report-producing
 interfaces (including the CLI) emit schema 2.0, described below.
 
@@ -411,7 +411,11 @@ the separate snapshot-pair input schema.
 `theme.ts` follows the OS color scheme until an explicit preference is chosen. The
 `codeimpact.theme` local-storage value contains only `light` or `dark`; storage errors
 fall back to in-memory state. A small HTML bootstrap applies appearance before React
-paints, and storage events synchronize open tabs. Theme changes affect CSS and React
+paints, and storage events synchronize open tabs. Layout-time subscription followed
+by a fresh preference read closes the startup gap where another tab could change
+storage before the listener was attached. An explicit in-memory choice remains
+independent of listener setup, so unavailable storage does not reset it.
+Theme changes affect CSS and React
 Flow color mode, not report objects, selected IDs or exports. No report/source storage
 is added. Reduced-motion CSS disables transitions; compact layouts use larger touch
 targets. Focus tracking retains an active inspector when a desktop viewport becomes
@@ -419,12 +423,13 @@ compact, including engines that blur a newly hidden element before a media-query
 Resize events also cover WebKit's coalesced breakpoint notifications; an inspector
 that remains visible keeps focus on its current control.
 
-The API client categorizes input, rate-limit, network and response failures while
+The API client categorizes access, input, rate-limit, network and response failures while
 preserving server messages. Retry holds the submitted PR URL or parsed snapshot in
 memory and resends it only on user action; successful loads clear the retry snapshot.
 Invalid JSON, unavailable API and unreadable responses have explicit recovery routes.
-Loading announces the operation, with no invented completion estimate. Input limits,
-API routes, request/report schemas and the analyzer remain unchanged.
+Loading announces the operation, with no invented completion estimate. Snapshot
+limits, request/report schemas and the analyzer remain unchanged. The pilot adds
+service-level admission and worker budgets described below.
 
 Test review controls live in the application shell, so query/category/sort survive
 view changes. Pure presentation helpers filter a new array and use locale-independent
@@ -664,12 +669,53 @@ empty-state wording from nonremoved test nodes; no report schema change is neede
 refusing to replace an existing output directory. Human pilot status is deferred,
 not inferred from browser tests. See [v3 results](REAL_EVALUATION_V3.md).
 
+## Bounded execution and local pilot service
+
+`execution.py` launches the trusted `codeimpact.worker` module with a fresh Python
+process per analysis. JSON crosses stdin/stdout; no pickle, shell or upstream
+execution is involved. Isolated Python mode ignores environment import overrides.
+Only PATH/LANG are inherited; access keys and GitHub credentials remain in the
+parent. The worker applies CPU/core-file limits before decoding source and importing
+the engine. Linux also applies an address-space cap; the parent watches RSS on both
+macOS and Linux. These are resource controls, not a filesystem/network sandbox.
+
+The worker invokes the unchanged analyzer and returns the same typed report.
+Internal node fingerprints are included only in IPC for reconstruction; public
+serialization continues to exclude them. Stable IDs, edge direction, deterministic
+ordering, scores, before/head paths and deleted-symbol handling are unchanged.
+Wall time, CPU time and memory live in a separate execution result, not report 2.0.
+`stats.elapsed_ms` still measures analysis alone. The CLI/evaluators continue to call
+the engine directly; service worker limits do not change their historical baselines.
+
+The parent bounds reply reads, converts resource/worker errors to source-free
+messages, and terminates/reaps children on failure or cancellation. Cleanup drains
+the killed child's pipe before waiting so a full stdout buffer cannot deadlock
+reaping. Cancellation during process creation still acquires and reaps the child.
+Each subsequent request gets a clean worker. There is no queue or persistent job.
+
+`service.py` authorizes submitted-code endpoints using a constant-time bearer-key
+comparison, then applies a process-local token bucket and nonblocking admission
+before buffering the body. Disconnect detection cancels in-flight ingestion or
+analysis. Defaults: two analyses, 30 requests/minute, 6 MB body, 10-second upload,
+90-second response, 20-second worker wall time, 15-second CPU time, 256 MiB sampled
+RSS, Linux 1 GiB virtual address space, and 32 MiB worker output. See
+[deployment details and platform limitations](DEPLOYMENT.md).
+
+`serve.py` requires a key and existing frontend build and binds to loopback by
+default. One API process serves static assets and API routes together. Startup
+probes a real worker before `/ready` reports ready. `/api/config` exposes only the
+access requirement. The dashboard stores its password field in React memory,
+adds the bearer header only for user submissions, and clears it on reload or user
+action. The demo remains public. Request logs omit source, credentials and URLs;
+API responses are marked no-store. There is no server-side source/report storage.
+Measured performance is recorded separately in [PERFORMANCE.md](PERFORMANCE.md).
+
 ## Public GitHub ingestion
 
 `github.py` owns URL validation, provider models, immutable-object reads and network
 bounds. It returns validated `AnalysisRequest` snapshots, source metadata and input
 warnings. `api.py` owns the HTTP client and optional server credential, invokes this
-reader, and runs the shared analyzer in a thread pool. The frontend only posts
+reader, and runs the shared analyzer in a bounded disposable process. The frontend only posts
 `{"url":"https://github.com/owner/repo/pull/number"}` and renders the returned report.
 
 Only exact HTTPS github.com PR URLs are accepted: no credentials, ports, queries,
@@ -707,10 +753,10 @@ regular Python source in this explicitly supported scope, not all repository con
 | Whole network import deadline | 60 seconds, including queued blob requests |
 
 Pending blob downloads are cancelled and awaited when one fails. Bounds are per
-import; they are not global multi-user quotas or process isolation. The 60-second
+import; service-wide admission and worker budgets are separate controls above. The 60-second
 deadline covers ingestion, not analyzer CPU time. Timings in report stats continue to
-measure analysis, excluding network retrieval. Public hosting still needs worker
-isolation and service-wide admission/resource controls.
+measure analysis, excluding network retrieval. Live hosting still needs verification
+of the actual host, TLS/secrets and resource configuration.
 
 The PR response is an additive `GitHubPRReport`: schema 2.0 report fields
 plus a required `source` object (`kind`, repository/head repository, PR number/URL,
@@ -723,10 +769,11 @@ analysis never switches to branch names. Export preserves all this metadata.
 Errors contain `detail: {code, message, retryable}`. Invalid URLs, unsupported/large
 input, private repositories and incomplete trees return 422; missing PRs/revisions
 404; rate limits 429; upstream/network failures 502/503; timeouts 504. The existing
-body-size middleware still returns 413 with a string detail. Error messages do not
+body boundary returns 413 with a structured detail. Error messages do not
 echo upstream bodies, credential-bearing URLs or validation input. Optional
 `CODEIMPACT_GITHUB_TOKEN` is read only on the server and sent as a GitHub API header.
-No auth UI, secret persistence or automatic token discovery is implemented.
+The pilot access-key field is separate from GitHub credentials. No GitHub auth UI,
+secret persistence or automatic token discovery is implemented.
 
 The form disables duplicate submissions, announces loading, clears stale results on
 failure and offers retry of the same PR. Revisions expand without changing the graph;
@@ -734,9 +781,10 @@ keyboard submission, mobile wrapping, JSON export and recovery have browser cove
 Browser tests use a test-only API dependency override for GitHub transport; the real
 reader, validation, analyzer and serialization still run. Development uses live GitHub.
 
-No database, queue or credentials are required. A future job layer can wrap
-ingestion and analysis without altering either module's data contracts. Durable jobs,
-access control and deployment remain separate future work. Any cross-request cache
+No database, queue or GitHub credential is required. The pilot launcher requires
+its own access key. A future job layer can wrap ingestion and analysis without
+altering either module's data contracts. Durable jobs, individual accounts and live
+hosting remain separate future work. Any cross-request cache
 must include repository, pinned analyzed revisions, analyzer version and settings.
 
 Provider references: [PR metadata](https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request),

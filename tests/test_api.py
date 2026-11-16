@@ -1,9 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from codeimpact.api import app
+from codeimpact.api import create_app
 from codeimpact.demo import demo_request
+from codeimpact.service import ServiceSettings
 
+app = create_app(ServiceSettings(requests_per_minute=600))
 client = TestClient(app)
 
 

@@ -246,6 +246,7 @@ code {
   padding: 8px;
 }
 input[type="url"],
+input[type="password"],
 .graph-toolbar > input {
   padding: 12px;
   background: var(--panel);
@@ -2061,4 +2062,32 @@ input[aria-invalid="true"] {
 
 .react-flow__background {
   background-color: var(--graph-bg) !important;
+}
+
+.pilot-access {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.pilot-access > div {
+  flex: 1 1 260px;
+}
+.pilot-access label {
+  display: block;
+  font-weight: 650;
+}
+.pilot-access p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.pilot-access input {
+  flex: 1 1 220px;
+  min-height: 44px;
+  min-width: 0;
+  width: 100%;
 }

@@ -6,7 +6,7 @@
 
 CodeImpact turns a code change into an inspectable dependency graph and a prioritized list of tests. Every recommendation includes a path back to a changed symbol, with source locations and evidence from the analyzed revisions.
 
-**Status: actively in development.** The local application supports public GitHub PRs, uploaded snapshots, and committed local Git history. Hosted deployment and private-repository integration are planned.
+**Status: actively in development.** The local application supports public GitHub PRs, uploaded snapshots, and committed local Git history. A built pilot server with access controls and bounded analysis workers is verified locally; live hosting is deferred. Private-repository integration is not implemented.
 
 [Quick start](#quick-start) · [Usage guide](docs/USAGE.md) · [Architecture](docs/ARCHITECTURE.md) · [Validation](docs/VALIDATION.md) · [CI](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml)
 
@@ -38,6 +38,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
 | **Fresh-source regression gates** | Replays v2 and v3 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
+| **Local pilot service** | Serves the built dashboard and API together, protects user-submitted analyses with an in-memory access-key flow, and bounds disposable workers, request sizes, deadlines and admission. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
 
@@ -72,6 +73,12 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 5. Use the sun/moon control in the header to switch themes. The initial theme follows your device; a chosen preference is saved locally when browser storage is available. Theme changes preserve your selection and report.
 
 You can also paste a public GitHub PR URL or upload snapshot pairs. See the [usage guide](docs/USAGE.md) for CLI examples, a deleted-function fixture, API requests, configuration, and troubleshooting.
+
+For the built application, follow the [local deployment guide](docs/DEPLOYMENT.md):
+set a pilot access key and run `make serve`. It serves one origin on port 8080 and
+keeps the fixture demo public. Live hosting remains deferred. The
+[performance receipt](docs/PERFORMANCE.md) records ten fresh-worker measurements
+per fixed case; it does not claim production capacity.
 
 ## Evaluate the analyzer
 
@@ -191,7 +198,8 @@ See [results and limitations](docs/REAL_EVALUATION_V3.md).
 
 The owner deferred the human developer pilot. `make pilot` prepares two snapshot
 uploads for the [walkthrough](docs/DEVELOPER_PILOT.md); no participant feedback is
-claimed. This milestone's changes remain local and uncommitted.
+claimed. Evaluation v3 and pilot preparation merged in
+[PR #11](https://github.com/danielpan01/CodeImpact/pull/11), with post-merge CI passing.
 
 ## Quality checks
 
@@ -201,12 +209,13 @@ make evaluate
 make evaluate-real
 make evaluate-real-v2
 make evaluate-real-v3
+make verify-pilot
 cd web
 npm run install:browsers
 npm run test:e2e
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all four offline evaluations, and desktop/mobile browser tests. The local milestone 5 configuration adds the v3 replay gate. The merged milestone 3 configuration includes Firefox and WebKit release checks alongside the complete Chromium suite. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all four offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 
@@ -224,11 +233,12 @@ The owner waived the separate developer walkthrough; no independent usability st
 or accessibility certification is claimed.
 
 Bounded mapping fallback merged in [PR #10](https://github.com/danielpan01/CodeImpact/pull/10)
-with post-merge CI passing. Fresh evaluation v3 and pilot preparation are implemented
-locally on `codex/fresh-evaluation-pilot`, with changes unstaged/uncommitted. Human
-source-label review remains pending and the developer pilot is deferred by the owner.
-Performance measurement, worker isolation and a hosted pilot form milestone 6;
-GitHub App authorization, persisted jobs and cross-request caching are not implemented.
+with post-merge CI passing. Fresh evaluation v3 and pilot preparation merged in
+[PR #11](https://github.com/danielpan01/CodeImpact/pull/11). Milestone 6 adds measured
+performance, bounded worker processes, pilot access controls and local deployment
+verification, completing its local scope. The owner deferred live hosting and the human developer pilot;
+source-label review is still pending. GitHub App authorization, persisted jobs and
+cross-request caching are not implemented.
 General dynamic dispatch and further fallback precision remain separate work.
 See the [build plan](docs/BUILD_PLAN.md).
 
@@ -240,6 +250,7 @@ Exports contain the full before/after source of changed files, including content
 
 - [Analyzer and API](src/codeimpact/) · [Dashboard](web/) · [Tests](tests/)
 - [Usage](docs/USAGE.md) · [Architecture](docs/ARCHITECTURE.md) · [Validation](docs/VALIDATION.md)
+- [Local deployment](docs/DEPLOYMENT.md) · [Measured performance](docs/PERFORMANCE.md)
 - [Corpus guide and measured results](docs/CORPUS.md) · [Authored cases](corpus/cases/)
 - [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Roadmap](docs/BUILD_PLAN.md)
 

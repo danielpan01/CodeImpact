@@ -64,9 +64,34 @@ test("theme follows the system until chosen, persists, and synchronizes between 
   ).toBe("light");
   const other = await context.newPage();
   await other.goto("/");
+  await expect(themeButton(other)).toHaveAccessibleName("Switch to dark theme");
   await dark(page);
   await expect(other.locator("html")).toHaveAttribute("data-theme", "dark");
   await other.close();
+});
+
+test("theme catches a preference change while synchronization starts", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("codeimpact.theme", "light");
+    const subscribe = window.addEventListener.bind(window);
+    window.addEventListener = ((
+      type: string,
+      listener: EventListenerOrEventListenerObject,
+      options?: boolean | AddEventListenerOptions,
+    ) => {
+      if (type === "storage") {
+        // Another tab can write after the initial render reads the preference
+        // but before this tab subscribes. That past event cannot be replayed.
+        localStorage.setItem("codeimpact.theme", "dark");
+      }
+      subscribe(type, listener, options);
+    }) as typeof window.addEventListener;
+  });
+  await page.goto("/");
+  await expect(themeButton(page)).toHaveAccessibleName("Switch to light theme");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
 test("unavailable preference storage never prevents analysis or theme switching", async ({

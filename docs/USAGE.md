@@ -21,7 +21,7 @@ If another app uses port 8000, run `CODEIMPACT_API_PORT=8001 make dev` instead.
 proxy follow these settings. Restart `make dev` after backend changes. If refreshed
 pages still show old controls, restart the frontend too; a running Vite process can
 retain old compiled modules in this local environment. Browser tests
-start their own servers on ports 8002 and 5174; those two ports must be free.
+start their own servers on ports 8002, 8003 and 5174; those ports must be free.
 
 For a fresh checkout, install the pinned dependencies first:
 
@@ -36,6 +36,23 @@ make dev
 ```
 
 Ensure `python3` selects Python 3.12 or newer before running `make setup`. The checked-in baseline uses Python 3.12 and Node 24.
+
+## Run the built local pilot
+
+Follow [DEPLOYMENT.md](DEPLOYMENT.md) to set `CODEIMPACT_ACCESS_KEY` and run
+`make serve` on port 8080. It serves the production dashboard and API together.
+Enter the shared **Pilot access key** before uploading snapshots or analyzing a
+public PR. **Load demo** remains public. The key stays only in this page's memory;
+**Clear key** removes it and a reload asks for it again. It is separate from the
+optional server-side GitHub token. After an access error, enter the correct key and
+retry the same input. Browser exports never include the key.
+
+Busy/rate-limited requests should be retried after the server's delay. A time or
+memory limit needs a smaller snapshot. Interrupted analyses are cancelled; there
+is no saved job or report URL. The default service allows two active analyses and
+30 requests per minute, with explicit worker budgets. `make verify-pilot` checks
+the built service on loopback. Live hosting is deferred; these instructions do not
+create a phone-accessible website.
 
 ## Try the demo
 
