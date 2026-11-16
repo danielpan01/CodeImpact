@@ -13,6 +13,11 @@ Reviewed reference: `8d9661f1640619741ed25e570911bea838198666` on `main`, merged
 passed. The [repository and UI review](REPOSITORY_REVIEW.md) distinguishes this
 reference from the new local review changes and records actual verification.
 
+Current checkout for milestone 8B: `e7e4c37aa149381c3a92324040337ee50d5e7a00`,
+merged [PR #13](https://github.com/danielpan01/CodeImpact/pull/13), with
+[post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43788431424).
+The repository-review reference above remains historical.
+
 ### Completed foundation
 
 | Milestone | Status against roadmap | Evidence / remaining boundary |
@@ -49,8 +54,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
 
-Milestone 8 continues with 8B as the next frontend priority, independently of
-milestone 7 and alongside source-label review; it must not change analyzer behavior.
+Milestone 8A is merged and 8B diagnostics are implemented. **8C is the next
+frontend priority**, independently of milestone 7 and alongside source-label review;
+frontend work must not change analyzer behavior.
 Milestone 7 is the recommended next analyzer task. Do not start all of
 milestone 9 as one large rewrite. Reassess priority after every recorded result.
 
@@ -85,14 +91,14 @@ action hierarchy and a recognizable CodeImpact identity. Apply the detailed dire
 [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md#visual-direction) and the delivery slices in
 [FRONTEND_ROADMAP.md](FRONTEND_ROADMAP.md#ongoing-professional-ui-quality).
 
-- **8A — Visual refresh (implemented locally):** introduce consistent rounded controls (10–12 px starting
+- **8A — Visual refresh (merged in PR #13):** introduce consistent rounded controls (10–12 px starting
   target), softer outer panels, stronger headings and clear primary/secondary actions.
   Refine the wordmark and a small dependency-graph motif. Reduce repeated boxed
   sections, use purposeful surface tints, and coordinate Tests, Map, Changes and
   evidence. Improve empty/loading/error states and restrained interaction feedback.
   Verify before/after desktop, tablet and phone screens in both themes. A radius-only
   adjustment does not complete this slice.
-- **8B — Diagnostics:** group the thousands of raw diagnostics by category/file with
+- **8B — Diagnostics (implemented):** group the thousands of raw diagnostics by category/file with
   counts, search and expandable complete entries. Keep raw warnings in exports and preserve exact
   evidence; do not make unknowns disappear to improve presentation.
 - **8C — Quality gates:** establish screenshot comparison baselines for the refined
@@ -113,12 +119,14 @@ screenshots or new design tokens alone. Keep the current production build and al
 application/evaluation checks green. Do not add fictitious history, team activity,
 completion percentages or unsupported backend actions.
 
-Milestone 8A is now implemented and verified in the local working tree, without
-analyzer changes or publication. The [visual receipt](FRONTEND_MILESTONE8A.md)
-records before/after captures, entry/workspace/evidence/source refinements and
-observed checks. The existing roadmap and phone-spacing edits are preserved.
-**8B is the next frontend task; 8C follows it.** Milestone 7 remains the next analyzer
-task and was not bundled into this visual work.
+Milestone 8A and the phone-spacing regression merged in PR #13. The
+[visual receipt](FRONTEND_MILESTONE8A.md) preserves its design and verification
+history. Milestone 8B now implements lossless category/file grouping, complete
+literal search, filters, 50-note pages and report-scoped state without changing
+the API or analyzer. The [diagnostics receipt](FRONTEND_MILESTONE8B.md) documents
+supported formats, fallback behavior, screenshots and checks.
+**8C is next for the frontend**; milestone 7 remains
+the next analyzer task. Neither is bundled into 8B.
 
 ### Later analyzer and evaluation work
 

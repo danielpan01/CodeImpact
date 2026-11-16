@@ -9,11 +9,13 @@ subsequently merged in PR #12; live hosting and the human pilot remain deferred.
 No independent review or usability study is claimed. See [VALIDATION.md](VALIDATION.md)
 for observed checks and [REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for the November 15 audit.
 
-Milestone **8A is implemented locally**: shared rounded controls, a recomposed entry
-screen, connected-node identity, stronger typography, coordinated surfaces and
-refined evidence/source states. See [the visual receipt](FRONTEND_MILESTONE8A.md)
-for before/after images and verification. Changes are unstaged/uncommitted;
-**8B diagnostics and 8C visual/accessibility gates remain future work**.
+Milestone **8A merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13)**,
+including the CI timeout correction; its post-merge checks passed. It supplies the
+rounded controls, entry composition, connected-node identity and coordinated surfaces.
+See [the visual receipt](FRONTEND_MILESTONE8A.md). **8B is implemented**:
+lossless category/file diagnostics, full-text search, filters, explicit paging and
+retained review state. See [the diagnostics receipt](FRONTEND_MILESTONE8B.md).
+**8C visual/accessibility gates are next**.
 
 ## Product goal
 
@@ -52,8 +54,8 @@ improvement. Capture before/after screenshots and review the completed implement
 
 **Owner direction, November 15: make the interface feel less generic and less
 AI-generated, with rounder buttons and more visual character.** The foundation is
-implemented, but its appearance still needs refinement. This is planned work for
-milestone 8, not a claim that the visual refresh has shipped.
+refined in merged milestone 8A. The direction below records the starting design
+brief; milestone 8B carries these styles into the diagnostics workflow.
 
 Aim for a carefully designed developer workbench: soft controls, confident type,
 clear surface depth and a recognizable CodeImpact identity. Keep the warm light
@@ -259,7 +261,7 @@ recommendation without scrolling at 360×844 and 390×844 in both themes across 
 five browser configurations. This is not a guarantee that arbitrarily long test
 names or real PR metadata fit the same first screen.
 
-### Milestone 8A: visual character and component refinement — implemented locally
+### Milestone 8A: visual character and component refinement — merged in PR #13
 
 1. Capture the current entry screen, loaded Tests workspace, evidence, Map and
    Changes with the demo and a large pinned report. Apply the visual direction
@@ -287,13 +289,22 @@ reduced-motion support and all report/export data. Include before/after evidence
 and explain specific visual decisions; passing tests alone cannot demonstrate
 that the result feels less generic.
 
-### Milestones 8B and 8C: diagnostics and regression protection
+### Milestone 8B: readable diagnostics — implemented
 
-After the visual refresh, make large diagnostics readable with category/file
-grouping, counts, search and expandable entries. Then establish deterministic
-screenshot comparisons for the refined design in a pinned CI environment and add
-rendered-accessibility checks. Preserve the full warnings and evidence in exports.
-Keep each slice reviewable and apply the verification commands above to UI changes.
+The working UI groups all original warning occurrences by supported category and
+confirmed file, with full-text literal search, category/file filters where useful,
+matching/total counts, expandable groups and 50-note pages. Unknown and ambiguous
+formats stay in General / unclassified. Duplicates have distinct original-order
+identities. Empty notes and no filter matches are distinct states. Controls and
+expansion survive view navigation; a new report resets them. Exports are unchanged.
+See [rules, screenshots and verification](FRONTEND_MILESTONE8B.md).
+
+### Milestone 8C: regression protection — next frontend step
+
+Establish deterministic screenshot comparisons in a pinned CI browser/font
+environment and add rendered-accessibility checks. Current screenshots are review
+evidence, not pixel-difference gates or accessibility certification. Keep this
+separate from the completed diagnostics presentation work.
 
 Maintain these standards in every future UI change:
 
@@ -309,12 +320,13 @@ Maintain these standards in every future UI change:
   long lists and the pilot access flow. Exports must preserve full underlying data.
 - Make large diagnostics manageable through display-only grouping and filtering.
   The inspected Cachetools LFU report has 3,128 notes; individual entries must remain
-  discoverable and exports unchanged after a future grouping feature.
+  discoverable and exports unchanged in the 8B implementation.
 - Measure real rendering bottlenecks before adopting virtualization or a new layout
   engine. Preserve stable symbol/edge identity and exact selected evidence paths.
 
-The visual refresh is implemented locally. Pixel-comparison gates, comprehensive
-rendered-accessibility scanning and grouped diagnostics remain planned work. Current
+The visual refresh is merged and grouped diagnostics are implemented.
+Pixel-comparison gates and comprehensive rendered-accessibility scanning remain
+planned for 8C. Current
 automated checks include semantic colors, focus, theme behavior, touch targets and
 cross-browser workflows.
 Agent visual inspection does not substitute for independent user feedback.

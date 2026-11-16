@@ -2417,3 +2417,241 @@ input[aria-invalid="true"] {
   min-width: 0;
   width: 100%;
 }
+
+/* Diagnostics use the report's original strings; only this presentation is filtered. */
+.diagnostics {
+  margin-top: 20px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  overflow-wrap: anywhere;
+}
+.diagnostics > summary {
+  padding: 14px 20px;
+  font-size: 15px;
+  border-radius: var(--radius);
+}
+.diagnostics > summary:hover {
+  background: var(--panel-muted);
+}
+.diagnostics > summary span {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.diagnostics-body {
+  padding: 0 20px 16px;
+}
+.diagnostics-caution {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--panel-muted);
+  border-radius: var(--radius-control);
+  font-size: 14px;
+  max-width: none !important;
+}
+.diagnostics-caution .icon {
+  margin-top: 2px;
+  color: var(--accent);
+}
+.diagnostic-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(170px, 1fr) minmax(
+      180px,
+      1fr
+    );
+  gap: 12px;
+  margin-top: 20px;
+}
+.diagnostic-toolbar label {
+  display: grid;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 0;
+}
+.diagnostic-toolbar :is(input, select) {
+  min-width: 0;
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+.diagnostic-results,
+.note-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.diagnostic-results {
+  margin-top: 8px;
+}
+.diagnostic-help,
+.diagnostic-footnote {
+  font-size: 12px;
+}
+.diagnostic-groups {
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+.diagnostic-category {
+  border-bottom: 1px solid var(--border);
+}
+.diagnostic-category :is(h3, h4) {
+  margin: 0;
+}
+.diagnostic-disclosure {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  min-width: 44px;
+  padding: 12px 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  text-align: left;
+  font: inherit;
+}
+.diagnostic-disclosure:hover,
+.diagnostic-disclosure[aria-expanded="true"] {
+  background: var(--panel-muted);
+}
+.diagnostic-disclosure > :is(span, code) {
+  flex: 1;
+  min-width: 0;
+}
+.diagnostic-disclosure .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+.diagnostic-disclosure[aria-expanded="true"] > .icon {
+  transform: rotate(90deg);
+}
+.diagnostic-disclosure small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+.diagnostic-file {
+  margin: 4px 0 12px 24px;
+  min-width: 0;
+}
+.diagnostic-file code {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: normal;
+}
+.diagnostic-file-label {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px;
+}
+.diagnostic-entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  scroll-margin-top: 120px;
+}
+.diagnostic-entry {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 8px;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.diagnostic-entry:last-child {
+  border-bottom: 0;
+}
+.note-number {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 2;
+  color: var(--muted);
+}
+.diagnostic-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 14px;
+  margin: 0;
+}
+.note-pagination {
+  padding: 12px 8px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.note-pagination > div {
+  display: flex;
+  gap: 8px;
+}
+.diagnostic-empty {
+  padding: 24px 8px;
+}
+.diagnostic-empty > .icon {
+  color: var(--muted);
+}
+@media (max-width: 800px) {
+  .diagnostic-toolbar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .diagnostic-toolbar .note-search {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 480px) {
+  .diagnostics > summary {
+    padding: 12px;
+  }
+  .diagnostics > summary span {
+    display: block;
+    margin: 4px 0 0 18px;
+  }
+  .diagnostics-body {
+    padding: 0 12px 12px;
+  }
+  .diagnostic-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .diagnostic-file {
+    margin-left: 0;
+  }
+  .diagnostic-entry {
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 4px;
+    padding-inline: 4px;
+  }
+  .diagnostic-disclosure {
+    gap: 6px;
+  }
+  .diagnostic-disclosure small {
+    max-width: 70px;
+  }
+  .diagnostic-results {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+}
+
+.diagnostic-toolbar .note-search:only-child {
+  grid-column: 1 / -1;
+  max-width: 640px;
+}
+.diagnostics {
+  scroll-margin-top: 120px;
+}

@@ -2,26 +2,26 @@
 
 ## Current priority — November 15, 2026
 
-The repository review starts from merged PR #12 (`8d9661f1640619741ed25e570911bea838198666`),
-whose post-merge CI passed. Technical milestones 1–6 match their local scope. The
-active [build plan](BUILD_PLAN.md) now specifies milestones 7–13: bounded discovery
-coverage, a distinctive UI refresh followed by diagnostics/quality gates, isolated
-fallback improvements, fresh evaluation, and conditional pilot/deployment/integration
-work. Live hosting and the human pilot
-remain owner-deferred; independent source-label review remains pending.
-See [REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for actual findings. The review's
-phone-spacing refinement and documentation are local, unstaged/uncommitted changes;
-they are not part of the merged PR #12 result.
+Milestone 8A, the repository-review/phone-spacing work and its browser timeout fix
+merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13), commit
+`e7e4c37aa149381c3a92324040337ee50d5e7a00`. Post-merge CI passed. Milestone 8B
+starts from that clean `main` checkout; there were no preexisting uncommitted edits.
 
-Milestone 8A now implements that visual direction locally: 12 px shared control
-corners, a connected-node wordmark, split entry layout, stronger sentence-case
-hierarchy, warm results/slate evidence surfaces, graphite dark theme, numbered
-trails and refined source/state styling. The preexisting roadmap and phone-spacing
-changes are preserved; all changes remain unstaged/uncommitted. No analyzer,
-discovery, report contract, corpus, baseline or dependency changed.
-See [FRONTEND_MILESTONE8A.md](FRONTEND_MILESTONE8A.md) for the before/after receipt and
-[VALIDATION.md](VALIDATION.md) for checks. Next frontend work is 8B diagnostics,
-then 8C visual/accessibility gates; analyzer milestone 7 remains separate.
+**8B is implemented.** Analysis diagnostics now
+provide category/file grouping, complete literal search, optional category/file
+filters, matching/total counts and explicit 50-note pages. Original warning strings,
+duplicates, report/export data and review state are preserved. Classification uses
+an allowlist of existing producer formats and confirmed report file/symbol identities;
+unknown formats remain General / unclassified. A new report resets diagnostics state.
+See [FRONTEND_MILESTONE8B.md](FRONTEND_MILESTONE8B.md) for rules, before/after evidence
+and limitations, and [VALIDATION.md](VALIDATION.md) for observed checks.
+
+The merged 8A visual language and phone first-result regression remain intact.
+No analyzer, discovery, resource limit, schema, corpus, label, baseline or dependency
+changed. **8C visual/accessibility gates are the next frontend step**; analyzer
+milestone 7 remains separate. The active [build plan](BUILD_PLAN.md) specifies
+milestones 7–13 and conditional later work. Live hosting and the human pilot remain
+owner-deferred; independent source-label review is still pending.
 
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
