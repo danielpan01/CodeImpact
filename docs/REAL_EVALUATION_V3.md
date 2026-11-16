@@ -9,13 +9,19 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-descriptor-binding-v1-evaluation.json (current)
+# reports/real-v3-legacy-dispatch-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current engine replay — milestone 9B
+## Current engine replay — milestone 9B legacy dispatch
+
+Holdout wrapper 5.0 links `descriptor-binding-v1` through the new
+`legacy-dispatch-v1` receipt. The complete six-case expanded measurement,
+discovery inventory and draft labels match. [Source and measurements](SLUGIFY_FALLBACK_REVIEW.md)
+
+## Preserved engine replay — milestone 9B descriptor binding
 
 The `descriptor-binding-v1` receipt reproduces all six expanded analyses
 and their measurements, labels, annotations and discovery inventory. Holdout

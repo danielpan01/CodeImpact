@@ -149,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-descriptor-binding-v1-evaluation.json
+# reports/real-v2-legacy-dispatch-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -204,10 +204,18 @@ preserved discovery receipt; no labels or old measurements change. See the
 Milestone **9B** traces ordinary zero-argument descriptor binding to a separate
 wrapper. It removes one false positive, leaving **35/154 selected** in the descriptor
 case, with 0 TP, 30 FP, 0 FN and 116 TN. Five uncertain definitions remain selected
-and three remain unselected. V2 now selects **393/581** with **109 TP, 271 FP,
+and three remain unselected. At that stage V2 selected **393/581** with **109 TP, 271 FP,
 0 FN and 179 TN**, including 13 of 22 uncertain definitions. The other five
 analyses and every retained evidence path match their predecessors.
 [Descriptor refinement review](docs/DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+The **9B Slugify slice** verifies a known literal legacy dispatch into an
+unchanged source module. Boundary selection drops from **108/133 to 42/133**,
+removing 66 false positives and retaining all 28 affected selections.
+All three uncertain Boundary tests remain unselected. V2 now selects **327/581**
+with **109 TP, 205 FP, 0 FN and 245 TN**, including 13 of 22 uncertain definitions.
+The ASCII case and four other v2 analyses match their previous hashes.
+[Source proof and exact recommendation changes](docs/SLUGIFY_FALLBACK_REVIEW.md)
 
 ### Fresh-repository evaluation v3
 
@@ -222,7 +230,7 @@ The separately versioned result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN*
 plus **12 uncertain definitions, none selected**. Only `test_pop` is newly recommended,
 with conservative module/import evidence; the other five analyses are unchanged.
 Milestone 9B preserves the complete measurement in a versioned engine replay.
-Current output is `reports/real-v3-descriptor-binding-v1-evaluation.json`. The dashboard explains
+Current output is `reports/real-v3-legacy-dispatch-v1-evaluation.json`. The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.
 All labels still await independent review. See [policy and preservation](docs/TEST_DISCOVERY.md).
 See [results and limitations](docs/REAL_EVALUATION_V3.md).
@@ -284,8 +292,8 @@ with new labels and measurements that preserve all historical baselines. Visual 
 with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
 Its pinned visual/accessibility gates remain active. Milestone 7 merged in
 [PR #16](https://github.com/danielpan01/CodeImpact/pull/16).
-The **9B descriptor slice** is implemented. The next slice is one bounded
-Slugify fallback mechanism. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+The **9B descriptor and Slugify slices** are implemented. Next is one bounded
+**9C module-data** mechanism. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

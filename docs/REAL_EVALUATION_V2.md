@@ -8,7 +8,19 @@ are claimed. These purposive samples are not production accuracy. Keep the full 
 
 [Source protocol](../corpus/real-v2/PROTOCOL.md) · [Original capture/review protocol](../corpus/real-v2/README.md) · [581-label review pack](../corpus/real-v2/REVIEW.md) · [First measurement](../corpus/real-v2/first-run.json) · [Attribution](../corpus/real-v2/ATTRIBUTION.md)
 
-## Current measurement: milestone 9B descriptor binding
+## Current measurement: milestone 9B legacy dispatch
+
+V2 selects **327/581**, with **109 TP / 205 FP / 0 FN / 245 TN**, and 13/22
+uncertain definitions selected. Boundary loses 66 false positives, leaving
+**42/133**, 28 TP / 14 FP / 0 FN / 88 TN and all three uncertain definitions
+unselected. ASCII and the other four analyses match their prior hashes.
+V2 retains 51 resolved paths, 269 conservative paths and seven changed tests.
+
+`make evaluate-real-v2` writes `reports/real-v2-legacy-dispatch-v1-evaluation.json`
+with wrapper 8.0. The successor checks and preserves `descriptor-binding-v1`
+and its entire predecessor chain. [Exact IDs and scope](SLUGIFY_FALLBACK_REVIEW.md)
+
+## Preserved measurement: milestone 9B descriptor binding
 
 V2 selects **393/581** definitions, with **109 TP / 271 FP / 0 FN / 179 TN**.
 Of 22 uncertain definitions, 13 are selected and nine are unselected.
@@ -270,11 +282,11 @@ All original dataset bytes and stable reports are preserved; they are not pooled
 
 ## Remaining work
 
-The [build plan](BUILD_PLAN.md) next calls for one bounded 9B Slugify mechanism.
+The [build plan](BUILD_PLAN.md) next calls for one bounded 9C module-data mechanism.
 Fresh evaluation follows the separately scoped refinements; human participation
 remains deferred. Preserve every prior measurement. The 124 remaining LFU fallback
 mistakes need additional bounded work; descriptor/classmethod fallback (30) and Slugify fallback
-(117) remain separate scopes. Fixture injection, runtime imports and general dynamic
+(51) remain separate scopes. Fixture injection, runtime imports and general dynamic
 dispatch also remain limitations. No stronger accuracy claim follows from this regression improvement.
 
 ## Milestone 7 current replay

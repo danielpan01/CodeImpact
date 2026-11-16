@@ -180,26 +180,27 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     report = evaluate_fresh(DATA)
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
-    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 272
+    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 271
+    assert report["lfu_summary"]["metrics"]["counts"]["fp"] == 272
     assert report["discovery_summary"]["metrics"]["counts"]["fp"] == 273
     assert report["argument_summary"]["metrics"]["counts"]["fp"] == 284
     assert report["partial_summary"]["metrics"]["counts"]["fp"] == 291
     assert report["original_summary"]["metrics"]["counts"]["fn"] == 44
-    assert report["active_baseline"] == "descriptor-binding-v1"
-    assert report["fresh_evaluation_schema_version"] == "7.0"
+    assert report["active_baseline"] == "legacy-dispatch-v1"
+    assert report["fresh_evaluation_schema_version"] == "8.0"
     from codeimpact.fresh_evaluate import measurement
 
     assert measurement(report) == json.loads((DATA / BASELINE_FILE).read_text())["measurement"]
     assert report["evaluation"]["regressions"] == []
     summary = report["summary"]
     assert summary["test_count"] == 581
-    assert summary["selected_count"] == 393
+    assert summary["selected_count"] == 327
     assert summary["label_status_counts"] == {"draft": 6}
     assert summary["metrics"]["counts"] == {
         "tp": 109,
         "fn": 0,
-        "fp": 271,
-        "tn": 179,
+        "fp": 205,
+        "tn": 245,
         "unclassified_recommendations": 13,
     }
     assert summary["unclassified_test_count"] == 22
@@ -217,17 +218,19 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     assert descriptor["metrics"]["recall"]["value"] is None  # zero classified positives
     from codeimpact.real_evaluate import canonical_hash
 
-    previous = json.loads((DATA / "baselines/lfu-callback-v1.json").read_text())["measurement"]
+    previous = json.loads((DATA / "baselines/descriptor-binding-v1.json").read_text())[
+        "measurement"
+    ]
     for case in report["evaluation"]["cases"]:
         cid = case["case"]["id"]
-        if cid != "cachetools_descriptor":
+        if cid != "slugify_boundary":
             assert canonical_hash(case["analysis"]) == previous["analysis_sha256"][cid]
         else:
             assert (
                 case["results"]["unclassified_recommendations"]
                 == previous["classifications"][cid]["unclassified_recommendations"]
             )
-            assert len(case["results"]["false_positives"]) == 30
+            assert len(case["results"]["false_positives"]) == 14
 
 
 def test_source_only_review_pack_matches_freeze(monkeypatch):

@@ -3262,3 +3262,115 @@ changed in the three new receipts. Their measurements and annotations reproduce
 the same recorded results, including the single removed recommendation and every
 uncertain outcome. The original local verification above describes the initial
 implementation. The pull request records checks for the final publication commit.
+
+## Milestone 9B — bounded Slugify dispatch
+
+Work started from clean local and remote main at
+`383b819667f91e3bcf6a39e23c1cf5a7b6b3554e`, the merged descriptor milestone.
+All four PR #18 checks and both jobs in the
+[post-merge quality run](https://github.com/danielpan01/CodeImpact/actions/runs/43974800145)
+passed. The local Slugify work remains unstaged and uncommitted.
+
+The pinned `TestSlugify.test_accented_text` calls the public re-export with
+the omitted legacy default. The existing binder and literal guard evaluator,
+together with the eager and selected-module audit, prove the terminal legacy
+branch in both revisions. The audit retains paths on unknown arguments,
+callable escapes, changed leaf modules, imports with unsupported effects,
+and exhausted budgets. Fixed external backend calls use the captured-source
+boundary described in the review. The analyzer only reads source and AST data.
+[Source trace, exact IDs and retained evidence](SLUGIFY_FALLBACK_REVIEW.md)
+
+Two intended exclusion controls failed before the new filter. An early synthetic
+rebinding control had no prior recommendation because its only callable was
+shadowed. The isolated predecessor replay of the corrected fixture reports two
+failures and 23 passing controls. Additional red tests caught a reachable eager
+invocation and an undefined external-import result shape. The final proof treats
+both as conservative. The baseline evidence regression reproduces the exact
+prior analysis hash and verifies every retained recommendation field.
+
+| Evaluation | TP / FP / FN / TN | Uncertain selected / unselected | Result |
+| --- | ---: | ---: | --- |
+| `make evaluate` | 23 / 0 / 2 / 32 | 2 / 0 | Exact stable report matched |
+| `make evaluate-real` | 45 / 0 / 0 / 123 | 11 / 22 | Exact stable report matched |
+| `make evaluate-real-v2` | 109 / 205 / 0 / 245 | 13 / 9 | 327/581 selected, strict successor receipt matched |
+| `make evaluate-real-v3` | 42 / 43 / 0 / 23 | 0 / 12 | 85/120 selected, complete expanded measurement matched |
+
+Boundary drops from **108/133 to 42/133**. All 66 removed IDs are conservative
+false positives against the preserved drafts. The same 28 affected definitions
+remain selected and the same three uncertain definitions remain unselected.
+There are zero added IDs. All 42 retained recommendations match their previous
+score, reason, path and revisions. The ASCII case, LFU, descriptor and both
+Atomicwrites analyses match their complete prior hashes. V2 has 51 resolved,
+269 conservative and seven changed-test recommendations. Slugify retains
+51 draft false positives across Boundary (14) and ASCII (37).
+
+V2 and v3 write distinct `legacy-dispatch-v1` reports using wrappers 8.0 and 5.0.
+The two receipts link `descriptor-binding-v1` and its predecessors. The audit
+matched **221 protected hashes**, including all **113 historical corpus files**,
+the historical reports, screenshot baselines and fixtures. The original v3
+outside-discovery inventory remains frozen. Every evaluation is byte-identical
+under hash seeds 7 and 173. Reversing file order reproduces stable analysis and
+valid evidence for all 43 cases, excluding only `stats.elapsed_ms`.
+
+| Check | Observed result |
+| --- | --- |
+| Focused dispatch, call-argument, evidence and receipt regressions | 92 passed |
+| `make check` | 964 Python tests passed, one expected Linux-only skip, one existing Starlette deprecation warning, 93% statement coverage. Ruff, mypy and production build passed. |
+| `make verify-pilot` | Local readiness, built UI, public demo, protected requests, exact report and storage checks passed |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e -- --workers=1` | 253 passed across Chromium, mobile, Firefox and WebKit |
+| Canonical Linux ARM64 visual comparisons | 16 passed |
+| Canonical Linux ARM64 accessibility scans | 48 passed with zero enabled-rule violations |
+| `git diff --check` and protected hashes | Passed |
+
+The existing `codeimpact` Colima profile ran the canonical suites with context
+`colima-codeimpact` and was stopped afterward. The six existing incomplete
+`color-contrast` cases still need manual review. They cover both themes for
+desktop and phone Map nodes, and a clipped trail label in both desktop
+deleted-source states. The native browser processes emitted the existing
+`NO_COLOR` / `FORCE_COLOR` environment warning.
+
+Local logs and preservation receipts are under `reports/slugify-*`. Labels
+remain agent drafts pending independent review. The next roadmap slice is
+one bounded **9C module-data** mechanism. Hosting and the human pilot remain
+deferred.
+
+### Slugify prepublication unittest lifecycle review
+
+Two source-only regressions reproduced missing recommendations when the test body
+took the legacy route but `__new__` or `doCleanups` called the edited function.
+The pre-fix run had two failures and one passing plain `TestCase` control. The
+proof now requires an unambiguous direct standard `TestCase` subclass with only
+distinct undecorated test methods and passive class statements. This covers
+lifecycle overrides without depending on a list of unittest hook names. Both new
+cases retain a validated conservative path in both revisions. The plain control
+still qualifies for exclusion.
+
+The focused suite passed **95 tests**. All four offline evaluation commands and
+`make verify-pilot` passed. The post-fix v2 and v3 reports differ from the prior
+local reports only in engine and baseline hashes. Boundary still selects **42/133**,
+removing exactly the same 66 IDs and preserving all 28 affected selections and
+all three unselected uncertain definitions. ASCII, retained evidence, and all 221
+protected hashes match their prior records. Only dependent hash fields changed in
+the three unpublished receipts. All four reports match with hash seeds 7 and 173.
+Reversed snapshot inputs reproduce stable analysis and valid evidence for all 43
+cases.
+
+`make check` passed Ruff, mypy, the production build and **967 Python tests**,
+with one expected Linux-only skip, one existing Starlette deprecation warning
+and 93% statement coverage. Frontend formatting and all **253 browser tests**
+passed. The canonical Linux ARM64 rerun passed **16 visual comparisons** and
+**48 accessibility scans**. The same six incomplete contrast findings remain
+for manual review, with zero enabled-rule violations. The CodeImpact Colima VM
+was stopped. `git diff --check` passed and all changes remain unstaged and
+uncommitted. Logs and comparison records are under `reports/slugify-lifecycle-*`.
+
+### Slugify publication recheck
+
+The owner authorized publication after rechecking the lifecycle fix. Local main
+fast-forwarded over the health-report commit `005c2d00be00f2bc7c185064f4712a6c9d301317`,
+which touched only `docs/maintenance/daily-health.md`. The milestone edits carried
+over intact. The focused suite passed **95 tests**, all four offline evaluations
+matched the strict baselines, and `make verify-pilot` passed. All **221 protected
+hashes** match, including **113 prior corpus files**. The full final-candidate CI
+results are recorded on the publication pull request.
