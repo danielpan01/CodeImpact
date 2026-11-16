@@ -149,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-discovery-v1-evaluation.json
+# reports/real-v2-lfu-callback-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -167,27 +167,39 @@ positives**, retaining all affected selections: **109 TP, 284 FP, 0 FN, 166 TN;
 call paths. Unknown/mutated arguments and other module/import fallback remain
 conservative.
 
-Bounded mapping fallback now removes **11 unrelated FIFO/LRU/RR recommendations**
-from the LFU case. Current results are **109 TP, 273 FP, 0 FN, 177 TN; 395/581
+Bounded mapping fallback removed **11 unrelated FIFO/LRU/RR recommendations**
+from the LFU case. Its preserved results are **109 TP, 273 FP, 0 FN, 177 TN; 395/581
 selected**, including **13 of 22 uncertain definitions**. Draft-label precision is
 109/382 (28.53%); recall is 109/109 (100%). Unknown receivers, shared mixins,
 class-stored callables and initialization effects retain conservative evidence.
-The other five v2 cases are unchanged; 125 LFU, 31 descriptor and 117 Slugify false
-positives remain. [Review status and exact controls](docs/MAPPING_FALLBACK_REVIEW.md)
+The other five v2 cases were unchanged; that stage retained 125 LFU, 31 descriptor
+and 117 Slugify false positives. [Review status and exact controls](docs/MAPPING_FALLBACK_REVIEW.md)
 record independent human review as pending.
 
 All original snapshots, labels, provenance, discrepancy annotations and all three prior
 v2 baselines are unchanged. The separate
 [`mapping-fallback-v1` baseline](corpus/real-v2/baselines/mapping-fallback-v1.json)
 records the mapping milestone’s source hashes, results and remaining mistakes.
-The new [`test-discovery-v1` replay](corpus/real-v2/baselines/test-discovery-v1.json)
-pins the current engine with exactly the same v2 measurement. The offline gate
+The preserved [`test-discovery-v1` replay](corpus/real-v2/baselines/test-discovery-v1.json)
+pins the milestone 7 engine with exactly the same v2 measurement. The offline gate
 verifies both historical receipts and the active baseline; it never accepts drift
 automatically. V2 is **development/regression data**, not unseen validation. Labels
 remain agent drafted, with no upstream tests executed. See
 [current and historical v2 results](docs/REAL_EVALUATION_V2.md) and the
 [source-only review pack](corpus/real-v2/REVIEW.md). Keep the full test suite as the
 merge gate; these measurements do not establish that omitted tests are safe.
+
+Milestone **9A** permits one bounded form of local callback: a direct, unrebound
+function that only raises a literal builtin exception, passed to a source-known
+plain constructor. The existing mapping proof must still exclude the changed
+implementation. Exactly one additional LFU false positive is removed:
+`tests/test_rr.py::RRCacheTest.test_rr_bad_choice`. LFU is **138/156 selected:
+6 TP / 124 FP / 0 FN / 18 TN**, with all eight uncertain selections retained.
+V2 is **394/581: 109 TP / 272 FP / 0 FN / 178 TN**, with 13/22 uncertain selected.
+All retained evidence fields and the other five analyses are unchanged. The new
+[`lfu-callback-v1` receipt](corpus/real-v2/baselines/lfu-callback-v1.json) links the
+preserved discovery receipt; no labels or old measurements change. See the
+[source boundary and exact review](docs/LFU_CALLBACK_REVIEW.md).
 
 ### Fresh-repository evaluation v3
 
@@ -201,7 +213,8 @@ discovery with 30 new source-only draft labels established before expanded analy
 The separately versioned result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN**,
 plus **12 uncertain definitions, none selected**. Only `test_pop` is newly recommended,
 with conservative module/import evidence; the other five analyses are unchanged.
-The output is `reports/real-v3-discovery-v1-evaluation.json`. The dashboard explains
+Milestone 9A preserves this complete measurement in a separate engine replay;
+the current output is `reports/real-v3-lfu-callback-v1-evaluation.json`. The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.
 All labels still await independent review. See [policy and preservation](docs/TEST_DISCOVERY.md).
 See [results and limitations](docs/REAL_EVALUATION_V3.md).
@@ -261,8 +274,10 @@ with new labels and measurements that preserve all historical baselines. Visual 
 8B merged in PR #14 with searchable, grouped diagnostics and unchanged report data.
 **8C merged in [PR #15](https://github.com/danielpan01/CodeImpact/pull/15)**,
 with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
-Its pinned visual/accessibility gates remain active. Milestone 7 is implemented.
-Bounded Cachetools fallback milestone **9A** is next. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+Its pinned visual/accessibility gates remain active. Milestone 7 merged in
+[PR #16](https://github.com/danielpan01/CodeImpact/pull/16).
+Milestone **9A** is implemented. Next is one bounded **9B** mechanism,
+starting with the descriptor instance/classmethod distinction; Slugify remains separate. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

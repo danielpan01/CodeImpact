@@ -178,3 +178,12 @@ false positives remain; descriptor, Slugify and module-data refinements belong t
 separate 9B/9C tasks. Preserve affected/uncertain paths, draft source controls before
 tuning, and add another versioned measurement. Live hosting and a human pilot stay
 deferred unless the owner resumes them.
+
+## Subsequent milestone 9A
+
+Milestone 7 merged as PR #16 at `a4d29a7c7c462c32f0bb7978e45708166b0106b0`.
+The subsequent [9A refinement](LFU_CALLBACK_REVIEW.md) leaves discovery policy,
+labels, denominators and this milestone's receipts unchanged. New current output
+names use `lfu-callback-v1`; all expanded v3 measurements stay identical. The active
+roadmap now proceeds to one bounded 9B mechanism, while hosting and the human pilot
+remain deferred.

@@ -49,6 +49,23 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         hashlib.sha256((ROOT / "benchmarks/preservation.json").read_bytes()).hexdigest()
         == (current["previous_receipt_sha256"])
     )
+    latest = json.loads((ROOT / "benchmarks/lfu-callback-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/test-discovery-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == latest["previous_receipt_sha256"]
+    )
+    assert set(latest["changed_historical_sources"]) == {
+        "src/codeimpact/mapping_protocols.py",
+        "src/codeimpact/fresh_evaluate.py",
+        "src/codeimpact/holdout_evaluate.py",
+    }
+    assert set(latest["added_corpus_sha256"]) == {
+        "corpus/real-v2/baselines/lfu-callback-v1.json",
+        "corpus/real-v3/baselines/lfu-callback-v1.json",
+    }
+    assert set(latest["current_sources_sha256"]) == set(current["current_sources_sha256"])
     corpus = {p.relative_to(ROOT).as_posix() for p in (ROOT / "corpus").rglob("*") if p.is_file()}
     historical = {p for p in receipt["files_sha256"] if p.startswith("corpus/")}
     assert len(historical) == 106
@@ -57,7 +74,10 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/test-discovery-v1.json",
         "corpus/real-v3/baselines/test-discovery-v1-labels.json",
     }
-    assert corpus == historical | current["added_corpus_sha256"].keys()
+    assert (
+        corpus
+        == historical | current["added_corpus_sha256"].keys() | latest["added_corpus_sha256"].keys()
+    )
     assert CURRENT_SOURCES <= current["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {
         p for p in receipt["files_sha256"] if p.startswith("src/")
@@ -70,9 +90,14 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "src/codeimpact/real_evaluate.py",
     }
     for path, expected in receipt["files_sha256"].items():
-        if path not in current["changed_historical_sources"]:
+        if path not in current["changed_historical_sources"] + latest["changed_historical_sources"]:
             assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
     for path, expected in (
         current["added_corpus_sha256"] | current["current_sources_sha256"]
+    ).items():
+        if path not in latest["changed_historical_sources"]:
+            assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
+    for path, expected in (
+        latest["added_corpus_sha256"] | latest["current_sources_sha256"]
     ).items():
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path

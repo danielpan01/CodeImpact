@@ -8,7 +8,31 @@ are claimed. These purposive samples are not production accuracy. Keep the full 
 
 [Source protocol](../corpus/real-v2/PROTOCOL.md) · [Original capture/review protocol](../corpus/real-v2/README.md) · [581-label review pack](../corpus/real-v2/REVIEW.md) · [First measurement](../corpus/real-v2/first-run.json) · [Attribution](../corpus/real-v2/ATTRIBUTION.md)
 
-## Current measurement: bounded mapping fallback
+## Current measurement: milestone 9A literal-raising callbacks
+
+**394/581 selected; 109 TP / 272 FP / 0 FN / 178 TN**. Draft-label precision is
+109/381 (28.61%); recall remains 109/109. Uncertainty is unchanged: 13 selected,
+9 unselected. LFU is **138/156: 6 TP / 124 FP / 0 FN / 18 TN**, with all eight
+uncertain definitions selected. The other five cases retain the exact measurements
+in the table below. Current explanation totals are 51 resolved / 336 fallback /
+7 changed tests. Denominators and labels are unchanged.
+
+Only `tests/test_rr.py::RRCacheTest.test_rr_bad_choice` is removed; no IDs are added.
+All retained recommendation fields, graph/source/diagnostic data, and all five other
+analyses are identical. The [source review](LFU_CALLBACK_REVIEW.md) documents the
+pre-implementation boundary, ambiguity controls and remaining 124 LFU mistakes.
+This is a known-case regression improvement, not independent validation.
+
+`make evaluate-real-v2` now writes `reports/real-v2-lfu-callback-v1-evaluation.json`,
+with fresh wrapper **6.0**. The separate
+[`lfu-callback-v1` baseline](../corpus/real-v2/baselines/lfu-callback-v1.json)
+links preserved `test-discovery-v1` → mapping → argument → partial receipts.
+`previous_summary` now refers to discovery; `mapping_summary`, `argument_summary`,
+`partial_summary` and `original_summary` retain the previous stages. Old report
+filenames and receipt bytes remain intact. Normal commands reject measurement and
+engine drift; no automatic baseline update is provided.
+
+## Previous measurement: bounded mapping fallback (preserved)
 
 **395/581 selected; 109 TP, 273 FP, 0 FN, 177 TN.** Draft-label precision is
 109/382 (28.53%); recall is 109/109 (100%). Uncertainty remains 13 selected and
@@ -232,10 +256,10 @@ All original dataset bytes and stable reports are preserved; they are not pooled
 
 ## Remaining work
 
-The [build plan](BUILD_PLAN.md) next calls for fresh evaluation and a developer pilot.
-Freeze unused changes and labels before analysis, record actual human review status,
-and preserve all four v2 measurements. The 125 remaining LFU fallback mistakes need
-additional bounded work; descriptor/classmethod fallback (31) and Slugify fallback
+The [build plan](BUILD_PLAN.md) next calls for one bounded 9B descriptor mechanism.
+Fresh evaluation follows the separately scoped refinements; human participation
+remains deferred. Preserve every prior measurement. The 124 remaining LFU fallback
+mistakes need additional bounded work; descriptor/classmethod fallback (31) and Slugify fallback
 (117) remain separate scopes. Fixture injection, runtime imports and general dynamic
 dispatch also remain limitations. No stronger accuracy claim follows from this regression improvement.
 

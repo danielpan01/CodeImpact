@@ -2,6 +2,18 @@
 
 ## Current priority — November 16, 2026
 
+Milestone 7 merged through PR #16 at
+`a4d29a7c7c462c32f0bb7978e45708166b0106b0`. All final PR and post-merge checks passed.
+Milestone **9A** is implemented; the owner authorized publication on November 16. It permits
+only direct literal-raising callbacks in the existing mapping exclusion proof.
+Exactly `tests/test_rr.py::RRCacheTest.test_rr_bad_choice` is removed: LFU
+138/156, 6 TP / 124 FP / 0 FN / 18 TN; all six affected and eight uncertain
+selections remain. V2 is 394/581, 109 TP / 272 FP / 0 FN / 178 TN, with 13/22
+uncertain selected. Retained recommendations and all five other v2 analyses are
+identical. V3's full expanded measurement is unchanged. New `lfu-callback-v1`
+receipts link the untouched milestone 7 receipts; see [scope and evidence](LFU_CALLBACK_REVIEW.md).
+The paragraphs below describe the preserved earlier milestones.
+
 Milestones 8A, 8B and 8C are merged in PRs #13, #14 and
 [#15](https://github.com/danielpan01/CodeImpact/pull/15). 8C’s merge commit is
 `7084ab04dd60881a6dde6e91986911f1d9f6ece2`; its
@@ -28,8 +40,8 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next: milestone 9A**, one bounded Cachetools LFU fallback pattern. The 125 LFU
-false positives are not changed here. Other 9-series work stays separate. Live
+**Next: one milestone 9B pattern**, beginning with the descriptor instance/classmethod
+distinction. The remaining 124 LFU and 117 Slugify false positives stay outside that scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or
 independent usability testing. The owner-approved local Colima runtime supplies

@@ -285,7 +285,11 @@ test("pinned LFU diagnostics search all raw notes and preserve the complete anal
   });
   const report: Report = await (await response).json();
   expect(report.warnings).toHaveLength(3128);
-  expect(report.recommendations).toHaveLength(139);
+  // 9A excludes the literal-raising RR callback; the 3128 raw notes stay lossless.
+  expect(report.recommendations).toHaveLength(138);
+  expect(report.recommendations.map((item) => item.symbol)).not.toContain(
+    "tests/test_rr.py::RRCacheTest.test_rr_bad_choice",
+  );
   await page.locator(".limitations > summary").click();
   await expect(page.getByRole("status", { name: "Note results" })).toHaveText(
     "3128 matching notes of 3128 total",

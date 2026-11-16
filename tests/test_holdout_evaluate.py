@@ -208,7 +208,7 @@ def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monk
     receipt = json.loads((DATA / "first-run.json").read_text())
     report = holdout.evaluate_holdout(DATA)
     assert report == holdout.evaluate_holdout(DATA)
-    assert report["holdout_evaluation_schema_version"] == "2.0"
+    assert report["holdout_evaluation_schema_version"] == "3.0"
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
     assert report["original_summary"] == receipt["measurement"]["summary"]
@@ -281,7 +281,7 @@ def test_measurement_drift_fails_gate(monkeypatch):
     report = holdout.evaluate_holdout(DATA)
     assert not report["first_measurement_matches"]
     assert report["evaluation"]["regressions"] == [
-        "v3: measurement differs from test-discovery-v1",
+        "v3: measurement differs from lfu-callback-v1",
     ]
 
 
@@ -297,7 +297,10 @@ def test_old_corpus_and_unchanged_reports_preserve_versioned_v2_measurements():
         raw = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode()
         assert hashlib.sha256(raw).hexdigest() == receipt.reports_sha256[name]
     mapping = json.loads((ROOT / "corpus/real-v2/baselines/mapping-fallback-v1.json").read_text())
-    assert measurement(evaluate_fresh(ROOT / "corpus/real-v2")) == mapping["measurement"]
+    discovery = json.loads((ROOT / "corpus/real-v2/baselines/test-discovery-v1.json").read_text())
+    assert mapping["measurement"] == discovery["measurement"]
+    current = json.loads((ROOT / "corpus/real-v2/baselines/lfu-callback-v1.json").read_text())
+    assert measurement(evaluate_fresh(ROOT / "corpus/real-v2")) == current["measurement"]
     assert receipt.reports_sha256["real-v2-evaluation.json"] == (
         "e4cd3fe60b1728dccfb5abc6326b998815f7f3d477314638a1fbcf520397b254"
     )

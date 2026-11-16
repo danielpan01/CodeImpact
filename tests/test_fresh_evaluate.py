@@ -10,7 +10,7 @@ from codeimpact.fresh_evaluate import (
     ARGUMENT_BASELINE_FILE,
     BASELINE_FILE,
     CURRENT_SOURCES,
-    MAPPING_BASELINE_FILE,
+    DISCOVERY_BASELINE_FILE,
     PARTIAL_BASELINE_FILE,
     evaluate_fresh,
     main,
@@ -184,23 +184,21 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     assert report["argument_summary"]["metrics"]["counts"]["fp"] == 284
     assert report["partial_summary"]["metrics"]["counts"]["fp"] == 291
     assert report["original_summary"]["metrics"]["counts"]["fn"] == 44
-    assert report["active_baseline"] == "test-discovery-v1"
-    assert report["fresh_evaluation_schema_version"] == "5.0"
+    assert report["active_baseline"] == "lfu-callback-v1"
+    assert report["fresh_evaluation_schema_version"] == "6.0"
     from codeimpact.fresh_evaluate import measurement
 
-    assert (
-        measurement(report) == json.loads((DATA / MAPPING_BASELINE_FILE).read_text())["measurement"]
-    )
+    assert measurement(report) == json.loads((DATA / BASELINE_FILE).read_text())["measurement"]
     assert report["evaluation"]["regressions"] == []
     summary = report["summary"]
     assert summary["test_count"] == 581
-    assert summary["selected_count"] == 395
+    assert summary["selected_count"] == 394
     assert summary["label_status_counts"] == {"draft": 6}
     assert summary["metrics"]["counts"] == {
         "tp": 109,
         "fn": 0,
-        "fp": 273,
-        "tn": 177,
+        "fp": 272,
+        "tn": 178,
         "unclassified_recommendations": 13,
     }
     assert summary["unclassified_test_count"] == 22
@@ -232,7 +230,7 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
                 case["results"]["unclassified_recommendations"]
                 == previous["classifications"][cid]["unclassified_recommendations"]
             )
-            assert len(case["results"]["false_positives"]) == 125
+            assert len(case["results"]["false_positives"]) == 124
 
 
 def test_source_only_review_pack_matches_freeze(monkeypatch):
@@ -474,4 +472,16 @@ def test_mapping_filter_source_hash_is_required(dataset):
         lambda d: d["analyzer_sha256"].pop("src/codeimpact/mapping_protocols.py"),
     )
     with pytest.raises(ValueError, match="source inventory"):
+        evaluate_fresh(dataset)
+
+
+@pytest.mark.parametrize("field", ["measurement", "explanation", "analyzer_sha256"])
+def test_discovery_baseline_cannot_be_rewritten(dataset, field, monkeypatch):
+    from codeimpact import fresh_evaluate
+
+    monkeypatch.setattr(
+        fresh_evaluate, "evaluate_real", lambda *_a, **_k: pytest.fail("ran analysis")
+    )
+    edit(dataset, DISCOVERY_BASELINE_FILE, lambda d: d.__setitem__(field, {}))
+    with pytest.raises(ValueError, match="Preserved discovery baseline changed"):
         evaluate_fresh(dataset)

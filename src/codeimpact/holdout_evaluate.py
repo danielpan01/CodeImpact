@@ -41,9 +41,11 @@ DOCUMENTS = {
     "discovery.json",
     "preservation.json",
 }
-BASELINE_FILE = "baselines/test-discovery-v1.json"
+DISCOVERY_BASELINE_FILE = "baselines/test-discovery-v1.json"
+BASELINE_FILE = "baselines/lfu-callback-v1.json"
 LABELS_FILE = "baselines/test-discovery-v1-labels.json"
-V2_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
+V2_DISCOVERY_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
+V2_REPLAY = "corpus/real-v2/baselines/lfu-callback-v1.json"
 
 
 class DraftLabel(StrictModel):
@@ -70,7 +72,7 @@ class DiscoveryLabels(StrictModel):
 
 class DiscoveryBaseline(StrictModel):
     schema_version: Literal["1.0"]
-    name: Literal["test-discovery-v1"]
+    name: Literal["test-discovery-v1", "lfu-callback-v1"]
     explanation: Nonblank
     frozen_inputs_sha256: SHA256
     previous_baseline_sha256: SHA256
@@ -87,15 +89,37 @@ def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBasel
     baseline = DiscoveryBaseline.model_validate(
         read_metadata(safe_file(directory, BASELINE_FILE))[0]
     )
+    require(baseline.name == "lfu-callback-v1", "Current baseline name mismatch")
     require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
     for path, expected in baseline.analyzer_sha256.items():
         require(file_hash(safe_file(project, path)) == expected, f"Engine changed: {path}")
+    require(
+        file_hash(safe_file(directory, DISCOVERY_BASELINE_FILE))
+        == baseline.previous_baseline_sha256,
+        "Preserved discovery baseline changed",
+    )
+    discovery = DiscoveryBaseline.model_validate(
+        read_metadata(safe_file(directory, DISCOVERY_BASELINE_FILE))[0]
+    )
+    require(discovery.name == "test-discovery-v1", "Discovery baseline name mismatch")
+    require(
+        set(discovery.analyzer_sha256) == CURRENT_SOURCES,
+        "Historical discovery engine inventory mismatch",
+    )
+    require(
+        file_hash(safe_file(project, V2_DISCOVERY_REPLAY)) == discovery.v2_replay_sha256,
+        "Historical v2 discovery receipt changed",
+    )
+    require(baseline.labels_sha256 == discovery.labels_sha256, "Discovery label receipt changed")
+    require(
+        baseline.frozen_inputs_sha256 == discovery.frozen_inputs_sha256, "Discovery freeze changed"
+    )
     require(
         file_hash(safe_file(directory, LABELS_FILE)) == baseline.labels_sha256,
         "Discovery labels changed",
     )
     require(
-        file_hash(safe_file(directory, "baseline.json")) == baseline.previous_baseline_sha256,
+        file_hash(safe_file(directory, "baseline.json")) == discovery.previous_baseline_sha256,
         "Historical first baseline changed",
     )
     require(
@@ -243,7 +267,7 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
         if p.is_file() and not p.is_relative_to(project / "corpus/real-v3")
     }
     require(
-        set(receipt.corpus_sha256) | {V2_REPLAY} == historical,
+        set(receipt.corpus_sha256) | {V2_DISCOVERY_REPLAY, V2_REPLAY} == historical,
         "Historical corpus inventory changed",
     )
     baseline = current_baseline(directory, project)
@@ -275,7 +299,14 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
     require(
         actual
         <= expected
-        | {"frozen-inputs.json", "first-run.json", "baseline.json", BASELINE_FILE, LABELS_FILE},
+        | {
+            "frozen-inputs.json",
+            "first-run.json",
+            "baseline.json",
+            DISCOVERY_BASELINE_FILE,
+            BASELINE_FILE,
+            LABELS_FILE,
+        },
         "Unexpected dataset file",
     )
     total = 0
@@ -288,6 +319,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
         "first-run.json",
         "baseline.json",
         BASELINE_FILE,
+        DISCOVERY_BASELINE_FILE,
         LABELS_FILE,
     ):
         if (directory / path).exists():
@@ -344,9 +376,11 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
     matches = measurement(report) == initial.measurement
     current_matches = measurement(report) == baseline.measurement
     if not current_matches:
-        report["evaluation"]["regressions"].append("v3: measurement differs from test-discovery-v1")
+        report["evaluation"]["regressions"].append("v3: measurement differs from lfu-callback-v1")
     report.update(
-        holdout_evaluation_schema_version="2.0",
+        holdout_evaluation_schema_version="3.0",
+        previous_baseline="test-discovery-v1",
+        previous_baseline_sha256=baseline.previous_baseline_sha256,
         active_baseline=baseline.name,
         active_baseline_sha256=canonical_hash(baseline.model_dump()),
         current_analyzer_sha256=baseline.analyzer_sha256,
@@ -361,7 +395,8 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         initial_regressions=initial.initial_regressions,
         discovery=discovery,
         interpretation=(
-            "Versioned v3 discovery expansion; original 90-test first measurement "
+            "Versioned v3 lfu-callback-v1 engine replay; test-discovery-v1 preserved; "
+            "original 90-test first measurement "
             "and excluded inventory preserved. "
             "New source labels were drafted before expanded analysis; human review pending. "
             "The owner deferred the human usability pilot. Preserved mistakes are regression "
@@ -377,7 +412,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_holdout,
         default_corpus=Path("corpus/real-v3"),
-        default_output=Path("reports/real-v3-discovery-v1-evaluation.json"),
+        default_output=Path("reports/real-v3-lfu-callback-v1-evaluation.json"),
     )
 
 

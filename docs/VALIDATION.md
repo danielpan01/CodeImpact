@@ -3045,3 +3045,135 @@ application correction was needed; current status wording was prepared for
 publication. Remote CI and merge status are recorded on the publication PR.
 
 Local logs: `reports/premerge-m7-{check,browser,evaluations,pilot,visual,a11y}.log`.
+
+## Milestone 9A — bounded LFU callback fallback (November 16, 2026)
+
+Started from clean merged milestone 7,
+`a4d29a7c7c462c32f0bb7978e45708166b0106b0`. PR #16's push and PR quality/UI jobs
+passed, as did [post-merge run 43930425754](https://github.com/danielpan01/CodeImpact/actions/runs/43930425754).
+There were no pre-existing user edits. Work is on local branch
+`codex/cachetools-lfu-milestone-9a`; HEAD is unchanged and all changes remain
+unstaged and uncommitted. No push, PR or merge was performed.
+
+### Source boundary and observed measurements
+
+The [source decision and implementation review](LFU_CALLBACK_REVIEW.md) was drafted
+before changing behavior. The existing nested-definition veto now permits only
+unrebound local functions whose sole statement raises a literal builtin exception,
+used directly as an argument to a source-known plain constructor. Existing mapping,
+initialization, inheritance, revision and budget checks still apply. Unknown,
+effectful, aliased/escaped and reflectively rebound callback/exception forms retain
+fallback. No new edges, scores, report/API fields, discovery rules, dependencies or
+source/resource limits were introduced. Upstream source was never run or imported.
+
+Exactly one ID is removed and none added:
+`tests/test_rr.py::RRCacheTest.test_rr_bad_choice`. LFU changes from **139/156**
+selected (6 TP / 125 FP / 0 FN / 17 TN) to **138/156** (6 TP / 124 FP / 0 FN /
+18 TN). All six affected and eight uncertain selections remain. Every retained
+recommendation object is identical, including scores, distances, reasons, paths,
+edge IDs and revisions. The graph, changed/removed symbols, source and 3,128 raw
+notes are unchanged; only the same test leaves the impact list (394 → 393).
+
+| Dataset | TP | FP | FN | TN | Uncertain selected / total | Change |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Authored, 25 cases | 23 | 0 | 2 | 32 | 2 / 2 | Full stable report unchanged |
+| Real v1, 6 cases | 45 | 0 | 0 | 123 | 11 / 33 | Full stable report unchanged |
+| Real v2, 6 cases | 109 | 272 | 0 | 178 | 13 / 22 | 394/581 selected; one fewer LFU FP; other five analyses identical |
+| Expanded real v3, 6 cases | 42 | 43 | 0 | 23 | 0 / 12 | Complete measurement unchanged; 85/120 selected |
+
+Original v3's 90-definition denominator and 30 exclusions remain frozen separately.
+All datasets retain their labels, uncertain classifications and known mistakes.
+These are development/regression cases, not unseen or independently reviewed
+validation. There is no claim of runtime failures or safe test skipping.
+
+### Verification actually run
+
+| Check | Observed result |
+| --- | --- |
+| Initial callback regressions before implementation | Five expected exclusion failures, 28 controls passed |
+| Additional reflective-binding controls before correction | Three failures exposed unsafe assumptions; fixed with conservative declines |
+| Final focused mapping regressions | **114 passed**, including 47 callback tests |
+| Preserved LFU replay / retained evidence regression | Exact milestone 7 analysis hash reproduced with only the historical nested-definition veto; every current path validated |
+| `make check` | **894 passed, 1 skipped, 1 warning**, 94% statement coverage; Ruff lint/format, mypy and production build passed |
+| `make evaluate` | Passed; authored discrepancies and stable bytes unchanged |
+| `make evaluate-real` | Passed; v1 discrepancies and stable bytes unchanged |
+| `make evaluate-real-v2` | Passed; strict `lfu-callback-v1` engine, history and current measurement match |
+| `make evaluate-real-v3` | Passed; strict replay and preserved discovery/first-run chains match |
+| `make verify-pilot` | Passed: built UI, readiness, public demo, protected analysis, exact report and no storage |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e -- --workers=1` | **253 passed**, no skips or retries, Chromium/mobile/Firefox/WebKit phone projects |
+| `CODEIMPACT_DOCKER_CONTEXT=colima-codeimpact npm run quality:container -- visual` | **16 passed**, zero expected-image changes |
+| `CODEIMPACT_DOCKER_CONTEXT=colima-codeimpact npm run quality:container -- a11y` | **48 passed**, no enabled-rule violations; six unchanged incomplete contrast cases |
+| Determinism | All four full report files byte-identical with seeds **7 and 173**; all 12 v2/v3 cases identical with reversed snapshot order; existing authored reordering/repeat tests passed |
+| Integrity / whitespace / documentation targets | All **186 protected hashes**, including **109 historical corpus files**, unchanged; staged diff empty; `git diff --check` and local Markdown targets passed |
+
+The native Python skip is `test_linux_address_space_limit`: `RLIMIT_AS` enforcement
+is Linux-only. The existing Starlette test-client deprecation warning remains.
+Browser processes also emit the existing `NO_COLOR`/`FORCE_COLOR` environment warning;
+it does not skip or alter assertions. The browser suite uses the documented one-worker
+native setup, without forced clicks, retries, timeouts or weaker assertions.
+
+The first broader focused pass found an old current-v2 expectation still comparing
+to the historical mapping result; it now explicitly checks both the preserved
+mapping/discovery equality and the new current receipt. A new evidence test's source
+field typo was also fixed. Final full verification has no remaining test failures.
+The complete native suites were rerun after tightening the reflection boundary.
+
+### UI preservation and remaining findings
+
+8A styling, 8B lossless diagnostics and 8C quality infrastructure are unchanged.
+The live-analysis LFU browser expectation changes deliberately to 138 and asserts
+absence of the exact removed ID, while retaining 3,128 notes and full export checks.
+Historical UI fixtures, all 18 screenshot PNGs, masks, tolerances and axe rules remain
+byte-identical. Canonical comparisons use the existing pinned Linux ARM64 environment.
+
+Axe's six incomplete `color-contrast` cases remain: Map in both themes at desktop
+(12 nodes each) and phone (six each), plus one clipped trail label in each desktop
+deleted-source state. These remain manual-review findings, not enabled-rule
+violations or accessibility certification. No independent usability review was done.
+The existing Colima VM was started for canonical checks and **stopped afterward**;
+its stopped state was verified. Live hosting and the human pilot remain deferred.
+
+### Receipts and handoff
+
+New `lfu-callback-v1` v2/v3 receipts and a preservation extension link their unchanged
+`test-discovery-v1` predecessors. Current output files are
+`reports/real-v2-lfu-callback-v1-evaluation.json` (fresh wrapper 6.0) and
+`reports/real-v3-lfu-callback-v1-evaluation.json` (holdout wrapper 3.0). Existing report
+filenames and all historical receipts are retained. Application/export report 2.0
+and evaluation schema 1.0 remain unchanged. Normal commands reject drift rather
+than rewriting baselines.
+
+Local evidence: `reports/milestone9a-before/`, `reports/milestone9a-*.log`,
+`reports/milestone9a-determinism.json`, `reports/milestone9a-preservation-result.json`
+and `reports/milestone9a-a11y-review.json`. Full canonical output is under
+`web/test-results/quality/canonical/{visual,a11y}/` and native browser artifacts under
+`web/test-results/e2e/`.
+
+Next: **one milestone 9B descriptor instance/classmethod pattern**, with its 31
+false positives and eight uncertain definitions considered explicitly. Keep Slugify's
+117 false positives and 9C module-data work separate. The 124 remaining LFU mistakes,
+authored fixture/runtime-import misses and unmodeled dynamic dispatch remain open.
+
+### Milestone 9A publication recheck — November 16, 2026
+
+The owner explicitly authorized committing, pushing and merging this milestone.
+Before publication, `origin/main` was refreshed and matched the starting commit
+`a4d29a7c7c462c32f0bb7978e45708166b0106b0`; there was no base-branch divergence.
+The implementation was reviewed without further analyzer changes. Current roadmap
+wording now identifies descriptor refinement as the next bounded 9B slice.
+
+The publication recheck passed `make check` (**894 passed, one Linux-only skip,
+one existing warning**, 94% coverage, lint/format, typing and production build),
+all four offline evaluation commands, `make verify-pilot`, frontend formatting,
+and the full one-worker browser suite (**253 passed**). The canonical Linux ARM64
+checks passed **16 visual comparisons and 48 accessibility scans**. No expected
+image, mask, tolerance or axe rule changed. The six incomplete contrast findings
+described above remain; enabled-rule violations are zero.
+
+All **186 protected hashes** still match, including **109 historical corpus files**.
+The four current report hashes exactly reproduce the recorded implementation and
+determinism receipts. Markdown file targets and `git diff --check` pass. Evidence
+is saved in `reports/premerge-9a-{check,evaluations,pilot,browser,visual,a11y}.log`
+and `reports/premerge-9a-a11y-review.json`. PR checks and the merge are separate
+publication steps; these local results do not claim a future CI outcome.

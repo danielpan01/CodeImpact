@@ -22,7 +22,9 @@ retained review state. See [the diagnostics receipt](FRONTEND_MILESTONE8B.md).
 communication while preserving these gates and all original screenshots.
 Two new expected images replace active empty/zero-discovery captures; the old files
 are retained. [Scope, review evidence and results](TEST_DISCOVERY.md) explain the
-new positive `test.py` and authored zero-discovery browser cases. Milestone 9A is next.
+new positive `test.py` and authored zero-discovery browser cases. Milestone 9A is implemented with unchanged UI and historical visual fixtures;
+the real LFU browser assertion now expects 138 recommendations. One bounded 9B
+mechanism is next; see [the measurement receipt](LFU_CALLBACK_REVIEW.md).
 
 ## Product goal
 
