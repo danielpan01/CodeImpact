@@ -12,9 +12,9 @@ CodeImpact turns a code change into an inspectable dependency graph and a priori
 
 ## See the impact
 
-![CodeImpact Tests workspace and evidence inspector](docs/media/milestone3-light-tests.png)
+![CodeImpact Tests workspace and evidence inspector](docs/media/milestone8a/after-desktop-light-tests.png)
 
-*The workspace opens in Tests, with a coordinated evidence inspector and a saved light/dark preference. [Dark theme](docs/media/milestone3-dark-tests.png) · [Focused map](docs/media/milestone3-dark-map.png) · [Phone evidence](docs/media/milestone3-mobile-evidence.png) · [Changed code](docs/media/milestone3-dark-changes.png) · [Before the redesign](docs/media/before-desktop.png).*
+*The refined workspace opens in Tests, with rounded shared controls, a distinct evidence surface and a saved light/dark preference. [Entry screen](docs/media/milestone8a/after-desktop-light-entry.png) · [Dark theme](docs/media/milestone8a/after-desktop-dark-tests.png) · [Focused map](docs/media/milestone8a/after-desktop-dark-map.png) · [Before/after and verification](docs/FRONTEND_MILESTONE8A.md). Milestone 8A is implemented locally and remains uncommitted.*
 
 A change to `discount(total)` can affect an unchanged API test through `test_create_order → create_order → checkout → discount`. CodeImpact makes that relationship visible, then lets you inspect each dependency and the changed code.
 
@@ -240,7 +240,13 @@ verification, completing its local scope. The owner deferred live hosting and th
 source-label review is still pending. GitHub App authorization, persisted jobs and
 cross-request caching are not implemented.
 General dynamic dispatch and further fallback precision remain separate work.
-See the [build plan](docs/BUILD_PLAN.md).
+The [November 15 repository review](docs/REPOSITORY_REVIEW.md) confirms the implemented
+roadmap and records a phone-layout refinement. The next analyzer milestone is bounded
+test-discovery coverage, motivated by v3's 30 omitted definitions; UI work next adds
+a more distinctive visual design with rounder controls, stronger typography and
+richer surfaces, followed by clearer large-report diagnostics and visual regression
+gates. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+[next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.
 

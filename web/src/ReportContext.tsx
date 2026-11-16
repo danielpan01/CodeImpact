@@ -11,11 +11,11 @@ export function ReportContext({
     <>
       <section className="report-context" aria-label="Report context">
         <div className="context-icon">
-          <Icon name="branch" />
+          <Icon name="impact" />
         </div>
         <div>
           <div className="context-meta">
-            <span className="eyebrow">Analysis workspace</span>
+            <span className="eyebrow">Change review</span>
             <span className="badge">
               {kind === "demo"
                 ? "Checkout demo"

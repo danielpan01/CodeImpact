@@ -46,7 +46,10 @@ function SourcePane({
   return (
     <section className="source-pane" aria-label={`${label} source`}>
       <h4>
-        {label} <small>{range ? `lines ${start}–${end}` : ""}</small>
+        <span>
+          <Icon name={label === "Before" ? "back" : "arrow"} /> {label}
+        </span>{" "}
+        <small>{range ? `lines ${start}–${end}` : ""}</small>
       </h4>
       {!source ? (
         <p>File absent in this revision.</p>

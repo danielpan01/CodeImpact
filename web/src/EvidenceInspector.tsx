@@ -76,8 +76,10 @@ export function EvidenceInspector({
                 <ol className="evidence-path">
                   {recommendation.evidence_path.map((id, i) => (
                     <li key={id}>
+                      <span className="trail-step" aria-hidden="true">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                       <span className="trail-role">
-                        {i + 1}.{" "}
                         {i === 0
                           ? "Test"
                           : i === recommendation.evidence_path.length - 1

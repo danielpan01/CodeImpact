@@ -157,6 +157,7 @@ export function TestsView({
         </div>
         {!visible.length && (
           <div className="empty-state">
+            <Icon name="tests" />
             <h3>No matching tests</h3>
             <p>Try another test or file name, or reset the filters.</p>
             <button

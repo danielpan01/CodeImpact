@@ -4,8 +4,16 @@ Status: milestones 1 and 2 merged in [PR #7](https://github.com/danielpan01/Code
 and [PR #8](https://github.com/danielpan01/CodeImpact/pull/8) after CI passed on
 November 12, 2026. Milestone 3 merged in [PR #9](https://github.com/danielpan01/CodeImpact/pull/9)
 after CI passed. New analyzer work follows the active [build plan](BUILD_PLAN.md).
-The owner waived the separate developer walkthrough. No deployment, independent review
-or usability study is claimed. See [VALIDATION.md](VALIDATION.md) for observed checks.
+The owner waived the separate developer walkthrough. A built local pilot service
+subsequently merged in PR #12; live hosting and the human pilot remain deferred.
+No independent review or usability study is claimed. See [VALIDATION.md](VALIDATION.md)
+for observed checks and [REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for the November 15 audit.
+
+Milestone **8A is implemented locally**: shared rounded controls, a recomposed entry
+screen, connected-node identity, stronger typography, coordinated surfaces and
+refined evidence/source states. See [the visual receipt](FRONTEND_MILESTONE8A.md)
+for before/after images and verification. Changes are unstaged/uncommitted;
+**8B diagnostics and 8C visual/accessibility gates remain future work**.
 
 ## Product goal
 
@@ -42,25 +50,37 @@ improvement. Capture before/after screenshots and review the completed implement
 
 ## Visual direction
 
-Use a light, warm-neutral analysis canvas, dark ink navigation and a restrained
-cobalt accent for primary actions and selection. Provide a coherent graphite dark
-theme during the polish milestone. Semantic change/evidence colors must work in
-both themes and include text or shape cues, not color alone.
+**Owner direction, November 15: make the interface feel less generic and less
+AI-generated, with rounder buttons and more visual character.** The foundation is
+implemented, but its appearance still needs refinement. This is planned work for
+milestone 8, not a claim that the visual refresh has shipped.
+
+Aim for a carefully designed developer workbench: soft controls, confident type,
+clear surface depth and a recognizable CodeImpact identity. Keep the warm light
+canvas and graphite dark theme, then give navigation, actions, results and evidence
+distinct visual roles. Use cobalt deliberately for the primary action and selected
+path; let quieter tinted surfaces connect related information. Semantic
+change/evidence colors must work in both themes with text or shape cues.
 
 | Element | Direction |
 | --- | --- |
-| Surfaces | Clear page, panel and selected-item levels; fine dividers; minimal nested boxes; subtle shadows only where they explain elevation |
-| Typography | Strong, compact headings; 14–16 px primary UI text; comfortably readable secondary labels; monospace for code, paths and revisions |
-| Spacing | Shared spacing tokens based on a 4/8 px scale; consistent control heights, panel padding and corner radii |
-| Color | Neutral content surfaces; cobalt for actions; clearly labeled coral/amber/teal change states; distinct before/after/mixed evidence badges |
-| Icons | One consistent SVG icon style with accessible labels; replace decorative Unicode control glyphs |
-| Graph | Readable symbol cards, explicit direction, selected-path emphasis and muted surrounding context; fit-to-view and a compact legend |
-| Motion | Brief state transitions and panel changes; no decorative continuous animation; respect reduced-motion preferences |
+| Buttons and inputs | Replace the current 6 px control corners with shared 10–12 px radii as the starting target. Give primary actions a confident filled treatment, secondary actions a quieter surface, and tertiary actions a clear text treatment. Keep touch targets at least 44 px |
+| Panels and badges | Start with 14–16 px outer panel corners and 6–8 px compact badges; use fully rounded pills selectively for filters. Keep dense code and list interiors aligned and compact |
+| Surfaces | Warm page canvas, crisp results surface and a subtly tinted inspector; use fine dividers within lists and restrained elevation for floating controls. Reduce repeated nested borders and identical boxes |
+| Typography | A distinctive, compact wordmark/header; stronger section titles; 14–16 px primary UI text; readable secondary labels. Reserve monospace for code, paths and revisions, and replace unnecessary uppercase labels with sentence case |
+| Spacing | Shared 4/8 px spacing scale with deliberate grouping: closer related controls, more separation between tasks. Preserve the phone first-result layout while giving desktop content room |
+| Color | More purposeful contrast between navigation, canvas, results and selected evidence. Cobalt connects actions and dependency paths; coral/amber/teal remain meaningful change states. Validate the palette independently in both themes |
+| Identity and icons | Refine the CodeImpact wordmark and a small connected-node motif derived from its dependency graph. Use one consistent SVG icon family, paired with clear labels; carry the same motif into useful empty/demo states |
+| Graph and evidence | Give the dependency trail a clear visual rhythm, coordinated node styling and readable revision badges. The selected path should be easy to follow across Map, Tests and the inspector |
+| Motion | Brief, consistent hover/press/selection transitions, starting around 120–180 ms. Keep controls stable while interacting and respect reduced-motion preferences |
 | Fonts/assets | Reliable system or locally bundled licensed fonts; no mandatory external font request for the primary experience |
 
-These are starting design decisions. Refine exact colors and sizing against real
-screenshots and contrast checks during implementation. Avoid giant decorative
-headers, arbitrary gradients, unsupported product claims or fabricated activity.
+These are starting design decisions to refine against real screens and contrast
+checks. Rounded corners alone do not complete the refresh: typography, composition,
+surface contrast and interaction states must improve together. Avoid a grid of
+identical metric cards, excessive pill badges, decorative gradient blobs, oversized
+marketing headings or a border around every fragment. Add character through the
+actual code-review workflow; do not invent activity or product capabilities.
 
 ## Workspace structure
 
@@ -202,26 +222,99 @@ documented volatile display fields, such as elapsed time, without masking useful
 ## Verification required for each frontend milestone
 
 Run focused UI regressions, `make check`, `make evaluate`, `make evaluate-real`,
-`make evaluate-real-v2`, and `cd web && npm run test:e2e`. Add coverage for behavior
+`make evaluate-real-v2`, `make evaluate-real-v3`, `make verify-pilot`, and
+`cd web && npm run test:e2e`. Add coverage for behavior
 introduced by that slice. Preserve the existing desktop and mobile tests; test new
 themes and responsive interactions explicitly as they arrive.
 
 Compare stable report results to the merged reference. Analyzer source, scores,
 selected IDs, graph direction, revision evidence, input limits, all corpus data and
-all three v2 measurements stay unchanged during this frontend program. Document
+all historical v2/v3 measurements stay unchanged during frontend work. Document
 actual outcomes and inspect screenshots; green tests alone do not establish good
 visual design. Keep changes unstaged/uncommitted for the owner to review and publish.
 
 ## Subsequent roadmap
 
-1. Independent label review and bounded Cachetools fallback narrowing, starting with
-   the 136 LFU-case false positives. Scope the 31 descriptor-case false positives
-   separately; preserve unknown receivers, uncertain labels and historical baselines.
-2. Fresh source changes selected and labeled before examining recommendations, plus
-   a developer pilot to assess both analyzer usefulness and the redesigned workflow.
-3. Performance/memory measurement, worker isolation and a small hosted pilot with
-   explicit access and resource controls. Introduce jobs/storage/private authorization
-   only when required by the pilot.
+The original follow-up work has advanced: bounded mapping refinement merged in
+PR #10, fresh v3 evaluation in PR #11, and local deployment preparation in PR #12.
+Use the active [build plan](BUILD_PLAN.md) for milestones 7–13. The frontend's next
+substantial work is milestone 8: visual character, large-report diagnostics and
+quality gates, in that order. It can proceed independently of analyzer milestone 7.
 
-The 284 v2 false positives present at frontend release, two authored misses and outstanding label review
-remain documented work. The frontend redesign does not change those measurements.
+The 284 v2 false positives present at frontend release became 273 after mapping
+refinement. V3 records 43 more false positives and 30 definitions outside discovery;
+the two authored misses and independent label review remain open. This UI review
+does not change those analyzer measurements.
+
+## Ongoing professional UI quality
+
+The November 15 review confirms the functional visual foundation is implemented:
+shared light and dark tokens, coherent typography, aligned controls, coordinated
+evidence and responsive layouts. The owner's subsequent feedback makes a more
+distinctive, less bland appearance an explicit next deliverable. The local refinement
+reduces excess phone spacing and removes the redundant phone-only table heading.
+It keeps labels, scores, export disclosure,
+44-pixel controls and all report data. A regression verifies the first complete demo
+recommendation without scrolling at 360×844 and 390×844 in both themes across all
+five browser configurations. This is not a guarantee that arbitrarily long test
+names or real PR metadata fit the same first screen.
+
+### Milestone 8A: visual character and component refinement — implemented locally
+
+1. Capture the current entry screen, loaded Tests workspace, evidence, Map and
+   Changes with the demo and a large pinned report. Apply the visual direction
+   above to the working application, starting with shared controls and surfaces.
+2. Round buttons and inputs consistently, improve primary/secondary action
+   hierarchy, and refine the wordmark, typography and selected states. Carry these
+   decisions through theme, export, graph and source-navigation controls.
+3. Recompose the entry screen around one clear input task with supporting demo and
+   upload options. Give the loaded workspace a stronger identity through its
+   compact header, integrated summary, readable test rows and distinctive evidence
+   trail. Keep useful content near the top on phones.
+4. Finish the quiet states as carefully as the main screen: loading, no results,
+   errors, disabled actions and empty evidence. Use specific, concise copy and
+   small relevant SVG details where useful. Show only real progress and counts.
+5. Inspect before/after screens at 1440×900, 1280×800, 768×1024, 390×844 and
+   360×844 in both themes. Refine the result in the browser before recording new
+   screenshot baselines; record actual owner feedback if it is provided.
+
+Acceptance: the change is visibly broader than a radius adjustment. Buttons feel
+consistent and rounded, primary actions are obvious, headings and surfaces create
+a clear hierarchy, and CodeImpact has a recognizable identity across all three
+views. Long names, code, semantic colors and evidence remain readable. Preserve
+the existing first-result regression, keyboard/focus behavior, 44 px touch targets,
+reduced-motion support and all report/export data. Include before/after evidence
+and explain specific visual decisions; passing tests alone cannot demonstrate
+that the result feels less generic.
+
+### Milestones 8B and 8C: diagnostics and regression protection
+
+After the visual refresh, make large diagnostics readable with category/file
+grouping, counts, search and expandable entries. Then establish deterministic
+screenshot comparisons for the refined design in a pinned CI environment and add
+rendered-accessibility checks. Preserve the full warnings and evidence in exports.
+Keep each slice reviewable and apply the verification commands above to UI changes.
+
+Maintain these standards in every future UI change:
+
+- Prioritize the user's next action and the actual evidence. Use consistent token
+  spacing, readable type, meaningful selected/focus states and complete labels.
+- Keep the first useful result accessible; long names wrap without losing identity.
+  Preserve sticky view navigation and the return path from evidence on phones.
+- Keep semantic colors and shape/text cues consistent in both themes. New UI must
+  pass contrast/focus checks and respect reduced motion; do not infer certification.
+- Use fixed-input screenshot comparison gates at desktop, tablet and phone sizes,
+  in a pinned CI environment. Keep before/after artifacts and review intended diffs.
+- Test the full report, empty/zero-discovery/error states, mixed/deleted evidence,
+  long lists and the pilot access flow. Exports must preserve full underlying data.
+- Make large diagnostics manageable through display-only grouping and filtering.
+  The inspected Cachetools LFU report has 3,128 notes; individual entries must remain
+  discoverable and exports unchanged after a future grouping feature.
+- Measure real rendering bottlenecks before adopting virtualization or a new layout
+  engine. Preserve stable symbol/edge identity and exact selected evidence paths.
+
+The visual refresh is implemented locally. Pixel-comparison gates, comprehensive
+rendered-accessibility scanning and grouped diagnostics remain planned work. Current
+automated checks include semantic colors, focus, theme behavior, touch targets and
+cross-browser workflows.
+Agent visual inspection does not substitute for independent user feedback.
