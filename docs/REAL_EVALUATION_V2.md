@@ -8,7 +8,21 @@ are claimed. These purposive samples are not production accuracy. Keep the full 
 
 [Source protocol](../corpus/real-v2/PROTOCOL.md) · [Original capture/review protocol](../corpus/real-v2/README.md) · [581-label review pack](../corpus/real-v2/REVIEW.md) · [First measurement](../corpus/real-v2/first-run.json) · [Attribution](../corpus/real-v2/ATTRIBUTION.md)
 
-## Current measurement: milestone 9A literal-raising callbacks
+## Current measurement: milestone 9B descriptor binding
+
+V2 selects **393/581** definitions, with **109 TP / 271 FP / 0 FN / 179 TN**.
+Of 22 uncertain definitions, 13 are selected and nine are unselected.
+The descriptor case loses only
+`tests/test_cachedmethod.py::UnboundMethodTest.test_class_call_without_instance`.
+All 35 retained descriptor recommendations use the same conservative paths.
+Current totals are 51 resolved, 335 conservative and seven changed-test
+recommendations. All five other case analyses match their previous hashes.
+
+`make evaluate-real-v2` writes `reports/real-v2-descriptor-binding-v1-evaluation.json`
+with wrapper 7.0 and links the complete `lfu-callback-v1` predecessor chain.
+[Current per-case and per-repository details](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+## Preserved measurement: milestone 9A literal-raising callbacks
 
 **394/581 selected; 109 TP / 272 FP / 0 FN / 178 TN**. Draft-label precision is
 109/381 (28.61%); recall remains 109/109. Uncertainty is unchanged: 13 selected,
@@ -256,10 +270,10 @@ All original dataset bytes and stable reports are preserved; they are not pooled
 
 ## Remaining work
 
-The [build plan](BUILD_PLAN.md) next calls for one bounded 9B descriptor mechanism.
+The [build plan](BUILD_PLAN.md) next calls for one bounded 9B Slugify mechanism.
 Fresh evaluation follows the separately scoped refinements; human participation
 remains deferred. Preserve every prior measurement. The 124 remaining LFU fallback
-mistakes need additional bounded work; descriptor/classmethod fallback (31) and Slugify fallback
+mistakes need additional bounded work; descriptor/classmethod fallback (30) and Slugify fallback
 (117) remain separate scopes. Fixture injection, runtime imports and general dynamic
 dispatch also remain limitations. No stronger accuracy claim follows from this regression improvement.
 

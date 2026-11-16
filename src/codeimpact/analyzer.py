@@ -15,6 +15,7 @@ from typing import Literal
 
 from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
+from codeimpact.descriptor_binding import DescriptorFallback
 from codeimpact.discovery import is_test_file
 from codeimpact.models import (
     AnalysisRequest,
@@ -685,7 +686,9 @@ def analyze(request: AnalysisRequest) -> Report:
     arguments = ArgumentFallback(before, after, {nodes[sid].path for sid in active})
     active = [sid for sid in active if sid not in arguments.passive_import_modules]
     aggregate = [sid for sid in changed if nodes[sid].kind == "module" and sid not in active]
-    fallback = AggregateFallback(before, after, {nodes[sid].path for sid in aggregate})
+    aggregate_paths = {nodes[sid].path for sid in aggregate}
+    fallback = AggregateFallback(before, after, aggregate_paths)
+    descriptors = DescriptorFallback(fallback.before, fallback.after, aggregate_paths)
     call_arguments = CallArgumentFilter(before, after, {nodes[sid].path for sid in active})
 
     def walk(
@@ -762,6 +765,8 @@ def analyze(request: AnalysisRequest) -> Report:
         for sid, candidate in walk(
             [module], False, nodes[module].path, body_path=nodes[module].path
         ).items():
+            if nodes[sid].kind == "test" and not descriptors.allows(sid, nodes[module].path):
+                continue
             current = paths.get(sid)
             if current is None or (len(candidate), candidate) < (len(current), current):
                 paths[sid] = candidate

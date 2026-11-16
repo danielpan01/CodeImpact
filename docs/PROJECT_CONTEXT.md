@@ -2,6 +2,15 @@
 
 ## Current priority — November 16, 2026
 
+Milestone 9A merged at `41753b3522246fe8c947a27326ada95b1c285dce` through PR #17.
+Milestone 9B implements ordinary zero-argument descriptor binding.
+One descriptor false positive is removed, leaving 35/154 selected and
+0 TP / 30 FP / 0 FN / 116 TN. The five selected and three unselected uncertain
+definitions retain their outcomes. V2 becomes 393/581 selected with
+109 TP / 271 FP / 0 FN / 179 TN, and the other cases retain their analysis hashes.
+The new `descriptor-binding-v1` receipts preserve milestone 9A and all earlier
+records. [Descriptor proof and measurements](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
 Milestone 7 merged through PR #16 at
 `a4d29a7c7c462c32f0bb7978e45708166b0106b0`. All final PR and post-merge checks passed.
 Milestone **9A** is implemented; the owner authorized publication on November 16. It permits
@@ -40,8 +49,8 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next: one milestone 9B pattern**, beginning with the descriptor instance/classmethod
-distinction. The remaining 124 LFU and 117 Slugify false positives stay outside that scope. Live
+**Next: one bounded Slugify fallback pattern in milestone 9B.**
+The 124 remaining LFU false positives are a separate scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or
 independent usability testing. The owner-approved local Colima runtime supplies

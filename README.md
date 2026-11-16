@@ -149,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-lfu-callback-v1-evaluation.json
+# reports/real-v2-descriptor-binding-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -195,11 +195,19 @@ plain constructor. The existing mapping proof must still exclude the changed
 implementation. Exactly one additional LFU false positive is removed:
 `tests/test_rr.py::RRCacheTest.test_rr_bad_choice`. LFU is **138/156 selected:
 6 TP / 124 FP / 0 FN / 18 TN**, with all eight uncertain selections retained.
-V2 is **394/581: 109 TP / 272 FP / 0 FN / 178 TN**, with 13/22 uncertain selected.
+At that stage V2 was **394/581: 109 TP / 272 FP / 0 FN / 178 TN**, with 13/22 uncertain selected.
 All retained evidence fields and the other five analyses are unchanged. The new
 [`lfu-callback-v1` receipt](corpus/real-v2/baselines/lfu-callback-v1.json) links the
 preserved discovery receipt; no labels or old measurements change. See the
 [source boundary and exact review](docs/LFU_CALLBACK_REVIEW.md).
+
+Milestone **9B** traces ordinary zero-argument descriptor binding to a separate
+wrapper. It removes one false positive, leaving **35/154 selected** in the descriptor
+case, with 0 TP, 30 FP, 0 FN and 116 TN. Five uncertain definitions remain selected
+and three remain unselected. V2 now selects **393/581** with **109 TP, 271 FP,
+0 FN and 179 TN**, including 13 of 22 uncertain definitions. The other five
+analyses and every retained evidence path match their predecessors.
+[Descriptor refinement review](docs/DESCRIPTOR_REFINEMENT_REVIEW.md)
 
 ### Fresh-repository evaluation v3
 
@@ -213,8 +221,8 @@ discovery with 30 new source-only draft labels established before expanded analy
 The separately versioned result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN**,
 plus **12 uncertain definitions, none selected**. Only `test_pop` is newly recommended,
 with conservative module/import evidence; the other five analyses are unchanged.
-Milestone 9A preserves this complete measurement in a separate engine replay;
-the current output is `reports/real-v3-lfu-callback-v1-evaluation.json`. The dashboard explains
+Milestone 9B preserves the complete measurement in a versioned engine replay.
+Current output is `reports/real-v3-descriptor-binding-v1-evaluation.json`. The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.
 All labels still await independent review. See [policy and preservation](docs/TEST_DISCOVERY.md).
 See [results and limitations](docs/REAL_EVALUATION_V3.md).
@@ -276,8 +284,8 @@ with new labels and measurements that preserve all historical baselines. Visual 
 with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
 Its pinned visual/accessibility gates remain active. Milestone 7 merged in
 [PR #16](https://github.com/danielpan01/CodeImpact/pull/16).
-Milestone **9A** is implemented. Next is one bounded **9B** mechanism,
-starting with the descriptor instance/classmethod distinction; Slugify remains separate. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+The **9B descriptor slice** is implemented. The next slice is one bounded
+Slugify fallback mechanism. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

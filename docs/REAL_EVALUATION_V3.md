@@ -9,13 +9,21 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-lfu-callback-v1-evaluation.json (current)
+# reports/real-v3-descriptor-binding-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current engine replay — milestone 9A
+## Current engine replay — milestone 9B
+
+The `descriptor-binding-v1` receipt reproduces all six expanded analyses
+and their measurements, labels, annotations and discovery inventory. Holdout
+wrapper 4.0 links `lfu-callback-v1` directly. The original 90-definition
+denominator and outside-discovery inventory remain independently preserved.
+[Descriptor measurement and receipts](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+## Preserved engine replay — milestone 9A
 
 The full expanded measurement below remains identical, including all six stable
 analysis hashes. New `baselines/lfu-callback-v1.json` records the new mapping engine

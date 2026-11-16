@@ -854,3 +854,20 @@ writing new `real-v2-lfu-callback-v1-evaluation.json` and
 `test-discovery-v1` predecessors. V3 is an engine-only replay with identical complete
 measurements. Metadata/source limits and historical integrity checks remain.
 [LFU_CALLBACK_REVIEW.md](LFU_CALLBACK_REVIEW.md) records the proof and exclusions.
+
+## Bounded ordinary descriptor binding
+
+When the complete module AST change moves only an existing descriptor
+`__call__` receiver into the positional-only list, `descriptor_binding.py`
+can inspect a narrow zero-argument ordinary descriptor invocation. The source
+query follows eager package initialization, decorator factories, constructor and
+receiver aliases, and a binding that returns a separate callable. The query must
+complete in both revisions, within 12,000 steps and 24 levels. Unknown effects,
+custom hooks, escaped values and classmethod dispatch retain the path.
+Only this test's aggregate contribution is excluded. Graph construction, active
+and resolved propagation, ranking, source and revision evidence retain their
+existing contracts. [Proof and exact measurement](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+Fresh v2 wrapper 7.0 and v3 wrapper 4.0 write separate `descriptor-binding-v1`
+reports and verify their predecessor chains. Analyzer/API schema 2.0 and
+evaluation schema 1.0 continue to apply.

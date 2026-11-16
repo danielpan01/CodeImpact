@@ -3177,3 +3177,88 @@ determinism receipts. Markdown file targets and `git diff --check` pass. Evidenc
 is saved in `reports/premerge-9a-{check,evaluations,pilot,browser,visual,a11y}.log`
 and `reports/premerge-9a-a11y-review.json`. PR checks and the merge are separate
 publication steps; these local results do not claim a future CI outcome.
+
+## Milestone 9B — bounded descriptor binding
+
+The working tree started clean on `main` at merged milestone 9A
+(`41753b3522246fe8c947a27326ada95b1c285dce`). The remote main ref matched.
+All four PR #17 checks and both jobs in the
+[post-merge quality run](https://github.com/danielpan01/CodeImpact/actions/runs/43965036481)
+passed. The 9B work is unstaged and uncommitted.
+
+Ordinary zero-argument class lookup reaches a separate unbound wrapper in the
+pinned Cachetools case. That wrapper has no receiver to forward. The proof
+removes `tests/test_cachedmethod.py::UnboundMethodTest.test_class_call_without_instance`
+from conservative module propagation. Direct raw calls and ambiguous classmethod
+paths retain their existing evidence across both revisions. The synthetic controls
+include affected routes because the pinned descriptor case has no affected labels.
+[Source review, exact IDs and measured results](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+Descriptor selection changes from **36/154 to 35/154**, with 0 TP, 30 FP, 0 FN and
+116 TN. Five uncertain definitions remain selected and three remain unselected.
+All 35 retained recommendations, graph data, source and diagnostics match their
+prior values. The other five v2 analyses match their historical hashes.
+
+| Evaluation | TP / FP / FN / TN | Uncertain selected / unselected | Result |
+| --- | ---: | ---: | --- |
+| `make evaluate` | 23 / 0 / 2 / 32 | 2 / 0 | Stable report matched |
+| `make evaluate-real` | 45 / 0 / 0 / 123 | 11 / 22 | Stable report matched |
+| `make evaluate-real-v2` | 109 / 271 / 0 / 179 | 13 / 9 | 393/581 selected, strict successor receipt matched |
+| `make evaluate-real-v3` | 42 / 43 / 0 / 23 | 0 / 12 | 85/120 selected, full expanded measurement matched |
+
+V2 and v3 write separate `descriptor-binding-v1` reports using wrappers 7.0 and
+4.0. Their current source and measurement hashes link `lfu-callback-v1` and the
+earlier receipt chains. The original v3 denominator and 30 exclusions remain
+frozen. The audit matched **200 protected hashes**, including **111 prior corpus
+files**, the screenshot baselines, UI fixtures and historical reports. The
+canonical data for every evaluation matched with hash seeds 7 and 173.
+Reversing snapshot file order across all **43 cases** produced identical
+analysis and validated evidence, excluding only `stats.elapsed_ms`.
+
+Before the change, two intended exclusion tests failed and 25 controls passed.
+A later control exposed an exception-superclass path that could still reach the
+raw descriptor, and the final guard follows that path. The first full run
+overlapped this correction and reported ten current-engine hash failures while
+the versioned receipts were being refreshed. Verification was restarted once
+the source and receipts matched.
+
+| Check | Observed result |
+| --- | --- |
+| Final focused descriptor, evidence, receipt and 9A callback regressions | 86 passed |
+| Final `make check` | 933 passed, one Linux-only skip, one existing Starlette deprecation warning, 94% statement coverage. Ruff, mypy and production build passed. |
+| `make verify-pilot` | Passed local readiness, built UI, public demo, protected requests, exact report and storage checks |
+| `cd web && npm run format:check` | Passed |
+| `cd web && npm run test:e2e -- --workers=1` | 253 passed across Chromium, mobile, Firefox and WebKit projects |
+| Canonical Linux ARM64 visual comparisons | 16 passed |
+| Canonical Linux ARM64 accessibility scans | 48 passed, zero enabled-rule violations |
+| `git diff --check` and preservation audit | Passed |
+
+The existing Colima `codeimpact` profile ran both canonical suites with Docker
+context `colima-codeimpact` and was stopped afterward. Six incomplete
+`color-contrast` findings still require manual review. These cover Map in both
+themes at desktop (12 nodes each) and phone (six nodes each), and one clipped
+trail label in each desktop deleted-source state. Screenshots, fixtures, masks,
+tolerances and axe rules match their starting hashes. The browser run emitted
+the pre-existing `NO_COLOR` / `FORCE_COLOR` environment warning.
+
+Local evidence is under `reports/milestone9b-*`, including the starting hashes,
+regression logs, determinism results and canonical axe summary. The analyzed
+repositories were read as source data. Labels remain agent drafts. The next
+bounded roadmap slice covers one Slugify fallback mechanism, with hosting and
+the human pilot deferred.
+
+### Milestone 9B descriptor publication review
+
+The owner authorized publication of the descriptor slice. Three new regressions
+failed against the original local implementation. The supported proof now declines
+when a property getter or non-`None` initializer result could change control flow,
+and it advances supported iterators on each `next()` call. All three regressions
+pass with the corrections.
+
+The local recheck passed the focused descriptor, callback, receipt and performance
+tests, all four strict offline evaluations, local pilot verification and frontend
+formatting. All **200 protected hashes** still match. Only engine and link hashes
+changed in the three new receipts. Their measurements and annotations reproduce
+the same recorded results, including the single removed recommendation and every
+uncertain outcome. The original local verification above describes the initial
+implementation. The pull request records checks for the final publication commit.

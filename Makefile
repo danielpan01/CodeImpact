@@ -19,9 +19,9 @@ evaluate:
 evaluate-real:
 	.venv/bin/python -m codeimpact.real_evaluate --corpus corpus/real --output reports/real-evaluation.json
 evaluate-real-v2:
-	.venv/bin/python -m codeimpact.fresh_evaluate --corpus corpus/real-v2 --output reports/real-v2-lfu-callback-v1-evaluation.json
+	.venv/bin/python -m codeimpact.fresh_evaluate --corpus corpus/real-v2 --output reports/real-v2-descriptor-binding-v1-evaluation.json
 evaluate-real-v3:
-	.venv/bin/python -m codeimpact.holdout_evaluate --corpus corpus/real-v3 --output reports/real-v3-lfu-callback-v1-evaluation.json
+	.venv/bin/python -m codeimpact.holdout_evaluate --corpus corpus/real-v3 --output reports/real-v3-descriptor-binding-v1-evaluation.json
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:

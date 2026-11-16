@@ -385,3 +385,13 @@ expanded v3 measurement with the new engine hash. No source, label, uncertainty,
 provenance, first-run, discovery inventory or old baseline is rewritten.
 Normal evaluation commands use the new strict receipts and distinct output names.
 See [the source proof and exact results](LFU_CALLBACK_REVIEW.md).
+
+## Milestone 9B descriptor measurement
+
+Both real-source replay gates add `baselines/descriptor-binding-v1.json`.
+V2 removes one unchanged, draft-labeled unaffected descriptor recommendation.
+The complete authored and v1 reports, the full v3 measurement and all 111
+prior corpus files match their historical record. Discovery denominators and
+uncertain classifications are preserved. The v2 and v3 commands write separate
+versioned output files and enforce the new measurement and engine hashes.
+[Per-case and per-repository results](DESCRIPTOR_REFINEMENT_REVIEW.md)
