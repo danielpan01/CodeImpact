@@ -136,7 +136,7 @@ These are the original `bef99db` results; the current gate uses the separate map
 
 Aggregate reasons: **6 resolved-call paths, 349 conservative module/import paths,
 7 changed tests**. Original selected IDs are retained per case and repository in `first-run.json`.
-The generated `reports/real-v2-evaluation.json` contains current IDs and all typed
+The historical mapping output `reports/real-v2-evaluation.json` contains its IDs and all typed
 evidence paths, full snapshots, source ranges and revision evidence, plus the
 original aggregate summary. The root dataset documents remain preserved as the
 original capture record; current gate behavior is documented below.
@@ -238,3 +238,14 @@ and preserve all four v2 measurements. The 125 remaining LFU fallback mistakes n
 additional bounded work; descriptor/classmethod fallback (31) and Slugify fallback
 (117) remain separate scopes. Fixture injection, runtime imports and general dynamic
 dispatch also remain limitations. No stronger accuracy claim follows from this regression improvement.
+
+## Milestone 7 current replay
+
+The new `baselines/test-discovery-v1.json` pins the expanded discovery engine and
+the complete unchanged mapping measurement: 395/581 selected, 109 TP / 273 FP /
+0 FN / 177 TN, 13 uncertain selected. It links the preserved mapping → argument →
+partial receipts. The fresh wrapper is **5.0** and writes
+`reports/real-v2-discovery-v1-evaluation.json`; the original stable output is kept.
+`previous_summary` refers to mapping; `argument_summary`, `partial_summary` and
+`original_summary` retain earlier stages. No original labels or analyses changed.
+See [TEST_DISCOVERY.md](TEST_DISCOVERY.md) for the corresponding v3 expansion.

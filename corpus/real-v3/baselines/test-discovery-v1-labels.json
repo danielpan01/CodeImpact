@@ -1,0 +1,195 @@
+{
+  "author": "Codex, November 16, 2026",
+  "case": "ordered_set_pop",
+  "independent_reviewer": null,
+  "interpretation": "Static dependency labels, not observed failures. Inherited/external routes absent from the snapshot retain uncertainty. Original frozen labels and excluded inventory remain unchanged.",
+  "labels": {
+    "test.py::test_binary_operations": {
+      "classification": "uncertain",
+      "end_line": 39,
+      "line": 32,
+      "rationale": "Uses inherited union/difference operators whose implementations are not in this pinned snapshot; the explicit intersection is defined locally, but the full test has external base-class dispatch."
+    },
+    "test.py::test_bitwise_and_consistency": {
+      "classification": "unaffected",
+      "end_line": 387,
+      "line": 378,
+      "rationale": "The custom local __and__ delegates to local intersection; intersection_update filters items directly without pop."
+    },
+    "test.py::test_clear": {
+      "classification": "unaffected",
+      "end_line": 135,
+      "line": 130,
+      "rationale": "Calls the locally overridden clear, which resets items and map directly instead of using a base-class pop loop."
+    },
+    "test.py::test_comparisons": {
+      "classification": "uncertain",
+      "end_line": 219,
+      "line": 212,
+      "rationale": "Uses inherited strict subset/superset comparison operators; their base-class implementations are outside the pinned source."
+    },
+    "test.py::test_empty_pickle": {
+      "classification": "uncertain",
+      "end_line": 22,
+      "line": 19,
+      "rationale": "Invokes external pickle serialization/deserialization for the empty instance; retain uncertainty about external protocol dispatch rather than equating a shared import with a pop dependency."
+    },
+    "test.py::test_empty_repr": {
+      "classification": "unaffected",
+      "end_line": 180,
+      "line": 178,
+      "rationale": "Uses the local __repr__ and iteration implementation, neither of which calls pop."
+    },
+    "test.py::test_eq_wrong_type": {
+      "classification": "unaffected",
+      "end_line": 185,
+      "line": 183,
+      "rationale": "Local __eq__ rejects the incompatible comparison without invoking pop."
+    },
+    "test.py::test_fancy_index_class": {
+      "classification": "unaffected",
+      "end_line": 81,
+      "line": 78,
+      "rationale": "The local fancy-index helper and OrderedSet.__getitem__ read indices and items without pop."
+    },
+    "test.py::test_getitem_type_error": {
+      "classification": "unaffected",
+      "end_line": 168,
+      "line": 165,
+      "rationale": "Exercises the local __getitem__ validation and TypeError branch, with no pop call."
+    },
+    "test.py::test_indexing": {
+      "classification": "unaffected",
+      "end_line": 55,
+      "line": 42,
+      "rationale": "Local indexing, copy and index paths read/create items and positions; none calls the changed pop method."
+    },
+    "test.py::test_operator_consistency_difference": {
+      "classification": "uncertain",
+      "end_line": 332,
+      "line": 324,
+      "rationale": "Combines locally defined difference methods with inherited subtraction; retain uncertainty about the external operator route."
+    },
+    "test.py::test_operator_consistency_disjoint": {
+      "classification": "uncertain",
+      "end_line": 375,
+      "line": 371,
+      "rationale": "Calls inherited isdisjoint, absent from the pinned source, alongside local intersection; retain uncertainty about the external base-class route."
+    },
+    "test.py::test_operator_consistency_isect": {
+      "classification": "unaffected",
+      "end_line": 321,
+      "line": 315,
+      "rationale": "Local intersection_update, __and__ and intersection use item filtering and _update_items, without pop; helper data generation/comparison is unchanged."
+    },
+    "test.py::test_operator_consistency_subset": {
+      "classification": "uncertain",
+      "end_line": 358,
+      "line": 353,
+      "rationale": "Combines local issubset with inherited <= dispatch; the external base-class implementation is not present."
+    },
+    "test.py::test_operator_consistency_superset": {
+      "classification": "uncertain",
+      "end_line": 368,
+      "line": 361,
+      "rationale": "Combines local issuperset with inherited >= dispatch; the external base-class implementation is not present."
+    },
+    "test.py::test_operator_consistency_union": {
+      "classification": "uncertain",
+      "end_line": 350,
+      "line": 344,
+      "rationale": "Combines locally defined update/union methods with inherited union; retain uncertainty about the external operator route."
+    },
+    "test.py::test_operator_consistency_xor": {
+      "classification": "uncertain",
+      "end_line": 341,
+      "line": 335,
+      "rationale": "Combines locally defined symmetric-difference methods with an inherited xor operator; retain uncertainty about the external operator route."
+    },
+    "test.py::test_order": {
+      "classification": "unaffected",
+      "end_line": 29,
+      "line": 25,
+      "rationale": "Construction, length, local equality and reversed iteration use unchanged methods, without a pop invocation."
+    },
+    "test.py::test_ordered_equality": {
+      "classification": "unaffected",
+      "end_line": 193,
+      "line": 188,
+      "rationale": "Local __eq__ compares sequence contents using list/iteration, without pop."
+    },
+    "test.py::test_ordered_inequality": {
+      "classification": "unaffected",
+      "end_line": 209,
+      "line": 196,
+      "rationale": "Negation of local equality compares unchanged sequence contents; no pop dependency is expressed."
+    },
+    "test.py::test_pandas_compat": {
+      "classification": "unaffected",
+      "end_line": 87,
+      "line": 84,
+      "rationale": "get_loc/get_indexer are local aliases of index, whose unchanged body does not call pop."
+    },
+    "test.py::test_pickle": {
+      "classification": "uncertain",
+      "end_line": 16,
+      "line": 13,
+      "rationale": "Invokes external pickle serialization/deserialization and implicit protocol dispatch; no direct pop call is present, but that external behavior is outside this source-only label review."
+    },
+    "test.py::test_pop": {
+      "classification": "affected",
+      "end_line": 162,
+      "line": 153,
+      "rationale": "Directly invokes OrderedSet.pop twice and passes the bound pop method to pytest.raises; this is a dependency on the edited callable, not evidence of a runtime failure."
+    },
+    "test.py::test_remove": {
+      "classification": "uncertain",
+      "end_line": 120,
+      "line": 98,
+      "rationale": "Calls inherited remove, which is not defined in this pinned source; direct discard/index checks alone do not establish the inherited call path."
+    },
+    "test.py::test_remove_error": {
+      "classification": "uncertain",
+      "end_line": 127,
+      "line": 123,
+      "rationale": "Calls inherited remove under pytest.raises; the base-class method body is absent from the pinned source."
+    },
+    "test.py::test_tuples": {
+      "classification": "unaffected",
+      "end_line": 95,
+      "line": 90,
+      "rationale": "Calls local add, index and __getitem__; these paths do not invoke pop."
+    },
+    "test.py::test_unordered_equality": {
+      "classification": "unaffected",
+      "end_line": 239,
+      "line": 222,
+      "rationale": "Local __eq__ compares builtin set values/iteration, not OrderedSet.pop."
+    },
+    "test.py::test_unordered_inequality": {
+      "classification": "unaffected",
+      "end_line": 252,
+      "line": 242,
+      "rationale": "The local equality route compares set contents; it does not invoke pop."
+    },
+    "test.py::test_update": {
+      "classification": "unaffected",
+      "end_line": 150,
+      "line": 138,
+      "rationale": "Local update loops through add; neither unchanged method calls pop."
+    },
+    "test.py::test_update_value_error": {
+      "classification": "unaffected",
+      "end_line": 175,
+      "line": 171,
+      "rationale": "Exercises local update error handling; the changed pop method is not on this path."
+    }
+  },
+  "name": "test-discovery-v1",
+  "original_discovery_sha256": "d073732ac23d642248df83e053898893d4c55e9315a5032ba0f0285fba0fab75",
+  "policy": "test-files-v2",
+  "review_status": "agent_draft",
+  "schema_version": "1.0",
+  "source_case_sha256": "9cdc403e96287e9e47b2a829d95b83fd9b00ec55f128842e7923cfc7e51fbee5",
+  "timing": "Drafted from the unchanged pinned test source and pop diff before implementing or running expanded discovery."
+}

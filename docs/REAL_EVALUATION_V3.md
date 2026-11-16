@@ -9,10 +9,24 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-evaluation.json
+# reports/real-v3-discovery-v1-evaluation.json (current)
+# reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
+
+## Current discovery extension — milestone 7
+
+Literal `test.py` is now supported. The separate `test-discovery-v1` label draft
+was created before expanded analysis: 1 affected, 17 unaffected, 12 uncertain.
+Current v3 selects **85/120** definitions: **42 TP / 43 FP / 0 FN / 23 TN**,
+with **12 uncertain definitions, none selected**. Only `test_pop` is newly selected
+via conservative module/import evidence. The other five analysis hashes are
+unchanged. The old 90-definition denominator and 30 exclusions remain explicit
+in the current holdout wrapper **2.0**; the original wrapper **1.0** and all frozen
+inputs/labels/provenance/baselines stay untouched. No discovery gap is silently
+reclassified as an unaffected test. See [policy, receipts, exact paths and review
+status](TEST_DISCOVERY.md). The original milestone 5 findings below are historical.
 
 ## First measurement, preserved
 
@@ -46,10 +60,11 @@ with the other change's 30 definitions outside discovery.
 - The syntax-repair case restores a module that cannot parse at the base revision.
   Its 30 labels concern import/loadability. Newly indexed head calls produce
   resolved paths; this is not 30 independently demonstrated runtime failures.
-- The older Ordered Set tree stores tests in `test.py`. The existing filename rule
-  discovers none. The dashboard now distinguishes **No tests discovered** from
+- The older Ordered Set tree stores tests in `test.py`. The original filename rule
+  discovered none (milestone 7 now supports this exact filename). The dashboard now distinguishes **No tests discovered** from
   **No tests recommended**, explains the supported names and leads into changed code.
-  The analyzer's discovery behavior is unchanged.
+  At that milestone the analyzer’s discovery behavior was unchanged; see the
+  separate milestone 7 expansion above.
 - Each repository contributes two historical changes; repeated tests,
   small-library selection and shared module effects limit generalization. The
   sample is purposive, not a random production benchmark or failure prediction.

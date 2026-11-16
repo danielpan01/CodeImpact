@@ -4,9 +4,14 @@ import ast
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
-from codeimpact.corpus import MAX_CORPUS_BYTES, StrictModel, discover_tests
+from pydantic import Field
+
+from codeimpact.corpus import MAX_CORPUS_BYTES, Nonblank, StrictModel, discover_tests
+from codeimpact.discovery import CURRENT_POLICY, LEGACY_POLICY, DiscoveryPolicy, is_test_file
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
+    MAPPING_BASELINE_FILE,
+    MAPPING_SOURCES,
     PROJECT,
     CaseBaseline,
     FirstRun,
@@ -36,6 +41,113 @@ DOCUMENTS = {
     "discovery.json",
     "preservation.json",
 }
+BASELINE_FILE = "baselines/test-discovery-v1.json"
+LABELS_FILE = "baselines/test-discovery-v1-labels.json"
+V2_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
+
+
+class DraftLabel(StrictModel):
+    classification: Literal["affected", "unaffected", "uncertain"]
+    rationale: Nonblank
+    line: int = Field(ge=1)
+    end_line: int = Field(ge=1)
+
+
+class DiscoveryLabels(StrictModel):
+    schema_version: Literal["1.0"]
+    name: Literal["test-discovery-v1"]
+    policy: Literal["test-files-v2"]
+    case: Literal["ordered_set_pop"]
+    source_case_sha256: SHA256
+    original_discovery_sha256: SHA256
+    review_status: Literal["agent_draft"]
+    author: Nonblank
+    independent_reviewer: None
+    timing: Nonblank
+    interpretation: Nonblank
+    labels: dict[Nonblank, DraftLabel]
+
+
+class DiscoveryBaseline(StrictModel):
+    schema_version: Literal["1.0"]
+    name: Literal["test-discovery-v1"]
+    explanation: Nonblank
+    frozen_inputs_sha256: SHA256
+    previous_baseline_sha256: SHA256
+    labels_sha256: SHA256
+    v2_replay_sha256: SHA256
+    analyzer_sha256: dict[str, SHA256]
+    annotations: dict[str, CaseBaseline]
+    expected_unclassified_recommendations: list[Nonblank]
+    discovery: dict[str, Any]
+    measurement: dict[str, Any]
+
+
+def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBaseline:
+    baseline = DiscoveryBaseline.model_validate(
+        read_metadata(safe_file(directory, BASELINE_FILE))[0]
+    )
+    require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
+    for path, expected in baseline.analyzer_sha256.items():
+        require(file_hash(safe_file(project, path)) == expected, f"Engine changed: {path}")
+    require(
+        file_hash(safe_file(directory, LABELS_FILE)) == baseline.labels_sha256,
+        "Discovery labels changed",
+    )
+    require(
+        file_hash(safe_file(directory, "baseline.json")) == baseline.previous_baseline_sha256,
+        "Historical first baseline changed",
+    )
+    require(
+        file_hash(safe_file(project, V2_REPLAY)) == baseline.v2_replay_sha256,
+        "Versioned v2 replay receipt changed",
+    )
+    return baseline
+
+
+def label_extension(
+    directory: Path, selected_unknown: list[str]
+) -> tuple[DiscoveryLabels, dict[str, dict[str, Any]]]:
+    labels = DiscoveryLabels.model_validate(read_metadata(safe_file(directory, LABELS_FILE))[0])
+    require(
+        file_hash(safe_file(directory, "cases/ordered_set_pop.json")) == labels.source_case_sha256,
+        "Discovery label source changed",
+    )
+    require(
+        file_hash(safe_file(directory, "discovery.json")) == labels.original_discovery_sha256,
+        "Original discovery inventory changed",
+    )
+    case = next(c for c in load_real(directory)[1] if c.id == labels.case)
+    added = discover_tests(case.request.head) - discover_tests(
+        case.request.head, policy=LEGACY_POLICY
+    )
+    require(set(labels.labels) == added, "Expanded label inventory mismatch")
+    definitions = {
+        f"test.py::{n.name}": n
+        for n in ast.parse(case.request.head.files["test.py"]).body
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    for sid, label in labels.labels.items():
+        node = definitions.get(sid)
+        require(
+            node is not None and (node.lineno, node.end_lineno) == (label.line, label.end_line),
+            f"Label source range mismatch: {sid}",
+        )
+    extension = {
+        field: {
+            sid: label.rationale
+            for sid, label in labels.labels.items()
+            if label.classification == category
+        }
+        for field, category in (
+            ("expected_affected", "affected"),
+            ("expected_unaffected", "unaffected"),
+            ("unclassified", "uncertain"),
+        )
+    }
+    return labels, {
+        labels.case: extension | {"expected_unclassified_recommendations": selected_unknown}
+    }
 
 
 class FrozenInputs(StrictModel):
@@ -78,9 +190,11 @@ def safe_file(root: Path, relative: str) -> Path:
     return current
 
 
-def discovery_audit(snapshot: Snapshot) -> dict[str, Any]:
+def discovery_audit(
+    snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY
+) -> dict[str, Any]:
     """Count test-shaped source definitions outside discovery; never collect/run tests."""
-    discovered = discover_tests(snapshot)
+    discovered = discover_tests(snapshot, policy=policy)
     shaped: set[str] = set()
     unparseable = []
 
@@ -111,7 +225,7 @@ def discovery_audit(snapshot: Snapshot) -> dict[str, Any]:
     excluded = {}
     for sid in sorted(shaped - discovered):
         path = sid.split("::", 1)[0]
-        supported_name = PurePosixPath(path).name.startswith("test_") or path.endswith("_test.py")
+        supported_name = is_test_file(path, policy=policy)
         excluded[sid] = "compound_statement" if supported_name else "unsupported_filename"
     return {
         "discovered_ids": sorted(discovered),
@@ -128,7 +242,15 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
         for p in (project / "corpus").rglob("*")
         if p.is_file() and not p.is_relative_to(project / "corpus/real-v3")
     }
-    require(set(receipt.corpus_sha256) == historical, "Historical corpus inventory changed")
+    require(
+        set(receipt.corpus_sha256) | {V2_REPLAY} == historical,
+        "Historical corpus inventory changed",
+    )
+    baseline = current_baseline(directory, project)
+    require(
+        file_hash(safe_file(project, V2_REPLAY)) == baseline.v2_replay_sha256,
+        "Versioned v2 replay receipt changed",
+    )
     require(set(receipt.reports_sha256) == REPORTS, "Historical report inventory mismatch")
     for path, expected in receipt.corpus_sha256.items():
         require(
@@ -142,7 +264,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
     selection, cases, provenance, _ = load_real(directory)
     frozen = FrozenInputs.model_validate(read_metadata(directory / "frozen-inputs.json")[0])
     require(frozen.reference_commit == REFERENCE, "Reference engine mismatch")
-    require(set(frozen.analyzer_sha256) == CURRENT_SOURCES, "Engine inventory mismatch")
+    require(set(frozen.analyzer_sha256) == MAPPING_SOURCES, "Historical engine inventory mismatch")
     expected = (
         DOCUMENTS
         | {f"{folder}/{case.id}.json" for case in cases for folder in ("cases", "provenance")}
@@ -151,7 +273,9 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
     require(set(frozen.files_sha256) == expected, "Frozen input inventory mismatch")
     actual = {p.relative_to(directory).as_posix() for p in directory.rglob("*") if p.is_file()}
     require(
-        actual <= expected | {"frozen-inputs.json", "first-run.json", "baseline.json"},
+        actual
+        <= expected
+        | {"frozen-inputs.json", "first-run.json", "baseline.json", BASELINE_FILE, LABELS_FILE},
         "Unexpected dataset file",
     )
     total = 0
@@ -159,15 +283,29 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
         file = safe_file(directory, path)
         require(file_hash(file) == expected_hash, f"Frozen input changed: {path}")
         total += file.stat().st_size
-    for path in ("frozen-inputs.json", "first-run.json", "baseline.json"):
+    for path in (
+        "frozen-inputs.json",
+        "first-run.json",
+        "baseline.json",
+        BASELINE_FILE,
+        LABELS_FILE,
+    ):
         if (directory / path).exists():
             total += read_metadata(directory / path)[1]
     require(total <= MAX_CORPUS_BYTES, "V3 total size limit exceeded")
-    for path, expected_hash in frozen.analyzer_sha256.items():
-        require(file_hash(safe_file(project, path)) == expected_hash, f"Engine changed: {path}")
+    baseline = current_baseline(directory, project)
+    require(
+        canonical_hash(frozen.model_dump()) == baseline.frozen_inputs_sha256,
+        "Historical frozen receipt changed",
+    )
+    mapping = read_metadata(safe_file(project, f"corpus/real-v2/{MAPPING_BASELINE_FILE}"))[0]
+    require(
+        frozen.analyzer_sha256 == mapping["analyzer_sha256"], "Historical engine receipt changed"
+    )
     audit = read_metadata(directory / "discovery.json")[0]
     require(
-        audit == {case.id: discovery_audit(case.request.head) for case in cases},
+        audit
+        == {case.id: discovery_audit(case.request.head, policy=LEGACY_POLICY) for case in cases},
         "Discovery audit mismatch",
     )
     for case in cases:
@@ -184,33 +322,48 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
 def evaluate_holdout(directory: Path) -> dict[str, Any]:
     frozen = validate_frozen(directory)
     initial = FirstRun.model_validate(read_metadata(directory / "first-run.json")[0])
-    baseline = ReplayBaseline.model_validate(read_metadata(directory / "baseline.json")[0])
+    original = ReplayBaseline.model_validate(read_metadata(directory / "baseline.json")[0])
+    baseline = current_baseline(directory)
     require(initial.reference_commit == frozen.reference_commit, "First-run reference mismatch")
     require(
         initial.frozen_inputs_sha256 == canonical_hash(frozen.model_dump()),
         "First-run frozen input mismatch",
     )
     require(
-        canonical_hash(initial.model_dump()) == baseline.first_run_sha256,
+        canonical_hash(initial.model_dump()) == original.first_run_sha256,
         "First measurement changed",
     )
+    labels, extensions = label_extension(directory, baseline.expected_unclassified_recommendations)
+    discovery = {case.id: discovery_audit(case.request.head) for case in load_real(directory)[1]}
+    require(discovery == baseline.discovery, "Current discovery audit mismatch")
     report = evaluate_real(
         directory,
         annotations={key: value.model_dump() for key, value in baseline.annotations.items()},
+        label_extensions=extensions,
     )
     matches = measurement(report) == initial.measurement
-    if not matches:
-        report["evaluation"]["regressions"].append("v3: measurement differs from frozen first run")
+    current_matches = measurement(report) == baseline.measurement
+    if not current_matches:
+        report["evaluation"]["regressions"].append("v3: measurement differs from test-discovery-v1")
     report.update(
-        holdout_evaluation_schema_version="1.0",
-        active_baseline="first-run",
+        holdout_evaluation_schema_version="2.0",
+        active_baseline=baseline.name,
+        active_baseline_sha256=canonical_hash(baseline.model_dump()),
+        current_analyzer_sha256=baseline.analyzer_sha256,
+        current_measurement_matches=current_matches,
+        original_summary=initial.measurement["summary"],
+        original_discovery=read_metadata(directory / "discovery.json")[0],
+        discovery_policy=CURRENT_POLICY,
+        label_extension=labels.model_dump(),
         first_measurement_matches=matches,
-        first_run_sha256=baseline.first_run_sha256,
+        first_run_sha256=original.first_run_sha256,
         frozen_inputs=frozen.model_dump(),
         initial_regressions=initial.initial_regressions,
-        discovery=read_metadata(directory / "discovery.json")[0],
+        discovery=discovery,
         interpretation=(
-            "Fresh v3 first measurement replay; agent-drafted source labels, human review pending. "
+            "Versioned v3 discovery expansion; original 90-test first measurement "
+            "and excluded inventory preserved. "
+            "New source labels were drafted before expanded analysis; human review pending. "
             "The owner deferred the human usability pilot. Preserved mistakes are regression "
             "data, not independent accuracy, test failures or permission to skip tests. "
             "Definitions outside discovery are listed separately and excluded from metrics."
@@ -224,7 +377,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_holdout,
         default_corpus=Path("corpus/real-v3"),
-        default_output=Path("reports/real-v3-evaluation.json"),
+        default_output=Path("reports/real-v3-discovery-v1-evaluation.json"),
     )
 
 

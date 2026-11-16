@@ -15,9 +15,14 @@ rounded controls, entry composition, connected-node identity and coordinated sur
 See [the visual receipt](FRONTEND_MILESTONE8A.md). **8B merged in [PR #14](https://github.com/danielpan01/CodeImpact/pull/14)**:
 lossless category/file diagnostics, full-text search, filters, explicit paging and
 retained review state. See [the diagnostics receipt](FRONTEND_MILESTONE8B.md).
-**8C is implemented on `codex/frontend-milestone-8c`**: 16 reviewed canonical image comparisons
-and 48 rendered WCAG A/AA scans. See [the gate receipt](FRONTEND_MILESTONE8C.md).
-Check that branch’s Actions results before merging; bounded analyzer milestone 7 is next.
+**8C merged in [PR #15](https://github.com/danielpan01/CodeImpact/pull/15)**, with
+[post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061):
+16 canonical image comparisons and 48 rendered WCAG A/AA scans. See the
+[gate receipt](FRONTEND_MILESTONE8C.md). Milestone 7 now adds explicit discovery-scope
+communication while preserving these gates and all original screenshots.
+Two new expected images replace active empty/zero-discovery captures; the old files
+are retained. [Scope, review evidence and results](TEST_DISCOVERY.md) explain the
+new positive `test.py` and authored zero-discovery browser cases. Milestone 9A is next.
 
 ## Product goal
 
@@ -301,7 +306,7 @@ identities. Empty notes and no filter matches are distinct states. Controls and
 expansion survive view navigation; a new report resets them. Exports are unchanged.
 See [rules, screenshots and verification](FRONTEND_MILESTONE8B.md).
 
-### Milestone 8C: regression protection — implemented; merge pending
+### Milestone 8C: regression protection — merged in PR #15
 
 Sixteen reviewed screenshots now form failing comparison gates in a pinned Linux
 ARM64/Ubuntu/Chromium/font environment. Forty-eight full-page axe scans cover both
@@ -333,7 +338,7 @@ Maintain these standards in every future UI change:
   engine. Preserve stable symbol/edge identity and exact selected evidence paths.
 
 The visual refresh and grouped diagnostics are merged. Milestone 8C now implements
-pixel comparisons and scoped rendered-accessibility gates locally. Existing semantic
+pixel comparisons and scoped rendered-accessibility gates in CI and locally. Existing semantic
 color, focus, theme, touch-target and cross-browser workflow checks are retained.
 Some graph/clipped-content contrast checks still require manual assessment; no
 comprehensive accessibility audit is claimed.

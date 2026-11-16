@@ -1,0 +1,299 @@
+{
+  "changed": [
+    "pricing.py::<module>",
+    "pricing.py::total"
+  ],
+  "changes": [
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "pricing.py",
+      "status": "modified",
+      "symbol": "pricing.py::<module>"
+    },
+    {
+      "after": {
+        "end_line": 2,
+        "line": 1
+      },
+      "before": {
+        "end_line": 2,
+        "line": 1
+      },
+      "path": "pricing.py",
+      "status": "modified",
+      "symbol": "pricing.py::total"
+    }
+  ],
+  "edges": [
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "checks.py:1 imports pricing"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "checks.py:1 imports pricing"
+        }
+      ],
+      "id": "e8beb691fa20235c49e1eecd78b8065c56e60246903f4e90718d3fe49dd35d0b",
+      "kind": "import",
+      "revision": "both",
+      "source": "checks.py::<module>",
+      "target": "pricing.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 3,
+            "line": 2,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 3,
+            "line": 1,
+            "path": "checks.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 3,
+            "line": 2,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 3,
+            "line": 1,
+            "path": "checks.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "b82bced726f6583c04de4459dc70fd8f201f06f91be9a3dacd911591bb98e94d",
+      "kind": "module",
+      "revision": "both",
+      "source": "checks.py::test_total",
+      "target": "checks.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 3,
+            "line": 3,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "checks.py:3 calls total"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 3,
+            "line": 3,
+            "path": "checks.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "checks.py:3 calls total"
+        }
+      ],
+      "id": "7e7317d0d39d54de9151940b5b3593170e3f9c320d1322469a9e791035bea5a8",
+      "kind": "call",
+      "revision": "both",
+      "source": "checks.py::test_total",
+      "target": "pricing.py::total"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "Conservative dependency on module initialization"
+        }
+      ],
+      "id": "44f92b636ec76b2ccaec57742e48e9b91d57f7c0bbf3692bda4b6bc2a283ad76",
+      "kind": "module",
+      "revision": "both",
+      "source": "pricing.py::total",
+      "target": "pricing.py::<module>"
+    },
+    {
+      "after": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "test_conditional.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "test_conditional.py:1 imports pricing"
+        }
+      ],
+      "before": [
+        {
+          "location": {
+            "end_line": 1,
+            "line": 1,
+            "path": "test_conditional.py"
+          },
+          "target_location": {
+            "end_line": 2,
+            "line": 1,
+            "path": "pricing.py"
+          },
+          "text": "test_conditional.py:1 imports pricing"
+        }
+      ],
+      "id": "63871ef2b1ad62ff710ebbb8bcfbd96fa56c4a5d0ec879963fd44f16c01c01f7",
+      "kind": "import",
+      "revision": "both",
+      "source": "test_conditional.py::<module>",
+      "target": "pricing.py::<module>"
+    }
+  ],
+  "impacted": [
+    "checks.py::<module>",
+    "checks.py::test_total",
+    "test_conditional.py::<module>"
+  ],
+  "label": "Unsupported test filenames and conditional definitions",
+  "nodes": [
+    {
+      "end_line": 3,
+      "id": "checks.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "checks",
+      "path": "checks.py"
+    },
+    {
+      "end_line": 3,
+      "id": "checks.py::test_total",
+      "kind": "function",
+      "line": 2,
+      "name": "test_total",
+      "path": "checks.py"
+    },
+    {
+      "end_line": 2,
+      "id": "pricing.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "pricing",
+      "path": "pricing.py"
+    },
+    {
+      "end_line": 2,
+      "id": "pricing.py::total",
+      "kind": "function",
+      "line": 1,
+      "name": "total",
+      "path": "pricing.py"
+    },
+    {
+      "end_line": 4,
+      "id": "test_conditional.py::<module>",
+      "kind": "module",
+      "line": 1,
+      "name": "test_conditional",
+      "path": "test_conditional.py"
+    }
+  ],
+  "recommendations": [],
+  "removed": [],
+  "schema_version": "2.0",
+  "source_files": [
+    {
+      "after": {
+        "parse_status": "parsed",
+        "text": "def total(amount):\n    return amount + 1\n"
+      },
+      "before": {
+        "parse_status": "parsed",
+        "text": "def total(amount):\n    return amount\n"
+      },
+      "path": "pricing.py"
+    }
+  ],
+  "stats": {
+    "changed": 2,
+    "edges": 5,
+    "elapsed_ms": 12.5,
+    "files_base": 3,
+    "files_head": 3,
+    "impacted": 3,
+    "recommended_tests": 0,
+    "symbols": 5
+  },
+  "warnings": [
+    "Risk scores prioritize review; they are not calibrated failure probabilities.",
+    "Static analysis is incomplete: dynamic dispatch, fixtures, reflection, re-exports, inheritance and runtime imports may hide dependencies. Keep the full test suite as a gate."
+  ]
+}

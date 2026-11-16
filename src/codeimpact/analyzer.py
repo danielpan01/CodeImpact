@@ -15,6 +15,7 @@ from typing import Literal
 
 from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
+from codeimpact.discovery import is_test_file
 from codeimpact.models import (
     AnalysisRequest,
     DependencyEvidence,
@@ -328,7 +329,7 @@ def build_index(snapshot: Snapshot) -> Index:
                 sid = f"{path}::{name}"
                 index.syntax[sid] = node
                 is_test = (
-                    (PurePosixPath(path).name.startswith("test_") or path.endswith("_test.py"))
+                    is_test_file(path)
                     and node.name.startswith("test_")
                     and not isinstance(node, ast.ClassDef)
                 )

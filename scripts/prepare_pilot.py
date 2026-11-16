@@ -35,7 +35,7 @@ def prepare(directory: Path, output: Path) -> None:
             "No participant observations have been recorded.\n"
             "Follow docs/DEVELOPER_PILOT.md in the CodeImpact checkout.\n"
             "Upload inflection_title.json for the evidence workflow, then\n"
-            "ordered_set_pop.json for the discovery-limit workflow.\n"
+            "ordered_set_pop.json for the expanded-discovery/evidence workflow.\n"
             "Source is JSON data; do not execute or install the upstream projects.\n",
             encoding="utf-8",
         )

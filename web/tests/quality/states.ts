@@ -29,7 +29,7 @@ const manifest = JSON.parse(
   readFileSync(new URL("./fixtures/manifest.json", import.meta.url), "utf8"),
 );
 const reports = Object.fromEntries(
-  ["demo", "mixed", "large", "zero-discovery"].map((name) => [
+  ["demo", "mixed", "large", "unsupported-discovery"].map((name) => [
     name,
     readReport(name),
   ]),
@@ -60,7 +60,7 @@ export async function renderState(page: Page, state: State, theme: Theme) {
     : state === "diagnostics"
       ? "large"
       : state === "zero-discovery"
-        ? state
+        ? "unsupported-discovery"
         : "demo";
   const report = reports[fixture];
   let attempts = 0;
@@ -151,6 +151,12 @@ export async function renderState(page: Page, state: State, theme: Theme) {
     await expect(page.locator(".test-row.selected")).toContainText(
       "test_create_order",
     );
+  }
+  if (state === "zero-discovery") {
+    await page.locator(".discovery-scope summary").click();
+    const scopeEnd = page.locator(".discovery-scope p").last();
+    await scopeEnd.scrollIntoViewIfNeeded();
+    await expect(scopeEnd).toBeInViewport({ ratio: 1 });
   }
   if (["evidence", "mixed", "map", "changes", "deleted"].includes(state)) {
     await showEvidence(page);

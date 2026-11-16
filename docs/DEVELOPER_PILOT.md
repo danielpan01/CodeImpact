@@ -35,12 +35,16 @@ facilitator for help. Try the same tasks on a narrow viewport if practical.
    Compare a different recommended test's conservative module/import explanation.
    Explain why a recommendation does not prove an assertion will fail. Clear the
    search and export the full report; filtering should not trim the export.
-3. Upload `ordered_set_pop.json`. Read **No tests discovered** and its filename
-   guidance. Use **Review changed code**, then select **modified OrderedSet.pop**
-   to see the new `index=-1` argument. Explain why the empty list is not permission
-   to skip the upstream tests. The captured `test.py` contains 30 test functions,
-   outside the current discovery rule. Whole-module previews are bounded; choose
-   the individual method to inspect it, or use the full JSON export.
+3. Upload `ordered_set_pop.json`. Milestone 7 discovers its 30 `test.py` definitions
+   and recommends `test_pop`. Open **Test discovery scope**, then inspect the
+   conservative module/import evidence and **Open changed code**. Select
+   **modified OrderedSet.pop** to see the new `index=-1` argument. Explain why
+   unselected tests are not proven safe to skip; 12 new source labels remain uncertain.
+   Whole-module previews are bounded; use the individual method or full JSON export.
+   For zero discovery, separately upload `tests/fixtures/unsupported-discovery.json`
+   from this checkout. Explain the unsupported filename and conditional-definition
+   boundaries, then use **Review changed code**. The old Ordered Set zero-discovery
+   walkthrough remains a historical milestone 5 result, not current behavior.
 4. Switch light/dark themes, return to Tests and use **New analysis**. Record any
    confusing navigation, lost context, clipping or unreadable evidence.
 

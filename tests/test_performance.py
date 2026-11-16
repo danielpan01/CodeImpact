@@ -44,9 +44,35 @@ def test_benchmark_cannot_write_into_historical_corpus(monkeypatch):
 
 def test_historical_corpus_engine_and_evaluators_remain_preserved():
     receipt = json.loads((ROOT / "benchmarks/preservation.json").read_text())
+    current = json.loads((ROOT / "benchmarks/test-discovery-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256((ROOT / "benchmarks/preservation.json").read_bytes()).hexdigest()
+        == (current["previous_receipt_sha256"])
+    )
     corpus = {p.relative_to(ROOT).as_posix() for p in (ROOT / "corpus").rglob("*") if p.is_file()}
-    assert corpus == {p for p in receipt["files_sha256"] if p.startswith("corpus/")}
-    assert CURRENT_SOURCES <= receipt["files_sha256"].keys()
-    assert len(corpus) == 106
+    historical = {p for p in receipt["files_sha256"] if p.startswith("corpus/")}
+    assert len(historical) == 106
+    assert set(current["added_corpus_sha256"]) == {
+        "corpus/real-v2/baselines/test-discovery-v1.json",
+        "corpus/real-v3/baselines/test-discovery-v1.json",
+        "corpus/real-v3/baselines/test-discovery-v1-labels.json",
+    }
+    assert corpus == historical | current["added_corpus_sha256"].keys()
+    assert CURRENT_SOURCES <= current["current_sources_sha256"].keys()
+    assert set(current["current_sources_sha256"]) == {
+        p for p in receipt["files_sha256"] if p.startswith("src/")
+    } | {"src/codeimpact/discovery.py"}
+    assert set(current["changed_historical_sources"]) == {
+        "src/codeimpact/analyzer.py",
+        "src/codeimpact/corpus.py",
+        "src/codeimpact/fresh_evaluate.py",
+        "src/codeimpact/holdout_evaluate.py",
+        "src/codeimpact/real_evaluate.py",
+    }
     for path, expected in receipt["files_sha256"].items():
+        if path not in current["changed_historical_sources"]:
+            assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
+    for path, expected in (
+        current["added_corpus_sha256"] | current["current_sources_sha256"]
+    ).items():
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path

@@ -17,7 +17,7 @@ def main() -> None:
     inputs = {
         "mixed": "tests/fixtures/mixed-revisions.json",
         "large": "corpus/real-v2/cases/cachetools_lfu.json",
-        "zero-discovery": "corpus/real-v3/cases/ordered_set_pop.json",
+        "unsupported-discovery": "tests/fixtures/unsupported-discovery.json",
     }
     requests = {"demo": demo_request()}
     provenance = {"demo": "src/codeimpact/demo.py"}
@@ -25,7 +25,10 @@ def main() -> None:
         data = json.loads((ROOT / path).read_text())
         requests[name] = AnalysisRequest.model_validate(data.get("request", data))
         provenance[name] = path
-    manifest = {}
+    # Retain archived fixture receipts (including 8C's original zero-discovery
+    # report); refreshed current fixtures are reviewed separately.
+    manifest_path = OUTPUT / "manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     for name, request in requests.items():
         report = analyze(request).model_dump(mode="json")
         # The only variable display field. No counts, source, warnings or evidence

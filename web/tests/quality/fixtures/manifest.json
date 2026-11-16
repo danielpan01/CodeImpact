@@ -26,5 +26,12 @@
     "report_sha256": "de5dac489f8bb7bf3c70829a0f2ae621265e1dd102e0d1cd474449696b4e5997",
     "recommendations": 0,
     "warnings": 166
+  },
+  "unsupported-discovery": {
+    "input": "tests/fixtures/unsupported-discovery.json",
+    "input_sha256": "6e0fd662551c4fdaf72328359322b11daa17ca33da9b84a0dfaf6208a6c5208b",
+    "report_sha256": "bb324b6837b384c40209e1f281e07b0fbce29cc7db06a6f4efb926ad4c3fa444",
+    "recommendations": 0,
+    "warnings": 2
   }
 }
