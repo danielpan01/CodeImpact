@@ -2876,3 +2876,172 @@ is retained as publication history.
 RLIMIT_AS skip, one existing Starlette/httpx warning**, 94% statement coverage,
 lint/types and production build passing. The receipt is
 `reports/milestone8c-publication-check.log`; `git diff --check` also passes.
+
+## Milestone 7 — bounded test discovery (November 16, 2026)
+
+Starting tree: clean, with no user edits. Milestone 8C was published at
+`753e234bb306370b666c766d24b279c50fa0d878`; its branch checks passed. The owner
+authorized its merge in [PR #15](https://github.com/danielpan01/CodeImpact/pull/15).
+Merged commit `7084ab04dd60881a6dde6e91986911f1d9f6ece2` subsequently passed both
+[post-merge jobs](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
+Milestone 7 started from that commit on local `codex/test-discovery-milestone-7`.
+Its changes remain unstaged/uncommitted; no new commit, push, PR or merge was made.
+
+### Scope and evidence
+
+The shared `test-files-v2` filename policy adds literal, case-sensitive `test.py`
+while retaining `test_*.py` / `*_test.py`, direct class methods and nested functions.
+Utility/production filenames and compound-statement definitions stay excluded.
+No runtime collection, configuration imports, dependency installation or upstream
+execution occurred. Scoring, selection filters, stable IDs, graph direction,
+deleted-symbol handling, typed paths, source/resource limits and application/export
+schema 2.0 are unchanged. Milestone 9 fallback work was not included.
+
+Before implementation or expanded recommendations, the 30 newly eligible Ordered
+Set definitions received source-only draft labels: **1 affected, 17 unaffected,
+12 uncertain**. The [label receipt](../corpus/real-v3/baselines/test-discovery-v1-labels.json)
+retains exact source ranges and rationales. Its initial SHA-256 remains
+`bb40f5912e4cc8e535c8aa908db2c44871a355336ca9f4457df862356653b879`.
+No independent reviewer is claimed. The original 90 labels and 30 excluded entries
+are untouched; uncertain definitions remain unknown even when not recommended.
+
+Only `test_pop` is newly selected, with the existing conservative path
+`test.py::test_pop → test.py::<module> → ordered_set.py::<module>`.
+That is not a newly resolved instance call or observed test failure. All
+recommendations pass the existing typed path/revision evidence validation.
+The other five v3 analysis hashes and the full stable v2 measurement are unchanged.
+A test-scoped replay of only the legacy filename predicate reproduces the **exact
+original v3 first-report SHA-256 and original discrepancy failures**; production
+analysis uses the current policy and refuses missing labels.
+
+### Observed checks
+
+| Check | Result |
+| --- | --- |
+| Discovery regressions before implementation | **8 failed, 7 passed**, demonstrating missing literal `test.py` support without changing old scope controls |
+| Focused discovery/evaluation/preservation checks | **32 passed** after the final legacy replay test; no upstream code execution |
+| Corpus and evaluation regression suite | **156 passed** after updating explicit versioned expectations; additional new cases are included in the full check |
+| `make check` | **841 passed, 1 skipped, 1 warning**, 265.06 s; 94% statement coverage; Ruff lint/format, mypy (22 files), TypeScript and production build passed |
+| `make evaluate` | Passed; **23 TP / 0 FP / 2 FN / 32 TN**, two uncertain selections; stable output byte-identical |
+| `make evaluate-real` | Passed; **45 TP / 0 FP / 0 FN / 123 TN**, 56/201 selected, 11 uncertain selections; stable output byte-identical |
+| `make evaluate-real-v2` | Passed; **109 TP / 273 FP / 0 FN / 177 TN**, 395/581 selected, 13/22 uncertain selected; complete measurement identical to mapping baseline |
+| `make evaluate-real-v3` | Passed; **42 TP / 43 FP / 0 FN / 23 TN**, 85/120 selected, 0/12 uncertain selected; original 84/90 and 30 exclusions retained separately |
+| `make verify-pilot` | Passed: readiness, static UI, public demo, protected analyses, exact frozen report and no report storage |
+| `cd web && npm run format:check` | Passed |
+| Focused browser regressions, one worker | **15 passed** across desktop/mobile Chromium, Firefox, desktop/phone WebKit |
+| `cd web && npm run test:e2e -- --workers=1` | **253 passed**, 4.8 min; all five projects, no skipped tests or retries |
+| Canonical `quality:container -- visual` | **16 passed**, 13.1 s, zero retries; no masks or tolerance changes |
+| Canonical `quality:container -- a11y` | **48 passed**, 55.8 s; zero reported enabled-rule violations, six cases retain incomplete contrast findings |
+| `git diff --check` | Passed; staging area empty and HEAD remains the 8C merge commit |
+| Historical hashes | **176/176 protected files/artifacts unchanged**, including all 106 original corpus files, benchmark records, all 16 original 8C expected images and stable historical evaluation reports |
+| Local preview | HTTP 200 for UI and health; real Ordered Set snapshot through the preview discovers 30 definitions and recommends only `test_pop` |
+
+The one expected platform skip is `test_linux_address_space_limit`: macOS does
+not enforce the tested Linux `RLIMIT_AS` behavior. The Python warning is the
+existing Starlette/httpx test-client deprecation. Browser tooling reports the
+existing `NO_COLOR`/`FORCE_COLOR` warning; Docker reports its legacy-builder
+notice. No dependency upgrade was introduced to silence these warnings.
+
+The first full check exposed the milestone 6 preservation test's exact 106-file
+inventory assertion: three intentionally added versioned corpus receipts required
+an explicit extension. The old receipt was not edited. The new preservation
+receipt pins it, all old corpus bytes, the exact three additions, and the current
+engine/evaluator inventory. Old source hashes remain historical; precisely five
+changed implementation files have separately pinned current hashes.
+The first evaluation-regression run also exposed eight obsolete wrapper/count
+expectations, corrected to assert both the preserved originals and new versions.
+
+Initial native browser attempts encountered an unset bundled-browser path and
+restricted-process launch failures. The correctly launched parallel run then had
+one new mobile assertion select a hidden result-row copy instead of the visible
+inspector label, and six native WebKit timeouts with `html` intercepting pointer
+hits before analysis. Scoping the assertion to the inspector fixed the selector.
+The unchanged Safari entry/phone behavior passed in isolation and all 15 focused
+cases passed with one worker; no forced clicks, increased timeouts, retries or
+weakened assertions were added. The full local suite uses one worker to avoid
+that concurrent native-browser issue; CI browser projects remain unchanged.
+
+### UI and screenshot review
+
+The new scope disclosure uses the 8A theme/control styles below results, preserving
+the first complete recommendation. New browser cases cover 30 discovered definitions,
+conservative evidence, changed source, full exports, zero discovery versus zero
+recommendations, keyboard expansion and reaching the final scope paragraph.
+The expanded desktop empty-state explanation initially clipped at the panel edge;
+it now uses the existing scrollable results area, with an explicit viewport assertion.
+
+The active zero-discovery fixture now contains authored unsupported filename and
+conditional-definition cases. Its audit records both; the UI explicitly counts
+only the one indexed test-shaped ordinary function. Original Ordered Set UI data
+and its manifest entry remain archived unchanged. Other active fixture bytes are
+unchanged apart from the already documented fixed elapsed-time convention.
+
+The first canonical visual run passed 14/16, identifying the intended empty and
+zero-discovery differences. Expected/actual/diff images and the actual running UI
+were inspected. The new phone image uses the existing full-app-shell capture
+pattern to include the complete disclosure; the earlier component capture clipped
+its bottom despite correct live layout bounds. Exactly two reviewed expected
+images were added under new names, retaining all old baselines:
+
+- Empty phone: [8C before](../web/tests/quality/baselines/empty-phone-light.png) →
+  [7 after](../web/tests/quality/baselines/milestone7-empty-phone-light.png).
+- Zero discovery desktop: [8C before](../web/tests/quality/baselines/zero-discovery-desktop-dark.png) →
+  [7 after](../web/tests/quality/baselines/milestone7-zero-discovery-desktop-dark.png).
+
+The matrix remains 16 active comparisons, 18 retained image files. Canonical scans
+use the documented 8C Linux ARM64/Ubuntu/Playwright 1.65.0/Chromium 158 environment.
+Expanded scope is scanned in both themes and sizes; its collapsed visual capture
+keeps the zero-discovery heading/action in view. The same six incomplete
+`color-contrast` cases remain: transformed Map labels in four theme/size cases
+(12 desktop nodes or six phone nodes), and one clipped trail label in each desktop
+deleted-source case. No rules were disabled or regions excluded. These are manual
+review findings, not established violations or certification. There was no new
+screen-reader study, independent usability review, human pilot or live hosting.
+
+### Artifacts, preview and next step
+
+Current output files are `reports/real-v2-discovery-v1-evaluation.json` (fresh wrapper
+5.0) and `reports/real-v3-discovery-v1-evaluation.json` (holdout wrapper 2.0).
+Original output filenames, snapshots, freezes, labels, provenance and baseline
+receipts are unchanged. The complete decisions and measurement comparison are in
+[TEST_DISCOVERY.md](TEST_DISCOVERY.md). Starting hashes and the unchanged pre-analysis
+label receipt are in `reports/milestone7-before/`; completion hashes/metrics are in
+`reports/milestone7-preservation-result.json`. Run logs use `reports/milestone7-*`.
+Canonical reports are under `web/test-results/quality/canonical/{visual,a11y}/`;
+full axe findings are retained, with a compact review in
+`reports/milestone7-a11y-review.json`. Browser artifacts use `web/test-results/e2e/`.
+
+The local preview was verified at http://127.0.0.1:5185. To start it from the root:
+
+```sh
+CODEIMPACT_WEB_PORT=5185 CODEIMPACT_API_PORT=8015 make dev
+```
+
+The local test VM was stopped after canonical verification. Hosting and the human
+pilot remain owner-deferred. Next is **milestone 9A**, one bounded Cachetools LFU
+fallback pattern; its 125 false positives are unchanged. Do not combine the
+remaining 9-series mechanisms or claim unselected/uncertain tests are safe to omit.
+
+### Milestone 7 publication recheck — November 16, 2026
+
+The owner subsequently requested committing, pushing and merging milestone 7.
+The implementation-stage status above records the earlier handoff. All required
+checks were rerun before publication: `make check` passed **841 Python tests**,
+with the same expected macOS-only skip and existing deprecation warning, plus
+lint, formatting, types and the production build. All **253 browser checks**
+passed with one worker, without skips or retries. All four evaluations matched
+their recorded baselines, and `make verify-pilot` passed.
+
+The canonical Linux ARM64 container passed **16 visual comparisons** and **48
+accessibility scans**. The same six incomplete contrast cases described above
+remain manual-review findings; there were no enabled-rule violations or changes
+to masks, rules, tolerances or expected screenshots during this recheck. The
+existing local test VM was started for these checks and stopped afterward.
+
+All **176 protected historical files/artifacts** retained their original hashes,
+and the pre-analysis label receipt retained its recorded SHA-256. Frontend
+formatting, documentation link targets and diff whitespace checks passed. No
+application correction was needed; current status wording was prepared for
+publication. Remote CI and merge status are recorded on the publication PR.
+
+Local logs: `reports/premerge-m7-{check,browser,evaluations,pilot,visual,a11y}.log`.

@@ -3,11 +3,19 @@
 import ast
 import json
 import re
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StringConstraints,
+    ValidationInfo,
+    model_validator,
+)
 
+from codeimpact.discovery import CURRENT_POLICY, DiscoveryPolicy, is_test_file
 from codeimpact.models import AnalysisRequest, Snapshot
 
 MAX_CASE_BYTES = 1_000_000
@@ -16,7 +24,7 @@ MAX_CORPUS_BYTES = 20_000_000
 Nonblank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
-def discover_tests(snapshot: Snapshot) -> set[str]:
+def discover_tests(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> set[str]:
     """Independently apply CodeImpact's discovery rule, without importing source.
 
     This is not pytest collection. Only direct definitions in modules, classes and
@@ -36,7 +44,7 @@ def discover_tests(snapshot: Snapshot) -> set[str]:
                 visit(path, node.body, name)
 
     for path, source in sorted(snapshot.files.items()):
-        if not (PurePosixPath(path).name.startswith("test_") or path.endswith("_test.py")):
+        if not is_test_file(path, policy=policy):
             continue
         try:
             tree = ast.parse(source, filename=path)
@@ -70,7 +78,7 @@ class CorpusCase(StrictModel):
     limitations: list[Nonblank]
 
     @model_validator(mode="after")
-    def validate_labels(self) -> "CorpusCase":
+    def validate_labels(self, info: ValidationInfo) -> "CorpusCase":
         if len(set(self.features)) != len(self.features):
             raise ValueError("Feature tags must be unique")
         if any(not re.fullmatch(r"[a-z][a-z0-9_]*", tag) for tag in self.features):
@@ -82,7 +90,8 @@ class CorpusCase(StrictModel):
         )
         if affected & unaffected or affected & unknown or unaffected & unknown:
             raise ValueError("Affected, unaffected and unclassified labels must be disjoint")
-        tests = discover_tests(self.request.head)
+        policy = (info.context or {}).get("discovery_policy", CURRENT_POLICY)
+        tests = discover_tests(self.request.head, policy=policy)
         labels = affected | unaffected | unknown
         if labels - tests:
             raise ValueError(f"Labels must identify a head test: {sorted(labels - tests)}")
@@ -119,7 +128,9 @@ def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def load_corpus(directory: Path) -> list[CorpusCase]:
+def load_corpus(
+    directory: Path, *, discovery_policy: DiscoveryPolicy = CURRENT_POLICY
+) -> list[CorpusCase]:
     """Read bounded JSON files only. Never materialize or execute their snapshots."""
     if directory.is_symlink():
         raise ValueError("Corpus directory must not be a symlink")
@@ -140,7 +151,7 @@ def load_corpus(directory: Path) -> list[CorpusCase]:
             raise ValueError(f"Corpus size limit exceeded at {path.name}")
         try:
             data = json.loads(raw, object_pairs_hook=_unique_object)
-            case = CorpusCase.model_validate(data)
+            case = CorpusCase.model_validate(data, context={"discovery_policy": discovery_policy})
         except (ValueError, RecursionError) as exc:
             raise ValueError(f"{path.name}: {exc}") from exc
         if case.id in cases:

@@ -7,8 +7,10 @@ Implemented locally from clean `main` at
 [branch check](https://github.com/danielpan01/CodeImpact/actions/runs/43794161848)
 and [post-merge check](https://github.com/danielpan01/CodeImpact/actions/runs/43795661155)
 passed. The owner subsequently authorized committing and pushing this milestone
-on `codex/frontend-milestone-8c`. Merge is pending; consult that branch’s Actions
-results for remote verification. The results below record the local implementation
+on `codex/frontend-milestone-8c`. It subsequently merged in
+[PR #15](https://github.com/danielpan01/CodeImpact/pull/15) as
+`7084ab04dd60881a6dde6e91986911f1d9f6ece2`, with
+[post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061). The results below record the local implementation
 handoff. Live hosting and the human pilot remain deferred.
 
 ## Canonical environment
@@ -272,3 +274,15 @@ Implementation references: [Playwright comparisons](https://playwright.dev/docs/
 [container guidance](https://playwright.dev/docs/docker),
 [axe integration and limitations](https://playwright.dev/docs/accessibility-testing),
 and [GitHub's ARM64 runner availability](https://github.blog/changelog/2026-01-29-arm64-standard-runners-are-now-available-in-private-repositories/).
+
+## Milestone 7 continuation
+
+The preceding counts and images remain the historical 8C receipt. Milestone 7
+adds literal `test.py` discovery, so Ordered Set is now a positive browser case.
+The active zero-discovery fixture is separately authored unsupported source; the
+original fixture/manifest entry remain archived unchanged. Only two active images
+change, under new `milestone7-` filenames. All 16 original baseline PNGs remain
+unchanged, with 16 active comparisons and 18 retained images. The 48 axe scans
+include the expanded new scope disclosure. No tolerance, rule, retries or region
+exclusions changed. See [the reviewed differences](TEST_DISCOVERY.md#frontend-and-visual-review)
+and the separate milestone 7 validation record.

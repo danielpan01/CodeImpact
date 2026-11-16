@@ -30,6 +30,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Module-level partial calls** | Resolves bounded `functools.partial` bindings to unambiguous functions, with alias, re-export and lexical-scope guards. |
 | **Argument-sensitive call paths** | Filters existing resolved paths when bounded argument guards establish a bypass or early exit; preserves other fallback evidence. |
 | **Constructor and factory arguments** | Tracks bounded default overrides, partial factories, forwarded options and early exits; uncertain cases retain recommendations. |
+| **Bounded test discovery** | Recognizes `test_` definitions in `test.py`, `test_*.py` and `*_test.py`, with explicit static-discovery limits. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
@@ -148,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-evaluation.json
+# reports/real-v2-discovery-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -178,7 +179,9 @@ record independent human review as pending.
 All original snapshots, labels, provenance, discrepancy annotations and all three prior
 v2 baselines are unchanged. The separate
 [`mapping-fallback-v1` baseline](corpus/real-v2/baselines/mapping-fallback-v1.json)
-records current source hashes, results and remaining mistakes. The offline gate
+records the mapping milestone’s source hashes, results and remaining mistakes.
+The new [`test-discovery-v1` replay](corpus/real-v2/baselines/test-discovery-v1.json)
+pins the current engine with exactly the same v2 measurement. The offline gate
 verifies both historical receipts and the active baseline; it never accepts drift
 automatically. V2 is **development/regression data**, not unseen validation. Labels
 remain agent drafted, with no upstream tests executed. See
@@ -188,13 +191,19 @@ merge gate; these measurements do not establish that omitted tests are safe.
 
 ### Fresh-repository evaluation v3
 
-`make evaluate-real-v3` replays six unused changes from PyISO8601, Inflection and
+`make evaluate-real-v3` replays six pinned changes from PyISO8601, Inflection and
 Ordered Set, frozen before analysis against merged PR #10. First results:
 **84/90 discovered definitions selected; 41 TP, 43 FP, 0 FN, 6 TN**. Draft-label
 precision is 48.81%; recall is 100% only within that discovered inventory.
-Thirty more test functions in `test.py` fall outside discovery and the metrics.
-The dashboard now explains that zero-discovery state explicitly. The analyzer and
-all historical baselines remain unchanged; all labels still await independent review.
+Those original metrics excluded 30 definitions in `test.py`; that inventory and all
+historical baselines remain frozen. Milestone 7 adds bounded literal `test.py`
+discovery with 30 new source-only draft labels established before expanded analysis.
+The separately versioned result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN**,
+plus **12 uncertain definitions, none selected**. Only `test_pop` is newly recommended,
+with conservative module/import evidence; the other five analyses are unchanged.
+The output is `reports/real-v3-discovery-v1-evaluation.json`. The dashboard explains
+static discovery scope and distinguishes zero discovery from zero recommendations.
+All labels still await independent review. See [policy and preservation](docs/TEST_DISCOVERY.md).
 See [results and limitations](docs/REAL_EVALUATION_V3.md).
 
 The owner deferred the human developer pilot. `make pilot` prepares two snapshot
@@ -246,14 +255,14 @@ source-label review is still pending. GitHub App authorization, persisted jobs a
 cross-request caching are not implemented.
 General dynamic dispatch and further fallback precision remain separate work.
 The [November 15 repository review](docs/REPOSITORY_REVIEW.md) confirms the implemented
-roadmap and records a phone-layout refinement. The next analyzer milestone is bounded
-test-discovery coverage, motivated by v3's 30 omitted definitions. Visual refinement
+roadmap and records a phone-layout refinement. Milestone 7 implements bounded `test.py` discovery and explicit scope,
+with new labels and measurements that preserve all historical baselines. Visual refinement
 8A merged in PR #13, including the phone regression and CI timeout fix. Milestone
 8B merged in PR #14 with searchable, grouped diagnostics and unchanged report data.
-**8C is implemented:** pinned visual comparisons, rendered-accessibility
-gates and narrowly scoped semantic fixes. Publication uses
-`codex/frontend-milestone-8c`; check Actions for that branch’s remote results.
-Merge status is separate from the recorded local verification. Bounded analyzer milestone **7** is next. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+**8C merged in [PR #15](https://github.com/danielpan01/CodeImpact/pull/15)**,
+with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
+Its pinned visual/accessibility gates remain active. Milestone 7 is implemented.
+Bounded Cachetools fallback milestone **9A** is next. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

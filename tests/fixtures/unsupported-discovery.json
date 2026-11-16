@@ -1,0 +1,17 @@
+{
+  "label": "Unsupported test filenames and conditional definitions",
+  "base": {
+    "files": {
+      "pricing.py": "def total(amount):\n    return amount\n",
+      "checks.py": "from pricing import total\ndef test_total():\n    assert total(10) == 10\n",
+      "test_conditional.py": "from pricing import total\nif True:\n    def test_conditional():\n        assert total(10) == 10\n"
+    }
+  },
+  "head": {
+    "files": {
+      "pricing.py": "def total(amount):\n    return amount + 1\n",
+      "checks.py": "from pricing import total\ndef test_total():\n    assert total(10) == 10\n",
+      "test_conditional.py": "from pricing import total\nif True:\n    def test_conditional():\n        assert total(10) == 10\n"
+    }
+  }
+}

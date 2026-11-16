@@ -2663,3 +2663,24 @@ input[aria-invalid="true"] {
 .diagnostics {
   scroll-margin-top: 120px;
 }
+/* Scope follows the results so the compact first recommendation stays in view. */
+.discovery-scope {
+  padding: 0 16px 12px;
+  color: var(--muted);
+  text-align: left;
+  font-size: 14px;
+}
+.empty-tests {
+  display: flex;
+  flex-direction: column;
+}
+.discovery-scope summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+.discovery-scope p {
+  margin: 8px 0;
+  max-width: 70ch;
+}

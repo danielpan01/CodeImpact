@@ -15,7 +15,7 @@ const cases: [State, keyof typeof layouts, Theme, string?][] = [
   ["deleted", "phone", "light", ".graph-panel"],
   ["diagnostics", "desktop", "light", ".diagnostics"],
   ["diagnostics", "phone", "dark", ".diagnostics"],
-  ["empty", "phone", "light", ".graph-panel"],
+  ["empty", "phone", "light", ".app-shell"],
   ["zero-discovery", "desktop", "dark"],
   ["error", "phone", "dark"],
   ["loading", "desktop", "light"],
@@ -39,7 +39,13 @@ for (const [state, layout, theme, selector] of cases) {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       const { release } = await renderState(page, state, theme);
-      if (state === "mixed") await page.evaluate(() => window.scrollTo(0, 0));
+      if (state === "zero-discovery") {
+        // Capture the empty-state heading and action. Browser/axe checks exercise
+        // the expanded explanation, including scrolling to its final paragraph.
+        await page.locator(".discovery-scope summary").click();
+      }
+      if (["mixed", "empty"].includes(state))
+        await page.evaluate(() => window.scrollTo(0, 0));
       if (state === "tests" && layout === "phone") {
         await page.evaluate(() => window.scrollTo(0, 0));
         await expect(page.locator(".test-row").first()).toBeInViewport({
@@ -55,7 +61,11 @@ for (const [state, layout, theme, selector] of cases) {
         });
       }
       const target = selector ? page.locator(selector) : page;
-      const name = `${state}-${layout}-${theme}.png`;
+      // Preserve 8C's original images; these two states intentionally changed in 7.
+      const prefix = ["empty", "zero-discovery"].includes(state)
+        ? "milestone7-"
+        : "";
+      const name = `${prefix}${state}-${layout}-${theme}.png`;
       try {
         if (process.env.QUALITY_MODE === "preview") {
           await target.screenshot({

@@ -23,9 +23,13 @@ flowchart LR
 ## Symbols and semantic comparison
 
 Each node has an ID `repository/path.py::qualified.name`, source lines and a kind:
-module, class, function or test. Tests are functions named `test_*` inside `test_*.py`
-or `*_test.py` files, including class methods. This is a discovery heuristic, not
-pytest collection. Parametrization and fixture injection are not modeled.
+module, class, function or test. Policy `test-files-v2` recognizes functions named
+`test_*` inside case-sensitive `test.py`, `test_*.py` or `*_test.py` files at any
+directory depth, including direct class methods and nested functions. This shared
+filename predicate is also used by the independent corpus walker and discovery
+audit. It is static discovery, not pytest collection. Arbitrary production files,
+parametrized executions, inherited test executions and fixture injection are not
+collected. See [bounded scope and versioned measurements](TEST_DISCOVERY.md).
 
 `ast.dump(..., include_attributes=False)` is SHA-256 hashed for every successfully
 parsed module, including empty and comment-only modules, to compare semantics
@@ -603,7 +607,7 @@ cases. No expected results are generated or accepted automatically.
 The mapping milestone adds `baselines/mapping-fallback-v1.json`, pinning nine engine
 files and the argument baseline's file hash. The gate validates both links in the
 mapping → argument → partial receipt chain; all three historical measurements remain
-intact. The fresh extension is now **4.0**. Its `previous_baseline`,
+intact. The mapping milestone’s fresh extension is **4.0** (historical). Its `previous_baseline`,
 `previous_baseline_sha256` and `previous_summary` identify the argument baseline.
 New `partial_baseline`, `partial_baseline_sha256` and `partial_summary` fields preserve
 the earlier summary alongside `original_summary` and current results.
@@ -680,6 +684,29 @@ empty-state wording from nonremoved test nodes; no report schema change is neede
 `scripts/prepare_pilot.py` exports two validated snapshot requests as JSON data,
 refusing to replace an existing output directory. Human pilot status is deferred,
 not inferred from browser tests. See [v3 results](REAL_EVALUATION_V3.md).
+
+### Milestone 7 discovery replay
+
+The original v3 audit is replayed under `test-files-v1`; current analysis uses
+`test-files-v2`. Frozen cases load with their historical label policy, then each
+evaluated case must validate complete current labels before analysis. A separate
+30-definition source-only draft extends Ordered Set; an extension cannot rewrite
+an original label. Exact source ranges, inventory, input hashes and draft status
+are validated. The original outside-discovery inventory remains in the current
+report alongside the expanded inventory.
+
+The v2 `test-discovery-v1` receipt preserves the full mapping measurement while
+pinning the current engine. The fresh wrapper is **5.0**; mapping, argument,
+partial and original summaries are separate. V3’s new `test-discovery-v1` receipt
+pins the expanded measurement, original freeze/baseline and new labels. The
+holdout wrapper is **2.0**, with `original_summary`, `original_discovery`, policy,
+label receipt and current match status. Make targets write new
+`real-v2-discovery-v1-evaluation.json` / `real-v3-discovery-v1-evaluation.json`
+files. Original outputs and corpus/benchmark receipts are retained.
+Application/export 2.0, dataset 1.0 and evaluation 1.0 contracts are unchanged.
+The dashboard explains scope from existing node data; its outside-scope count
+only counts indexed test-shaped ordinary functions, not invisible definitions.
+See [TEST_DISCOVERY.md](TEST_DISCOVERY.md) for current results and exclusions.
 
 ## Bounded execution and local pilot service
 

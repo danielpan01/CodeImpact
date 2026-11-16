@@ -11,7 +11,7 @@ import pytest
 from codeimpact import holdout_evaluate as holdout
 from codeimpact.corpus import CorpusCase, load_corpus
 from codeimpact.evaluate import evaluate
-from codeimpact.fresh_evaluate import CURRENT_SOURCES, evaluate_fresh
+from codeimpact.fresh_evaluate import CURRENT_SOURCES, MAPPING_SOURCES, evaluate_fresh, measurement
 from codeimpact.models import Snapshot
 from codeimpact.real_evaluate import evaluate_real, label_hash
 
@@ -51,11 +51,11 @@ def test_source_discovery_audit_does_not_execute_or_collect():
         )
     )
     assert audit["discovered_ids"] == [
+        "test.py::test_other",
         "test_regular.py::Group.test_method",
         "test_regular.py::test_direct",
     ]
     assert audit["outside_discovery"] == {
-        "test.py::test_other": "unsupported_filename",
         "test_regular.py::test_conditional": "compound_statement",
     }
     assert audit["test_shaped_definition_count"] == 4
@@ -65,7 +65,7 @@ def test_source_discovery_audit_does_not_execute_or_collect():
 def test_reference_freeze_and_source_review_pack(monkeypatch):
     frozen = holdout.validate_frozen(DATA)
     assert frozen.reference_commit == holdout.REFERENCE
-    assert set(frozen.analyzer_sha256) == CURRENT_SOURCES
+    assert set(frozen.analyzer_sha256) == MAPPING_SOURCES
     assert len(frozen.files_sha256) == 31
     pack = (DATA / "REVIEW.md").read_text()
     assert pack.startswith(script(monkeypatch, "review_real").review_pack(DATA))
@@ -130,7 +130,9 @@ def test_unsafe_receipt_paths_are_rejected(tmp_path, path):
         holdout.safe_file(tmp_path, path)
 
 
-@pytest.mark.parametrize("path", ["licenses", "README.md", "first-run.json"])
+@pytest.mark.parametrize(
+    "path", ["licenses", "README.md", "first-run.json", "baselines", holdout.LABELS_FILE]
+)
 def test_symlink_files_and_parents_rejected(dataset, tmp_path, path):
     original = dataset / path
     outside = tmp_path / "outside"
@@ -182,7 +184,7 @@ def test_missing_first_run_fails_without_creating_receipt(dataset, tmp_path):
     assert not path.exists()
 
 
-def test_no_upstream_import_network_or_subprocess_and_exact_first_measurement(monkeypatch):
+def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monkeypatch):
     import builtins
     import socket
     import subprocess
@@ -199,32 +201,41 @@ def test_no_upstream_import_network_or_subprocess_and_exact_first_measurement(mo
     monkeypatch.setattr(builtins, "__import__", guarded)
     monkeypatch.setattr(socket.socket, "connect", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
-    original_report = evaluate_real(DATA)
-    original_raw = (json.dumps(original_report, indent=2, sort_keys=True) + "\n").encode()
+    # The old frozen case lacks labels for the newly supported inventory. Refuse
+    # an unversioned evaluation rather than silently dropping those definitions.
+    with pytest.raises(ValueError, match="Every head test needs an explicit label"):
+        evaluate_real(DATA)
     receipt = json.loads((DATA / "first-run.json").read_text())
-    assert hashlib.sha256(original_raw).hexdigest() == receipt["first_report_sha256"]
-    assert original_report["evaluation"]["regressions"] == receipt["initial_regressions"]
     report = holdout.evaluate_holdout(DATA)
     assert report == holdout.evaluate_holdout(DATA)
-    assert report["holdout_evaluation_schema_version"] == "1.0"
-    assert report["first_measurement_matches"]
+    assert report["holdout_evaluation_schema_version"] == "2.0"
+    assert not report["first_measurement_matches"]
+    assert report["current_measurement_matches"]
+    assert report["original_summary"] == receipt["measurement"]["summary"]
+    assert report["original_summary"]["test_count"] == 90
+    assert report["original_summary"]["selected_count"] == 84
+    for cid, digest in measurement(report)["analysis_sha256"].items():
+        if cid != "ordered_set_pop":
+            assert digest == receipt["measurement"]["analysis_sha256"][cid]
     assert report["evaluation"]["regressions"] == []
     assert len(report["initial_regressions"]) == 3
-    assert report["summary"]["test_count"] == 90
-    assert report["summary"]["selected_count"] == 84
+    assert report["summary"]["test_count"] == 120
+    assert report["summary"]["selected_count"] == 85
     assert report["summary"]["label_status_counts"] == {"draft": 6}
     assert report["summary"]["metrics"]["counts"] == {
-        "tp": 41,
+        "tp": 42,
         "fp": 43,
         "fn": 0,
-        "tn": 6,
+        "tn": 23,
         "unclassified_recommendations": 0,
     }
     missing = next(case for case in report["cases"] if case["id"] == "ordered_set_pop")
-    assert missing["test_count"] == 0
-    assert missing["metrics"]["recall"]["value"] is None
-    assert missing["metrics"]["precision"]["value"] is None
-    outside = report["discovery"]["ordered_set_pop"]["outside_discovery"]
+    assert missing["test_count"] == 30
+    assert missing["selected_test_ids"] == ["test.py::test_pop"]
+    assert missing["unclassified_test_count"] == 12
+    assert missing["unclassified_recommendation_count"] == 0
+    assert report["discovery"]["ordered_set_pop"]["outside_discovery"] == {}
+    outside = report["original_discovery"]["ordered_set_pop"]["outside_discovery"]
     assert len(outside) == 30
     assert outside["test.py::test_pop"] == "unsupported_filename"
 
@@ -249,7 +260,7 @@ def test_annotation_drift_fails_gate_without_relabeling(dataset, tmp_path):
     before = (dataset / "cases/inflection_title.json").read_bytes()
     edit(
         dataset,
-        "baseline.json",
+        holdout.BASELINE_FILE,
         lambda data: data["annotations"]["inflection_title"]["known_discrepancies"][
             "false_positives"
         ].clear(),
@@ -270,22 +281,26 @@ def test_measurement_drift_fails_gate(monkeypatch):
     report = holdout.evaluate_holdout(DATA)
     assert not report["first_measurement_matches"]
     assert report["evaluation"]["regressions"] == [
-        "v3: measurement differs from frozen first run",
+        "v3: measurement differs from test-discovery-v1",
     ]
 
 
-def test_old_corpus_and_all_three_reports_are_byte_identical():
+def test_old_corpus_and_unchanged_reports_preserve_versioned_v2_measurements():
     receipt = holdout.validate_preservation(DATA)
     reports = {
         "corpus-evaluation.json": evaluate(load_corpus(ROOT / "corpus/cases")).model_dump(
             mode="json"
         ),
         "real-evaluation.json": evaluate_real(ROOT / "corpus/real"),
-        "real-v2-evaluation.json": evaluate_fresh(ROOT / "corpus/real-v2"),
     }
     for name, report in reports.items():
         raw = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode()
         assert hashlib.sha256(raw).hexdigest() == receipt.reports_sha256[name]
+    mapping = json.loads((ROOT / "corpus/real-v2/baselines/mapping-fallback-v1.json").read_text())
+    assert measurement(evaluate_fresh(ROOT / "corpus/real-v2")) == mapping["measurement"]
+    assert receipt.reports_sha256["real-v2-evaluation.json"] == (
+        "e4cd3fe60b1728dccfb5abc6326b998815f7f3d477314638a1fbcf520397b254"
+    )
 
 
 def test_pilot_preparation_only_exports_frozen_json(monkeypatch, tmp_path):

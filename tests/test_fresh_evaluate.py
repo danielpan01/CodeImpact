@@ -10,6 +10,7 @@ from codeimpact.fresh_evaluate import (
     ARGUMENT_BASELINE_FILE,
     BASELINE_FILE,
     CURRENT_SOURCES,
+    MAPPING_BASELINE_FILE,
     PARTIAL_BASELINE_FILE,
     evaluate_fresh,
     main,
@@ -179,11 +180,17 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     report = evaluate_fresh(DATA)
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
-    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 284
+    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 273
+    assert report["argument_summary"]["metrics"]["counts"]["fp"] == 284
     assert report["partial_summary"]["metrics"]["counts"]["fp"] == 291
     assert report["original_summary"]["metrics"]["counts"]["fn"] == 44
-    assert report["active_baseline"] == "mapping-fallback-v1"
-    assert report["fresh_evaluation_schema_version"] == "4.0"
+    assert report["active_baseline"] == "test-discovery-v1"
+    assert report["fresh_evaluation_schema_version"] == "5.0"
+    from codeimpact.fresh_evaluate import measurement
+
+    assert (
+        measurement(report) == json.loads((DATA / MAPPING_BASELINE_FILE).read_text())["measurement"]
+    )
     assert report["evaluation"]["regressions"] == []
     summary = report["summary"]
     assert summary["test_count"] == 581
@@ -325,7 +332,7 @@ def test_preserved_v2_files_are_byte_identical():
     import hashlib
 
     baseline = json.loads((DATA / BASELINE_FILE).read_text())
-    assert len(baseline["historical_files_sha256"]) == 26
+    assert len(baseline["historical_files_sha256"]) == 27
     for relative, expected in baseline["historical_files_sha256"].items():
         assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == expected, relative
     original = json.loads((DATA / "first-run.json").read_text())

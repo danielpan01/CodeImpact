@@ -286,7 +286,9 @@ def load_real(
         )
     raw_selection, total = read_metadata(directory / "selection.json")
     selection = Selection.model_validate(raw_selection)
-    cases = load_corpus(directory / "cases")
+    # These captured datasets were labeled under the original filename policy.
+    # Validate their frozen labels first; current extensions are explicit overlays.
+    cases = load_corpus(directory / "cases", discovery_policy="test-files-v1")
     selected = {s.id: s for s in selection.cases}
     require({c.id for c in cases} == set(selected), "Case IDs differ from selection")
     require(
@@ -353,7 +355,10 @@ def summarize(cases: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def evaluate_real(
-    directory: Path, *, annotations: dict[str, dict[str, Any]] | None = None
+    directory: Path,
+    *,
+    annotations: dict[str, dict[str, Any]] | None = None,
+    label_extensions: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     selection, cases, provenance, coverage = load_real(directory)
     original_cases = cases
@@ -366,9 +371,44 @@ def evaluate_real(
             ),
             "Baseline may only override discrepancy annotations",
         )
-        cases = [
-            CorpusCase.model_validate(case.model_dump() | annotations[case.id]) for case in cases
-        ]
+    if label_extensions is not None:
+        require(
+            set(label_extensions) <= {case.id for case in cases}, "Unknown label-extension case"
+        )
+    current_cases = []
+    for case in cases:
+        data = case.model_dump()
+        extension = (label_extensions or {}).get(case.id)
+        if extension is not None:
+            require(
+                set(extension)
+                == {
+                    "expected_affected",
+                    "expected_unaffected",
+                    "unclassified",
+                    "expected_unclassified_recommendations",
+                },
+                "Label extension fields mismatch",
+            )
+            old_ids = (
+                set(case.expected_affected) | set(case.expected_unaffected) | set(case.unclassified)
+            )
+            for field in ("expected_affected", "expected_unaffected", "unclassified"):
+                require(
+                    not old_ids.intersection(extension[field]),
+                    "Label extension rewrites an original label",
+                )
+                data[field] = data[field] | extension[field]
+            data["expected_unclassified_recommendations"] = sorted(
+                set(case.expected_unclassified_recommendations)
+                | set(extension["expected_unclassified_recommendations"])
+            )
+        if annotations is not None:
+            data |= annotations[case.id]
+        # Frozen cases are loaded under their original policy. Every evaluated
+        # case must explicitly label the complete current inventory before analysis.
+        current_cases.append(CorpusCase.model_validate(data))
+    cases = current_cases
     # evaluate() validates every recommendation's typed path and revision evidence.
     evaluation = evaluate(cases)
     results = []
@@ -381,7 +421,20 @@ def evaluate_real(
                 "id": case.id,
                 "repository": p.repository,
                 "change_url": p.change_url,
-                "label_review": p.label_review.model_dump(),
+                "label_review": (
+                    p.label_review.model_dump()
+                    | {
+                        "labels_sha256": label_hash(case),
+                        "author": (
+                            "Codex (source-only discovery extension; see versioned label receipt)"
+                        ),
+                        "reviewer": None,
+                        "review_reference": None,
+                        "status": "draft",
+                    }
+                    if label_extensions and case.id in label_extensions
+                    else p.label_review.model_dump()
+                ),
                 "coverage": coverage[case.id],
                 "test_count": len(case.expected_affected)
                 + len(case.expected_unaffected)

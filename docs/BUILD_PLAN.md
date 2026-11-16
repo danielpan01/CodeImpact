@@ -1,6 +1,6 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — reviewed November 15, 2026
+## Active roadmap — updated November 16, 2026
 
 **Milestones 1–6 match their implemented technical scope. The product still has
 explicit coverage, accuracy and release-readiness work.** Live hosting and the human
@@ -13,11 +13,12 @@ Reviewed reference: `8d9661f1640619741ed25e570911bea838198666` on `main`, merged
 passed. The [repository and UI review](REPOSITORY_REVIEW.md) distinguishes this
 reference from the new local review changes and records actual verification.
 
-Current checkout for milestone 8C: `c967862fd7152c6d2883d5289b762ea24b67857d`,
-merged [PR #14](https://github.com/danielpan01/CodeImpact/pull/14), with
-[post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43795661155).
-8A and 8B are merged. 8C is implemented on `codex/frontend-milestone-8c`;
-merge is pending. Local verification and remote Actions results are separate.
+Milestones 8A, 8B and 8C are merged. 8C landed in
+[PR #15](https://github.com/danielpan01/CodeImpact/pull/15), commit
+`7084ab04dd60881a6dde6e91986911f1d9f6ece2`, with
+[post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
+Milestone 7 is implemented from that clean checkout.
+See [the discovery receipt](TEST_DISCOVERY.md) and VALIDATION.md.
 The repository-review reference above remains historical.
 
 ### Completed foundation
@@ -32,9 +33,10 @@ The repository-review reference above remains historical.
 | 6. Local deployment preparation | Merged, PR #12 | Disposable bounded workers, access/admission controls, performance receipt and built-server checks; live hosting deferred |
 
 Current measured limits matter more than a milestone count: authored data retains
-two misses; v2 retains 273 false positives; v3 retains 43 false positives and **30
-source test definitions outside discovery**. The zero discovered false-negative
-count in v3 does not cover those 30 definitions. All labels still require independent
+two misses; v2 retains 273 false positives; the original v3 result retains 43 false positives and **30 excluded definitions**.
+Milestone 7 adds those 30 definitions to a separate current measurement: 85/120
+selected, 42 TP / 43 FP / 0 FN / 23 TN, with 12 uncertain definitions unselected.
+The original 90-definition denominator and its exclusions remain frozen. All labels still require independent
 review. Preserve the historical datasets and measurements through subsequent work.
 
 The November 15 review also makes a bounded phone-spacing improvement: the complete
@@ -42,12 +44,12 @@ first demo recommendation is visible without scrolling at 360×844 and 390×844 
 both themes, with all controls and report data retained. This is a local refinement,
 not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.md.
 
-### Next milestones, in order
+### Milestone sequence and remaining work
 
 | Order | Milestone | Why now | Done when |
 | --- | --- | --- | --- |
-| 7 | Bounded test-discovery coverage and explicit scope | V3 excludes 30 definitions in `test.py`, including a direct `test_pop` call | Supported filename policy is explicit; discovered/outside-scope inventories are auditable; new evidence and baseline are versioned without rewriting the original v3 result |
-| 8 | Visual character, large-report diagnostics and UI quality gates | The owner wants rounder controls and a less bland, more distinctive interface; the LFU example exposes 3,128 raw notes and the interface needs durable regression protection | A visible refresh improves controls, typography, surfaces and identity; grouped diagnostics and visual/accessibility checks protect the result |
+| 7 — implemented | Bounded test-discovery coverage and explicit scope | Original v3 excluded 30 definitions in `test.py`; current version covers them | Supported filename policy is explicit; discovered/outside-scope inventories are auditable; new evidence and baseline are versioned without rewriting the original v3 result |
+| 8 — merged | Visual character, large-report diagnostics and UI quality gates | The owner wants rounder controls and a less bland, more distinctive interface; the LFU example exposes 3,128 raw notes and the interface needs durable regression protection | A visible refresh improves controls, typography, surfaces and identity; grouped diagnostics and visual/accessibility checks protect the result |
 | 9A | Cachetools fallback refinement | 125 LFU-case false positives remain after the mapping fix | One bounded source pattern is supported with unknown/shared-mixin controls; measured improvements preserve affected/uncertain selections |
 | 9B | Descriptor and Slugify fallback refinement | Separate mechanisms account for 31 descriptor and 117 Slugify false positives | Each mechanism has its own regression-first milestone and versioned measurement; no blanket suppression of module/import evidence |
 | 9C | Module-data dependency refinement | V3 records 37 Inflection and six ISO validator false positives | Supported data/export changes are distinguished using source evidence; initialization side effects remain conservative |
@@ -56,14 +58,17 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
 
-Milestones 8A and 8B are merged. **8C is implemented** with reviewed
-canonical screenshots, rendered-accessibility scans and CI integration. Publication
-uses `codex/frontend-milestone-8c`; check Actions for remote job results. Analyzer behavior and all historical baselines are
-unchanged. See [the gate receipt](FRONTEND_MILESTONE8C.md).
-Milestone 7 is the recommended next analyzer task. Do not start all of
-milestone 9 as one large rewrite. Reassess priority after every recorded result.
+Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
+remain active. **Milestone 7 is implemented** with one filename extension,
+a pre-analysis source-label draft, separately versioned measurements and preserved
+history. **9A is the next task**. Do not start all of milestone 9 as one rewrite.
 
-### Milestone 7: bounded test-discovery coverage
+### Milestone 7: bounded test-discovery coverage — implemented
+
+The acceptance list below is satisfied within the documented static-discovery
+boundary. [TEST_DISCOVERY.md](TEST_DISCOVERY.md) records the policy, labels, exact
+result changes, historical preservation and UI evidence; [VALIDATION.md](VALIDATION.md)
+records actual checks and the publication recheck.
 
 1. Inspect the existing filename/symbol rules and the frozen v3 discovery audit.
    Specify a small supported policy, starting with literal `test.py` as motivated
@@ -104,7 +109,7 @@ action hierarchy and a recognizable CodeImpact identity. Apply the detailed dire
 - **8B — Diagnostics (merged in PR #14):** group the thousands of raw diagnostics by category/file with
   counts, search and expandable complete entries. Keep raw warnings in exports and preserve exact
   evidence; do not make unknowns disappear to improve presentation.
-- **8C — Quality gates (implemented; merge pending):** 16 reviewed image baselines and
+- **8C — Quality gates (merged in PR #15):** 16 reviewed image baselines and
   48 rendered WCAG A/AA scans, using pinned Linux ARM64/Ubuntu/Chromium/fonts and
   fixed local reports. Only fixture elapsed time is fixed; no content is masked.
   Explicit failure/recovery probes verify both gates. CI integration is included;
@@ -129,9 +134,9 @@ history. Milestone 8B now implements lossless category/file grouping, complete
 literal search, filters, 50-note pages and report-scoped state without changing
 the API or analyzer. The [diagnostics receipt](FRONTEND_MILESTONE8B.md) documents
 supported formats, fallback behavior, screenshots and checks.
-**8C is implemented; merge is pending**. Its [verification and update protocol](FRONTEND_MILESTONE8C.md)
-keep 8A/8B evidence intact. **Milestone 7 is the recommended next development task**,
-with independent source-label review still pending.
+**8C is merged**. Its [verification and update protocol](FRONTEND_MILESTONE8C.md)
+keep 8A/8B evidence intact. Milestone 7 retains these gates and is implemented.
+**Milestone 9A is next**, with independent source-label review still pending.
 
 ### Later analyzer and evaluation work
 

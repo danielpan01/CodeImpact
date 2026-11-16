@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import type { Report } from "./types";
 import { Icon } from "./Icon";
+import { DiscoveryScope } from "./DiscoveryScope";
 import {
   categories,
   defaultTestControls,
@@ -49,18 +50,21 @@ export function TestsView({
   }, [reveal]);
   if (!report.recommendations.length)
     return (
-      <div className="empty-state">
-        <Icon name="tests" />
-        <h3>{hasTests ? "No tests recommended" : "No tests discovered"}</h3>
-        <p>
-          {hasTests
-            ? "No recommendation does not establish that tests are safe to skip."
-            : "No test definitions matched discovery in the current snapshot. Look for test_ functions in test_*.py or *_test.py files."}{" "}
-          Review the changed code and keep the full suite as your merge gate.
-        </p>
-        <button className="primary" onClick={onChanges}>
-          Review changed code <Icon name="arrow" />
-        </button>
+      <div className="test-list empty-tests">
+        <div className="empty-state">
+          <Icon name="tests" />
+          <h3>{hasTests ? "No tests recommended" : "No tests discovered"}</h3>
+          <p>
+            {hasTests
+              ? "No recommendation does not establish that tests are safe to skip."
+              : "No test definitions matched discovery in the current snapshot. Look for test_ functions in test.py, test_*.py or *_test.py files."}{" "}
+            Review the changed code and keep the full suite as your merge gate.
+          </p>
+          <button className="primary" onClick={onChanges}>
+            Review changed code <Icon name="arrow" />
+          </button>
+          <DiscoveryScope report={report} />
+        </div>
       </div>
     );
   return (
@@ -205,6 +209,7 @@ export function TestsView({
           Export always includes all {report.recommendations.length}{" "}
           recommendations in analysis order.
         </p>
+        <DiscoveryScope report={report} />
       </div>
     </>
   );

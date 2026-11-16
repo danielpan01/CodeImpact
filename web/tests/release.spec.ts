@@ -687,7 +687,7 @@ test("dark mixed and deleted evidence stays explicit during source review", asyn
   ).toContainText("def f()");
 });
 
-test("fresh cases distinguish undiscovered tests from unselected tests", async ({
+test("literal test.py discovery retains evidence and complete exports", async ({
   page,
 }, testInfo) => {
   const fixture = JSON.parse(
@@ -702,30 +702,97 @@ test("fresh cases distinguish undiscovered tests from unselected tests", async (
   await page.goto("/");
   await dark(page);
   const report = await upload(page, fixture.request);
-  expect(report.nodes.filter((node) => node.kind === "test")).toHaveLength(0);
-  await expect(
-    page.getByRole("heading", { name: "No tests discovered" }),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/test_ functions in test_\*\.py or \*_test\.py/),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/keep the full suite as your merge gate/),
-  ).toBeVisible();
+  expect(report.nodes.filter((node) => node.kind === "test")).toHaveLength(30);
+  expect(report.recommendations.map((item) => item.symbol)).toEqual([
+    "test.py::test_pop",
+  ]);
+  await expect(page.locator(".test-row")).toHaveCount(1);
+  const scope = page
+    .locator("summary")
+    .filter({ hasText: "Test discovery scope" });
+  await scope.focus();
+  await scope.press("Enter");
+  await expect(page.locator(".discovery-scope")).toContainText(
+    "30 discovered definitions",
+  );
+  await expect(page.locator(".discovery-scope")).toContainText(
+    "not pytest collection",
+  );
+  expect((await scope.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  const scopeEnd = page.locator(".discovery-scope p").last();
+  await scopeEnd.scrollIntoViewIfNeeded();
+  await expect(scopeEnd).toBeInViewport({ ratio: 1 });
   await page.screenshot({
-    path: testInfo.outputPath("no-tests-discovered.png"),
+    path: testInfo.outputPath("test-py-discovery.png"),
     fullPage: true,
   });
   expect(await exported(page)).toEqual(report);
-  await page.getByRole("button", { name: "Review changed code" }).click();
+  await showEvidence(page);
+  await expect(
+    page
+      .locator(".detail-panel")
+      .getByText("Conservative module/import dependency", { exact: true }),
+  ).toBeVisible();
+  await openChangedCode(page);
   await page.getByRole("button", { name: /modified.*OrderedSet.pop/ }).click();
   await expect(
     page.getByRole("region", { name: "After source" }),
   ).toContainText("def pop(self, index=-1)");
   await noOverflow(page);
+});
+
+test("unsupported source differs from discovered but unselected tests", async ({
+  page,
+}, testInfo) => {
+  const fixture = JSON.parse(
+    await readFile(
+      new URL(
+        "../../tests/fixtures/unsupported-discovery.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  await dark(page);
+  const report = await upload(page, fixture);
+  expect(report.nodes.filter((node) => node.kind === "test")).toHaveLength(0);
+  await expect(
+    page.getByRole("heading", { name: "No tests discovered" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/test_ functions in test.py, test_\*\.py or \*_test\.py/),
+  ).toBeVisible();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Test discovery scope" })
+    .click();
+  await expect(page.locator(".discovery-scope")).toContainText(
+    "0 discovered definitions",
+  );
+  await expect(page.locator(".discovery-scope")).toContainText(
+    "1 indexed test-shaped function is outside",
+  );
+  await expect(page.locator(".discovery-scope")).toContainText(
+    "conditional, loop or try blocks",
+  );
+  const scopeEnd = page.locator(".discovery-scope p").last();
+  await scopeEnd.scrollIntoViewIfNeeded();
+  await expect(scopeEnd).toBeInViewport({ ratio: 1 });
+  expect(await exported(page)).toEqual(report);
+  await page.screenshot({
+    path: testInfo.outputPath("unsupported-discovery.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Review changed code" }).click();
+  await page.getByRole("button", { name: /modified.*total/ }).click();
+  await expect(
+    page.getByRole("region", { name: "After source" }),
+  ).toContainText("return amount + 1");
+  await noOverflow(page);
   await page.getByRole("button", { name: "New analysis", exact: true }).click();
   const unchanged = {
-    files: { "test_control.py": "def test_control():\n    assert True\n" },
+    files: { "test.py": "def test_control():\n    assert True\n" },
   };
   await upload(page, {
     base: unchanged,

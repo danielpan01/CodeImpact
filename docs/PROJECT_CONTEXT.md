@@ -1,33 +1,39 @@
 # CodeImpact project context
 
-## Current priority — November 15, 2026
+## Current priority — November 16, 2026
 
-Milestone 8A merged in [PR #13](https://github.com/danielpan01/CodeImpact/pull/13).
-Milestone 8B merged in [PR #14](https://github.com/danielpan01/CodeImpact/pull/14),
-commit `c967862fd7152c6d2883d5289b762ea24b67857d`; its PR, branch and post-merge CI
-checks passed. Milestone 8C started from that clean checkout with no user edits.
+Milestones 8A, 8B and 8C are merged in PRs #13, #14 and
+[#15](https://github.com/danielpan01/CodeImpact/pull/15). 8C’s merge commit is
+`7084ab04dd60881a6dde6e91986911f1d9f6ece2`; its
+[post-merge quality jobs passed](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
+The owner authorized that merge, followed by local milestone 7 implementation,
+then requested publication of milestone 7 on November 16. There were no starting
+user edits. The implementation and publication checks are recorded in VALIDATION.md.
 
-**8C is implemented on `codex/frontend-milestone-8c`; merge is pending.** Sixteen individually
-reviewed screenshot baselines and 48 rendered WCAG A/AA scans use fixed local
-reports. The canonical Linux ARM64/Ubuntu/font image is pinned by digest, with
-Playwright 1.65.0 and Chromium revision 1254. The owner authorized a local Colima
-runtime for matching Linux verification; this does not deploy or host CodeImpact.
-Defect probes fail, recovery checks pass and repeated canonical comparisons are
-stable. The new CI job runs on publication; consult Actions for its remote results. See
-[FRONTEND_MILESTONE8C.md](FRONTEND_MILESTONE8C.md) and [VALIDATION.md](VALIDATION.md).
+Milestone 7 adds literal `test.py` to the existing case-sensitive filename policy.
+It preserves direct class/nested discovery and excludes arbitrary production files,
+compound-statement definitions and runtime collection. A source-only draft labeled
+30 newly eligible Ordered Set definitions before expanded analysis: 1 affected,
+17 unaffected, 12 uncertain. Only `test_pop` is newly selected, conservatively.
+Current v3 is 85/120 selected, 42 TP / 43 FP / 0 FN / 23 TN, with 12 uncertain
+unselected definitions. Original v3 remains 84/90 plus 30 excluded definitions;
+all original corpus/labels/provenance/freezes/first runs/baselines are unchanged.
+Authored/v1 stable reports and v2’s full mapping measurement are unchanged.
+New current receipts/output filenames are separate. Application/export 2.0 stays.
 
-Small fixes give visible navigation counts complete accessible names, name source
-regions and zoom controls correctly, expose original note numbers as text and
-improve graph attribution contrast. The 8A visual direction, 8B lossless grouping,
-search/filter/paging/state and complete exports remain intact. Historical screenshots,
-analyzer behavior, schemas, corpus inputs/labels/provenance and baselines are preserved.
-Automated accessibility coverage is partial; graph/clipped-content contrast still
-has manual-review findings. No independent usability or screen-reader review is claimed.
+Tests has a keyboard-accessible discovery-scope disclosure and distinct zero-test,
+zero-recommendation and filtered-empty states. A separate authored fixture retains
+zero-discovery coverage. 8A styling, 8B lossless diagnostics and 8C’s 16 canonical
+comparisons/48 accessibility scans remain; two intentionally changed screenshots
+have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
+and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next: bounded analyzer milestone 7**, following the active [build plan](BUILD_PLAN.md).
-Live hosting and the human pilot remain owner-deferred; independent source-label
-review remains pending. The owner authorized committing and pushing 8C on November 15; no new merge
-authorization was given.
+**Next: milestone 9A**, one bounded Cachetools LFU fallback pattern. The 125 LFU
+false positives are not changed here. Other 9-series work stays separate. Live
+hosting and the human pilot remain owner-deferred; independent source-label review
+remains pending. Automated/agent review is not accessibility certification or
+independent usability testing. The owner-approved local Colima runtime supplies
+8C’s pinned Linux ARM64 environment; it does not host CodeImpact.
 
 Evaluation v2, bounded module-level partial calls and argument-sensitive filtering
 are merged in [PR #6](https://github.com/danielpan01/CodeImpact/pull/6), commit
