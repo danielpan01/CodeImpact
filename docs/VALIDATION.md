@@ -2851,3 +2851,28 @@ and the final whitespace check passes. Current documentation now distinguishes
 implementation completion, branch publication and merge status. Remote Actions
 results belong to the pushed commit; local results alone are not a remote pass.
 No new PR or merge was authorized in this push request.
+
+### Milestone 8C clean-checkout publication fix — November 15, 2026
+
+The first published commit, `0734d036ff5aabe245f8246c0775959d5d35bc5a`, exposed
+a setup failure in [Actions run 43800264793](https://github.com/danielpan01/CodeImpact/actions/runs/43800264793).
+The `ui-quality` job could build the image, but Docker could not create
+`/work/web/node_modules` inside the read-only repository bind. Both quality
+commands exited **125 before any tests ran**. The local development checkout had
+that directory already, which explained the difference from CI.
+
+A separate copy containing only Git-tracked CodeImpact files, with no host
+`node_modules`, reproduced the exact failure. The wrapper now creates that empty
+mountpoint before binding the repository read-only; the isolated volume continues
+to use the image's Linux dependencies. The same clean copy then passed **16/16
+visual comparisons in 11.0 s** and **48/48 accessibility scans in 40.4 s**. No
+expected images or tolerances changed. Frontend formatting passes, all **186**
+protected files/artifacts retain their original hashes, and all **16** baseline
+images remain byte-identical to the published commit. Reproduction/recovery logs
+are `reports/milestone8c-clean-checkout-{reproduction,visual,a11y}.log`.
+The follow-up commit's remote workflow is a separate result; the first failed run
+is retained as publication history.
+`make check` was rerun after the wrapper fix: **810 passed, one expected macOS
+RLIMIT_AS skip, one existing Starlette/httpx warning**, 94% statement coverage,
+lint/types and production build passing. The receipt is
+`reports/milestone8c-publication-check.log`; `git diff --check` also passes.

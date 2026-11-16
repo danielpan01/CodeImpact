@@ -32,6 +32,9 @@ function run(args) {
     );
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
+// Fresh checkouts need the mountpoint before the repository becomes read-only.
+// The volume still supplies Linux dependencies from the image, not the host.
+mkdirSync(`${web}node_modules`, { recursive: true });
 mkdirSync(`${web}test-results`, { recursive: true });
 mkdirSync(`${web}${spec.baselineDirectory}`, { recursive: true });
 run([

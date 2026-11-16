@@ -58,6 +58,9 @@ the dependency image from the lockfile, then runs with **network disabled**, a
 read-only repository and an isolated Node dependency volume. Only test output is
 writable during comparisons. No daemon port or application port is published.
 Images/packages need network access for initial preparation, not for tests.
+The wrapper creates an empty `web/node_modules` mountpoint when absent, before
+binding the repository read-only. Linux dependencies still come exclusively from
+the image-backed volume; a fresh checkout does not require a host `npm ci`.
 
 Inside that canonical container the commands are `npm run test:visual` and
 `npm run test:a11y`. A direct `npm run test:visual` on macOS refuses to compare
@@ -245,6 +248,16 @@ failure artifacts are in `reports/milestone8c-proofs/`; run logs use
 `reports/milestone8c-*.log`. The initial local scan found the label mismatch; a
 concurrent early test run exposed shared-output cleanup, now fixed with separate
 directories. Neither failure was hidden by retries or looser assertions.
+
+The first publication [Actions run](https://github.com/danielpan01/CodeImpact/actions/runs/43800264793)
+caught a fresh-checkout setup defect: Docker could not create the dependency
+mountpoint inside the read-only repository, so both quality commands exited 125
+before running tests. A tracked-files-only local copy reproduced that exact error.
+Creating the empty mountpoint before the bind fixed it. From that same clean copy,
+all **16 visual comparisons (11.0 s)** and **48 accessibility scans (40.4 s)** passed,
+without host dependencies, baseline updates or tolerance changes. Logs are
+`reports/milestone8c-clean-checkout-{reproduction,visual,a11y}.log`.
+Remote results for the follow-up commit are recorded separately in Actions.
 
 After this bounded frontend gate work, the next analyzer task is **milestone 7:
 explicit, bounded test discovery**, with new versioned measurements and all original
