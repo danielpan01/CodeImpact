@@ -871,3 +871,19 @@ existing contracts. [Proof and exact measurement](DESCRIPTOR_REFINEMENT_REVIEW.m
 Fresh v2 wrapper 7.0 and v3 wrapper 4.0 write separate `descriptor-binding-v1`
 reports and verify their predecessor chains. Analyzer/API schema 2.0 and
 evaluation schema 1.0 continue to apply.
+
+## Literal dispatch and aggregate fallback
+
+`DispatchFallback` uses the existing plain-body-change checks, re-export resolver
+and argument binder. A named dispatcher with a literal guard and terminal return
+may exclude a test's aggregate contribution when both snapshots select an
+unchanged source module and the alternate branch reaches the edited function.
+Eager effects and reachable calls in the selected module are audited. Unknown
+bindings, external module escape, mutable guards and unsupported control flow
+decline. For unittest methods, a direct standard `TestCase` subclass must
+define only distinct undecorated test methods and passive class statements.
+Other class members keep fallback because construction, execution and cleanup
+can invoke code outside the test body. Other aggregate seeds and all
+active/resolved evidence follow their existing traversals. The capture boundary
+and budgets are described in the
+[Slugify review](SLUGIFY_FALLBACK_REVIEW.md).

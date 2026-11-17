@@ -395,3 +395,12 @@ prior corpus files match their historical record. Discovery denominators and
 uncertain classifications are preserved. The v2 and v3 commands write separate
 versioned output files and enforce the new measurement and engine hashes.
 [Per-case and per-repository results](DESCRIPTOR_REFINEMENT_REVIEW.md)
+
+## Milestone 9B Slugify measurement
+
+The v2 `legacy-dispatch-v1` receipt records 66 reviewed false-positive removals
+for the Boundary case, using the original draft labels. V3 replays its entire
+expanded measurement under the new engine. The two successors verify their
+unchanged descriptor predecessors. Authored and v1 stable reports, original
+v3 discovery exclusions and all historical corpus data remain preserved.
+[Exact IDs, per-case results and evidence comparison](SLUGIFY_FALLBACK_REVIEW.md)

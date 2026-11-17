@@ -17,6 +17,7 @@ from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
 from codeimpact.descriptor_binding import DescriptorFallback
 from codeimpact.discovery import is_test_file
+from codeimpact.dispatch_fallback import DispatchFallback
 from codeimpact.models import (
     AnalysisRequest,
     DependencyEvidence,
@@ -691,6 +692,8 @@ def analyze(request: AnalysisRequest) -> Report:
     descriptors = DescriptorFallback(fallback.before, fallback.after, aggregate_paths)
     call_arguments = CallArgumentFilter(before, after, {nodes[sid].path for sid in active})
 
+    dispatch = DispatchFallback(before, after, call_arguments)
+
     def walk(
         seeds: list[str],
         calls_only: bool,
@@ -765,7 +768,10 @@ def analyze(request: AnalysisRequest) -> Report:
         for sid, candidate in walk(
             [module], False, nodes[module].path, body_path=nodes[module].path
         ).items():
-            if nodes[sid].kind == "test" and not descriptors.allows(sid, nodes[module].path):
+            if nodes[sid].kind == "test" and (
+                not descriptors.allows(sid, nodes[module].path)
+                or not dispatch.allows(sid, nodes[module].path)
+            ):
                 continue
             current = paths.get(sid)
             if current is None or (len(candidate), candidate) < (len(current), current):

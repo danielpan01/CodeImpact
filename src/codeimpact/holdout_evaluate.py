@@ -10,6 +10,7 @@ from codeimpact.corpus import MAX_CORPUS_BYTES, Nonblank, StrictModel, discover_
 from codeimpact.discovery import CURRENT_POLICY, LEGACY_POLICY, DiscoveryPolicy, is_test_file
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
+    DESCRIPTOR_SOURCES,
     DISCOVERY_SOURCES,
     MAPPING_BASELINE_FILE,
     MAPPING_SOURCES,
@@ -44,11 +45,13 @@ DOCUMENTS = {
 }
 DISCOVERY_BASELINE_FILE = "baselines/test-discovery-v1.json"
 LFU_BASELINE_FILE = "baselines/lfu-callback-v1.json"
-BASELINE_FILE = "baselines/descriptor-binding-v1.json"
+DESCRIPTOR_BASELINE_FILE = "baselines/descriptor-binding-v1.json"
+BASELINE_FILE = "baselines/legacy-dispatch-v1.json"
 LABELS_FILE = "baselines/test-discovery-v1-labels.json"
 V2_DISCOVERY_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
 V2_LFU_REPLAY = "corpus/real-v2/baselines/lfu-callback-v1.json"
-V2_REPLAY = "corpus/real-v2/baselines/descriptor-binding-v1.json"
+V2_DESCRIPTOR_REPLAY = "corpus/real-v2/baselines/descriptor-binding-v1.json"
+V2_REPLAY = "corpus/real-v2/baselines/legacy-dispatch-v1.json"
 
 
 class DraftLabel(StrictModel):
@@ -75,7 +78,9 @@ class DiscoveryLabels(StrictModel):
 
 class DiscoveryBaseline(StrictModel):
     schema_version: Literal["1.0"]
-    name: Literal["test-discovery-v1", "lfu-callback-v1", "descriptor-binding-v1"]
+    name: Literal[
+        "test-discovery-v1", "lfu-callback-v1", "descriptor-binding-v1", "legacy-dispatch-v1"
+    ]
     explanation: Nonblank
     frozen_inputs_sha256: SHA256
     previous_baseline_sha256: SHA256
@@ -92,12 +97,29 @@ def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBasel
     baseline = DiscoveryBaseline.model_validate(
         read_metadata(safe_file(directory, BASELINE_FILE))[0]
     )
-    require(baseline.name == "descriptor-binding-v1", "Current baseline name mismatch")
+    require(baseline.name == "legacy-dispatch-v1", "Current baseline name mismatch")
     require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
     for path, expected in baseline.analyzer_sha256.items():
         require(file_hash(safe_file(project, path)) == expected, f"Engine changed: {path}")
     require(
-        file_hash(safe_file(directory, LFU_BASELINE_FILE)) == baseline.previous_baseline_sha256,
+        file_hash(safe_file(directory, DESCRIPTOR_BASELINE_FILE))
+        == baseline.previous_baseline_sha256,
+        "Preserved descriptor baseline changed",
+    )
+    descriptor = DiscoveryBaseline.model_validate(
+        read_metadata(safe_file(directory, DESCRIPTOR_BASELINE_FILE))[0]
+    )
+    require(descriptor.name == "descriptor-binding-v1", "Descriptor baseline name mismatch")
+    require(
+        set(descriptor.analyzer_sha256) == DESCRIPTOR_SOURCES,
+        "Historical descriptor engine inventory",
+    )
+    require(
+        file_hash(safe_file(project, V2_DESCRIPTOR_REPLAY)) == descriptor.v2_replay_sha256,
+        "Historical v2 descriptor receipt changed",
+    )
+    require(
+        file_hash(safe_file(directory, LFU_BASELINE_FILE)) == descriptor.previous_baseline_sha256,
         "Preserved LFU baseline changed",
     )
     lfu = DiscoveryBaseline.model_validate(
@@ -284,7 +306,9 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
         if p.is_file() and not p.is_relative_to(project / "corpus/real-v3")
     }
     require(
-        set(receipt.corpus_sha256) | {V2_DISCOVERY_REPLAY, V2_LFU_REPLAY, V2_REPLAY} == historical,
+        set(receipt.corpus_sha256)
+        | {V2_DISCOVERY_REPLAY, V2_LFU_REPLAY, V2_DESCRIPTOR_REPLAY, V2_REPLAY}
+        == historical,
         "Historical corpus inventory changed",
     )
     baseline = current_baseline(directory, project)
@@ -322,6 +346,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
             "baseline.json",
             DISCOVERY_BASELINE_FILE,
             LFU_BASELINE_FILE,
+            DESCRIPTOR_BASELINE_FILE,
             BASELINE_FILE,
             LABELS_FILE,
         },
@@ -339,6 +364,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
         BASELINE_FILE,
         DISCOVERY_BASELINE_FILE,
         LFU_BASELINE_FILE,
+        DESCRIPTOR_BASELINE_FILE,
         LABELS_FILE,
     ):
         if (directory / path).exists():
@@ -396,11 +422,11 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
     current_matches = measurement(report) == baseline.measurement
     if not current_matches:
         report["evaluation"]["regressions"].append(
-            "v3: measurement differs from descriptor-binding-v1"
+            "v3: measurement differs from legacy-dispatch-v1"
         )
     report.update(
-        holdout_evaluation_schema_version="4.0",
-        previous_baseline="lfu-callback-v1",
+        holdout_evaluation_schema_version="5.0",
+        previous_baseline="descriptor-binding-v1",
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         active_baseline=baseline.name,
         active_baseline_sha256=canonical_hash(baseline.model_dump()),
@@ -416,7 +442,7 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         initial_regressions=initial.initial_regressions,
         discovery=discovery,
         interpretation=(
-            "Versioned v3 descriptor-binding-v1 engine replay; prior receipts preserved; "
+            "Versioned v3 legacy-dispatch-v1 engine replay; prior receipts preserved; "
             "original 90-test first measurement "
             "and excluded inventory preserved. "
             "New source labels were drafted before expanded analysis; human review pending. "
@@ -433,7 +459,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_holdout,
         default_corpus=Path("corpus/real-v3"),
-        default_output=Path("reports/real-v3-descriptor-binding-v1-evaluation.json"),
+        default_output=Path("reports/real-v3-legacy-dispatch-v1-evaluation.json"),
     )
 
 

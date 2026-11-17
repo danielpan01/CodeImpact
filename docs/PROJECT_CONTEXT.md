@@ -2,6 +2,15 @@
 
 ## Current priority — November 16, 2026
 
+The 9B descriptor slice merged through PR #18 at
+`383b819667f91e3bcf6a39e23c1cf5a7b6b3554e`. The 9B Slugify slice is implemented.
+A known literal dispatch into an unchanged legacy module removes
+66 Boundary false positives. Boundary now selects 42/133, with 28 TP, 14 FP,
+0 FN and 88 TN. All three uncertain definitions remain unselected. V2 selects
+327/581 with 109 TP, 205 FP, 0 FN and 245 TN. The ASCII case and the other four
+v2 analyses retain their hashes. New `legacy-dispatch-v1` receipts preserve
+the descriptor and earlier baselines. [Exact Slugify results](SLUGIFY_FALLBACK_REVIEW.md)
+
 Milestone 9A merged at `41753b3522246fe8c947a27326ada95b1c285dce` through PR #17.
 Milestone 9B implements ordinary zero-argument descriptor binding.
 One descriptor false positive is removed, leaving 35/154 selected and
@@ -49,7 +58,7 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next: one bounded Slugify fallback pattern in milestone 9B.**
+**Next: one bounded module-data pattern in milestone 9C.**
 The 124 remaining LFU false positives are a separate scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or
