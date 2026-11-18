@@ -361,7 +361,9 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
     historical = {
         p.relative_to(project).as_posix()
         for p in (project / "corpus").rglob("*")
-        if p.is_file() and not p.is_relative_to(project / "corpus/real-v3")
+        if p.is_file()
+        and not p.is_relative_to(project / "corpus/real-v3")
+        and not p.is_relative_to(project / "corpus/real-v4")
     }
     require(
         set(receipt.corpus_sha256)

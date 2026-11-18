@@ -1,0 +1,153 @@
+{
+  "annotations": {
+    "humanize_intcomma_locale": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "tests/test_filesize.py::test_naturalsize": "Exercises the naturalsize file-size formatter. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__": "The test calls activate with absent locale location metadata and checks the error path, separate from intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__": "The test calls activate with absent locale location metadata and checks the error path, separate from intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::test_default_locale_path_defined__file__": "Exercises locale path lookup with a defined module file. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::test_default_locale_path_null__file__": "Exercises locale path lookup with a null module file. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::test_default_locale_path_undefined__file__": "Exercises locale path lookup after deleting the module file attribute. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_i18n.py::test_i18n": "Exercises naturaltime, ordinal and precisedelta across locale activation. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_apnumber": "Exercises apnumber word formatting. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_fractional": "Exercises fractional rational-number formatting. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_intword": "Exercises intword formatting. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_intword_powers": "Exercises only the length of the intword powers table. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_ordinal": "Exercises ordinal formatting. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_number.py::test_scientific": "Exercises scientific notation, including conversion of float inputs. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_date_and_delta": "Exercises date_and_delta conversion before formatting. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldate": "Exercises the naturaldate formatter. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturalday": "Exercises the naturalday formatter. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta": "Exercises the naturaldelta formatter. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default": "Exercises the naturaldelta formatter for the minimum unit default cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit": "Exercises the naturaldelta formatter for the minimum unit explicit cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_nomonths": "Exercises the naturaldelta formatter for the nomonths cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_when_explicit": "Exercises the naturaldelta formatter for the when explicit cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo": "Exercises the naturaldelta formatter for the when missing tzinfo cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaltime": "Exercises the naturaltime formatter. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default": "Exercises the naturaltime formatter for the minimum unit default cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit": "Exercises the naturaltime formatter for the minimum unit explicit cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_naturaltime_nomonths": "Exercises the naturaltime formatter for the nomonths cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_precisedelta_bogus_call": "Exercises the precisedelta formatter for the bogus call cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_precisedelta_custom_format": "Exercises the precisedelta formatter for the custom format cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_precisedelta_multiple_units": "Exercises the precisedelta formatter for the multiple units cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_precisedelta_one_unit_enough": "Exercises the precisedelta formatter for the one unit enough cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_precisedelta_suppress_units": "Exercises the precisedelta formatter for the suppress units cases. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>.",
+          "tests/test_time.py::test_time_unit": "Exercises Unit enum comparison and invalid comparison handling. The captured call chain does not reach intcomma. Conservative evidence ends at src/humanize/__init__.py::<module>."
+        }
+      },
+      "limitations": [
+        "The changed package export keeps conservative paths for unrelated formatter and locale tests. The existing intcomma reader is selected through fallback."
+      ]
+    },
+    "humanize_small_delta": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "tests/test_time.py::test_date_and_delta": "Exercises date_and_delta conversion before formatting. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldate": "Exercises the naturaldate formatter. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturalday": "Exercises the naturalday formatter. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta": "Exercises the naturaldelta formatter. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default": "Exercises the naturaldelta formatter for the minimum unit default cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit": "Exercises the naturaldelta formatter for the minimum unit explicit cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_nomonths": "Exercises the naturaldelta formatter for the nomonths cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_when_explicit": "Exercises the naturaldelta formatter for the when explicit cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo": "Exercises the naturaldelta formatter for the when missing tzinfo cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaltime": "Exercises the naturaltime formatter. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default": "Exercises the naturaltime formatter for the minimum unit default cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit": "Exercises the naturaltime formatter for the minimum unit explicit cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_naturaltime_nomonths": "Exercises the naturaltime formatter for the nomonths cases. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_precisedelta_bogus_call": "None returns early and the suppressed-years options raise before the edited loop. The remaining call uses naturaldelta. Conservative evidence ends at tests/test_time.py::<module>.",
+          "tests/test_time.py::test_time_unit": "Exercises Unit enum comparison and invalid comparison handling. The captured call chain does not reach precisedelta. Conservative evidence ends at tests/test_time.py::<module>."
+        }
+      },
+      "limitations": [
+        "The changed precisedelta parameter list seeds the test module. The broad path includes unrelated time APIs and calls that leave precisedelta before the edited loop."
+      ]
+    },
+    "icecream_local_time": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "The static naming rule excludes 32 unittest-style mixed-case methods. The timestamp change has no discovered test denominator."
+      ]
+    },
+    "icecream_source_error": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "The static naming rule excludes 32 unittest-style mixed-case methods, including testNoSourceAvailable."
+      ]
+    },
+    "oyaml_error_context": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "test_oyaml.py::test_dump": "Exercises dump of a root ordered mapping, using representers rather than the edited mapping constructor. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_dump_all": "Exercises dump_all of ordered and plain mapping documents, using representers rather than the edited mapping constructor. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_dump_and_safe_dump_match": "Exercises dump and safe_dump of the same plain mapping, using representers rather than the edited mapping constructor. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_loads_to_std_dict": "The skip guard requires a runtime with ordered standard dicts, where oyaml skips the loader registration. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_safe_dump": "Exercises safe_dump of a root ordered mapping, using representers rather than the edited mapping constructor. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_safe_dump_all": "Exercises safe_dump_all of ordered and plain mapping documents, using representers rather than the edited mapping constructor. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_safe_loads_to_std_dict": "The skip guard requires a runtime with ordered standard dicts, where oyaml skips the loader registration. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_subclass_dump": "This checks safe and unsafe representation of an OrderedDict subclass, without loading through the edited constructor. Conservative evidence ends at test_oyaml.py::<module>."
+        }
+      },
+      "limitations": [
+        "The new unhashable-key test changes its module. Broad fallback also selects dump-only tests and loaders guarded to skip the edited constructor registration."
+      ]
+    },
+    "oyaml_registrations": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "test_oyaml.py::test_loads_to_std_dict": "The skip guard requires a runtime with ordered standard dicts, where oyaml skips the loader registration. Conservative evidence ends at test_oyaml.py::<module>.",
+          "test_oyaml.py::test_safe_loads_to_std_dict": "The skip guard requires a runtime with ordered standard dicts, where oyaml skips the loader registration. Conservative evidence ends at test_oyaml.py::<module>."
+        }
+      },
+      "limitations": [
+        "Changed loader/dumper registration and new tests keep broad test-module fallback. External dispatch and old interpreter guards remain uncertain where source cannot settle them."
+      ]
+    }
+  },
+  "expected_uncertain_selected": {
+    "humanize_intcomma_locale": [],
+    "humanize_small_delta": [],
+    "icecream_local_time": [],
+    "icecream_source_error": [],
+    "oyaml_error_context": [
+      "test_oyaml.py::test_anchors_and_references",
+      "test_oyaml.py::test_load",
+      "test_oyaml.py::test_load_all",
+      "test_oyaml.py::test_merge",
+      "test_oyaml.py::test_omap",
+      "test_oyaml.py::test_omap_flow_style",
+      "test_oyaml.py::test_safe_load"
+    ],
+    "oyaml_registrations": [
+      "test_oyaml.py::test_anchors_and_references",
+      "test_oyaml.py::test_load",
+      "test_oyaml.py::test_load_all",
+      "test_oyaml.py::test_merge",
+      "test_oyaml.py::test_omap",
+      "test_oyaml.py::test_omap_flow_style",
+      "test_oyaml.py::test_safe_load",
+      "test_oyaml.py::test_subclass_dump",
+      "test_oyaml.py::test_unhashable_error_context"
+    ]
+  },
+  "first_run_sha256": "86e4d3a2f511d9d02dee3e7a4fda60b5d8aceb673ca4da4f4cae7d25df58ac18",
+  "schema_version": "1.0"
+}

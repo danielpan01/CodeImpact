@@ -6,11 +6,12 @@ import difflib
 from pathlib import Path
 from urllib.parse import quote
 
+from codeimpact.discovery import LEGACY_POLICY
 from codeimpact.real_evaluate import load_real
 
 
-def review_pack(directory):
-    selection, cases, provenance, _ = load_real(directory)
+def review_pack(directory, *, discovery_policy=LEGACY_POLICY, outside=None):
+    selection, cases, provenance, _ = load_real(directory, discovery_policy=discovery_policy)
     lines = [
         "# Real-repository label review pack",
         "",
@@ -73,6 +74,14 @@ def review_pack(directory):
                     body = node.body
                 url = f"https://github.com/{p.repository}/blob/{p.head.commit.sha}/{quote(path)}#L{node.lineno}-L{node.end_lineno}"
                 lines += [f"- [ ] [`{sid}`]({url}) — {rationale}"]
+            lines.append("")
+        if outside is not None:
+            entries = outside[case.id]
+            lines += [f"### Outside discovery ({len(entries)})", ""]
+            for sid, reason in sorted(entries.items()):
+                path = sid.split("::", 1)[0]
+                url = f"https://github.com/{p.repository}/blob/{p.head.commit.sha}/{quote(path)}"
+                lines.append(f"- [`{sid}`]({url}) — `{reason}`")
             lines.append("")
     lines += ["## Selection exclusions", "", selection.policy, ""]
     for item in selection.exclusions:

@@ -1,0 +1,1847 @@
+{
+  "base": {
+    "commit": {
+      "message": "Merge pull request #168 from carlpatt/tests",
+      "parents": [
+        {
+          "sha": "d30c2b6882a87bbed45573fe968ce83959b7f0e0"
+        },
+        {
+          "sha": "8819eced72be4cb31ab75534c2c5b6afaced3953"
+        }
+      ],
+      "sha": "9d9de69177154b41b2d6ef412d1487639e99833d",
+      "tree": {
+        "sha": "a7f213847eae1a0db76de0001008cba3897e2d6d"
+      }
+    },
+    "license": {
+      "path": "LICENCE",
+      "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "b45b63c2157e0750b5041dddc1bf73ac3ea88d77e1304adb0b1c6543e0d82f2d",
+      "src/humanize/__init__.py": "a0a452062f9eed2065b9b4089ffff6689442fc6fc8212435c0439e5f73ea39cb",
+      "src/humanize/filesize.py": "20edfcab3fe5b2ec4bf32bc629b4995270fc41c591778ea95431a7f5e1e2c609",
+      "src/humanize/i18n.py": "5d490c4ce8a3dcbb5d5515a18c97158ee855c7c4ddf807c169e690549dae317c",
+      "src/humanize/number.py": "e311caa1367cb54b1f28a63102f79fe93b170c31f46e1f398e5dc76b5bfedb45",
+      "src/humanize/time.py": "ca5f19492d59dadd1e3e0dfd15aea02fc68b32caf9ce1699df03aa1f3e0b9131",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_filesize.py": "a847a0ac4d17e34b8af8c795dec7053e011742fed27f0dbd6e59ce9cf131e61e",
+      "tests/test_i18n.py": "ae15c91a3aaa12bf0202fbd5e9f1e53a5928e540a872ceecffd449bcdc44f89b",
+      "tests/test_number.py": "9b35a25c5f4b7ee82765271d788e44774270957261988e168eeb988b0034ca2c",
+      "tests/test_time.py": "aa1d2209b9ba2ad46415bbfa423f807e9a312d64b56a11cbca83ff18f36f9c2c"
+    },
+    "tree": {
+      "sha": "a7f213847eae1a0db76de0001008cba3897e2d6d",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "a98564ff3b935335117e239a509f5045cb44e2a9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/CONTRIBUTING.md",
+          "sha": "08fc73d1affcf8474bfba09ce00d9716dfb44802",
+          "size": 506,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.md",
+          "sha": "a7597cb438ed5a35d7b5e8eb82d80bf01cf13b7f",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE.md",
+          "sha": "696a67a2a01ae3308deb83af70768e65ef6f6d7d",
+          "size": 442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/PULL_REQUEST_TEMPLATE.md",
+          "sha": "7fa46eca88a55ac7e19390cf15f0990552b3c4a0",
+          "size": 58,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "198aa76fb527f4dd41170f51a4c6bc8d0153bbb2",
+          "size": 144,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/labels.yml",
+          "sha": "8f0eca226b5f1d5a3c4cd8bf7b6b49f8888e17ee",
+          "size": 1710,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/release-drafter.yml",
+          "sha": "402bfbf6fe62d38bf3dec19f4cec6bd1625629a9",
+          "size": 535,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "338771773938c6b98e24ecf7afd25e969963fb71",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/docs.yml",
+          "sha": "f707d4bf10b7404f16d2d62638335a89d2f28a50",
+          "size": 600,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/labels.yml",
+          "sha": "230384694fccca74cc629dbfde83f8a71cff51cd",
+          "size": 295,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/lint.yml",
+          "sha": "87a14382f0700b353f82192b19e3779aaa41ab21",
+          "size": 742,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release-drafter.yml",
+          "sha": "959f1e072fd7181e2b6543d81d89c492784fa8fa",
+          "size": 443,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "1ac0fee8f2a5cb45cf845818a5dbc2d587052f15",
+          "size": 2093,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "6927254700307d3953502b760ac8a46984b1d233",
+          "size": 112,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "7af3b16dbea2d05c1a8ea9a4092a16f1390c63ca",
+          "size": 962,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yml",
+          "sha": "73e1f821366996a3769a840991c9cd4970975339",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "2a4f1df37dbafe7bead93d42e8e150942e59c2ce",
+          "size": 270,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENCE",
+          "sha": "e0687959f9e19e8bee8783424885bca65477fa28",
+          "size": 1078,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "2c98ab0d41e897cf660917f4910151802b96f053",
+          "size": 5956,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "RELEASING.md",
+          "sha": "bdc8af0c27bebeedbbdd6f536525a6cd94cc2b71",
+          "size": 1833,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "596b95c009d7884ce4bc505cad3687ecd14b7b37",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/filesize.md",
+          "sha": "9f3cf50065f3fcb4fabe4dce77cfa38f3db994cb",
+          "size": 34,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/i18n.md",
+          "sha": "3e4dcdf8dd55e2631ef352bb4ba00737282c5b18",
+          "size": 42,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.md",
+          "sha": "f75fa24199c917810e7696cc1276659889872ef3",
+          "size": 220,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/number.md",
+          "sha": "6b3194211b488c8af1f6fb22f47e12ef3cc4c850",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "752ae7b0c495ab330a889475788c67a8f4e32a2a",
+          "size": 41,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/time.md",
+          "sha": "13c8dd8ba7c9c801b9218d7039f3f52f6dfaa5f6",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "mkdocs.yml",
+          "sha": "f515aa86e8f391312647d6491f7886f160721930",
+          "size": 341,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a291cb69f62e5bd9f20fe1426943dbab4cb5f7ba",
+          "size": 39,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "scripts",
+          "sha": "5f87f5cf98f8002c7c3a52b514bd42823a1c4e41",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100755",
+          "path": "scripts/update-translations.sh",
+          "sha": "95c889860dd8d2c4776ad8146354caafd6af0b48",
+          "size": 516,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "107d9e61c54b9b919f165e0700d64dddf542d3ba",
+          "size": 298,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "9bc8bdbbd642ada7366035e1268e83afc2831b03",
+          "size": 2091,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "a561041b4d88d56d19322771de32a9aa9d079fa7",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize",
+          "sha": "ee1f8f16b944464cdb7c058d3020c83e1b254343",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/__init__.py",
+          "sha": "44d7c1d7f125e39088af03316da758656b2aba56",
+          "size": 719,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/filesize.py",
+          "sha": "5497e8e6aa721d7ffd6fae180dde8f5553eb0b0f",
+          "size": 2167,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/i18n.py",
+          "sha": "95e7be940a27c97d5a0fd348794832c6fa11fea9",
+          "size": 3398,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale",
+          "sha": "f953c2d5d5ac211b263375d42c1f7a8a670ee17a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/de_DE",
+          "sha": "ff5e679e62d6b682d8d368f3bdec649548e56f44",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES",
+          "sha": "31ff91fb8e376140dcfa9c401653df89c51f3e3e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES/humanize.mo",
+          "sha": "60956261cfd58836499e20467b340902002fc85f",
+          "size": 2615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES/humanize.po",
+          "sha": "8b35e93206b83e3e1279c7e8ee8b86abc9a6c8fd",
+          "size": 5186,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/es_ES",
+          "sha": "2ca1eb05299e1bd601f4449f9f0a52bc7ddb36bb",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES",
+          "sha": "50d758ace4c92f5e296e432015626a9f6fa6b3df",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES/humanize.mo",
+          "sha": "09ca065e5413ae649be8fa12b3980ea92eb370f0",
+          "size": 2692,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES/humanize.po",
+          "sha": "68f5b141829231aa24803517a4b7c4747c6b6267",
+          "size": 5106,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fa_IR",
+          "sha": "952129383cd998c3f472d85dd4308c60e2e01678",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES",
+          "sha": "23c9014f6b30ff9b7b3d45bd6bf1a1e5dddbc6a3",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES/humanize.mo",
+          "sha": "a13cf2a79280594fd03e0e1563680b0280b8419e",
+          "size": 2801,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES/humanize.po",
+          "sha": "c2a70da49ffae3c606482d2b69e40bbdd7a59358",
+          "size": 5367,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fi_FI",
+          "sha": "ab60df08cb1901cf5712539314e0172b10e92848",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES",
+          "sha": "bfd457c7412c1f6acf8c5c66f7fd3d970f3c9e9d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES/humanize.mo",
+          "sha": "d34085fb7cc2280cebc678f27df70bb28fffd227",
+          "size": 2629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES/humanize.po",
+          "sha": "1226296f663b144c32010b018514b3a06787af5d",
+          "size": 5208,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fr_FR",
+          "sha": "a8079518b73f94661a5d59e5f541f0717e7f9a3d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES",
+          "sha": "2c56ba503108bbaa7c7cb371c64715022f6ee96b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES/humanize.mo",
+          "sha": "f2aae3bcd59208a670d9b394a091a0d9228b6d96",
+          "size": 1900,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES/humanize.po",
+          "sha": "df85d625cb657413c997c79670e2c7aaf6f88778",
+          "size": 5434,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/id_ID",
+          "sha": "70f464c68b9de7aac49b0b45ec9666d5f332ab63",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES",
+          "sha": "514bc6c79f059fb93fc5cd4901f57ed886bafd89",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES/humanize.mo",
+          "sha": "0acecb14835d2d4af09bf2b5a58629a4f12ce229",
+          "size": 2443,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES/humanize.po",
+          "sha": "8ec63ef71486fdac8ebfc4006cf04222ad8a0ce3",
+          "size": 4855,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/it_IT",
+          "sha": "8035f2c2aeebe4419552ca529075587f937fd56b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES",
+          "sha": "11ddc277ed14bad0bd06e2039a865bf486622c29",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES/humanize.mo",
+          "sha": "5611b64846988251834bcd8388556d4b5d26858a",
+          "size": 2506,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES/humanize.po",
+          "sha": "a0992bc54491fab58e46414865482dc2a18ffbbc",
+          "size": 5098,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ja_JP",
+          "sha": "585710bb3adc4ec8c3802265426ad079e0f65aec",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES",
+          "sha": "223dc5c039fc16248891dbbb92223f5843bc2abe",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES/humanize.mo",
+          "sha": "41c35324ee9839ba866826878efca235b2b2b464",
+          "size": 1952,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES/humanize.po",
+          "sha": "c055cae63f2926025d481677d8f292b0bd3ea515",
+          "size": 4869,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ko_KR",
+          "sha": "9c4155952f9422a791988631992fce7ad33aa63c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES",
+          "sha": "f67d266c928b3a2cb5728a48b92dce9284e0c6a7",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES/humanize.mo",
+          "sha": "3439ba69905e9855d458b7d07ad04bb589019fc6",
+          "size": 1795,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES/humanize.po",
+          "sha": "27c274e35523b758d30c739026e0ec24c07e79a7",
+          "size": 5281,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/nl_NL",
+          "sha": "4542892118522ba4bef920ea8a3b7740954360e0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES",
+          "sha": "6ad29eb5a35e5ad19a7d687698b4ad7db04f2c79",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES/humanize.mo",
+          "sha": "541391fc32c54ca6ca5a00cd6a9fd96274d43ef9",
+          "size": 2581,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES/humanize.po",
+          "sha": "fdb0480ca345128810c049a03480e389f5971a9c",
+          "size": 5138,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pl_PL",
+          "sha": "5c21e1c1a35cddfeaf80e844e549e040442ab3d4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES",
+          "sha": "d6543e01c2c78daccd4a1e3994cc5dd23a9364f9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES/humanize.mo",
+          "sha": "05ed9d2d87bda098d70defff952d3e26e202b657",
+          "size": 2777,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES/humanize.po",
+          "sha": "34dd72d0adda0255311e273c1c2610357da97903",
+          "size": 5363,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_BR",
+          "sha": "ceecdfafb0128349d257ab3a654210b085e8a7a4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES",
+          "sha": "fc532d8001113bff2a974c80fb79046d56dea1b0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES/humanize.mo",
+          "sha": "a79ea93bfa68321f9a96753c30b479a4be9d9b15",
+          "size": 2499,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES/humanize.po",
+          "sha": "27688c7bf2c3041ef6f7106fdc113655db16c61c",
+          "size": 5054,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_PT",
+          "sha": "c56a6c53513ffac0337e2112373b7af9a9ed5c31",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES",
+          "sha": "eac77f516608386af1e5b2ce2766ca3707297836",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES/humanize.mo",
+          "sha": "1dea0aeb3aee4710a6ee9f6bd2e90d2db477266e",
+          "size": 2716,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES/humanize.po",
+          "sha": "eecd5971347c831190581533032f6373bc8e2241",
+          "size": 5071,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ru_RU",
+          "sha": "ecd4ad5fd259f5fb6939990474dee3c62cb67969",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES",
+          "sha": "bce7d3b337f4eb91f3685aa70c46d4288ad7886b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.mo",
+          "sha": "054849cf1512fa2fed02319e412a16db8674171a",
+          "size": 3101,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.po",
+          "sha": "cfa8ad4fb53e96e446d12cbb19c04d07fc7942f2",
+          "size": 6500,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/sk_SK",
+          "sha": "4bbc2a9a1ea183842c9fb358819966ce4bffa049",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES",
+          "sha": "5198f54db6640c79767f775a8d1251080a25d575",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES/humanize.mo",
+          "sha": "921ce40ce46f4ced1cb1e50a7b1ecc416a17b3a7",
+          "size": 2656,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES/humanize.po",
+          "sha": "04c206a8d28599e9a0402a64f03e76868866db14",
+          "size": 5366,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/tr_TR",
+          "sha": "3f2511cae761208ec3c6156b9fc80bec759eaf14",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES",
+          "sha": "6cb7deb4cf04d6921567d474eb5aa904829162fa",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES/humanize.mo",
+          "sha": "2294de7427dc18783064991de955c3f6be323d6d",
+          "size": 2484,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES/humanize.po",
+          "sha": "a3da4da0d60d2fb554a956814cc0426c7b34ce49",
+          "size": 5049,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/uk_UA",
+          "sha": "1da134dbd32b2e8c4662117dc5ee80e3807088df",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES",
+          "sha": "10b88fb6c7ab286a31685e70f94371aef64f7a78",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES/humanize.mo",
+          "sha": "db054f906b8a9c27836b3a01b35db9c4e9c518a0",
+          "size": 3058,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES/humanize.po",
+          "sha": "c4d1d98259fdc152c58f02a0c882aa898e7817da",
+          "size": 5667,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/vi_VI",
+          "sha": "76d5460a3da7c6db1808078b3df8593e96036788",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES",
+          "sha": "8fb41a57d397b7467abafdc6a6788eaeb0437e24",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES/humanize.mo",
+          "sha": "ddf02f795f419e06339e92ae2a7e22e115f4e761",
+          "size": 2315,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES/humanize.po",
+          "sha": "cb403bd4cee9bf412d04252e8192e97e1f050e71",
+          "size": 5294,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/zh_CN",
+          "sha": "a6a1a1d70a1aa9b3d72d76044d501bb403782345",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES",
+          "sha": "30126f468a5ac23257871cfcf40922eb6d9422be",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES/humanize.mo",
+          "sha": "af99510ac00e4110fd759b159ebabbacaf3c0b68",
+          "size": 2347,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES/humanize.po",
+          "sha": "5433598acbeca1eaaf8c90a29e5ed66f67a707ff",
+          "size": 4932,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/number.py",
+          "sha": "0fef81f1a115932c8af4a18304df7e44af633987",
+          "size": 9019,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/time.py",
+          "sha": "319d7e41a0f38a795047bd01337a149559594eaf",
+          "size": 16486,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "1b622723511cae795ad9d27ebe125a4d9d432fc1",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_filesize.py",
+          "sha": "871c61a80c7044b8fc0b6a50c2d19adcc4950cd6",
+          "size": 1221,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_i18n.py",
+          "sha": "385be253a95516dc6a797851b4c454b28f33f1a5",
+          "size": 2160,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_number.py",
+          "sha": "347217d2163062b4c71d1516439ca11d4529a864",
+          "size": 4170,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_time.py",
+          "sha": "90c01300895cd5ebe4c07a6cd76aa804e1aea910",
+          "size": 23143,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "074b7e146cb9103f42cf58ad454e46080b7870b8",
+          "size": 412,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/python-humanize/humanize/commit/62706fd4cb90ebeb9bf85685bad8ab1fa9d0c742",
+  "head": {
+    "commit": {
+      "message": "Represent with a zero if the delta is too small\n\nIf the delta is too small to be represented with the minimum unit,\nrepresent it as \"0 X\" where X is the minimum unit.\n\nFixes #159",
+      "parents": [
+        {
+          "sha": "9d9de69177154b41b2d6ef412d1487639e99833d"
+        }
+      ],
+      "sha": "62706fd4cb90ebeb9bf85685bad8ab1fa9d0c742",
+      "tree": {
+        "sha": "947a59fc72003359b4be1603fb2985750e8ef124"
+      }
+    },
+    "license": {
+      "path": "LICENCE",
+      "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "b45b63c2157e0750b5041dddc1bf73ac3ea88d77e1304adb0b1c6543e0d82f2d",
+      "src/humanize/__init__.py": "a0a452062f9eed2065b9b4089ffff6689442fc6fc8212435c0439e5f73ea39cb",
+      "src/humanize/filesize.py": "20edfcab3fe5b2ec4bf32bc629b4995270fc41c591778ea95431a7f5e1e2c609",
+      "src/humanize/i18n.py": "5d490c4ce8a3dcbb5d5515a18c97158ee855c7c4ddf807c169e690549dae317c",
+      "src/humanize/number.py": "e311caa1367cb54b1f28a63102f79fe93b170c31f46e1f398e5dc76b5bfedb45",
+      "src/humanize/time.py": "eade1538f4abf4617de696c076e01a5885a63b7cf6b2703db1e43bcf499539b4",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_filesize.py": "a847a0ac4d17e34b8af8c795dec7053e011742fed27f0dbd6e59ce9cf131e61e",
+      "tests/test_i18n.py": "ae15c91a3aaa12bf0202fbd5e9f1e53a5928e540a872ceecffd449bcdc44f89b",
+      "tests/test_number.py": "9b35a25c5f4b7ee82765271d788e44774270957261988e168eeb988b0034ca2c",
+      "tests/test_time.py": "9d98f5e4dc77e1298b481392c411867907c6309877a0e63fa4d3ed35e71068f7"
+    },
+    "tree": {
+      "sha": "947a59fc72003359b4be1603fb2985750e8ef124",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "a98564ff3b935335117e239a509f5045cb44e2a9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/CONTRIBUTING.md",
+          "sha": "08fc73d1affcf8474bfba09ce00d9716dfb44802",
+          "size": 506,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.md",
+          "sha": "a7597cb438ed5a35d7b5e8eb82d80bf01cf13b7f",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE.md",
+          "sha": "696a67a2a01ae3308deb83af70768e65ef6f6d7d",
+          "size": 442,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/PULL_REQUEST_TEMPLATE.md",
+          "sha": "7fa46eca88a55ac7e19390cf15f0990552b3c4a0",
+          "size": 58,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "198aa76fb527f4dd41170f51a4c6bc8d0153bbb2",
+          "size": 144,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/labels.yml",
+          "sha": "8f0eca226b5f1d5a3c4cd8bf7b6b49f8888e17ee",
+          "size": 1710,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/release-drafter.yml",
+          "sha": "402bfbf6fe62d38bf3dec19f4cec6bd1625629a9",
+          "size": 535,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "338771773938c6b98e24ecf7afd25e969963fb71",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/docs.yml",
+          "sha": "f707d4bf10b7404f16d2d62638335a89d2f28a50",
+          "size": 600,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/labels.yml",
+          "sha": "230384694fccca74cc629dbfde83f8a71cff51cd",
+          "size": 295,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/lint.yml",
+          "sha": "87a14382f0700b353f82192b19e3779aaa41ab21",
+          "size": 742,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release-drafter.yml",
+          "sha": "959f1e072fd7181e2b6543d81d89c492784fa8fa",
+          "size": 443,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "1ac0fee8f2a5cb45cf845818a5dbc2d587052f15",
+          "size": 2093,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "6927254700307d3953502b760ac8a46984b1d233",
+          "size": 112,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "7af3b16dbea2d05c1a8ea9a4092a16f1390c63ca",
+          "size": 962,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yml",
+          "sha": "73e1f821366996a3769a840991c9cd4970975339",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "2a4f1df37dbafe7bead93d42e8e150942e59c2ce",
+          "size": 270,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENCE",
+          "sha": "e0687959f9e19e8bee8783424885bca65477fa28",
+          "size": 1078,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "2c98ab0d41e897cf660917f4910151802b96f053",
+          "size": 5956,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "RELEASING.md",
+          "sha": "bdc8af0c27bebeedbbdd6f536525a6cd94cc2b71",
+          "size": 1833,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "596b95c009d7884ce4bc505cad3687ecd14b7b37",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/filesize.md",
+          "sha": "9f3cf50065f3fcb4fabe4dce77cfa38f3db994cb",
+          "size": 34,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/i18n.md",
+          "sha": "3e4dcdf8dd55e2631ef352bb4ba00737282c5b18",
+          "size": 42,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.md",
+          "sha": "f75fa24199c917810e7696cc1276659889872ef3",
+          "size": 220,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/number.md",
+          "sha": "6b3194211b488c8af1f6fb22f47e12ef3cc4c850",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "752ae7b0c495ab330a889475788c67a8f4e32a2a",
+          "size": 41,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/time.md",
+          "sha": "13c8dd8ba7c9c801b9218d7039f3f52f6dfaa5f6",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "mkdocs.yml",
+          "sha": "f515aa86e8f391312647d6491f7886f160721930",
+          "size": 341,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "a291cb69f62e5bd9f20fe1426943dbab4cb5f7ba",
+          "size": 39,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "scripts",
+          "sha": "5f87f5cf98f8002c7c3a52b514bd42823a1c4e41",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100755",
+          "path": "scripts/update-translations.sh",
+          "sha": "95c889860dd8d2c4776ad8146354caafd6af0b48",
+          "size": 516,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "107d9e61c54b9b919f165e0700d64dddf542d3ba",
+          "size": 298,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "9bc8bdbbd642ada7366035e1268e83afc2831b03",
+          "size": 2091,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "dc7be9feeded81e7011ea39a56efcbd738d288cc",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize",
+          "sha": "7332ce4be4467836475ae10f70e1bdfc98fe00b5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/__init__.py",
+          "sha": "44d7c1d7f125e39088af03316da758656b2aba56",
+          "size": 719,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/filesize.py",
+          "sha": "5497e8e6aa721d7ffd6fae180dde8f5553eb0b0f",
+          "size": 2167,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/i18n.py",
+          "sha": "95e7be940a27c97d5a0fd348794832c6fa11fea9",
+          "size": 3398,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale",
+          "sha": "f953c2d5d5ac211b263375d42c1f7a8a670ee17a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/de_DE",
+          "sha": "ff5e679e62d6b682d8d368f3bdec649548e56f44",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES",
+          "sha": "31ff91fb8e376140dcfa9c401653df89c51f3e3e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES/humanize.mo",
+          "sha": "60956261cfd58836499e20467b340902002fc85f",
+          "size": 2615,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/de_DE/LC_MESSAGES/humanize.po",
+          "sha": "8b35e93206b83e3e1279c7e8ee8b86abc9a6c8fd",
+          "size": 5186,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/es_ES",
+          "sha": "2ca1eb05299e1bd601f4449f9f0a52bc7ddb36bb",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES",
+          "sha": "50d758ace4c92f5e296e432015626a9f6fa6b3df",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES/humanize.mo",
+          "sha": "09ca065e5413ae649be8fa12b3980ea92eb370f0",
+          "size": 2692,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/es_ES/LC_MESSAGES/humanize.po",
+          "sha": "68f5b141829231aa24803517a4b7c4747c6b6267",
+          "size": 5106,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fa_IR",
+          "sha": "952129383cd998c3f472d85dd4308c60e2e01678",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES",
+          "sha": "23c9014f6b30ff9b7b3d45bd6bf1a1e5dddbc6a3",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES/humanize.mo",
+          "sha": "a13cf2a79280594fd03e0e1563680b0280b8419e",
+          "size": 2801,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fa_IR/LC_MESSAGES/humanize.po",
+          "sha": "c2a70da49ffae3c606482d2b69e40bbdd7a59358",
+          "size": 5367,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fi_FI",
+          "sha": "ab60df08cb1901cf5712539314e0172b10e92848",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES",
+          "sha": "bfd457c7412c1f6acf8c5c66f7fd3d970f3c9e9d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES/humanize.mo",
+          "sha": "d34085fb7cc2280cebc678f27df70bb28fffd227",
+          "size": 2629,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fi_FI/LC_MESSAGES/humanize.po",
+          "sha": "1226296f663b144c32010b018514b3a06787af5d",
+          "size": 5208,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fr_FR",
+          "sha": "a8079518b73f94661a5d59e5f541f0717e7f9a3d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES",
+          "sha": "2c56ba503108bbaa7c7cb371c64715022f6ee96b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES/humanize.mo",
+          "sha": "f2aae3bcd59208a670d9b394a091a0d9228b6d96",
+          "size": 1900,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/fr_FR/LC_MESSAGES/humanize.po",
+          "sha": "df85d625cb657413c997c79670e2c7aaf6f88778",
+          "size": 5434,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/id_ID",
+          "sha": "70f464c68b9de7aac49b0b45ec9666d5f332ab63",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES",
+          "sha": "514bc6c79f059fb93fc5cd4901f57ed886bafd89",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES/humanize.mo",
+          "sha": "0acecb14835d2d4af09bf2b5a58629a4f12ce229",
+          "size": 2443,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/id_ID/LC_MESSAGES/humanize.po",
+          "sha": "8ec63ef71486fdac8ebfc4006cf04222ad8a0ce3",
+          "size": 4855,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/it_IT",
+          "sha": "8035f2c2aeebe4419552ca529075587f937fd56b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES",
+          "sha": "11ddc277ed14bad0bd06e2039a865bf486622c29",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES/humanize.mo",
+          "sha": "5611b64846988251834bcd8388556d4b5d26858a",
+          "size": 2506,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/it_IT/LC_MESSAGES/humanize.po",
+          "sha": "a0992bc54491fab58e46414865482dc2a18ffbbc",
+          "size": 5098,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ja_JP",
+          "sha": "585710bb3adc4ec8c3802265426ad079e0f65aec",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES",
+          "sha": "223dc5c039fc16248891dbbb92223f5843bc2abe",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES/humanize.mo",
+          "sha": "41c35324ee9839ba866826878efca235b2b2b464",
+          "size": 1952,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ja_JP/LC_MESSAGES/humanize.po",
+          "sha": "c055cae63f2926025d481677d8f292b0bd3ea515",
+          "size": 4869,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ko_KR",
+          "sha": "9c4155952f9422a791988631992fce7ad33aa63c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES",
+          "sha": "f67d266c928b3a2cb5728a48b92dce9284e0c6a7",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES/humanize.mo",
+          "sha": "3439ba69905e9855d458b7d07ad04bb589019fc6",
+          "size": 1795,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ko_KR/LC_MESSAGES/humanize.po",
+          "sha": "27c274e35523b758d30c739026e0ec24c07e79a7",
+          "size": 5281,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/nl_NL",
+          "sha": "4542892118522ba4bef920ea8a3b7740954360e0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES",
+          "sha": "6ad29eb5a35e5ad19a7d687698b4ad7db04f2c79",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES/humanize.mo",
+          "sha": "541391fc32c54ca6ca5a00cd6a9fd96274d43ef9",
+          "size": 2581,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/nl_NL/LC_MESSAGES/humanize.po",
+          "sha": "fdb0480ca345128810c049a03480e389f5971a9c",
+          "size": 5138,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pl_PL",
+          "sha": "5c21e1c1a35cddfeaf80e844e549e040442ab3d4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES",
+          "sha": "d6543e01c2c78daccd4a1e3994cc5dd23a9364f9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES/humanize.mo",
+          "sha": "05ed9d2d87bda098d70defff952d3e26e202b657",
+          "size": 2777,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pl_PL/LC_MESSAGES/humanize.po",
+          "sha": "34dd72d0adda0255311e273c1c2610357da97903",
+          "size": 5363,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_BR",
+          "sha": "ceecdfafb0128349d257ab3a654210b085e8a7a4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES",
+          "sha": "fc532d8001113bff2a974c80fb79046d56dea1b0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES/humanize.mo",
+          "sha": "a79ea93bfa68321f9a96753c30b479a4be9d9b15",
+          "size": 2499,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_BR/LC_MESSAGES/humanize.po",
+          "sha": "27688c7bf2c3041ef6f7106fdc113655db16c61c",
+          "size": 5054,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_PT",
+          "sha": "c56a6c53513ffac0337e2112373b7af9a9ed5c31",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES",
+          "sha": "eac77f516608386af1e5b2ce2766ca3707297836",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES/humanize.mo",
+          "sha": "1dea0aeb3aee4710a6ee9f6bd2e90d2db477266e",
+          "size": 2716,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/pt_PT/LC_MESSAGES/humanize.po",
+          "sha": "eecd5971347c831190581533032f6373bc8e2241",
+          "size": 5071,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ru_RU",
+          "sha": "ecd4ad5fd259f5fb6939990474dee3c62cb67969",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES",
+          "sha": "bce7d3b337f4eb91f3685aa70c46d4288ad7886b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.mo",
+          "sha": "054849cf1512fa2fed02319e412a16db8674171a",
+          "size": 3101,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.po",
+          "sha": "cfa8ad4fb53e96e446d12cbb19c04d07fc7942f2",
+          "size": 6500,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/sk_SK",
+          "sha": "4bbc2a9a1ea183842c9fb358819966ce4bffa049",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES",
+          "sha": "5198f54db6640c79767f775a8d1251080a25d575",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES/humanize.mo",
+          "sha": "921ce40ce46f4ced1cb1e50a7b1ecc416a17b3a7",
+          "size": 2656,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/sk_SK/LC_MESSAGES/humanize.po",
+          "sha": "04c206a8d28599e9a0402a64f03e76868866db14",
+          "size": 5366,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/tr_TR",
+          "sha": "3f2511cae761208ec3c6156b9fc80bec759eaf14",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES",
+          "sha": "6cb7deb4cf04d6921567d474eb5aa904829162fa",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES/humanize.mo",
+          "sha": "2294de7427dc18783064991de955c3f6be323d6d",
+          "size": 2484,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/tr_TR/LC_MESSAGES/humanize.po",
+          "sha": "a3da4da0d60d2fb554a956814cc0426c7b34ce49",
+          "size": 5049,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/uk_UA",
+          "sha": "1da134dbd32b2e8c4662117dc5ee80e3807088df",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES",
+          "sha": "10b88fb6c7ab286a31685e70f94371aef64f7a78",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES/humanize.mo",
+          "sha": "db054f906b8a9c27836b3a01b35db9c4e9c518a0",
+          "size": 3058,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/uk_UA/LC_MESSAGES/humanize.po",
+          "sha": "c4d1d98259fdc152c58f02a0c882aa898e7817da",
+          "size": 5667,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/vi_VI",
+          "sha": "76d5460a3da7c6db1808078b3df8593e96036788",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES",
+          "sha": "8fb41a57d397b7467abafdc6a6788eaeb0437e24",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES/humanize.mo",
+          "sha": "ddf02f795f419e06339e92ae2a7e22e115f4e761",
+          "size": 2315,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/vi_VI/LC_MESSAGES/humanize.po",
+          "sha": "cb403bd4cee9bf412d04252e8192e97e1f050e71",
+          "size": 5294,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/zh_CN",
+          "sha": "a6a1a1d70a1aa9b3d72d76044d501bb403782345",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES",
+          "sha": "30126f468a5ac23257871cfcf40922eb6d9422be",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES/humanize.mo",
+          "sha": "af99510ac00e4110fd759b159ebabbacaf3c0b68",
+          "size": 2347,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/locale/zh_CN/LC_MESSAGES/humanize.po",
+          "sha": "5433598acbeca1eaaf8c90a29e5ed66f67a707ff",
+          "size": 4932,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/number.py",
+          "sha": "0fef81f1a115932c8af4a18304df7e44af633987",
+          "size": 9019,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/humanize/time.py",
+          "sha": "e40c482cc86f5b2eaee3e28cfb5f79d3bc88f7c0",
+          "size": 16877,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "e8841bba6b60db708eebe9fe7cc8e2e1e0431fe6",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_filesize.py",
+          "sha": "871c61a80c7044b8fc0b6a50c2d19adcc4950cd6",
+          "size": 1221,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_i18n.py",
+          "sha": "385be253a95516dc6a797851b4c454b28f33f1a5",
+          "size": 2160,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_number.py",
+          "sha": "347217d2163062b4c71d1516439ca11d4529a864",
+          "size": 4170,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_time.py",
+          "sha": "f0311ce9b80d21af17aed70aa416a4b1a44eacb4",
+          "size": 23252,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "074b7e146cb9103f42cf58ad454e46080b7870b8",
+          "size": 412,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "humanize_small_delta",
+  "label_review": {
+    "author": "Codex source-only draft, November 17, 2026",
+    "drafted_before_analysis": true,
+    "labels_sha256": "5efdaa2fd8e2ea4a589b0b42717ed1e3abd7b74c728bd9871a2a34ecaa64313f",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "python-humanize/humanize",
+  "schema_version": "1.0",
+  "selection_reason": "Return a zero minimum unit for a too-small precise delta.",
+  "warnings": []
+}

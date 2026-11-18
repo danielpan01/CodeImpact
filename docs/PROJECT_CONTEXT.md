@@ -3,12 +3,17 @@
 ## Current priority — November 17, 2026
 
 The 9C literal-table and validator/export slices merged through PRs #20 and #21.
-The test parameter-table slice is implemented. Inflection titleize
+The test parameter-table slice merged through PR #22. Inflection titleize
 selects 2/22 with one resolved call and one conservative mutation/cleanup path.
 Expanded v3 is 47/120, with 42 TP / 5 FP / 0 FN / 61 TN and all 12 uncertain
 definitions unselected. New `parameter-tables-v1` receipts preserve the
 additive-export and literal-table records. Labels await independent review.
 [Titleize source and evidence review](PARAMETER_TABLE_REVIEW.md)
+
+The v4 dataset and offline replay use the frozen PR #22 engine.
+It selects 92/105 with 19 TP / 57 FP / 0 FN / 13 TN, all 16 uncertain
+definitions selected, and 64 definitions outside discovery. Independent
+v4 source-label review is pending. [Results](REAL_EVALUATION_V4.md)
 
 ## Preserved milestone context
 
@@ -71,7 +76,7 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next evaluation milestone: 10, with new frozen inputs and reviewed labels.**
+**Next analyzer candidate: bounded unittest mixed-case method discovery.**
 The 124 remaining LFU false positives are a separate scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or

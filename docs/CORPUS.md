@@ -413,3 +413,18 @@ legacy-dispatch receipts. V2's entire measurement matches. V3 removes exactly
 Four retained paths change to existing production evidence after an unrelated
 test-table path is filtered. The original labels and all historical inputs
 retain their hashes. [Per-case results and evidence](MODULE_DATA_REVIEW.md)
+
+## Fresh evaluation v4
+
+`corpus/real-v4` contains six newly pinned changes across Humanize, IceCream
+and oyaml. The pre-analysis protocol and candidate decisions establish
+selection order and explain exclusions. Source, complete tree receipts,
+license notices, draft labels, discovery inventories and the source-only
+review pack were frozen before the first analysis. The first measurement
+and discrepancy baseline are separate files. V4 uses the existing static
+discovery policy. Its extended source inventory counts mixed-case unittest
+methods outside discovery without including them in metric labels.
+
+Run `make evaluate-real-v4` offline. See the [v4 results](REAL_EVALUATION_V4.md),
+[dataset](../corpus/real-v4/README.md), and
+[human label review workflow](../corpus/real-v4/REVIEW_WORKFLOW.md).

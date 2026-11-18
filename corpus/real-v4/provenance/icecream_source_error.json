@@ -1,0 +1,370 @@
+{
+  "base": {
+    "commit": {
+      "message": "spacing",
+      "parents": [
+        {
+          "sha": "9bd62f3c3ae4e0502b8dc7a4ccf25de45ef0bd19"
+        }
+      ],
+      "sha": "daa30a0672e4588ca75a7072352114fe4232869a",
+      "tree": {
+        "sha": "20ebbe3a26b0d5f2a48582a0d3d4759679197897"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+      "spdx": "MIT",
+      "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+    },
+    "source_sha256": {
+      "icecream/__init__.py": "fc6d494eb78773cb5518f7360cebad1208b879d08f671f8a28669cb1f2117642",
+      "icecream/__version__.py": "3c3579d9581e2e5e766b4755fa47979cd3e4503fff08ad2f6a8b65caecbd201c",
+      "icecream/builtins.py": "5d1c5d364426ea231fe5ca088efbae87d8be91e289b861d79b769825cc0409fd",
+      "icecream/coloring.py": "d0b8b587158c6179fc8e0a26b58ceaaedf86366266f573666505f96856e87df6",
+      "icecream/icecream.py": "a2f6508eb5581b3f876d0eeb3e9c936a5f03eb0a785b0cf8dfeaf845c5ad0674",
+      "setup.py": "2dfa5fae1450fc172298879630afb6b753ebca13653e8153a3a3738afcb276c9",
+      "tests/install_test_import.py": "85088eee152b898b293df62927d56244301076d51ab3d98b87f174ea7a8f2b3e",
+      "tests/test_icecream.py": "bbbf25ea1e3c03cedf52cbf6ec055c209ebaf119eef498274e191e2962b5052a",
+      "tests/test_install.py": "cae593e5d3063f52f851561c6d51aafe8f84c0644644062d85f1d07b15534534"
+    },
+    "tree": {
+      "sha": "20ebbe3a26b0d5f2a48582a0d3d4759679197897",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "5a8edc0e1d30e6809371e3085305218064fec71f",
+          "size": 65,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "18ff33a8e859cfab6a7ec042f9f0cbe80390ec1b",
+          "size": 463,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "9809d45604ca225d691b2592a42e9db80d18353e",
+          "size": 1054,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "1372e018c72d0c67850a9a2cf43e3f277f6cb7df",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "86a55f79768789a9a1db0bcb6dfcf7ac38acda20",
+          "size": 7844,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.txt",
+          "sha": "b585ddb90da37817ac25235e073a95ce1da695b8",
+          "size": 2817,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "icecream",
+          "sha": "8edee49dc64ec42399fda021efb54d71b9d0236f",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/__init__.py",
+          "sha": "4962b92046791e2339f05f73767c5f7a2aabfeb7",
+          "size": 507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/__version__.py",
+          "sha": "3b7b10b441fd0a13bc15f737415665e36dc1bd2a",
+          "size": 485,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/builtins.py",
+          "sha": "67136e0d42d97442d85ff1a4f2d1028877ebbc98",
+          "size": 386,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/coloring.py",
+          "sha": "b577be354ab1304d6661ce2e253abacadff0e094",
+          "size": 3623,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/icecream.py",
+          "sha": "a361356e9100fbeb346e0d5055677df5cbd50eeb",
+          "size": 9899,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "logo.svg",
+          "sha": "f71ccb6388782c57766ad2cc8eafbcb1d921b466",
+          "size": 12801,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "2e9053c06e45cd65ebfe61ac591c280a1a9c6ee4",
+          "size": 67,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "df3d31dd69c41d8c0ed94735a40ffb53c928d012",
+          "size": 3228,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "9f914a6f17c724539b17bd614ac6008de222294e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/install_test_import.py",
+          "sha": "cf03ac0fcdeae4bc9c3e5037c03563d083a1517a",
+          "size": 182,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_icecream.py",
+          "sha": "8c695ee2b0756bb131c0fdca5fd9df37bd8518a0",
+          "size": 17121,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_install.py",
+          "sha": "61f9a796c0d774123552ac9cf8717514997548d6",
+          "size": 896,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "0652468ee2cdcd7f454157439c8129c4121afd22",
+          "size": 125,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/gruns/icecream/commit/2d0144ef5f4529564b5fe7f64fc1a86e0a682074",
+  "head": {
+    "commit": {
+      "message": "tweak the no source available error message to be clearer",
+      "parents": [
+        {
+          "sha": "daa30a0672e4588ca75a7072352114fe4232869a"
+        }
+      ],
+      "sha": "2d0144ef5f4529564b5fe7f64fc1a86e0a682074",
+      "tree": {
+        "sha": "c4c822fa4a5428726e9f10db785349f5fbd0b254"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+      "spdx": "MIT",
+      "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+    },
+    "source_sha256": {
+      "icecream/__init__.py": "fc6d494eb78773cb5518f7360cebad1208b879d08f671f8a28669cb1f2117642",
+      "icecream/__version__.py": "3c3579d9581e2e5e766b4755fa47979cd3e4503fff08ad2f6a8b65caecbd201c",
+      "icecream/builtins.py": "5d1c5d364426ea231fe5ca088efbae87d8be91e289b861d79b769825cc0409fd",
+      "icecream/coloring.py": "d0b8b587158c6179fc8e0a26b58ceaaedf86366266f573666505f96856e87df6",
+      "icecream/icecream.py": "79bc8e410feb4f153d900c6e84271bd60524f1121f59b4060f2f61fcb02d04e4",
+      "setup.py": "2dfa5fae1450fc172298879630afb6b753ebca13653e8153a3a3738afcb276c9",
+      "tests/install_test_import.py": "85088eee152b898b293df62927d56244301076d51ab3d98b87f174ea7a8f2b3e",
+      "tests/test_icecream.py": "bbbf25ea1e3c03cedf52cbf6ec055c209ebaf119eef498274e191e2962b5052a",
+      "tests/test_install.py": "cae593e5d3063f52f851561c6d51aafe8f84c0644644062d85f1d07b15534534"
+    },
+    "tree": {
+      "sha": "c4c822fa4a5428726e9f10db785349f5fbd0b254",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "5a8edc0e1d30e6809371e3085305218064fec71f",
+          "size": 65,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "18ff33a8e859cfab6a7ec042f9f0cbe80390ec1b",
+          "size": 463,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "9809d45604ca225d691b2592a42e9db80d18353e",
+          "size": 1054,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "1372e018c72d0c67850a9a2cf43e3f277f6cb7df",
+          "size": 30,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "86a55f79768789a9a1db0bcb6dfcf7ac38acda20",
+          "size": 7844,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.txt",
+          "sha": "b585ddb90da37817ac25235e073a95ce1da695b8",
+          "size": 2817,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "icecream",
+          "sha": "7da4e5c2fb5c0735b30420e14959b7c12730b70a",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/__init__.py",
+          "sha": "4962b92046791e2339f05f73767c5f7a2aabfeb7",
+          "size": 507,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/__version__.py",
+          "sha": "3b7b10b441fd0a13bc15f737415665e36dc1bd2a",
+          "size": 485,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/builtins.py",
+          "sha": "67136e0d42d97442d85ff1a4f2d1028877ebbc98",
+          "size": 386,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/coloring.py",
+          "sha": "b577be354ab1304d6661ce2e253abacadff0e094",
+          "size": 3623,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "icecream/icecream.py",
+          "sha": "5a7ae4cb19595ee4d4b6ef232439fbf60ccfe188",
+          "size": 9954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "logo.svg",
+          "sha": "f71ccb6388782c57766ad2cc8eafbcb1d921b466",
+          "size": 12801,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "2e9053c06e45cd65ebfe61ac591c280a1a9c6ee4",
+          "size": 67,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "df3d31dd69c41d8c0ed94735a40ffb53c928d012",
+          "size": 3228,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "9f914a6f17c724539b17bd614ac6008de222294e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/install_test_import.py",
+          "sha": "cf03ac0fcdeae4bc9c3e5037c03563d083a1517a",
+          "size": 182,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_icecream.py",
+          "sha": "8c695ee2b0756bb131c0fdca5fd9df37bd8518a0",
+          "size": 17121,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_install.py",
+          "sha": "61f9a796c0d774123552ac9cf8717514997548d6",
+          "size": 896,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "0652468ee2cdcd7f454157439c8129c4121afd22",
+          "size": 125,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "icecream_source_error",
+  "label_review": {
+    "author": "Codex source-only draft, November 17, 2026",
+    "drafted_before_analysis": true,
+    "labels_sha256": "c1b7b469b5b27e9284c6f6b8acdf2caffa968023960f8ccc27d284499df1d972",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "gruns/icecream",
+  "schema_version": "1.0",
+  "selection_reason": "Change the public message raised when source is unavailable.",
+  "warnings": []
+}

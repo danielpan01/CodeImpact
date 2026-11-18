@@ -47,7 +47,7 @@ def select_license(tree: Tree) -> TreeEntry:
     licenses = [
         entry
         for entry in tree.tree
-        if entry.path in {"LICENSE.txt", "LICENSE.rst", "LICENSE", "MIT-LICENSE"}
+        if entry.path in {"LICENSE.txt", "LICENSE.rst", "LICENSE", "LICENCE", "MIT-LICENSE"}
     ]
     if len(licenses) != 1:
         raise ValueError("Capture requires one explicit root license; review this repository")
