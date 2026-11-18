@@ -887,3 +887,15 @@ can invoke code outside the test body. Other aggregate seeds and all
 active/resolved evidence follow their existing traversals. The capture boundary
 and budgets are described in the
 [Slugify review](SLUGIFY_FALLBACK_REVIEW.md).
+
+## Literal module-data dependencies
+
+`ModuleDataFallback` recognizes full module edits confined to existing literal
+sequence-of-row assignments. A bounded source query checks each test's reads,
+parameter decorators, defaults, transitive calls and eager initialization.
+Each changed module has its own traversal, so production and test parameter data
+can supply independent contributions. A changed-data read retains fallback.
+Unknown effects, aliases/re-exports, rebinding and other reachable change shapes
+decline the proof. The original graph supplies every retained path. The query
+uses a 12,000-step and 24-level bound and reads source as AST data.
+[Supported initialization and exact boundaries](MODULE_DATA_REVIEW.md)

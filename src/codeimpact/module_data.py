@@ -1,0 +1,626 @@
+"""Negative dependency proof for edits confined to existing literal rule tables."""
+
+import ast
+import copy
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
+
+from codeimpact.selection import MAX_DEPTH
+
+if TYPE_CHECKING:
+    from codeimpact.analyzer import Index
+
+MAX_STEPS = 12000
+MAX_LITERAL_NODES = 4000
+SCALAR = (str, bytes, int, float, bool, type(None))
+DATA_METHODS = {
+    "upper",
+    "lower",
+    "capitalize",
+    "replace",
+    "strip",
+    "split",
+    "join",
+    "format",
+    "encode",
+    "decode",
+    "group",
+    "get",
+    "items",
+    "values",
+    "keys",
+}
+MUTATORS = {"insert", "append", "add"}
+BUILTINS = {"str", "bytes", "int", "bool", "float", "abs", "len", "tuple", "list", "set", "dict"}
+EXTERNAL_CALLS = {"re.sub", "re.search", "re.escape", "unicodedata.normalize"}
+EXTERNAL_MODULES = {"re", "unicodedata", "pytest"}
+MODULE_HOOKS = {
+    "__getattr__",
+    "__dir__",
+    "setup_module",
+    "teardown_module",
+    "setup_function",
+    "teardown_function",
+    "setUpModule",
+    "tearDownModule",
+    "load_tests",
+}
+
+
+class Unknown(Exception):
+    """Incomplete source evidence retains the contribution."""
+
+
+class ReadsTable(Exception):
+    """The test reaches the edited binding."""
+
+
+@dataclass(frozen=True)
+class Data:
+    table: tuple[str, str] | None = None
+
+
+DATA = Data()
+
+
+@dataclass
+class Scope:
+    path: str
+    values: dict[str, "Value"] = field(default_factory=dict)
+    parent: "Scope | None" = None
+
+
+@dataclass
+class Function:
+    node: ast.FunctionDef | ast.Lambda
+    scope: Scope
+
+
+@dataclass(frozen=True)
+class Module:
+    path: str
+
+
+@dataclass(frozen=True)
+class External:
+    name: str
+
+
+type Value = Data | Function | Module | External
+
+
+def literal(node: ast.AST) -> bool:
+    nodes = list(ast.walk(node))
+    return (
+        len(nodes) <= MAX_LITERAL_NODES
+        and all(
+            isinstance(n, (ast.List, ast.Tuple, ast.Set, ast.Dict, ast.Load))
+            or isinstance(n, ast.Constant)
+            and type(n.value) in SCALAR
+            for n in nodes
+        )
+        and not any(isinstance(n, ast.Dict) and None in n.keys for n in nodes)
+    )
+
+
+def table(node: ast.AST) -> bool:
+    return (
+        isinstance(node, (ast.List, ast.Tuple))
+        and bool(node.elts)
+        and all(isinstance(row, (ast.List, ast.Tuple)) and bool(row.elts) for row in node.elts)
+        and literal(node)
+    )
+
+
+def changed_tables(before: "Index", after: "Index", path: str) -> set[str]:
+    old, new = (i.syntax.get(f"{path}::<module>") for i in (before, after))
+    if not isinstance(old, ast.Module) or not isinstance(new, ast.Module):
+        return set()
+    if len(old.body) != len(new.body):
+        return set()
+    names = set()
+    normalized = copy.deepcopy(new)
+    for a, b, replacement in zip(old.body, new.body, normalized.body, strict=True):
+        if ast.dump(a) == ast.dump(b):
+            continue
+        if not (
+            isinstance(a, ast.Assign)
+            and isinstance(b, ast.Assign)
+            and isinstance(replacement, ast.Assign)
+            and len(a.targets) == len(b.targets) == 1
+            and isinstance(a.targets[0], ast.Name)
+            and isinstance(b.targets[0], ast.Name)
+            and a.targets[0].id == b.targets[0].id
+            and type(a.value) is type(b.value)
+            and table(a.value)
+            and table(b.value)
+        ):
+            return set()
+        names.add(a.targets[0].id)
+        replacement.value = a.value
+    if not names or ast.dump(old) != ast.dump(normalized):
+        return set()
+    for name in names:
+        # Existing binding, exactly once, without a global/nonlocal replacement.
+        for tree in (old, new):
+            if sum(
+                isinstance(n, ast.Name) and n.id == name and isinstance(n.ctx, ast.Store)
+                for n in ast.walk(tree)
+            ) != 1 or any(
+                isinstance(n, (ast.Global, ast.Nonlocal)) and name in n.names
+                for n in ast.walk(tree)
+            ):
+                return set()
+    return names
+
+
+class Query:
+    def __init__(self, index: "Index", path: str, names: set[str], safe_modules: set[str]):
+        self.index = index
+        self.safe_modules = safe_modules
+        self.changed = {(path, name) for name in names}
+        self.modules: dict[str, Scope] = {}
+        self.initializing: set[str] = set()
+        self.steps = 0
+        self.depth = 0
+        self.stack: set[tuple[ast.AST, bool]] = set()
+        self.parameter_tables: set[tuple[str, str]] = set()
+        self.mutated_tables: set[tuple[str, str]] = set()
+        resolver = index.partials
+        if resolver is None:
+            raise Unknown("source resolver unavailable")
+        self.resolver = resolver
+
+    def tick(self) -> None:
+        self.steps += 1
+        if self.steps > MAX_STEPS or self.depth > MAX_DEPTH:
+            raise Unknown("table proof budget")
+
+    def touch(self, value: Value, eager: bool) -> Value:
+        if not eager and isinstance(value, Data) and value.table in self.changed:
+            raise ReadsTable()
+        return value
+
+    def lookup(self, name: str, scope: Scope, eager: bool) -> Value:
+        current: Scope | None = scope
+        while current is not None:
+            if name in current.values:
+                return self.touch(current.values[name], eager)
+            current = current.parent
+        if name in BUILTINS:
+            return External(name)
+        raise Unknown("unknown name")
+
+    def module(self, path: str) -> Scope:
+        self.tick()
+        if path not in self.safe_modules:
+            raise Unknown("reachable module has another kind of change")
+        if path in self.initializing:
+            raise Unknown("eager cycle")
+        if path in self.modules:
+            return self.modules[path]
+        tree = self.index.syntax.get(f"{path}::<module>")
+        if not isinstance(tree, ast.Module) or self.index.sources[path].parse_status != "parsed":
+            raise Unknown("unavailable source")
+        scope = Scope(path)
+        self.initializing.add(path)
+        self.depth += 1
+        try:
+            name = self.index.nodes[f"{path}::<module>"].name
+            parent = self.resolver.modules.get(name.rpartition(".")[0])
+            if parent and parent not in self.initializing:
+                self.module(parent)
+            for stmt in tree.body:
+                self.tick()
+                if isinstance(stmt, (ast.Import, ast.ImportFrom)):
+                    self.imports(stmt, scope)
+                elif isinstance(stmt, ast.FunctionDef):
+                    if (
+                        stmt.name in MODULE_HOOKS
+                        or stmt.name.startswith("pytest_")
+                        or stmt.name in scope.values
+                    ):
+                        raise Unknown("custom lifecycle or duplicate definition")
+                    self.header(stmt, scope, True)
+                    scope.values[stmt.name] = Function(stmt, scope)
+                elif (
+                    isinstance(stmt, ast.Assign)
+                    and len(stmt.targets) == 1
+                    and isinstance(stmt.targets[0], ast.Name)
+                ):
+                    key = stmt.targets[0].id
+                    if (
+                        key in scope.values
+                        or key.startswith("pytest")
+                        or key.startswith("__")
+                        and key != "__version__"
+                    ):
+                        raise Unknown("rebound or special module binding")
+                    if not literal(stmt.value):
+                        raise Unknown("nonliteral global data")
+                    scope.values[key] = Data((path, key))
+                elif isinstance(stmt, ast.Expr):
+                    self.data(self.expr(stmt.value, scope, True))
+                else:
+                    raise Unknown("effectful module initialization")
+            self.modules[path] = scope
+            return scope
+        finally:
+            self.depth -= 1
+            self.initializing.remove(path)
+
+    def imports(self, node: ast.Import | ast.ImportFrom, scope: Scope) -> None:
+        if any(a.asname or a.name == "*" for a in node.names):
+            raise Unknown("alias or wildcard")
+        bindings, imports = self.resolver.decode(node, scope.path, self.resolver.modules)
+        for module in imports:
+            if module in self.resolver.modules:
+                self.module(self.resolver.modules[module])
+            elif module not in EXTERNAL_MODULES or module.split(".")[0] in self.resolver.modules:
+                raise Unknown("unknown import effects")
+        for name, target in bindings:
+            if name in scope.values:
+                raise Unknown("competing import")
+            if isinstance(node, ast.Import):
+                path = self.resolver.modules.get(target)
+                value: Value = Module(path) if path else External(target)
+            else:
+                module, _, member = target.rpartition(".")
+                path = self.resolver.modules.get(module)
+                if not path:
+                    raise Unknown("unsupported external named import")
+                imported = self.module(path)
+                value = imported.values.get(member, External("<missing>"))
+                if (
+                    isinstance(value, (Module, External))
+                    or isinstance(value, Function)
+                    and (value.scope.path != path)
+                ):
+                    raise Unknown("re-exported binding")
+            scope.values[name] = value
+
+    @staticmethod
+    def data(value: Value) -> Data:
+        if not isinstance(value, Data):
+            raise Unknown("callable or namespace escape")
+        return value
+
+    def reference(self, node: ast.AST, scope: Scope) -> Value:
+        """Inspect a bare registered reference without consuming its contents.
+
+        Only definition metadata and an audited initialization mutator receiver
+        use this exception. All executable expressions still inspect data reads.
+        """
+        self.tick()
+        if isinstance(node, ast.Name):
+            return self.lookup(node.id, scope, True)
+        if isinstance(node, ast.Attribute):
+            obj = self.expr(node.value, scope, True)
+            if isinstance(obj, Module):
+                value = self.module(obj.path).values.get(node.attr)
+                if value is not None:
+                    return value
+        return self.expr(node, scope, True)
+
+    def header(self, fn: ast.FunctionDef, scope: Scope, eager: bool) -> None:
+        args = fn.args
+        if fn.type_params:
+            raise Unknown("generic callable")
+        for n in [fn.returns, *(p.annotation for p in ast.walk(args) if isinstance(p, ast.arg))]:
+            if n is not None and not isinstance(n, ast.Constant):
+                raise Unknown("active annotation")
+        for default in [*args.defaults, *args.kw_defaults]:
+            if default is not None:
+                self.data(
+                    self.reference(default, scope) if eager else self.expr(default, scope, False)
+                )
+        for decorator in fn.decorator_list:
+            if not (
+                fn.name.startswith("test_")
+                and isinstance(decorator, ast.Call)
+                and len(decorator.args) == 2
+                and not decorator.keywords
+                and isinstance(decorator.args[0], (ast.Tuple, ast.List))
+                and all(
+                    isinstance(x, ast.Constant) and isinstance(x.value, str)
+                    for x in decorator.args[0].elts
+                )
+                and isinstance(value := self.expr(decorator.func, scope, eager), External)
+                and value.name == "pytest.mark.parametrize"
+            ):
+                raise Unknown("unknown decorator")
+            values = decorator.args[1]
+            data = self.data(
+                self.reference(values, scope) if eager else self.expr(values, scope, False)
+            )
+            expected = {p.arg for p in args.args}
+            names = [x.value for x in decorator.args[0].elts if isinstance(x, ast.Constant)]
+            if set(names) != expected or len(names) != len(expected):
+                raise Unknown("unproved fixture argument")
+            self.parameters(values, data, len(names))
+
+    def parameters(self, node: ast.AST, data: Data, arity: int) -> None:
+        """Audit collection effects for this contribution's changed parameter data."""
+        if data.table not in self.changed:
+            return
+        if data.table is not None:
+            if data.table in self.mutated_tables:
+                raise Unknown("mutated parameter data")
+            self.parameter_tables.add(data.table)
+            path, name = data.table
+            tree = self.index.syntax.get(f"{path}::<module>")
+            if not isinstance(tree, ast.Module):
+                raise Unknown("unavailable parameter binding")
+            values = [
+                stmt.value
+                for stmt in tree.body
+                if isinstance(stmt, ast.Assign)
+                and len(stmt.targets) == 1
+                and isinstance(stmt.targets[0], ast.Name)
+                and stmt.targets[0].id == name
+            ]
+            if len(values) != 1:
+                raise Unknown("ambiguous parameter binding")
+            node = values[0]
+        if not (
+            isinstance(node, (ast.List, ast.Tuple))
+            and literal(node)
+            and all(
+                isinstance(row, (ast.List, ast.Tuple)) and len(row.elts) == arity
+                for row in node.elts
+            )
+        ):
+            raise Unknown("unproved parameter row shape")
+
+    def function(
+        self, fn: Function, args: list[Value], kwargs: dict[str, Value], eager: bool
+    ) -> Data:
+        self.tick()
+        node = fn.node
+        for v in [*args, *kwargs.values()]:
+            self.data(v)
+        if (node, eager) in self.stack:
+            if eager:
+                raise Unknown("eager recursion")
+            # Scan a recursive body once. All reads and calls are visited without
+            # branch pruning and every incoming value has already been inspected.
+            return DATA
+        a = node.args
+        params = a.posonlyargs + a.args
+        if a.vararg or a.kwarg or len(args) > len(params):
+            raise Unknown("variadic or excess arguments")
+        local = Scope(fn.scope.path, parent=fn.scope)
+        supplied = dict(kwargs)
+        defaults = dict(
+            zip([p.arg for p in params[len(params) - len(a.defaults) :]], a.defaults, strict=True)
+        )
+        for i, param in enumerate(params):
+            if i < len(args):
+                if param.arg in supplied:
+                    raise Unknown("duplicate argument")
+                value = args[i]
+            elif param.arg in supplied and param not in a.posonlyargs:
+                value = supplied.pop(param.arg)
+            elif param.arg in defaults:
+                value = self.expr(defaults[param.arg], fn.scope, eager)
+            else:
+                raise Unknown("missing argument")
+            local.values[param.arg] = self.data(value)
+        for param, default in zip(a.kwonlyargs, a.kw_defaults, strict=True):
+            if param.arg in supplied:
+                value = supplied.pop(param.arg)
+            elif default is not None:
+                value = self.expr(default, fn.scope, eager)
+            else:
+                raise Unknown("missing keyword")
+            local.values[param.arg] = self.data(value)
+        if supplied:
+            raise Unknown("extra keywords")
+        self.stack.add((node, eager))
+        self.depth += 1
+        try:
+            if isinstance(node, ast.FunctionDef):
+                self.header(node, fn.scope, eager)
+                self.block(node.body, local, eager)
+            else:
+                self.data(self.expr(node.body, local, eager))
+            return DATA
+        finally:
+            self.depth -= 1
+            self.stack.remove((node, eager))
+
+    def expr(self, node: ast.AST, scope: Scope, eager: bool) -> Value:
+        self.tick()
+        if isinstance(node, ast.Constant) and type(node.value) in SCALAR:
+            return DATA
+        if isinstance(node, ast.Name):
+            return self.lookup(node.id, scope, False)
+        if isinstance(node, ast.Attribute):
+            obj = self.expr(node.value, scope, eager)
+            if isinstance(obj, Module):
+                module = self.module(obj.path)
+                value = module.values.get(node.attr)
+                if value is None:
+                    raise Unknown("unknown module member")
+                return self.touch(value, False)
+            if isinstance(obj, External):
+                return External(obj.name + "." + node.attr)
+            raise Unknown("escaped bound data method")
+        if isinstance(node, ast.Call):
+            args = [self.expr(arg, scope, eager) for arg in node.args]
+            if any(kw.arg is None for kw in node.keywords):
+                raise Unknown("keyword expansion")
+            kwargs = {kw.arg: self.expr(kw.value, scope, eager) for kw in node.keywords if kw.arg}
+            if len(kwargs) != len(node.keywords):
+                raise Unknown("duplicate keywords")
+            if isinstance(node.func, ast.Attribute):
+                obj = (
+                    self.reference(node.func.value, scope)
+                    if eager and node.func.attr in MUTATORS
+                    else self.expr(node.func.value, scope, eager)
+                )
+                if isinstance(obj, Data):
+                    if node.func.attr in MUTATORS and eager and obj.table is not None:
+                        # Only source-owned literal tables may be populated at import.
+                        if obj.table in self.parameter_tables:
+                            raise Unknown("mutation after parameter registration")
+                        self.mutated_tables.add(obj.table)
+                        for v in [*args, *kwargs.values()]:
+                            self.data(v)
+                        return DATA
+                    if node.func.attr in DATA_METHODS:
+                        for v in [*args, *kwargs.values()]:
+                            self.data(v)
+                        return DATA
+                    raise Unknown("unknown or effectful data method")
+            fn = self.expr(node.func, scope, eager)
+            if isinstance(fn, Function):
+                return self.function(fn, args, kwargs, eager)
+            if isinstance(fn, External) and fn.name in BUILTINS | EXTERNAL_CALLS:
+                for v in [*args, *kwargs.values()]:
+                    if (
+                        isinstance(v, Function)
+                        and isinstance(v.node, ast.Lambda)
+                        and fn.name == "re.sub"
+                    ):
+                        self.function(v, [DATA] * len(v.node.args.args), {}, eager)
+                    else:
+                        self.data(v)
+                return DATA
+            raise Unknown("unknown call")
+        if isinstance(node, ast.Lambda):
+            if eager or node.args.defaults or node.args.kw_defaults:
+                raise Unknown("eager callback")
+            return Function(node, scope)
+        if isinstance(node, (ast.ListComp, ast.GeneratorExp)):
+            nested = Scope(scope.path, parent=scope)
+            for generator in node.generators:
+                if generator.is_async:
+                    raise Unknown("async comprehension")
+                self.data(self.expr(generator.iter, nested, eager))
+                self.bind(generator.target, DATA, nested)
+                for cond in generator.ifs:
+                    self.data(self.expr(cond, nested, eager))
+            self.data(self.expr(node.elt, nested, eager))
+            return DATA
+        if isinstance(
+            node,
+            (
+                ast.Tuple,
+                ast.List,
+                ast.Set,
+                ast.Dict,
+                ast.Subscript,
+                ast.BinOp,
+                ast.UnaryOp,
+                ast.BoolOp,
+                ast.Compare,
+                ast.IfExp,
+                ast.JoinedStr,
+                ast.FormattedValue,
+                ast.Slice,
+            ),
+        ):
+            for child in ast.iter_child_nodes(node):
+                if isinstance(child, ast.expr):
+                    self.data(self.expr(child, scope, eager))
+            return DATA
+        raise Unknown(type(node).__name__)
+
+    def bind(self, target: ast.AST, value: Data, scope: Scope) -> None:
+        if isinstance(target, ast.Name):
+            scope.values[target.id] = value
+        elif isinstance(target, (ast.Tuple, ast.List)):
+            for element in target.elts:
+                self.bind(element, DATA, scope)
+        else:
+            raise Unknown("nonlocal mutation")
+
+    def block(self, body: list[ast.stmt], scope: Scope, eager: bool) -> None:
+        for stmt in body:
+            self.tick()
+            if isinstance(stmt, ast.FunctionDef):
+                if stmt.name in scope.values or stmt.decorator_list:
+                    raise Unknown("rebound or decorated helper")
+                self.header(stmt, scope, eager)
+                scope.values[stmt.name] = Function(stmt, scope)
+            elif isinstance(stmt, ast.Assign):
+                value = self.data(self.expr(stmt.value, scope, eager))
+                for target in stmt.targets:
+                    self.bind(target, value, scope)
+            elif isinstance(stmt, ast.Return):
+                if stmt.value is not None:
+                    self.data(self.expr(stmt.value, scope, eager))
+            elif isinstance(stmt, ast.If):
+                self.data(self.expr(stmt.test, scope, eager))
+                # Scan every alternative, without deriving a value-sensitive skip.
+                self.block(stmt.body, scope, eager)
+                self.block(stmt.orelse, scope, eager)
+            elif isinstance(stmt, ast.For):
+                self.data(self.expr(stmt.iter, scope, eager))
+                self.bind(stmt.target, DATA, scope)
+                self.block(stmt.body, scope, eager)
+                self.block(stmt.orelse, scope, eager)
+            elif isinstance(stmt, ast.Expr):
+                self.data(self.expr(stmt.value, scope, eager))
+            elif isinstance(stmt, ast.Assert):
+                self.data(self.expr(stmt.test, scope, eager))
+                if stmt.msg:
+                    self.data(self.expr(stmt.msg, scope, eager))
+            elif isinstance(stmt, ast.Pass):
+                continue
+            else:
+                raise Unknown(type(stmt).__name__)
+
+    def excludes(self, sid: str) -> bool:
+        node = self.index.syntax.get(sid)
+        if not isinstance(node, ast.FunctionDef):
+            return False
+        path, _, name = sid.partition("::")
+        if "." in name:
+            return False
+        module = self.module(path)
+        if any(p.rsplit("/", 1)[-1] == "conftest.py" for p in self.index.sources):
+            raise Unknown("unproved captured pytest lifecycle")
+        self.header(node, module, False)
+        if node.args.args and not node.decorator_list:
+            return False
+        self.function(Function(node, module), [DATA] * len(node.args.args), {}, False)
+        return True
+
+
+class ModuleDataFallback:
+    def __init__(self, before: "Index", after: "Index", paths: set[str]):
+        self.indexes = before, after
+        unique_modules = all(
+            len(module_names := [n.name for n in index.nodes.values() if n.kind == "module"])
+            == len(set(module_names))
+            for index in self.indexes
+        )
+        self.changes = {
+            p: names
+            for p in sorted(paths)
+            if unique_modules and (names := changed_tables(before, after, p))
+        }
+        self.safe_modules = set(self.changes) | {
+            p
+            for p in before.sources.keys() & after.sources.keys()
+            if before.sources[p] == after.sources[p]
+        }
+        self.cache: dict[tuple[str, str], bool] = {}
+
+    def allows(self, sid: str, path: str) -> bool:
+        if path not in self.changes:
+            return True
+        key = sid, path
+        if key not in self.cache:
+            keep = False
+            for index in self.indexes:
+                try:
+                    keep |= not Query(index, path, self.changes[path], self.safe_modules).excludes(
+                        sid
+                    )
+                except (ReadsTable, Unknown, RecursionError):
+                    keep = True
+            self.cache[key] = keep
+        return self.cache[key]

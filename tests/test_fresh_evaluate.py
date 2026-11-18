@@ -180,14 +180,15 @@ def test_offline_source_as_data_and_honest_first_measurement(monkeypatch):
     report = evaluate_fresh(DATA)
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
-    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 271
+    assert report["previous_summary"]["metrics"]["counts"]["fp"] == 205
+    assert report["descriptor_summary"]["metrics"]["counts"]["fp"] == 271
     assert report["lfu_summary"]["metrics"]["counts"]["fp"] == 272
     assert report["discovery_summary"]["metrics"]["counts"]["fp"] == 273
     assert report["argument_summary"]["metrics"]["counts"]["fp"] == 284
     assert report["partial_summary"]["metrics"]["counts"]["fp"] == 291
     assert report["original_summary"]["metrics"]["counts"]["fn"] == 44
-    assert report["active_baseline"] == "legacy-dispatch-v1"
-    assert report["fresh_evaluation_schema_version"] == "8.0"
+    assert report["active_baseline"] == "literal-tables-v1"
+    assert report["fresh_evaluation_schema_version"] == "9.0"
     from codeimpact.fresh_evaluate import measurement
 
     assert measurement(report) == json.loads((DATA / BASELINE_FILE).read_text())["measurement"]

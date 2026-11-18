@@ -142,17 +142,19 @@ def test_draft_receipt_remains_the_preanalysis_version():
     )
 
 
-def test_original_v3_first_report_is_reproducible_with_only_the_legacy_filename_rule(monkeypatch):
+def test_original_v3_first_report_is_reproducible_with_historical_filters(monkeypatch):
     from codeimpact import analyzer, corpus
+    from codeimpact.module_data import ModuleDataFallback
 
     # A test-scoped historical replay, not a production mode or new baseline.
-    # No upstream source is executed. Everything other than filename discovery
-    # runs through the current analyzer and must reproduce the original bytes.
+    # Restore the historical filename policy and disable the new table filter.
+    # The complete old report hash still has to match exactly.
     def historical_filename(path, **_kwargs):
         return is_test_file(path, policy=LEGACY_POLICY)
 
     monkeypatch.setattr(analyzer, "is_test_file", historical_filename)
     monkeypatch.setattr(corpus, "is_test_file", historical_filename)
+    monkeypatch.setattr(ModuleDataFallback, "allows", lambda *_: True)
     report = evaluate_real(DATA)
     raw = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode()
     receipt = json.loads((DATA / "first-run.json").read_text())

@@ -208,25 +208,25 @@ def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monk
     receipt = json.loads((DATA / "first-run.json").read_text())
     report = holdout.evaluate_holdout(DATA)
     assert report == holdout.evaluate_holdout(DATA)
-    assert report["holdout_evaluation_schema_version"] == "5.0"
+    assert report["holdout_evaluation_schema_version"] == "6.0"
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
     assert report["original_summary"] == receipt["measurement"]["summary"]
     assert report["original_summary"]["test_count"] == 90
     assert report["original_summary"]["selected_count"] == 84
     for cid, digest in measurement(report)["analysis_sha256"].items():
-        if cid != "ordered_set_pop":
+        if cid not in {"ordered_set_pop", "inflection_rules"}:
             assert digest == receipt["measurement"]["analysis_sha256"][cid]
     assert report["evaluation"]["regressions"] == []
     assert len(report["initial_regressions"]) == 3
     assert report["summary"]["test_count"] == 120
-    assert report["summary"]["selected_count"] == 85
+    assert report["summary"]["selected_count"] == 71
     assert report["summary"]["label_status_counts"] == {"draft": 6}
     assert report["summary"]["metrics"]["counts"] == {
         "tp": 42,
-        "fp": 43,
+        "fp": 29,
         "fn": 0,
-        "tn": 23,
+        "tn": 37,
         "unclassified_recommendations": 0,
     }
     missing = next(case for case in report["cases"] if case["id"] == "ordered_set_pop")
@@ -281,7 +281,7 @@ def test_measurement_drift_fails_gate(monkeypatch):
     report = holdout.evaluate_holdout(DATA)
     assert not report["first_measurement_matches"]
     assert report["evaluation"]["regressions"] == [
-        "v3: measurement differs from legacy-dispatch-v1",
+        "v3: measurement differs from literal-tables-v1",
     ]
 
 
