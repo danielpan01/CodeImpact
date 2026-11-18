@@ -104,9 +104,55 @@ records do not update the frozen draft, baseline or review status.
 [Source-only pack](../corpus/real-v4/REVIEW.md) ·
 [Human review instructions](../corpus/real-v4/REVIEW_WORKFLOW.md)
 
-The next bounded analyzer milestone should audit `unittest.TestCase` mixed-case
-method discovery, starting with the two IceCream cases. Draft labels for any
-newly covered definitions before enabling the rule, protect the original
-169/105/64 inventory, and add a separately versioned measurement. The Humanize
-package and decorator fallback findings provide separate precision work.
-[Verification results](VALIDATION.md#milestone-10--fresh-repository-evaluation-v4)
+## Mixed-case unittest successor
+
+`unittest-discovery-v1` replays the same six snapshot pairs under
+`test-files-v3`. In each IceCream case, both revisions have unchanged test
+sources with one direct `import unittest` per relevant file, 30
+`TestIceCream` methods and two `TestIceCreamInstall` methods. The newly
+discovered and selected ID sets are identical for both cases. The 32 exact
+IDs per case, head line spans and individual source rationales are in the
+separate draft label receipt. Its pre-analysis SHA-256 is
+`c4f3b20d9b148b6fb3f42c56d2ad9e55a868b8ea2ccc1df305e4c4784e31b691`.
+[Frozen successor draft labels](../corpus/real-v4-successors/unittest-discovery-v1/labels.json)
+
+The timestamp change replaces `datetime.utcnow()` with `datetime.now()`
+in `_formatTime`. Seven tests exercise enabled zero-argument output.
+Argument-only formatting tests bypass that branch. The source-error change
+edits `NoSourceAvailableError.infoMessage`, which `testNoSourceAvailable` checks.
+Other error or stack-sensitive cases can depend on external source inspection
+or dynamic setup. Both installation methods in both cases remain uncertain
+because the assertions involve shared runtime builtins state.
+
+| Replay or case | Source-shaped | Discovered | Selected | Outside | TP | FP | FN | TN | Uncertain selected / unselected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Frozen v4 | 169 | 105 | 92 | 64 | 19 | 57 | 0 | 13 | 16 / 0 |
+| Successor IceCream timestamp | 32 | 32 | 32 | 0 | 7 | 22 | 0 | 0 | 3 / 0 |
+| Successor IceCream source error | 32 | 32 | 32 | 0 | 1 | 26 | 0 | 0 | 5 / 0 |
+| Successor IceCream total | 64 | 64 | 64 | 0 | 8 | 48 | 0 | 0 | 8 / 0 |
+| Successor v4 | 169 | 169 | 156 | 0 | 27 | 105 | 0 | 13 | 24 / 0 |
+
+All 64 new recommendations have conservative module/import evidence present
+in both revisions. In each case, 31 paths run from the method through its
+test module, `icecream/__init__.py::<module>` and the changed
+`icecream/icecream.py::<module>`. The remaining method, `testDifferentName`,
+imports `ic` inside its body and starts its path directly at the package
+module after the test. The successor has 151 conservative, five changed-test
+and zero resolved-call recommendations. The four non-IceCream v4 cases
+retain identical stable analyses, selections and outcomes.
+
+```sh
+make evaluate-real-v4            # reports/real-v4-evaluation.json
+make evaluate-real-v4-unittest   # reports/real-v4-unittest-discovery-v1-evaluation.json
+```
+
+Both targets run offline in CI. The first preserves the original inventory,
+labels, source-only review pack, first measurement and report. The successor
+validates the exact label overlay, evidence and classification against its
+own receipt. Its JSON report lists the selected IDs, revision paths,
+uncertainties and all prior and current discovery counts. Independent label
+review remains pending for both versions. Review the successor labels against
+the same pinned source spans and record proposed revisions separately.
+[Successor baseline](../corpus/real-v4-successors/unittest-discovery-v1/baseline.json)
+· [Discovery boundaries](TEST_DISCOVERY.md#mixed-case-unittest-methods)
+· [Verification](VALIDATION.md#mixed-case-unittest-discovery)

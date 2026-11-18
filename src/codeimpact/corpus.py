@@ -15,7 +15,13 @@ from pydantic import (
     model_validator,
 )
 
-from codeimpact.discovery import CURRENT_POLICY, DiscoveryPolicy, is_test_file
+from codeimpact.discovery import (
+    CURRENT_POLICY,
+    DiscoveryPolicy,
+    is_test_file,
+    mixed_case_methods,
+    shadows_unittest,
+)
 from codeimpact.models import AnalysisRequest, Snapshot
 
 MAX_CASE_BYTES = 1_000_000
@@ -32,16 +38,22 @@ def discover_tests(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLI
     """
     found: set[str] = set()
 
-    def visit(path: str, body: list[ast.stmt], prefix: str = "") -> None:
+    expand = policy == CURRENT_POLICY and not shadows_unittest(snapshot.files)
+
+    def visit(
+        path: str, body: list[ast.stmt], mixed: set[ast.FunctionDef], prefix: str = ""
+    ) -> None:
         for node in body:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
                 name = f"{prefix}.{node.name}" if prefix else node.name
-                if not isinstance(node, ast.ClassDef) and node.name.startswith("test_"):
+                if not isinstance(node, ast.ClassDef) and (
+                    node.name.startswith("test_") or node in mixed
+                ):
                     sid = f"{path}::{name}"
                     if sid in found:
                         raise ValueError(f"Ambiguous duplicate head test: {sid}")
                     found.add(sid)
-                visit(path, node.body, name)
+                visit(path, node.body, mixed, name)
 
     for path, source in sorted(snapshot.files.items()):
         if not is_test_file(path, policy=policy):
@@ -50,7 +62,7 @@ def discover_tests(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLI
             tree = ast.parse(source, filename=path)
         except (SyntaxError, ValueError, RecursionError):
             continue
-        visit(path, tree.body)
+        visit(path, tree.body, mixed_case_methods(tree) if expand else set())
     return found
 
 

@@ -30,7 +30,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Module-level partial calls** | Resolves bounded `functools.partial` bindings to unambiguous functions, with alias, re-export and lexical-scope guards. |
 | **Argument-sensitive call paths** | Filters existing resolved paths when bounded argument guards establish a bypass or early exit; preserves other fallback evidence. |
 | **Constructor and factory arguments** | Tracks bounded default overrides, partial factories, forwarded options and early exits; uncertain cases retain recommendations. |
-| **Bounded test discovery** | Recognizes `test_` definitions in `test.py`, `test_*.py` and `*_test.py`, with explicit static-discovery limits. |
+| **Bounded test discovery** | Recognizes `test_` definitions and direct mixed-case methods of statically identified `unittest.TestCase` classes in `test.py`, `test_*.py` and `*_test.py`. |
 | **Explainable test priorities** | Uses cycle-safe reverse traversal and deterministic heuristic scores, with a typed evidence path for each recommendation. |
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
@@ -254,10 +254,17 @@ claimed. Evaluation v3 and pilot preparation merged in
 ### Fresh-repository evaluation v4
 
 `make evaluate-real-v4` replays six changes from Humanize, IceCream and oyaml
-against the frozen PR #22 engine. It selects **92/105** discovered definitions
+under the original `test-files-v2` policy. It selects **92/105** discovered definitions
 with **19 TP, 57 FP, 0 FN and 13 TN** against source draft labels. All 16
-uncertain definitions are selected. A further **64** IceCream methods fall
-outside discovery. No upstream tests ran, and independent review is pending.
+uncertain definitions are selected. A further **64** IceCream methods were
+outside that policy.
+
+`make evaluate-real-v4-unittest` replays the same snapshots under the active
+`test-files-v3` policy. It discovers **169/169** definitions and selects **156**,
+with **27 TP, 105 FP, 0 FN and 13 TN** and all 24 uncertain definitions selected.
+All 64 newly discovered IceCream definitions receive conservative module/import
+evidence. The additional draft labels were frozen before expanded analysis.
+No upstream tests ran, and independent review is pending.
 [Results](docs/REAL_EVALUATION_V4.md) · [Source label review](corpus/real-v4/REVIEW_WORKFLOW.md)
 
 ## Quality checks
@@ -269,6 +276,7 @@ make evaluate-real
 make evaluate-real-v2
 make evaluate-real-v3
 make evaluate-real-v4
+make evaluate-real-v4-unittest
 make verify-pilot
 cd web
 npm run install:browsers
@@ -279,7 +287,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all five offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all six offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

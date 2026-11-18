@@ -9,7 +9,7 @@ from typing import Literal
 from pydantic import Field
 
 from codeimpact.corpus import Nonblank, StrictModel
-from codeimpact.discovery import CURRENT_POLICY
+from codeimpact.discovery import V2_POLICY
 from codeimpact.fresh_evaluate import file_hash
 from codeimpact.real_evaluate import SHA256, CaseID, load_real, read_metadata, require
 from codeimpact.v4_evaluate import DIRECTORY, FREEZE, inventories, validate_frozen
@@ -45,11 +45,11 @@ class ReviewRecord(StrictModel):
 
 
 def build_pack(directory: Path) -> str:
-    _, cases, _, _ = load_real(directory, discovery_policy=CURRENT_POLICY)
+    _, cases, _, _ = load_real(directory, discovery_policy=V2_POLICY)
     audit = inventories(cases)
     pack = review_pack(
         directory,
-        discovery_policy=CURRENT_POLICY,
+        discovery_policy=V2_POLICY,
         outside={cid: r["head"]["outside_discovery"] for cid, r in audit.items()},
     )
     # Present a whitespace-clean diff. Snapshot strings retain their exact bytes.
@@ -58,7 +58,7 @@ def build_pack(directory: Path) -> str:
 
 def review_context(directory: Path, cid: str):
     _, cases, _ = validate_frozen(directory)
-    _, _, provenance, _ = load_real(directory, discovery_policy=CURRENT_POLICY)
+    _, _, provenance, _ = load_real(directory, discovery_policy=V2_POLICY)
     case = next((case for case in cases if case.id == cid), None)
     if case is None:
         raise ValueError("Unknown review case")

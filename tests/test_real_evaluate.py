@@ -175,8 +175,8 @@ def test_evidence_path_corruption_is_rejected(monkeypatch):
 
     original = evaluate.analyze
 
-    def corrupt(request):
-        report = original(request)
+    def corrupt(request, **kwargs):
+        report = original(request, **kwargs)
         report.recommendations[0].evidence_path = ["not-a-test"]
         return report
 

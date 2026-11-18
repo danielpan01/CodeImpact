@@ -74,8 +74,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 9B — Slugify merged | Known legacy dispatch avoids modern truncation | 66 Boundary false positives removed and 51 Slugify false positives remain across both cases | All affected and uncertain outcomes preserved with dedicated receipts |
 | 9C — literal tables merged | Existing literal rule-table edits | 14 Inflection rule-case false positives removed, six affected definitions retained | Production and test-module contributions audited independently with exact replacement evidence |
 | 9C — validator/export merged | Additive package exports with unchanged explicit members | Four validator-addition false positives removed. Two decorated tests retain fallback | Exact evidence, two-revision proof and separately versioned receipts |
-| 9C — parameter tables implemented | Inflection titleize body and test parameter data | 20 unrelated recommendations removed, one mutation/cleanup case retains fallback | Separate evidence for the source function and test-module table, measured with preserved labels |
-| 10 — implemented, review pending | Fresh v4 evaluation and source-label review workflow | 92/105 selected with 57 draft false positives, 16 uncertain selections and 64 outside discovery | Six frozen changes, source-only review and strict offline replay. Independent label review remains pending |
+| 9C — parameter tables merged, PR #22 | Inflection titleize body and test parameter data | 20 unrelated recommendations removed, one mutation/cleanup case retains fallback | Separate evidence for the source function and test-module table, measured with preserved labels |
+| 10 — merged, PR #23; review pending | Fresh v4 evaluation and source-label review workflow | Frozen v4 selects 92/105 with 57 draft false positives, 16 uncertain selections and 64 outside discovery | Six frozen changes, source-only review and strict offline replay. Independent label review remains pending |
+| Post-10 discovery — implemented | Bounded mixed-case `unittest.TestCase` method discovery | Both IceCream changes now cover all 32 definitions each, with 48 draft false positives across the two changes | Frozen v4 stays runnable. A separately versioned evaluation records the new denominator, exact IDs and evidence |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -83,9 +84,13 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
 remain active. **Milestone 7 is merged** with one filename extension,
 a pre-analysis source-label draft, separately versioned measurements and preserved
-history. Milestone 10 adds frozen v4 inputs and a separate evidence review
-workflow. The next analyzer candidate is bounded unittest mixed-case method
-discovery, based on the IceCream coverage gap. [V4 results](REAL_EVALUATION_V4.md)
+history. Milestone 10 merged in PR #23 with frozen v4 inputs and a separate
+source review workflow. The follow-up implements bounded mixed-case unittest
+discovery and exposes the succeeding precision issue. Audit one IceCream
+module/import path next, beginning with tests that pass arguments and bypass
+the changed timestamp branch. Require revision-specific proof and retain
+conservative paths for setup, dynamic lookup and external dependencies.
+[V4 results](REAL_EVALUATION_V4.md)
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
@@ -164,8 +169,7 @@ keep 8A/8B evidence intact. Milestone 7 retains these gates and is implemented.
 See [the bounded callback proof and measurement](LFU_CALLBACK_REVIEW.md).
 The 9B descriptor slice removes one false positive and preserves all eight
 uncertain outcomes. The Slugify slice removes 66 conservative Boundary false positives.
-The 9C literal-table and validator/export slices are merged. The titleize
-parameter-table slice is implemented.
+The 9C literal-table, validator/export and titleize parameter-table slices are merged.
 [Slugify results](SLUGIFY_FALLBACK_REVIEW.md) · [Parameter-table results](PARAMETER_TABLE_REVIEW.md)
 
 ### Later analyzer and evaluation work
@@ -202,7 +206,8 @@ No database, queue or new framework is an automatic next step.
 ### Completion rule for future work
 
 Run focused tests plus `make check`, `make evaluate`, `make evaluate-real`,
-`make evaluate-real-v2`, `make evaluate-real-v3`, `make verify-pilot`, and
+`make evaluate-real-v2`, `make evaluate-real-v3`, `make evaluate-real-v4`,
+`make evaluate-real-v4-unittest`, `make verify-pilot`, and
 `cd web && npm run test:e2e` for application changes. Include frontend formatting
 for UI work. Verify relevant determinism and unchanged historical receipts, update
 actual results, and leave changes unstaged/uncommitted for the owner's publication.

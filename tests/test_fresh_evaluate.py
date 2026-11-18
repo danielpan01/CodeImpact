@@ -256,8 +256,8 @@ def test_invalid_recommendation_evidence_fails(monkeypatch):
 
     original = evaluate.analyze
 
-    def corrupt(request):
-        report = original(request)
+    def corrupt(request, **kwargs):
+        report = original(request, **kwargs)
         report.recommendations[0].evidence_edges[0] = "invented-edge"
         return report
 

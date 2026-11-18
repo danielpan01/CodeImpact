@@ -250,8 +250,8 @@ def test_bad_evidence_cannot_be_recorded_as_matching(monkeypatch):
 
     original = evaluator.analyze
 
-    def corrupt(request):
-        report = original(request)
+    def corrupt(request, **kwargs):
+        report = original(request, **kwargs)
         if report.recommendations:
             report.recommendations[0].evidence_edges[0] = "invalid-edge"
         return report

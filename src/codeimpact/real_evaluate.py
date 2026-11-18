@@ -24,7 +24,7 @@ from codeimpact.corpus import (
     _unique_object,
     load_corpus,
 )
-from codeimpact.discovery import LEGACY_POLICY, DiscoveryPolicy
+from codeimpact.discovery import LEGACY_POLICY, V2_POLICY, DiscoveryPolicy
 from codeimpact.evaluate import Counts, evaluate, metrics
 from codeimpact.github import (
     EXCLUDED_DIRS,
@@ -363,6 +363,7 @@ def evaluate_real(
     annotations: dict[str, dict[str, Any]] | None = None,
     label_extensions: dict[str, dict[str, Any]] | None = None,
     discovery_policy: DiscoveryPolicy = LEGACY_POLICY,
+    analysis_policy: DiscoveryPolicy = V2_POLICY,
 ) -> dict[str, Any]:
     selection, cases, provenance, coverage = load_real(directory, discovery_policy=discovery_policy)
     original_cases = cases
@@ -411,10 +412,12 @@ def evaluate_real(
             data |= annotations[case.id]
         # Frozen cases are loaded under their original policy. Every evaluated
         # case must explicitly label the complete current inventory before analysis.
-        current_cases.append(CorpusCase.model_validate(data))
+        current_cases.append(
+            CorpusCase.model_validate(data, context={"discovery_policy": analysis_policy})
+        )
     cases = current_cases
     # evaluate() validates every recommendation's typed path and revision evidence.
-    evaluation = evaluate(cases)
+    evaluation = evaluate(cases, policy=analysis_policy)
     results = []
     for result in evaluation.cases:
         case = result.case
@@ -487,14 +490,16 @@ def main(
     evaluator: Callable[[Path], dict[str, Any]] = evaluate_real,
     default_corpus: Path = Path("corpus/real"),
     default_output: Path = Path("reports/real-evaluation.json"),
+    protected_inputs: tuple[Path, ...] = (),
 ) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, default=default_corpus)
     parser.add_argument("--output", type=Path, default=default_output)
     args = parser.parse_args(argv)
     try:
+        output = args.output.resolve()
         require(
-            not args.output.resolve().is_relative_to(args.corpus.resolve()),
+            not any(output.is_relative_to(p.resolve()) for p in (args.corpus, *protected_inputs)),
             "Report output must be outside the corpus directory",
         )
         report = evaluator(args.corpus)

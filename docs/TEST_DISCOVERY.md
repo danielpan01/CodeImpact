@@ -1,4 +1,10 @@
-# Milestone 7 — bounded test discovery
+# Bounded test discovery
+
+The filename expansion below records Milestone 7. The active policy adds
+[mixed-case unittest methods](#mixed-case-unittest-methods) under the same
+supported filenames.
+
+## Milestone 7 — literal `test.py`
 
 Implemented November 16, 2026, from clean `7084ab04dd60881a6dde6e91986911f1d9f6ece2`,
 after the authorized merge of [milestone 8C / PR #15](https://github.com/danielpan01/CodeImpact/pull/15).
@@ -187,3 +193,37 @@ labels, denominators and this milestone's receipts unchanged. New current output
 names use `lfu-callback-v1`; all expanded v3 measurements stay identical. The active
 roadmap now proceeds to one bounded 9B mechanism, while hosting and the human pilot
 remain deferred.
+
+## Mixed-case unittest methods
+
+`test-files-v3` adds synchronous, undecorated methods whose names begin with
+`test` followed by an uppercase ASCII letter. The method must be directly
+defined on an undecorated, top-level class whose sole base is
+`unittest.TestCase`. The supported binding is a unique, unconditional,
+unaliased `import unittest` before the class definition. The class and method
+bindings must also be unique in their respective scopes.
+
+The proof declines when a captured Python module or package could shadow
+`unittest`, visible rebinding or object escape makes the import ambiguous, or
+the module directly accesses the `sys` import cache or search path hooks.
+Wildcard imports, alias imports, unqualified bases, dynamic/multiple bases,
+custom metaclasses, decorated or asynchronous methods, module-level mixed-case
+functions, nested classes and nested helpers do not qualify for this extension.
+Definitions under compound statements and unsupported filenames stay outside
+the rule. Ordinary `test_` definitions retain their prior behavior.
+
+This source rule classifies definitions independently in base and head.
+A method removed or no longer eligible in head cannot be recommended as a
+current test. A surviving method may have before-only evidence for a deleted
+dependency. Stable IDs, exact evidence paths, ranking and the application
+report contract follow the existing rules. The proof covers lexical source
+and captured paths. Runtime imports, setup behavior, custom loaders,
+monkey-patching hidden behind other modules and inherited test executions
+remain outside the discovery claim.
+
+The two frozen IceCream cases each contain 30 excluded `TestIceCream` methods
+and two excluded `TestIceCreamInstall` methods. Separate labels for all 64
+case/definition pairs were drafted and frozen before expanded analysis.
+The original inventory and source-only review pack remain under v2.
+[Exact draft IDs, source ranges and rationales](../corpus/real-v4-successors/unittest-discovery-v1/labels.json)
+· [Both replay targets and results](REAL_EVALUATION_V4.md#mixed-case-unittest-successor)

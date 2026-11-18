@@ -3,12 +3,11 @@
 import ast
 import hashlib
 import json
-import re
 from pathlib import Path
 from typing import Any, Literal
 
 from codeimpact.corpus import MAX_CORPUS_BYTES, CorpusCase, StrictModel
-from codeimpact.discovery import CURRENT_POLICY
+from codeimpact.discovery import CURRENT_POLICY, V2_POLICY, DiscoveryPolicy, is_mixed_case_name
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
     PROJECT,
@@ -16,6 +15,7 @@ from codeimpact.fresh_evaluate import (
     FirstRun,
     file_hash,
     measurement,
+    replay_source_matches,
 )
 from codeimpact.holdout_evaluate import discovery_audit, safe_file
 from codeimpact.models import Snapshot
@@ -31,6 +31,7 @@ from codeimpact.real_evaluate import main as real_main
 
 REFERENCE = "ed728a0851e87308c0ed454071ded12adb37eda8"
 DIRECTORY = Path("corpus/real-v4")
+SUCCESSOR = Path("corpus/real-v4-successors/unittest-discovery-v1")
 ENGINE = CURRENT_SOURCES | {"src/codeimpact/corpus.py", "src/codeimpact/evaluate.py"}
 FREEZE = "frozen-inputs.json"
 FIRST = "first-run.json"
@@ -75,9 +76,11 @@ class Baseline(StrictModel):
     expected_uncertain_selected: dict[str, list[str]]
 
 
-def source_inventory(snapshot: Snapshot) -> dict[str, Any]:
+def source_inventory(snapshot: Snapshot, *, policy: DiscoveryPolicy = V2_POLICY) -> dict[str, Any]:
     """Extend the source audit with unittest-style names outside discovery."""
-    result = discovery_audit(snapshot)
+    result = discovery_audit(snapshot, policy=policy)
+    if policy == CURRENT_POLICY:
+        return result
     outside = result["outside_discovery"]
 
     class Visitor(ast.NodeVisitor):
@@ -87,7 +90,7 @@ def source_inventory(snapshot: Snapshot) -> dict[str, Any]:
 
         def definition(self, node: ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef) -> None:
             self.scope.append(node.name)
-            if not isinstance(node, ast.ClassDef) and re.match(r"^test[A-Z]", node.name):
+            if not isinstance(node, ast.ClassDef) and is_mixed_case_name(node.name):
                 sid = f"{self.path}::{'.'.join(self.scope)}"
                 require(sid not in outside, f"Ambiguous source-only test ID: {sid}")
                 outside[sid] = "unsupported_function_name"
@@ -106,9 +109,12 @@ def source_inventory(snapshot: Snapshot) -> dict[str, Any]:
     return result
 
 
-def inventories(cases: list[CorpusCase]) -> dict[str, Any]:
+def inventories(cases: list[CorpusCase], *, policy: DiscoveryPolicy = V2_POLICY) -> dict[str, Any]:
     return {
-        c.id: {side: source_inventory(getattr(c.request, side)) for side in ("base", "head")}
+        c.id: {
+            side: source_inventory(getattr(c.request, side), policy=policy)
+            for side in ("base", "head")
+        }
         for c in cases
     }
 
@@ -128,7 +134,9 @@ def validate_history(directory: Path, project: Path) -> Preservation:
     prior = {
         p.relative_to(project).as_posix()
         for p in (project / "corpus").rglob("*")
-        if p.is_file() and not p.is_relative_to(project / DIRECTORY)
+        if p.is_file()
+        and not p.is_relative_to(project / DIRECTORY)
+        and not p.is_relative_to(project / SUCCESSOR)
     }
     require(set(receipt.corpus_sha256) == prior, "Historical corpus inventory differs")
     require(
@@ -144,11 +152,11 @@ def validate_history(directory: Path, project: Path) -> Preservation:
 def validate_frozen(
     directory: Path, project: Path = PROJECT, *, before_measurement: bool = False
 ) -> tuple[FrozenInputs, list[CorpusCase], dict[str, Any]]:
-    selected, cases, provenance, _ = load_real(directory, discovery_policy=CURRENT_POLICY)
+    selected, cases, provenance, _ = load_real(directory, discovery_policy=V2_POLICY)
     frozen = FrozenInputs.model_validate(read_metadata(safe_file(directory, FREEZE))[0])
     require(set(frozen.analyzer_sha256) == ENGINE, "Frozen v4 engine inventory differs")
     for path, digest in frozen.analyzer_sha256.items():
-        require(file_hash(safe_file(project, path)) == digest, f"Frozen analyzer changed: {path}")
+        require(replay_source_matches(project, path, digest), f"Frozen analyzer changed: {path}")
     expected = input_files(cases)
     require(set(frozen.files_sha256) == expected, "Frozen v4 input inventory differs")
     actual_paths = sorted(directory.rglob("*"))
@@ -251,8 +259,11 @@ def evaluate_v4(directory: Path) -> dict[str, Any]:
     for cid, note in baseline.annotations.items():
         expected = baseline.expected_uncertain_selected[cid]
         data = by_id[cid].model_dump() | note.model_dump()
-        CorpusCase.model_validate(data | {"expected_unclassified_recommendations": expected})
-    report = evaluate_real(directory, discovery_policy=CURRENT_POLICY)
+        CorpusCase.model_validate(
+            data | {"expected_unclassified_recommendations": expected},
+            context={"discovery_policy": V2_POLICY},
+        )
+    report = evaluate_real(directory, discovery_policy=V2_POLICY)
     initial = list(report["evaluation"]["regressions"])
     regressions = []
     if (
@@ -281,7 +292,7 @@ def evaluate_v4(directory: Path) -> dict[str, Any]:
         baseline_sha256=file_hash(safe_file(directory, BASELINE)),
         first_regressions=first.initial_regressions,
         baseline_annotations={cid: note.model_dump() for cid, note in baseline.annotations.items()},
-        discovery_policy=CURRENT_POLICY,
+        discovery_policy=V2_POLICY,
         discovery=audit,
         independent_review="pending",
         interpretation="Fresh purposive evaluation against frozen draft source dependency labels. "
