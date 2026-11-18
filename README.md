@@ -149,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-additive-exports-v1-evaluation.json
+# reports/real-v2-parameter-tables-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -234,10 +234,12 @@ The **9C literal rule-table slice** removes 14 Inflection rule-case false positi
 accounting independently for production and test parameter tables. All six affected
 definitions remain selected. The **9C validator/export slice** removes four
 PyISO8601 false positives while keeping both changed tests and two conservative
-Hypothesis recommendations. Current v3 is **67/120 selected**, with **42 TP,
-25 FP, 0 FN and 41 TN**. All 12 uncertain definitions remain unselected.
-Current output is `reports/real-v3-additive-exports-v1-evaluation.json`.
-[Rule-table review](docs/MODULE_DATA_REVIEW.md) · [Validator/export review](docs/VALIDATOR_EXPORT_REVIEW.md).
+Hypothesis recommendations. The **9C parameter-table slice** removes 20
+titleize case false positives while retaining its resolved call evidence.
+Current v3 is **47/120 selected**, with **42 TP, 5 FP, 0 FN and 61 TN**.
+All 12 uncertain definitions remain unselected.
+Current output is `reports/real-v3-parameter-tables-v1-evaluation.json`.
+[Rule-table review](docs/MODULE_DATA_REVIEW.md) · [Validator/export review](docs/VALIDATOR_EXPORT_REVIEW.md) · [Parameter-table review](docs/PARAMETER_TABLE_REVIEW.md).
 
 The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.
@@ -301,8 +303,8 @@ with new labels and measurements that preserve all historical baselines. Visual 
 with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
 Its pinned visual/accessibility gates remain active. Milestone 7 merged in
 [PR #16](https://github.com/danielpan01/CodeImpact/pull/16).
-The **9C literal-table slice** merged in PR #20. See the
-[9C validator/export review](docs/VALIDATOR_EXPORT_REVIEW.md),
+The **9C literal-table and validator/export slices** merged in PRs #20 and #21.
+See the [parameter-table results](docs/PARAMETER_TABLE_REVIEW.md),
 [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction), and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 

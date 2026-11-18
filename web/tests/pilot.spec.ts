@@ -46,7 +46,10 @@ test("built pilot keeps demo public and protects snapshot analysis with a memory
   expect(result.status()).toBe(200);
   expect(result.headers()["cache-control"]).toBe("no-store");
   expect(await result.text()).not.toContain(KEY);
-  await expect(page.locator(".test-row")).toHaveCount(22);
+  await expect(page.locator(".test-row")).toHaveText([
+    /test_titleize/,
+    /test_uncountable_word_is_not_greedy/,
+  ]);
   await page.getByRole("button", { name: "New analysis", exact: true }).click();
   await expect(page.getByLabel("Pilot access key")).toHaveValue(KEY);
   expect(await page.getByLabel("Pilot access key").getAttribute("type")).toBe(

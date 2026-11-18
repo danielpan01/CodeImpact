@@ -208,25 +208,30 @@ def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monk
     receipt = json.loads((DATA / "first-run.json").read_text())
     report = holdout.evaluate_holdout(DATA)
     assert report == holdout.evaluate_holdout(DATA)
-    assert report["holdout_evaluation_schema_version"] == "7.0"
+    assert report["holdout_evaluation_schema_version"] == "8.0"
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
     assert report["original_summary"] == receipt["measurement"]["summary"]
     assert report["original_summary"]["test_count"] == 90
     assert report["original_summary"]["selected_count"] == 84
     for cid, digest in measurement(report)["analysis_sha256"].items():
-        if cid not in {"ordered_set_pop", "inflection_rules", "iso8601_validator"}:
+        if cid not in {
+            "ordered_set_pop",
+            "inflection_rules",
+            "iso8601_validator",
+            "inflection_title",
+        }:
             assert digest == receipt["measurement"]["analysis_sha256"][cid]
     assert report["evaluation"]["regressions"] == []
     assert len(report["initial_regressions"]) == 3
     assert report["summary"]["test_count"] == 120
-    assert report["summary"]["selected_count"] == 67
+    assert report["summary"]["selected_count"] == 47
     assert report["summary"]["label_status_counts"] == {"draft": 6}
     assert report["summary"]["metrics"]["counts"] == {
         "tp": 42,
-        "fp": 25,
+        "fp": 5,
         "fn": 0,
-        "tn": 41,
+        "tn": 61,
         "unclassified_recommendations": 0,
     }
     missing = next(case for case in report["cases"] if case["id"] == "ordered_set_pop")
@@ -281,7 +286,7 @@ def test_measurement_drift_fails_gate(monkeypatch):
     report = holdout.evaluate_holdout(DATA)
     assert not report["first_measurement_matches"]
     assert report["evaluation"]["regressions"] == [
-        "v3: measurement differs from additive-exports-v1",
+        "v3: measurement differs from parameter-tables-v1",
     ]
 
 

@@ -3541,3 +3541,70 @@ The skip is the Linux-only address-space enforcement test on macOS. Existing
 warnings are the Starlette/httpx test-client deprecation and the browser
 `NO_COLOR` / `FORCE_COLOR` environment warning. Local logs are under
 `reports/validator-*`. The implementation was handed off unstaged and uncommitted.
+
+## Milestone 9C — test parameter tables and production body edits
+
+Local and remote main started clean at PR #21's merge
+`7f1f99d6b565fa90833f09c864661c45fb7629fe`. Before edits, the pinned
+titleize report reproduced the `additive-exports-v1` hash and validated all
+22 paths. Only `test_titleize` reached the changed production function and
+its aggregate module seed. The other 21 tests reached their edited test
+module. The pre-edit per-seed capture is under `reports/titleize-before/`.
+[Source trace and exact IDs](PARAMETER_TABLE_REVIEW.md)
+
+The first focused run against the old analyzer recorded two expected
+failures and 19 passing controls. The mixed-change proof verifies the
+production definition header and all other production statements, audits
+eager initialization in both revisions, and requires direct registration
+of the edited literal rows for parameter collection. Tests with unknown
+collection, mutable or escaped table data and other production edits retain
+fallback. Regressions cover direct and transitive production callers,
+table-only and shared table readers, malformed rows, before-only resolved
+evidence and a table-use path found in only one revision.
+
+The current titleize case selects 2/22, with 1 TP, 1 FP, 0 FN and 20 TN
+against the frozen draft labels. Both retained recommendation objects
+match exactly. The remaining conservative recommendation is the test that
+mutates `UNCOUNTABLES` with `try/finally` cleanup. Twenty tests lose only
+their table contribution. The 40 nodes, 70 edges, three changed symbols and
+revision evidence are preserved.
+
+| Evaluation | TP / FP / FN / TN | Uncertain selected / unselected | Observed result |
+| --- | ---: | ---: | --- |
+| `make evaluate` | 23 / 0 / 2 / 32 | 2 / 0 | Byte-identical report |
+| `make evaluate-real` | 45 / 0 / 0 / 123 | 11 / 22 | Byte-identical report |
+| `make evaluate-real-v2` | 109 / 205 / 0 / 245 | 13 / 9 | All six hashes and 327/581 measurement match |
+| `make evaluate-real-v3` | 42 / 5 / 0 / 61 | 0 / 12 | 47/120 selected. Only titleize changes |
+
+The `parameter-tables-v1` v2 and v3 receipts link the preserved additive-export
+and earlier baselines. Fresh wrapper 11.0 and holdout wrapper 8.0 write new
+output filenames. The application schema remains 2.0. Of 240 protected
+starting hashes, 239 match, including all 119 historical corpus files,
+historical receipts, provenance and tracked UI source and visual baselines.
+The one expected change is the pilot browser test's assertion of the two
+rendered rows. No UI implementation changed.
+
+The first `make verify-pilot` run failed at the original first-run hash
+assertion. The verifier now reads the active, integrity-checked measurement
+and validates the exact built-server report for the same frozen request.
+It passed readiness, static UI, public demo, protected analysis and no-storage
+checks. The original first run retains its hash.
+
+All four reports match byte for byte under hash seeds 7 and 173. Under each seed,
+all 43 cases with reversed snapshot file order produce identical analysis
+with only `stats.elapsed_ms` excluded. Every recommendation in those reruns
+passes typed validation. The original snapshots and draft labels were
+preserved. Independent label review remains pending.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused synthetic, evidence and evaluation regressions | 177 passed |
+| `make check` | Ruff lint and format, mypy (26 modules), 1,063 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| Frontend formatting | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop and mobile Chromium, Firefox and WebKit |
+| Final `git diff --check` and staged diff | Passed. No staged files |
+
+The skip is the Linux-only address-space enforcement test on macOS. Existing
+warnings are the Starlette/httpx test-client deprecation and the browser
+`NO_COLOR` / `FORCE_COLOR` warning. Local logs and integrity records are under
+`reports/titleize-*`. The implementation was handed off unstaged and uncommitted.

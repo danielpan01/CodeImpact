@@ -141,9 +141,26 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(exports["current_sources_sha256"]) == set(tables["current_sources_sha256"]) | {
         "src/codeimpact/additive_exports.py"
     }
-    extensions = (current, latest, descriptor, dispatch, tables, exports)
+    params = json.loads((ROOT / "benchmarks/parameter-tables-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/additive-exports-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == params["previous_receipt_sha256"]
+    )
+    assert set(params["changed_historical_sources"]) == {
+        "src/codeimpact/module_data.py",
+        "src/codeimpact/fresh_evaluate.py",
+        "src/codeimpact/holdout_evaluate.py",
+    }
+    assert set(params["added_corpus_sha256"]) == {
+        "corpus/real-v2/baselines/parameter-tables-v1.json",
+        "corpus/real-v3/baselines/parameter-tables-v1.json",
+    }
+    assert set(params["current_sources_sha256"]) == set(exports["current_sources_sha256"])
+    extensions = (current, latest, descriptor, dispatch, tables, exports, params)
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
-    assert CURRENT_SOURCES <= exports["current_sources_sha256"].keys()
+    assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {
         p for p in receipt["files_sha256"] if p.startswith("src/")
     } | {"src/codeimpact/discovery.py"}

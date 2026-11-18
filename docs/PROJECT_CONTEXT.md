@@ -2,13 +2,13 @@
 
 ## Current priority — November 17, 2026
 
-The 9C literal-table slice merged through PR #20 at
-`c1bfd751b0c6f4f64434e3c6d90d08166346b6df`. The validator/export slice is
-implemented. PyISO8601 validator addition selects 4/8, with two changed
-tests and two conservative Hypothesis recommendations. Expanded v3 is 67/120
-with 42 TP / 25 FP / 0 FN / 41 TN. New `additive-exports-v1` receipts link the
-literal-table baselines. Titleize and Inflection argument bypasses are separate.
-[Source and evidence review](VALIDATOR_EXPORT_REVIEW.md)
+The 9C literal-table and validator/export slices merged through PRs #20 and #21.
+The test parameter-table slice is implemented. Inflection titleize
+selects 2/22 with one resolved call and one conservative mutation/cleanup path.
+Expanded v3 is 47/120, with 42 TP / 5 FP / 0 FN / 61 TN and all 12 uncertain
+definitions unselected. New `parameter-tables-v1` receipts preserve the
+additive-export and literal-table records. Labels await independent review.
+[Titleize source and evidence review](PARAMETER_TABLE_REVIEW.md)
 
 ## Preserved milestone context
 
@@ -58,7 +58,7 @@ It preserves direct class/nested discovery and excludes arbitrary production fil
 compound-statement definitions and runtime collection. A source-only draft labeled
 30 newly eligible Ordered Set definitions before expanded analysis: 1 affected,
 17 unaffected, 12 uncertain. Only `test_pop` is newly selected, conservatively.
-Current v3 is 85/120 selected, 42 TP / 43 FP / 0 FN / 23 TN, with 12 uncertain
+Milestone 7 v3 was 85/120 selected, 42 TP / 43 FP / 0 FN / 23 TN, with 12 uncertain
 unselected definitions. Original v3 remains 84/90 plus 30 excluded definitions;
 all original corpus/labels/provenance/freezes/first runs/baselines are unchanged.
 Authored/v1 stable reports and v2’s full mapping measurement are unchanged.
@@ -71,7 +71,7 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Separate 9C candidate: the Inflection titleize case.**
+**Next evaluation milestone: 10, with new frozen inputs and reviewed labels.**
 The 124 remaining LFU false positives are a separate scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or
