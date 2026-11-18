@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-17** (America/New_York).
+Checked on **2026-11-18** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -25,6 +25,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: corpus/real-v2/baselines/lfu-callback-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/mapping-fallback-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/test-discovery-v1.json | PASS | Local target exists; fragment not checked |
+| README.md: corpus/real-v4/REVIEW_WORKFLOW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
@@ -45,15 +46,19 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/FRONTEND_ROADMAP.md#visual-direction | PASS | Local target exists; fragment not checked |
 | README.md: docs/LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/PARAMETER_TABLE_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V4.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/milestone8a/after-desktop-dark-map.png | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/milestone8a/after-desktop-dark-tests.png | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/milestone8a/after-desktop-light-entry.png | PASS | Local target exists; fragment not checked |
@@ -63,6 +68,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: tests/ | PASS | Local target exists; fragment not checked |
 | README.md: web/ | PASS | Local target exists; fragment not checked |
 | CONTRIBUTING.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: ../corpus/real-v4/README.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: CORPUS.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
@@ -70,15 +76,19 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: PARAMETER_TABLE_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/milestone6.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real-v3/baselines/test-discovery-v1-labels.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../corpus/real-v4/PROTOCOL.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/empty-phone-light.png | PASS | Local target exists; fragment not checked |
@@ -97,13 +107,17 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: PARAMETER_TABLE_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V4.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-desktop.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-mobile.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/changes.png | PASS | Local target exists; fragment not checked |
@@ -140,13 +154,13 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | Package | Repository constraint | PyPI latest | Latest release requires Python |
 | --- | --- | --- | --- |
 | Pygments | ==2.21.0 | 2.21.0 | >=3.9 |
-| annotated-doc | ==0.0.5 | 0.0.6 | >=3.10 |
+| annotated-doc | ==0.0.5 | 0.0.7 | >=3.11 |
 | annotated-types | ==0.8.0 | 0.8.0 | >=3.10 |
 | anyio | ==4.16.0 | 4.16.0 | >=3.10 |
 | certifi | ==2026.10.23 | 2026.10.23 | >=3.7 |
 | click | ==8.5.0 | 8.5.1 | >=3.10 |
 | coverage | ==7.17.2 | 7.17.3 | >=3.11 |
-| fastapi | ==0.162.0 | 0.163.2 | >=3.11 |
+| fastapi | ==0.162.0 | 0.165.0 | >=3.11 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
 | httpx | ==0.28.1 | 0.28.1 | >=3.8 |
