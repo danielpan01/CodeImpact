@@ -3667,3 +3667,55 @@ The skip is the Linux-only address-space enforcement test on macOS. Existing
 warnings are the Starlette/httpx test-client deprecation and the browser
 `NO_COLOR` / `FORCE_COLOR` notice. Local logs and smoke-check records are
 under `reports/v4-*`. The implementation was handed off unstaged and uncommitted.
+
+## Mixed-case unittest discovery
+
+Local and remote main started at merged PR #23,
+`782eb227a9ae73006a5084766208a97f0f2c349c`, with a clean working tree.
+Before implementation, frozen v4 replayed with 105 of 169 test-shaped
+definitions discovered and 64 outside discovery. The audit covered the same
+30 `TestIceCream` and two `TestIceCreamInstall` definitions in both revisions
+of each pinned change. The new labels and source rationales were frozen before
+expanded analysis. The original v4 files retain their starting hashes.
+
+The initial synthetic regression run had seven expected failures and 22
+passing controls. The implemented `test-files-v3` rule uses the same
+eligibility check in the analyzer and corpus walker. It classifies each
+revision independently and retains before-only deletion evidence. The frozen
+v4 gate still runs with v2 and reproduces the original stable report. The new
+`make evaluate-real-v4-unittest` gate checks the pre-analysis labels and the
+separate observed measurement. Tests cover invalid ranges, incomplete labels,
+output protection, evidence and measurement drift.
+
+Expanded v4 discovers all 169 definitions and selects 156. The 64 new IceCream
+selections include eight draft true positives, 48 draft false positives and
+eight uncertainties. All 64 have typed conservative module/import paths
+present in both revisions. The successor overall has 27 TP, 105 FP, 0 FN,
+13 TN and 24 uncertain selections. All 157 historical corpus files and five
+original replay reports match their starting hashes. Applying active discovery
+to those same 49 cases changed only the two IceCream analyses.
+[Results and exact IDs](REAL_EVALUATION_V4.md#mixed-case-unittest-successor)
+
+All labels remain drafts pending independent source review. Upstream source
+was parsed as data. Hosting and the developer usability pilot remain deferred.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused discovery, replay and preservation tests | 71 passed |
+| `make check` | Ruff lint and format, mypy (28 modules), 1,117 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| Five original offline evaluations | All matched their recorded baselines and starting report bytes |
+| `make evaluate-real-v4-unittest` | Matched the separately recorded classifications and full stable report digest |
+| Snapshot analysis API for both IceCream cases | Both returned 32 recommendations with schema 2.0 and matched the stable successor analyses |
+| `make verify-pilot` | Local readiness, public demo, access gate and exact pinned pilot report passed |
+| `npm run format:check` | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop/mobile Chromium, Firefox and desktop/mobile WebKit |
+| Determinism and evidence | All six reports matched byte for byte under hash seeds 7 and 173. For each seed all 55 case replays with reversed snapshot file order matched, excluding only `stats.elapsed_ms`, and passed typed path validation |
+| `git diff --check` | Passed with an empty staging area |
+
+An intermediate `make check` run caught a v2 replay source-hash mismatch
+while the discovery source and its unpublished receipt were being updated.
+The targeted reversal test passed once the source and receipt were finalized.
+The final run had no failures. The macOS skip covers Linux-only address-space
+enforcement. The existing warnings are the Starlette/httpx test-client
+deprecation and Playwright's `NO_COLOR` / `FORCE_COLOR` notice.
+The local verification logs are under `reports/unittest-*`.

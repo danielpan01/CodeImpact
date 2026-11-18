@@ -201,7 +201,9 @@ def active_baseline(directory: Path, project: Path = PROJECT) -> RegressionBasel
     )
     require(previous.name == "module-partial-v1", "Previous baseline name mismatch")
     for path, expected in sorted(baseline.analyzer_sha256.items()):
-        require(file_hash(project / path) == expected, f"Current analyzer mismatch: {path}")
+        require(
+            replay_source_matches(project, path, expected), f"Current analyzer mismatch: {path}"
+        )
     return baseline
 
 
@@ -212,6 +214,33 @@ def file_hash(path: Path) -> str:
         raw = stream.read(MAX_METADATA_BYTES + 1)
     require(len(raw) <= MAX_METADATA_BYTES, "Frozen file size limit exceeded")
     return hashlib.sha256(raw).hexdigest()
+
+
+# Prior reports use the same indexer with the previous discovery policy. Allow
+# only the exact recorded source transition for the four policy-aware files.
+POLICY_SOURCE_CHANGES = {
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/corpus.py",
+    "src/codeimpact/discovery.py",
+    "src/codeimpact/evaluate.py",
+}
+
+
+def replay_source_matches(project: Path, path: str, expected: str) -> bool:
+    actual = file_hash(project / path)
+    if actual == expected:
+        return True
+    receipt_path = project / "benchmarks/unittest-discovery-v1-preservation.json"
+    if path not in POLICY_SOURCE_CHANGES or not receipt_path.is_file():
+        return False
+    receipt, _ = read_metadata(receipt_path)
+    predecessor = project / "benchmarks/fresh-v4-preservation.json"
+    if file_hash(predecessor) != receipt["previous_receipt_sha256"]:
+        return False
+    previous, _ = read_metadata(predecessor)
+    previous_hash: str | None = previous["current_sources_sha256"].get(path)
+    current_hash: str | None = receipt["current_sources_sha256"].get(path)
+    return expected == previous_hash and actual == current_hash
 
 
 def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:

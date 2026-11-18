@@ -173,7 +173,29 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(v4["current_sources_sha256"]) == set(params["current_sources_sha256"]) | {
         "src/codeimpact/v4_evaluate.py"
     }
-    extensions = (current, latest, descriptor, dispatch, tables, exports, params, v4)
+    unittest = json.loads((ROOT / "benchmarks/unittest-discovery-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256((ROOT / "benchmarks/fresh-v4-preservation.json").read_bytes()).hexdigest()
+        == unittest["previous_receipt_sha256"]
+    )
+    assert set(unittest["changed_historical_sources"]) == {
+        "src/codeimpact/analyzer.py",
+        "src/codeimpact/corpus.py",
+        "src/codeimpact/discovery.py",
+        "src/codeimpact/evaluate.py",
+        "src/codeimpact/fresh_evaluate.py",
+        "src/codeimpact/holdout_evaluate.py",
+        "src/codeimpact/real_evaluate.py",
+        "src/codeimpact/v4_evaluate.py",
+    }
+    assert set(unittest["added_corpus_sha256"]) == {
+        f"corpus/real-v4-successors/unittest-discovery-v1/{file}"
+        for file in ("baseline.json", "labels.json")
+    }
+    assert set(unittest["current_sources_sha256"]) == set(v4["current_sources_sha256"]) | {
+        "src/codeimpact/unittest_evaluate.py"
+    }
+    extensions = (current, latest, descriptor, dispatch, tables, exports, params, v4, unittest)
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {

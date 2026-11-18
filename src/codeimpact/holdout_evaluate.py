@@ -7,7 +7,14 @@ from typing import Any, Literal
 from pydantic import Field
 
 from codeimpact.corpus import MAX_CORPUS_BYTES, Nonblank, StrictModel, discover_tests
-from codeimpact.discovery import CURRENT_POLICY, LEGACY_POLICY, DiscoveryPolicy, is_test_file
+from codeimpact.discovery import (
+    CURRENT_POLICY,
+    LEGACY_POLICY,
+    V2_POLICY,
+    DiscoveryPolicy,
+    is_mixed_case_name,
+    is_test_file,
+)
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
     DESCRIPTOR_SOURCES,
@@ -21,6 +28,7 @@ from codeimpact.fresh_evaluate import (
     FirstRun,
     file_hash,
     measurement,
+    replay_source_matches,
 )
 from codeimpact.github import SHA
 from codeimpact.models import Snapshot
@@ -114,7 +122,7 @@ def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBasel
     require(baseline.name == "parameter-tables-v1", "Current baseline name mismatch")
     require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
     for path, expected in baseline.analyzer_sha256.items():
-        require(file_hash(safe_file(project, path)) == expected, f"Engine changed: {path}")
+        require(replay_source_matches(project, path, expected), f"Engine changed: {path}")
     require(
         file_hash(safe_file(directory, EXPORTS_BASELINE_FILE)) == baseline.previous_baseline_sha256,
         "Preserved additive exports baseline changed",
@@ -239,7 +247,7 @@ def label_extension(
         "Original discovery inventory changed",
     )
     case = next(c for c in load_real(directory)[1] if c.id == labels.case)
-    added = discover_tests(case.request.head) - discover_tests(
+    added = discover_tests(case.request.head, policy=V2_POLICY) - discover_tests(
         case.request.head, policy=LEGACY_POLICY
     )
     require(set(labels.labels) == added, "Expanded label inventory mismatch")
@@ -317,6 +325,7 @@ def discovery_audit(
     """Count test-shaped source definitions outside discovery; never collect/run tests."""
     discovered = discover_tests(snapshot, policy=policy)
     shaped: set[str] = set()
+    mixed: set[str] = set()
     unparseable = []
 
     class Visitor(ast.NodeVisitor):
@@ -326,8 +335,12 @@ def discovery_audit(
 
         def definition(self, node: ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef) -> None:
             self.scope.append(node.name)
-            if not isinstance(node, ast.ClassDef) and node.name.startswith("test_"):
-                shaped.add(f"{self.path}::{'.'.join(self.scope)}")
+            if not isinstance(node, ast.ClassDef):
+                sid = f"{self.path}::{'.'.join(self.scope)}"
+                if node.name.startswith("test_"):
+                    shaped.add(sid)
+                elif policy == CURRENT_POLICY and is_mixed_case_name(node.name):
+                    mixed.add(sid)
             for statement in node.body:
                 self.visit(statement)
             self.scope.pop()
@@ -344,10 +357,13 @@ def discovery_audit(
             continue
         Visitor(path).visit(tree)
     excluded = {}
+    shaped.update(mixed)
     for sid in sorted(shaped - discovered):
         path = sid.split("::", 1)[0]
-        supported_name = is_test_file(path, policy=policy)
-        excluded[sid] = "compound_statement" if supported_name else "unsupported_filename"
+        if not is_test_file(path, policy=policy):
+            excluded[sid] = "unsupported_filename"
+        else:
+            excluded[sid] = "unsupported_unittest_scope" if sid in mixed else "compound_statement"
     return {
         "discovered_ids": sorted(discovered),
         "test_shaped_definition_count": len(shaped),
@@ -364,6 +380,7 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
         if p.is_file()
         and not p.is_relative_to(project / "corpus/real-v3")
         and not p.is_relative_to(project / "corpus/real-v4")
+        and not p.is_relative_to(project / "corpus/real-v4-successors/unittest-discovery-v1")
     }
     require(
         set(receipt.corpus_sha256)
@@ -485,7 +502,10 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         "First measurement changed",
     )
     labels, extensions = label_extension(directory, baseline.expected_unclassified_recommendations)
-    discovery = {case.id: discovery_audit(case.request.head) for case in load_real(directory)[1]}
+    discovery = {
+        case.id: discovery_audit(case.request.head, policy=V2_POLICY)
+        for case in load_real(directory)[1]
+    }
     require(discovery == baseline.discovery, "Current discovery audit mismatch")
     report = evaluate_real(
         directory,
@@ -508,7 +528,7 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         current_measurement_matches=current_matches,
         original_summary=initial.measurement["summary"],
         original_discovery=read_metadata(directory / "discovery.json")[0],
-        discovery_policy=CURRENT_POLICY,
+        discovery_policy=V2_POLICY,
         label_extension=labels.model_dump(),
         first_measurement_matches=matches,
         first_run_sha256=original.first_run_sha256,

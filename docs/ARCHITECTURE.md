@@ -31,6 +31,13 @@ audit. It is static discovery, not pytest collection. Arbitrary production files
 parametrized executions, inherited test executions and fixture injection are not
 collected. See [bounded scope and versioned measurements](TEST_DISCOVERY.md).
 
+The default `test-files-v3` policy also recognizes direct methods whose names
+start with `test` and an ASCII capital letter. The module must have one unique
+and prior `import unittest` and the top-level class must directly inherit
+only `unittest.TestCase` with a proven lexical binding. The analyzer and corpus
+walker share this eligibility check. Each revision is classified independently.
+[Mixed-case scope and exclusions](TEST_DISCOVERY.md#mixed-case-unittest-methods)
+
 `ast.dump(..., include_attributes=False)` is SHA-256 hashed for every successfully
 parsed module, including empty and comment-only modules, to compare semantics
 without source locations. Comments, whitespace and moved lines do not count. A
@@ -927,7 +934,7 @@ uses. Only the test-table seed's contribution is filtered.
 ## Frozen fresh-repository evaluation v4
 
 The v4 wrapper reuses the real-source tree, provenance, label and typed path
-validation. It loads labels under the current discovery policy and separately
+validation. It loads labels under the frozen `test-files-v2` policy and separately
 audits mixed-case source test names. The frozen inputs pin discovery, the
 source-only review pack and the reference analyzer. Replay verifies the
 complete first stable report hash and the declared discrepancy and uncertain
@@ -935,3 +942,10 @@ selection IDs. The new wrapper's own metadata is versioned separately from
 the unchanged application report. Review decisions are separate source
 records and only a future versioned label receipt can change metrics.
 [Dataset and review workflow](../corpus/real-v4/README.md)
+
+The `unittest-discovery-v1` successor validates the frozen inventories before
+overlaying source labels for exactly the newly discovered head definitions. It
+uses the same typed path validation under `test-files-v3` and checks a separate
+full report digest and classification receipt. Older gates pin the v2 analysis
+policy and verify the recorded source transition for the policy-aware files.
+[Replay commands and measurements](REAL_EVALUATION_V4.md)

@@ -1,0 +1,45 @@
+{
+  "added_corpus_sha256": {
+    "corpus/real-v4-successors/unittest-discovery-v1/baseline.json": "31f2e36130a1092438b0efe4bbd5dc41c796bcdb66a5b0ae65e8e5a6bf4d85a9",
+    "corpus/real-v4-successors/unittest-discovery-v1/labels.json": "c4f3b20d9b148b6fb3f42c56d2ad9e55a868b8ea2ccc1df305e4c4784e31b691"
+  },
+  "changed_historical_sources": [
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/corpus.py",
+    "src/codeimpact/discovery.py",
+    "src/codeimpact/evaluate.py",
+    "src/codeimpact/fresh_evaluate.py",
+    "src/codeimpact/holdout_evaluate.py",
+    "src/codeimpact/real_evaluate.py",
+    "src/codeimpact/v4_evaluate.py"
+  ],
+  "current_sources_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/additive_exports.py": "04ef713ad252b862fe07f96588e5169fe2c36ba9f1e02f76cf80ce08162dd23e",
+    "src/codeimpact/analyzer.py": "8634d79ed411256beafb8b8d4811c6f45a69534ea08e22dffa668a2a8f3c7b91",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/cli.py": "76761ebb0c31cbecd5f75959ba9f524d8ba05016c72b38cfaefad3142483ed2e",
+    "src/codeimpact/corpus.py": "cd866958fd2bb0eb49ad1a10267f90ab1d1b0009c9ebc8da9905ce0397a8696c",
+    "src/codeimpact/demo.py": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ff16cc9bfc00c2ed9dd51d8ad102ec355fe8218f3fedd2d6c78942573ceb4ff7",
+    "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
+    "src/codeimpact/evaluate.py": "c9195252459eae11beb7c202c6d5ef15c232f775f790bebebe4a1b9d17f17a58",
+    "src/codeimpact/fresh_evaluate.py": "ae5891f18768fb8f6fd15861a1963fbf337debb5a12c5b3ab8082125ef392015",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/holdout_evaluate.py": "42938210faa9d62cfea3b09ff59914e64590880a63da1159d2180a451cf28658",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/module_data.py": "0f662cab9b11d74c5f30a9a0302c841927afc88e4318a418fe4cc0e2c20aa8e2",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/real_evaluate.py": "8721380d14b238b8d40512fa5f8873e8420a825411877a394ab2207f67777e06",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c",
+    "src/codeimpact/unittest_evaluate.py": "96ef20d97e4c9239274651a7debcb99ec5c124e128acf81c91654cfb885109ad",
+    "src/codeimpact/v4_evaluate.py": "d3b9ea8a7595f9c099c2c52e3e4e4a5939dc53f8a278f3c87e938d08f04ed1d4"
+  },
+  "explanation": "Preserve prior corpus and reports with explicit v2 replay. Pin the discovery extension and its independently versioned v4 measurement.",
+  "name": "unittest-discovery-v1",
+  "previous_receipt_sha256": "cd1beba2e34a2488c556164fafeb667df64632e59a7cdc766af213f5fb0f001c",
+  "schema_version": "1.0"
+}

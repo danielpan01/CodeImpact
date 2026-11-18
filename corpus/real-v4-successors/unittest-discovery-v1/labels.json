@@ -1,0 +1,407 @@
+{
+  "author": "Codex source-only draft, November 18, 2026",
+  "cases": {
+    "icecream_local_time": {
+      "labels": {
+        "tests/test_icecream.py::TestIceCream.testArgToStringFunction": {
+          "classification": "unaffected",
+          "end_line": 363,
+          "line": 354,
+          "rationale": "Exercises an argument and a configured argument formatting function. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testAsArgument": {
+          "classification": "affected",
+          "end_line": 203,
+          "line": 191,
+          "rationale": "The test includes a zero-argument ic() in the list expression as well as argument formatting. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testCallSurroundedByExpressions": {
+          "classification": "unaffected",
+          "end_line": 258,
+          "line": 255,
+          "rationale": "Exercises a single argument alongside surrounding noop calls. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testColoring": {
+          "classification": "unaffected",
+          "end_line": 520,
+          "line": 516,
+          "rationale": "Exercises a dictionary argument with ANSI coloring enabled. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testComments": {
+          "classification": "affected",
+          "end_line": 263,
+          "line": 260,
+          "rationale": "The test makes a zero-argument ic() call beside a comment and checks context and time. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testComplicated": {
+          "classification": "affected",
+          "end_line": 283,
+          "line": 274,
+          "rationale": "The test calls ic() with zero arguments before the argument-output assertions. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testDifferentName": {
+          "classification": "affected",
+          "end_line": 301,
+          "line": 291,
+          "rationale": "The test imports the exported ic as foo and calls foo() without arguments. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testEnableDisable": {
+          "classification": "unaffected",
+          "end_line": 352,
+          "line": 338,
+          "rationale": "Exercises one argument per call before, during and after enable/disable. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testExpressionArguments": {
+          "classification": "unaffected",
+          "end_line": 246,
+          "line": 233,
+          "rationale": "Exercises subscript and attribute expressions as arguments. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testFormat": {
+          "classification": "unaffected",
+          "end_line": 437,
+          "line": 431,
+          "rationale": "Exercises a string argument through both the callable and its format method. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testIncludeContextMultiLine": {
+          "classification": "unaffected",
+          "end_line": 429,
+          "line": 419,
+          "rationale": "Exercises a multiline argument with context enabled. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testIncludeContextSingleLine": {
+          "classification": "unaffected",
+          "end_line": 408,
+          "line": 401,
+          "rationale": "Exercises a single argument with context enabled. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMethodArguments": {
+          "classification": "unaffected",
+          "end_line": 272,
+          "line": 265,
+          "rationale": "Exercises a method result passed as an argument. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineContainerArgs": {
+          "classification": "unaffected",
+          "end_line": 506,
+          "line": 466,
+          "rationale": "Exercises tuple and list arguments across lines. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineInvocationWithComments": {
+          "classification": "unaffected",
+          "end_line": 452,
+          "line": 439,
+          "rationale": "Exercises two arguments separated by comments and newlines. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineValueWrapped": {
+          "classification": "unaffected",
+          "end_line": 399,
+          "line": 393,
+          "rationale": "Exercises a multiline string argument and its wrapped representation. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleArguments": {
+          "classification": "unaffected",
+          "end_line": 214,
+          "line": 210,
+          "rationale": "Exercises two ordinary arguments. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleArgumentsLongLineWrapped": {
+          "classification": "unaffected",
+          "end_line": 391,
+          "line": 374,
+          "rationale": "Exercises four arguments whose output is wrapped. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleCallsOnSameLine": {
+          "classification": "unaffected",
+          "end_line": 253,
+          "line": 248,
+          "rationale": "Exercises two calls with explicit arguments on the same source line. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleTupleArguments": {
+          "classification": "unaffected",
+          "end_line": 514,
+          "line": 508,
+          "rationale": "Exercises two tuple arguments and two scalar arguments. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testNestedMultiline": {
+          "classification": "affected",
+          "end_line": 231,
+          "line": 216,
+          "rationale": "The test includes the multiline zero-argument ic() and checks context and time. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testNoSourceAvailable": {
+          "classification": "uncertain",
+          "end_line": 457,
+          "line": 454,
+          "rationale": "The dynamic eval call is intended to take the missing-source branch before timestamp formatting. External frame detection controls that branch."
+        },
+        "tests/test_icecream.py::TestIceCream.testOutputFunction": {
+          "classification": "unaffected",
+          "end_line": 336,
+          "line": 319,
+          "rationale": "Exercises single-argument calls routed through the configured output callback. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testPrefixConfiguration": {
+          "classification": "unaffected",
+          "end_line": 317,
+          "line": 303,
+          "rationale": "Exercises single-argument calls with custom prefix string and callback. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testReturnValue": {
+          "classification": "affected",
+          "end_line": 289,
+          "line": 285,
+          "rationale": "The test calls enabled ic() without arguments even though it asserts the passthrough value. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleArgument": {
+          "classification": "unaffected",
+          "end_line": 208,
+          "line": 205,
+          "rationale": "Exercises one direct argument. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleArgumentLongLineNotWrapped": {
+          "classification": "unaffected",
+          "end_line": 372,
+          "line": 365,
+          "rationale": "Exercises a long string passed as one argument. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleTupleArgument": {
+          "classification": "unaffected",
+          "end_line": 464,
+          "line": 459,
+          "rationale": "Exercises one tuple passed as one argument. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testValues": {
+          "classification": "unaffected",
+          "end_line": 417,
+          "line": 410,
+          "rationale": "Exercises literal positional arguments. The argument branch bypasses _formatTime."
+        },
+        "tests/test_icecream.py::TestIceCream.testWithoutArgs": {
+          "classification": "affected",
+          "end_line": 189,
+          "line": 186,
+          "rationale": "The test calls ic() and inspects the context and time output. The enabled no-argument formatting branch calls the edited _formatTime."
+        },
+        "tests/test_install.py::TestIceCreamInstall.testInstall": {
+          "classification": "uncertain",
+          "end_line": 28,
+          "line": 23,
+          "rationale": "Installs ic through builtins and calls it by name from runMe. Setup uses a dynamically imported builtins module and the runtime output depends on that binding."
+        },
+        "tests/test_install.py::TestIceCreamInstall.testUninstall": {
+          "classification": "uncertain",
+          "end_line": 38,
+          "line": 30,
+          "rationale": "Expects NameError after removing ic from builtins. The assertion depends on shared runtime builtins state and an indirect call from runMe."
+        }
+      },
+      "source_case_sha256": "3172893b30e8bd09ebadf6536bb79fc44bdfa90224bbf99f5b36771ea9460c55"
+    },
+    "icecream_source_error": {
+      "labels": {
+        "tests/test_icecream.py::TestIceCream.testArgToStringFunction": {
+          "classification": "unaffected",
+          "end_line": 363,
+          "line": 354,
+          "rationale": "Exercises an argument and a configured argument formatting function. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testAsArgument": {
+          "classification": "unaffected",
+          "end_line": 203,
+          "line": 191,
+          "rationale": "Exercises the normal source path that includes a zero-argument ic() in the list expression as well as argument formatting. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testCallSurroundedByExpressions": {
+          "classification": "unaffected",
+          "end_line": 258,
+          "line": 255,
+          "rationale": "Exercises a single argument alongside surrounding noop calls. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testColoring": {
+          "classification": "uncertain",
+          "end_line": 520,
+          "line": 516,
+          "rationale": "It checks ANSI escapes rather than the formatted content. Source recovery and the output coloring callback are external behavior."
+        },
+        "tests/test_icecream.py::TestIceCream.testComments": {
+          "classification": "unaffected",
+          "end_line": 263,
+          "line": 260,
+          "rationale": "Exercises the normal source path that makes a zero-argument ic() call beside a comment and checks context and time. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testComplicated": {
+          "classification": "unaffected",
+          "end_line": 283,
+          "line": 274,
+          "rationale": "Exercises the normal source path that calls ic() with zero arguments before the argument-output assertions. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testDifferentName": {
+          "classification": "unaffected",
+          "end_line": 301,
+          "line": 291,
+          "rationale": "Exercises the normal source path that imports the exported ic as foo and calls foo() without arguments. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testEnableDisable": {
+          "classification": "uncertain",
+          "end_line": 352,
+          "line": 338,
+          "rationale": "It changes the enabled flag and checks returns and snippets; external frame detection still determines whether it takes the message path."
+        },
+        "tests/test_icecream.py::TestIceCream.testExpressionArguments": {
+          "classification": "unaffected",
+          "end_line": 246,
+          "line": 233,
+          "rationale": "Exercises subscript and attribute expressions as arguments. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testFormat": {
+          "classification": "unaffected",
+          "end_line": 437,
+          "line": 431,
+          "rationale": "Exercises a string argument through both the callable and its format method. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testIncludeContextMultiLine": {
+          "classification": "unaffected",
+          "end_line": 429,
+          "line": 419,
+          "rationale": "Exercises a multiline argument with context enabled. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testIncludeContextSingleLine": {
+          "classification": "unaffected",
+          "end_line": 408,
+          "line": 401,
+          "rationale": "Exercises a single argument with context enabled. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMethodArguments": {
+          "classification": "unaffected",
+          "end_line": 272,
+          "line": 265,
+          "rationale": "Exercises a method result passed as an argument. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineContainerArgs": {
+          "classification": "unaffected",
+          "end_line": 506,
+          "line": 466,
+          "rationale": "Exercises tuple and list arguments across lines. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineInvocationWithComments": {
+          "classification": "unaffected",
+          "end_line": 452,
+          "line": 439,
+          "rationale": "Exercises two arguments separated by comments and newlines. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultilineValueWrapped": {
+          "classification": "unaffected",
+          "end_line": 399,
+          "line": 393,
+          "rationale": "Exercises a multiline string argument and its wrapped representation. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleArguments": {
+          "classification": "unaffected",
+          "end_line": 214,
+          "line": 210,
+          "rationale": "Exercises two ordinary arguments. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleArgumentsLongLineWrapped": {
+          "classification": "unaffected",
+          "end_line": 391,
+          "line": 374,
+          "rationale": "Exercises four arguments whose output is wrapped. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleCallsOnSameLine": {
+          "classification": "unaffected",
+          "end_line": 253,
+          "line": 248,
+          "rationale": "Exercises two calls with explicit arguments on the same source line. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testMultipleTupleArguments": {
+          "classification": "unaffected",
+          "end_line": 514,
+          "line": 508,
+          "rationale": "Exercises two tuple arguments and two scalar arguments. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testNestedMultiline": {
+          "classification": "unaffected",
+          "end_line": 231,
+          "line": 216,
+          "rationale": "Exercises the normal source path that includes the multiline zero-argument ic() and checks context and time. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testNoSourceAvailable": {
+          "classification": "affected",
+          "end_line": 457,
+          "line": 454,
+          "rationale": "Forces the missing-source path with a dynamic call and explicitly checks the edited NoSourceAvailableError.infoMessage."
+        },
+        "tests/test_icecream.py::TestIceCream.testOutputFunction": {
+          "classification": "unaffected",
+          "end_line": 336,
+          "line": 319,
+          "rationale": "Exercises single-argument calls routed through the configured output callback. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testPrefixConfiguration": {
+          "classification": "unaffected",
+          "end_line": 317,
+          "line": 303,
+          "rationale": "Exercises single-argument calls with custom prefix string and callback. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testReturnValue": {
+          "classification": "uncertain",
+          "end_line": 289,
+          "line": 285,
+          "rationale": "The assertions only check passthrough values. The external frame reader decides whether the message branch is reached."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleArgument": {
+          "classification": "unaffected",
+          "end_line": 208,
+          "line": 205,
+          "rationale": "Exercises one direct argument. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleArgumentLongLineNotWrapped": {
+          "classification": "unaffected",
+          "end_line": 372,
+          "line": 365,
+          "rationale": "Exercises a long string passed as one argument. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testSingleTupleArgument": {
+          "classification": "unaffected",
+          "end_line": 464,
+          "line": 459,
+          "rationale": "Exercises one tuple passed as one argument. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testValues": {
+          "classification": "unaffected",
+          "end_line": 417,
+          "line": 410,
+          "rationale": "Exercises literal positional arguments. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_icecream.py::TestIceCream.testWithoutArgs": {
+          "classification": "unaffected",
+          "end_line": 189,
+          "line": 186,
+          "rationale": "Exercises the normal source path that calls ic() and inspects the context and time output. The asserted normal output does not use the missing-source message."
+        },
+        "tests/test_install.py::TestIceCreamInstall.testInstall": {
+          "classification": "uncertain",
+          "end_line": 28,
+          "line": 23,
+          "rationale": "Installs ic through builtins and calls it by name from runMe. Setup uses a dynamically imported builtins module and the runtime output depends on that binding."
+        },
+        "tests/test_install.py::TestIceCreamInstall.testUninstall": {
+          "classification": "uncertain",
+          "end_line": 38,
+          "line": 30,
+          "rationale": "Expects NameError after removing ic from builtins. The assertion depends on shared runtime builtins state and an indirect call from runMe."
+        }
+      },
+      "source_case_sha256": "a6754bcb49357a2ed4f57d532c392bbdc15995f916ea514f4abeb52e8301c424"
+    }
+  },
+  "independent_reviewer": null,
+  "name": "unittest-discovery-v1",
+  "original_discovery_sha256": "62c0358ae6091b5484c61b951e7897df4f1f1ba84e198d2892f26d02bc47427e",
+  "original_freeze_sha256": "faaa19165674dcebc5d5eeb16ae9fef4ba44d82b731e9f2ecd45b96423f4b123",
+  "policy": "test-files-v3",
+  "review_status": "agent_draft",
+  "schema_version": "1.0",
+  "timing": "Drafted against pinned base and head before the expanded analyzer ran."
+}

@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from codeimpact.analyzer import analyze, build_index
 from codeimpact.corpus import CorpusCase, discover_tests, load_corpus
+from codeimpact.discovery import CURRENT_POLICY, V2_POLICY, DiscoveryPolicy
 from codeimpact.models import AnalysisRequest, DependencyEvidence, Report
 
 
@@ -121,14 +122,17 @@ def _evidence_key(item: DependencyEvidence) -> tuple[int, int, str]:
     return item.location.line, item.location.end_line, item.text
 
 
-def validate_report(request: AnalysisRequest, report: Report) -> None:
+def validate_report(
+    request: AnalysisRequest, report: Report, *, policy: DiscoveryPolicy = CURRENT_POLICY
+) -> None:
     """Check path contracts independently of selection labels.
 
     Re-indexing checks that the returned union retains each revision's evidence;
     it does not certify that the index resolves Python semantics correctly. The
     authored labels, separate discovery and existing analyzer tests cover that gap.
     """
-    before, after = build_index(request.base), build_index(request.head)
+    before = build_index(request.base, policy=policy)
+    after = build_index(request.head, policy=policy)
     nodes = {node.id: node for node in report.nodes}
     _require(len(nodes) == len(report.nodes), "duplicate nodes")
     _require(set(nodes) == before.nodes.keys() | after.nodes.keys(), "node union")
@@ -178,7 +182,7 @@ def validate_report(request: AnalysisRequest, report: Report) -> None:
                 _require(
                     item.target_location.path == nodes[edge.target].path, "dependency evidence path"
                 )
-    tests = discover_tests(request.head)
+    tests = discover_tests(request.head, policy=policy)
     selected = [rec.symbol for rec in report.recommendations]
     _require(len(set(selected)) == len(selected), "duplicate recommendations")
     _require(set(selected) <= tests - set(report.removed), "non-head or removed recommended test")
@@ -225,9 +229,9 @@ def validate_report(request: AnalysisRequest, report: Report) -> None:
         _require(rec.path_revision == path_revision, "path revision intersection")
 
 
-def evaluate_case(case: CorpusCase) -> CaseResult:
-    report = analyze(case.request)
-    validate_report(case.request, report)
+def evaluate_case(case: CorpusCase, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> CaseResult:
+    report = analyze(case.request, policy=policy)
+    validate_report(case.request, report, policy=policy)
     result = classify(case, {rec.symbol for rec in report.recommendations})
     regressions = []
     for label, actual, expected in (
@@ -243,11 +247,14 @@ def evaluate_case(case: CorpusCase) -> CaseResult:
             regressions.append(
                 f"{case.id}: {label}: expected {sorted(expected)}, observed {actual}"
             )
-    return CaseResult(
-        case=case,
-        results=result,
-        regressions=regressions,
-        analysis=report.model_dump(mode="json", exclude={"stats": {"elapsed_ms"}}),
+    return CaseResult.model_validate(
+        {
+            "case": case,
+            "results": result,
+            "regressions": regressions,
+            "analysis": report.model_dump(mode="json", exclude={"stats": {"elapsed_ms"}}),
+        },
+        context={"discovery_policy": policy},
     )
 
 
@@ -259,11 +266,11 @@ def _aggregate(results: list[CaseResult]) -> Metrics:
     return metrics(counts)
 
 
-def evaluate(cases: list[CorpusCase]) -> Evaluation:
+def evaluate(cases: list[CorpusCase], *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
         raise ValueError("Evaluation needs nonempty cases with unique IDs")
     cases = sorted(cases, key=lambda case: case.id)
-    results = [evaluate_case(case) for case in cases]
+    results = [evaluate_case(case, policy=policy) for case in cases]
     canonical = json.dumps(
         [case.model_dump(mode="json") for case in cases], sort_keys=True, separators=(",", ":")
     )
@@ -271,14 +278,17 @@ def evaluate(cases: list[CorpusCase]) -> Evaluation:
         group: [r for r in results if r.case.category == group]
         for group in ("supported", "known_limitation")
     }
-    return Evaluation(
-        corpus_sha256=hashlib.sha256(canonical.encode()).hexdigest(),
-        case_count=len(results),
-        group_case_counts={key: len(value) for key, value in groups.items()},
-        totals=_aggregate(results),
-        groups={key: _aggregate(value) for key, value in groups.items()},
-        cases=results,
-        regressions=[message for result in results for message in result.regressions],
+    return Evaluation.model_validate(
+        {
+            "corpus_sha256": hashlib.sha256(canonical.encode()).hexdigest(),
+            "case_count": len(results),
+            "group_case_counts": {key: len(value) for key, value in groups.items()},
+            "totals": _aggregate(results),
+            "groups": {key: _aggregate(value) for key, value in groups.items()},
+            "cases": results,
+            "regressions": [message for result in results for message in result.regressions],
+        },
+        context={"discovery_policy": policy},
     )
 
 
@@ -332,14 +342,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--case", dest="case_id", help="Evaluate one stable case ID")
     args = parser.parse_args(argv)
     try:
-        cases = load_corpus(args.corpus)
+        cases = load_corpus(args.corpus, discovery_policy=V2_POLICY)
         if args.case_id:
             cases = [case for case in cases if case.id == args.case_id]
             if not cases:
                 raise ValueError(f"Unknown case: {args.case_id}")
         if args.output.resolve().is_relative_to(args.corpus.resolve()):
             raise ValueError("Report output must be outside the corpus directory")
-        report = evaluate(cases)
+        report = evaluate(cases, policy=V2_POLICY)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n",

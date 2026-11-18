@@ -150,8 +150,8 @@ def test_source_only_pack_regenerates_and_freeze_detects_changes(
 def test_v4_rejects_bad_revision_evidence(monkeypatch):
     analyze = evaluate.analyze
 
-    def corrupt(request):
-        report = analyze(request)
+    def corrupt(request, **kwargs):
+        report = analyze(request, **kwargs)
         if report.recommendations:
             rec = report.recommendations[0]
             rec.path_revision = "after" if rec.path_revision == "both" else "both"

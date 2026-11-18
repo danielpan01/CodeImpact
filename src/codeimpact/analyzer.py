@@ -17,7 +17,13 @@ from codeimpact.additive_exports import AdditiveExports
 from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
 from codeimpact.descriptor_binding import DescriptorFallback
-from codeimpact.discovery import is_test_file
+from codeimpact.discovery import (
+    CURRENT_POLICY,
+    DiscoveryPolicy,
+    is_test_file,
+    mixed_case_methods,
+    shadows_unittest,
+)
 from codeimpact.dispatch_fallback import DispatchFallback
 from codeimpact.models import (
     AnalysisRequest,
@@ -318,7 +324,7 @@ class Index:
             edge.evidence.append(item)
 
 
-def build_index(snapshot: Snapshot) -> Index:
+def build_index(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
     modules: dict[str, str] = {}
@@ -326,15 +332,23 @@ def build_index(snapshot: Snapshot) -> Index:
     definitions: dict[str, list[tuple[str, ast.AST, str]]] = defaultdict(list)
     source_lines: dict[str, list[str]] = {}
 
-    def collect(path: str, nodes: list[ast.stmt], prefix: str = "") -> None:
+    expand = policy == CURRENT_POLICY and not shadows_unittest(snapshot.files)
+
+    def collect(
+        path: str,
+        nodes: list[ast.stmt],
+        test_file: bool,
+        mixed: set[ast.FunctionDef],
+        prefix: str = "",
+    ) -> None:
         for node in nodes:
             if isinstance(node, DEFINITIONS):
                 name = f"{prefix}.{node.name}" if prefix else node.name
                 sid = f"{path}::{name}"
                 index.syntax[sid] = node
                 is_test = (
-                    is_test_file(path)
-                    and node.name.startswith("test_")
+                    test_file
+                    and (node.name.startswith("test_") or node in mixed)
                     and not isinstance(node, ast.ClassDef)
                 )
                 kind: Literal["test", "class", "function"] = (
@@ -361,7 +375,7 @@ def build_index(snapshot: Snapshot) -> Index:
                 )
                 names[f"{module_name(path)}.{name}"] = sid
                 definitions[path].append((sid, node, name))
-                collect(path, node.body, name)
+                collect(path, node.body, test_file, mixed, name)
 
     for path, source in sorted(snapshot.files.items()):
         # Match Python's universal physical newlines, not str.splitlines()'s extra
@@ -403,7 +417,9 @@ def build_index(snapshot: Snapshot) -> Index:
         )
         index.ranges[sid] = SourceRange(line=1, end_line=index.nodes[sid].end_line)
         names[mod] = sid
-        collect(path, tree.body)
+        test_file = is_test_file(path, policy=policy)
+        mixed = mixed_case_methods(tree) if expand and test_file else set()
+        collect(path, tree.body, test_file, mixed)
 
     partials = PartialBindings(trees, modules, import_targets)
     index.partials = partials
@@ -664,9 +680,10 @@ def merge_edges(before: Index, after: Index) -> dict[tuple[str, str, str], Edge]
     return result
 
 
-def analyze(request: AnalysisRequest) -> Report:
+def analyze(request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Report:
     started = time.perf_counter()
-    before, after = build_index(request.base), build_index(request.head)
+    before = build_index(request.base, policy=policy)
+    after = build_index(request.head, policy=policy)
     nodes = before.nodes | after.nodes
     edges = merge_edges(before, after)
     changed = sorted(
