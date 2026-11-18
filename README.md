@@ -149,7 +149,7 @@ Read the [actual results and remaining mistakes](docs/REAL_EVALUATION.md),
 
 ```sh
 make evaluate-real-v2
-# reports/real-v2-legacy-dispatch-v1-evaluation.json
+# reports/real-v2-literal-tables-v1-evaluation.json
 ```
 
 Six changes from Atomicwrites, Python Slugify and Cachetools were labeled before
@@ -226,11 +226,17 @@ precision is 48.81%; recall is 100% only within that discovered inventory.
 Those original metrics excluded 30 definitions in `test.py`; that inventory and all
 historical baselines remain frozen. Milestone 7 adds bounded literal `test.py`
 discovery with 30 new source-only draft labels established before expanded analysis.
-The separately versioned result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN**,
+The discovery milestone result is **85/120 selected; 42 TP, 43 FP, 0 FN, 23 TN**,
 plus **12 uncertain definitions, none selected**. Only `test_pop` is newly recommended,
 with conservative module/import evidence; the other five analyses are unchanged.
 Milestone 9B preserves the complete measurement in a versioned engine replay.
-Current output is `reports/real-v3-legacy-dispatch-v1-evaluation.json`. The dashboard explains
+The **9C literal rule-table slice** removes 14 Inflection rule-case false positives,
+accounting independently for production and test parameter tables. All six affected
+definitions remain selected. Current v3 is **71/120 selected**, with **42 TP,
+29 FP, 0 FN and 37 TN**. All 12 uncertain definitions remain unselected.
+Titleize, PyISO8601, Ordered Set and the full v2 measurement match their prior
+analyses. Current output is `reports/real-v3-literal-tables-v1-evaluation.json`.
+[Rule-table proof and exact evidence changes](docs/MODULE_DATA_REVIEW.md). The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.
 All labels still await independent review. See [policy and preservation](docs/TEST_DISCOVERY.md).
 See [results and limitations](docs/REAL_EVALUATION_V3.md).
@@ -292,8 +298,8 @@ with new labels and measurements that preserve all historical baselines. Visual 
 with [post-merge CI passing](https://github.com/danielpan01/CodeImpact/actions/runs/43808633061).
 Its pinned visual/accessibility gates remain active. Milestone 7 merged in
 [PR #16](https://github.com/danielpan01/CodeImpact/pull/16).
-The **9B descriptor and Slugify slices** are implemented. Next is one bounded
-**9C module-data** mechanism. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
+The **9B slices are merged**, and the first **9C literal-table slice** is implemented
+locally. Next is one bounded **9C validator/export** mechanism. See the [frontend direction](docs/FRONTEND_ROADMAP.md#visual-direction) and ordered
 [next-step roadmap](docs/BUILD_PLAN.md) for acceptance criteria and deferred pilot gates.
 
 Direct function-local imports, aliases, relative imports and `src/` layouts are supported within the [documented scope](docs/ARCHITECTURE.md#bounded-function-local-imports). The [module binding scan](docs/ARCHITECTURE.md#bounded-module-level-rebinding) requires one direct import and no competing module-scope bindings; bare annotations and separate function/class body bindings do not invalidate it. Conditional imports, competing bindings and closure propagation remain conservative. The bounded selection filter is documented in [Architecture](docs/ARCHITECTURE.md#scoped-aggregate-fallback). Unsupported initialization and protocol changes retain conservative fallback; the [argument-tracking boundary](docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments) documents the exclusions now supported.

@@ -3374,3 +3374,111 @@ over intact. The focused suite passed **95 tests**, all four offline evaluations
 matched the strict baselines, and `make verify-pilot` passed. All **221 protected
 hashes** match, including **113 prior corpus files**. The full final-candidate CI
 results are recorded on the publication pull request.
+
+## Milestone 9C — literal rule-table dependencies
+
+Started from clean local and remote main at
+`614e18bfd5d7f38b0a1a8564ba470f2fc34ded20`, merged Slugify PR #19.
+All four publication checks and the
+[post-merge quality run](https://github.com/danielpan01/CodeImpact/actions/runs/43984577616)
+passed. There were no pre-existing working-tree edits. Implementation and
+verification read the captured upstream source as data.
+
+The source review identified two independent initialization seeds in
+`inflection_rules`. Production edits `PLURALS` and `SINGULARS`, while
+the test module edits `SINGULAR_TO_PLURAL`. The new proof checks literal-table
+reads through tests, parameter decorators, defaults and transitive calls, with
+an eager initialization audit. It removes each test's contribution from one
+module seed only after both revisions support exclusion.
+[Exact source pattern, removed IDs and evidence comparison](MODULE_DATA_REVIEW.md)
+
+Three focused regressions failed before implementation and 16 controls passed.
+They demonstrated unrelated tests sharing changed production/test modules and
+source-owned rule registration. Later controls cover mutations, aliases and
+re-exports, data escape, defaults, eager effects, unknown decorators and lifecycle,
+deleted bindings, revision differences, recursion and query budgets.
+
+The first exploratory replay changed titleize through its edited parameter table.
+Its production module has a different function-body edit. The final proof declines
+whenever a reachable module has another change shape, and all five nontarget v3
+analyses now match their prior hashes. A focused regression protects this scope.
+An initial evidence test expected identical retained recommendations and exposed
+four valid replacement paths. It now asserts their exact production paths,
+distances, scores and revision evidence.
+
+Final review added six failing source-only regressions for derived global data,
+table-dependent eager conditions, helper calls in defaults, function setup and
+teardown, and captured conftest fixtures. The tightened audit retains these
+unproven effects and still supports literal-only rule registration. Current
+measurements remain identical; only unpublished successor hashes were refreshed.
+The first full Python run had loaded the older evidence assertion and failed
+there (998 passed, one expected skip). It was rerun after the assertion and final
+source safeguards were complete.
+Three additional failing controls cover changed container types and malformed or
+mutated parameter rows. They pass after the shape/collection guard. An initial
+guard also declined unchanged parameter comprehensions; restricting its arity
+check to the changed binding restores the exact intended corpus result without
+allowing changed-data reads or collection effects.
+
+Inflection rules selects **8/22**, with **6 TP / 2 FP / 0 FN / 14 TN**.
+Exactly 14 draft false-positive IDs are removed, with zero additions. All six
+affected definitions remain selected. Four retained recommendation objects match
+their predecessors. Four lose their unrelated test-module path and use an existing
+two-hop production path in both revisions, changing priority from 50 to 40 under
+the existing scoring formula. Every retained explanation stays conservative.
+
+| Evaluation | TP / FP / FN / TN | Uncertain selected / unselected | Result |
+| --- | ---: | ---: | --- |
+| `make evaluate` | 23 / 0 / 2 / 32 | 2 / 0 | Stable report matched |
+| `make evaluate-real` | 45 / 0 / 0 / 123 | 11 / 22 | Stable report matched |
+| `make evaluate-real-v2` | 109 / 205 / 0 / 245 | 13 / 9 | Entire 327/581 measurement matched |
+| `make evaluate-real-v3` | 42 / 29 / 0 / 37 | 0 / 12 | Strict current baseline matched, 71/120 selected |
+
+Titleize, both PyISO8601 cases, Ordered Set and all six v2 analyses match their prior
+hashes. The new `literal-tables-v1` v2/v3 receipts link the preserved
+`legacy-dispatch-v1` files and earlier chains. Fresh wrapper 9.0 and holdout
+wrapper 6.0 use distinct output filenames. All **250 protected hashes** matched,
+including **115 historical corpus files**, historical reports and all UI fixtures
+and screenshot baselines. The original v3 denominator and excluded inventory,
+draft labels, review packs and provenance remain preserved. Normal gates enforce
+current engine hashes, exact measurements and predecessor integrity.
+
+All four evaluation reports match byte for byte under hash seeds **7 and 173**.
+Reversed snapshot input order matches stable analysis for all **43 cases**.
+The only excluded volatile field is `stats.elapsed_ms`. Typed path and revision
+validation runs on every recommendation. A test-scoped predecessor replay also
+reproduces the exact previous Inflection analysis hash.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused table, evidence, history and preservation tests | 58 passed |
+| `make check` | Ruff lint/format, mypy (25 modules), 1,008 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| `make verify-pilot` | Readiness, built UI, public demo, protected requests, exact report and storage checks passed |
+| Frontend formatting | Passed |
+| Full desktop/mobile browser suite, one worker | 253 passed |
+| Canonical Linux ARM64 visual comparisons | 16 passed |
+| Canonical Linux ARM64 accessibility scans | 48 passed, zero enabled-rule violations |
+| Protected hashes, staged diff and whitespace | Matched, empty staged diff and `git diff --check` passed |
+
+The final native-browser rerun first encountered sandbox process-launch failures
+(`SIGABRT` and `EPERM`). It was interrupted with 135 launch failures, 22 passes,
+one interrupted test and 95 not run. The full suite was restarted with process
+permissions; no assertion, browser setting or dependency was changed to bypass
+the failure. The failed attempt is in `reports/module-data-browser-sandbox.log`.
+
+The Python skip is `test_linux_address_space_limit`: `RLIMIT_AS` enforcement is
+Linux-only and this host is macOS. The one warning is the existing
+Starlette/httpx test-client deprecation. No Python test failed in the final run.
+
+Six pre-existing incomplete contrast findings still need manual review. These
+concern Map labels in both themes and sizes and the clipped desktop deleted-source
+trail label. The full axe results match the previous findings. The existing
+`NO_COLOR` / `FORCE_COLOR` browser environment warning remains. The CodeImpact
+Colima test VM was started for the canonical gates and stopped afterward.
+
+The implementation was handed off unstaged and uncommitted. The 14 exact removals,
+six affected IDs and four evidence replacements are in MODULE_DATA_REVIEW.md. Local logs and
+hash/determinism summaries are under `reports/module-data-*`. Labels remain
+agent drafts pending independent review. The two rule-case false positives concern
+empty/uncountable argument bypasses. The next bounded 9C slice can study
+PyISO8601 validator/export handling. Hosting and the human pilot remain deferred.

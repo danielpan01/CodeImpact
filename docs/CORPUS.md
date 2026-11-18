@@ -404,3 +404,12 @@ expanded measurement under the new engine. The two successors verify their
 unchanged descriptor predecessors. Authored and v1 stable reports, original
 v3 discovery exclusions and all historical corpus data remain preserved.
 [Exact IDs, per-case results and evidence comparison](SLUGIFY_FALLBACK_REVIEW.md)
+
+## Milestone 9C literal-table measurement
+
+V2 and v3 add `baselines/literal-tables-v1.json` as successors to the preserved
+legacy-dispatch receipts. V2's entire measurement matches. V3 removes exactly
+14 Inflection rule-case false positives while retaining its six affected tests.
+Four retained paths change to existing production evidence after an unrelated
+test-table path is filtered. The original labels and all historical inputs
+retain their hashes. [Per-case results and evidence](MODULE_DATA_REVIEW.md)

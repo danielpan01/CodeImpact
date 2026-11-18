@@ -9,13 +9,30 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-legacy-dispatch-v1-evaluation.json (current)
+# reports/real-v3-literal-tables-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current engine replay — milestone 9B legacy dispatch
+## Current measurement — milestone 9C literal rule tables
+
+The Inflection rule case selects **8/22**, with **6 TP / 2 FP / 0 FN / 14 TN**.
+Its six affected definitions remain selected. Fourteen unrelated tests lose
+both production and test-table fallback contributions. Four retained paths now
+use existing production evidence and receive the existing distance-based score.
+[Exact IDs, source proof and path comparison](MODULE_DATA_REVIEW.md)
+
+Expanded v3 selects **71/120**, with **42 TP / 29 FP / 0 FN / 37 TN** and all
+12 uncertain definitions unselected. The other five v3 analyses match their
+prior hashes, including titleize and both validator cases. All six v2 analyses
+also match their predecessors. Holdout wrapper **6.0** verifies the new
+`literal-tables-v1` measurement and its `legacy-dispatch-v1` predecessor.
+
+The original 90-definition result, excluded inventory and all labels remain
+frozen. Every normal replay validates the history and fails on unexpected drift.
+
+## Preserved engine replay — milestone 9B legacy dispatch
 
 Holdout wrapper 5.0 links `descriptor-binding-v1` through the new
 `legacy-dispatch-v1` receipt. The complete six-case expanded measurement,

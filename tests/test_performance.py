@@ -103,6 +103,21 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(dispatch["current_sources_sha256"]) == set(descriptor["current_sources_sha256"]) | {
         "src/codeimpact/dispatch_fallback.py"
     }
+    tables = json.loads((ROOT / "benchmarks/literal-tables-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/legacy-dispatch-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == tables["previous_receipt_sha256"]
+    )
+    assert set(tables["changed_historical_sources"]) == changed
+    assert set(tables["added_corpus_sha256"]) == {
+        "corpus/real-v2/baselines/literal-tables-v1.json",
+        "corpus/real-v3/baselines/literal-tables-v1.json",
+    }
+    assert set(tables["current_sources_sha256"]) == set(dispatch["current_sources_sha256"]) | {
+        "src/codeimpact/module_data.py"
+    }
     corpus = {p.relative_to(ROOT).as_posix() for p in (ROOT / "corpus").rglob("*") if p.is_file()}
     historical = {p for p in receipt["files_sha256"] if p.startswith("corpus/")}
     assert len(historical) == 106
@@ -111,9 +126,9 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/test-discovery-v1.json",
         "corpus/real-v3/baselines/test-discovery-v1-labels.json",
     }
-    extensions = (current, latest, descriptor, dispatch)
+    extensions = (current, latest, descriptor, dispatch, tables)
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
-    assert CURRENT_SOURCES <= dispatch["current_sources_sha256"].keys()
+    assert CURRENT_SOURCES <= tables["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {
         p for p in receipt["files_sha256"] if p.startswith("src/")
     } | {"src/codeimpact/discovery.py"}

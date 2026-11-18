@@ -33,6 +33,7 @@ from codeimpact.models import (
     Symbol,
     SymbolChange,
 )
+from codeimpact.module_data import ModuleDataFallback
 from codeimpact.partial_bindings import PartialBindings
 from codeimpact.selection import AggregateFallback, propagation_changes
 
@@ -693,6 +694,7 @@ def analyze(request: AnalysisRequest) -> Report:
     call_arguments = CallArgumentFilter(before, after, {nodes[sid].path for sid in active})
 
     dispatch = DispatchFallback(before, after, call_arguments)
+    module_data = ModuleDataFallback(before, after, {nodes[sid].path for sid in active})
 
     def walk(
         seeds: list[str],
@@ -746,12 +748,21 @@ def analyze(request: AnalysisRequest) -> Report:
                 for sid in seeds
                 if nodes[sid].path not in arguments.changes
                 and nodes[sid].path not in call_arguments.changes
+                and nodes[sid].path not in module_data.changes
             ],
             calls_only,
         )
         for source_path in call_arguments.changes:
             group = [sid for sid in seeds if nodes[sid].path == source_path]
             for sid, candidate in walk(group, calls_only, body_path=source_path).items():
+                current = result.get(sid)
+                if current is None or (len(candidate), candidate) < (len(current), current):
+                    result[sid] = candidate
+        for source_path in module_data.changes:
+            group = [sid for sid in seeds if nodes[sid].path == source_path]
+            for sid, candidate in walk(group, calls_only).items():
+                if nodes[sid].kind == "test" and not module_data.allows(sid, source_path):
+                    continue
                 current = result.get(sid)
                 if current is None or (len(candidate), candidate) < (len(current), current):
                     result[sid] = candidate

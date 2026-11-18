@@ -299,3 +299,10 @@ partial receipts. The fresh wrapper is **5.0** and writes
 `previous_summary` refers to mapping; `argument_summary`, `partial_summary` and
 `original_summary` retain earlier stages. No original labels or analyses changed.
 See [TEST_DISCOVERY.md](TEST_DISCOVERY.md) for the corresponding v3 expansion.
+
+## Milestone 9C engine replay
+
+The separate `literal-tables-v1` receipt pins the new module-data engine with
+the complete v2 measurement from legacy-dispatch-v1. All six analyses match.
+Fresh wrapper 9.0 writes `reports/real-v2-literal-tables-v1-evaluation.json`.
+The command verifies the preserved predecessor chain. [V3 table results](MODULE_DATA_REVIEW.md)
