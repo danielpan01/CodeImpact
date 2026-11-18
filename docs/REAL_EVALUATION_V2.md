@@ -306,3 +306,12 @@ The separate `literal-tables-v1` receipt pins the new module-data engine with
 the complete v2 measurement from legacy-dispatch-v1. All six analyses match.
 Fresh wrapper 9.0 writes `reports/real-v2-literal-tables-v1-evaluation.json`.
 The command verifies the preserved predecessor chain. [V3 table results](MODULE_DATA_REVIEW.md)
+
+## Milestone 9C additive package exports
+
+The `additive-exports-v1` successor links the preserved literal-table receipt.
+All six v2 analyses and the complete measurement match: 327/581 selected, with
+109 TP, 205 FP, 0 FN, 245 TN and 13 of 22 uncertain definitions selected.
+Fresh wrapper 10.0 writes `reports/real-v2-additive-exports-v1-evaluation.json`.
+The observed selection change is in the v3 validator addition.
+[Source and evidence review](VALIDATOR_EXPORT_REVIEW.md)

@@ -1,0 +1,38 @@
+{
+  "added_corpus_sha256": {
+    "corpus/real-v2/baselines/additive-exports-v1.json": "3d4915ce138e259ca54b64029f36f149ab9d968e86fbb60754ef2012ded79dbd",
+    "corpus/real-v3/baselines/additive-exports-v1.json": "8804ad809f1a69a32c985fad2f61b93a18b0fa5a53d9c826f23846acf803be9e"
+  },
+  "changed_historical_sources": [
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/fresh_evaluate.py",
+    "src/codeimpact/holdout_evaluate.py"
+  ],
+  "current_sources_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/additive_exports.py": "04ef713ad252b862fe07f96588e5169fe2c36ba9f1e02f76cf80ce08162dd23e",
+    "src/codeimpact/analyzer.py": "910f5de113989458d92d21bc4c7482768a4f0e2f30cdcbb84a68ae3d85958d46",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/cli.py": "76761ebb0c31cbecd5f75959ba9f524d8ba05016c72b38cfaefad3142483ed2e",
+    "src/codeimpact/corpus.py": "073619e9c20c8a2cb5b9df77d3bf8fb247490e1f21466dcd45f9120fb72015f5",
+    "src/codeimpact/demo.py": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ebd6854864a3287616e0df3a3a7a834413fa60a58ca85f4ea0f7a3d614cb883b",
+    "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
+    "src/codeimpact/evaluate.py": "bc9f81bd69dceaf5f4201d2df7202c15f628e0016a6118765e12ddcec623f3c2",
+    "src/codeimpact/fresh_evaluate.py": "39ef2a7735056818637d301d05f974dde694fa45181a8b76a20ea378f10ebc91",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/holdout_evaluate.py": "b7cb0d597a0473d31599a0c8c06420279ba2f56240840e7ed9905444b031b6e0",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/module_data.py": "5906673e5eeb70042275b42d94d5aae421f8e5e53efb1f68491882c0f41e7c7e",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/real_evaluate.py": "8d845b2334306fb343f9f10d6d8c107d57599258aeb52f08064d7ae3b4ee5c7a",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c"
+  },
+  "explanation": "Preserve all original corpus files and prior receipts. Pin the additive export engine and its current v2/v3 receipts.",
+  "name": "additive-exports-v1",
+  "previous_receipt_sha256": "2cd7148ae78252e26213e47011d67bbda42b3d6131ddc2014fed26b2555c9287",
+  "schema_version": "1.0"
+}

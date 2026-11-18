@@ -3482,3 +3482,62 @@ hash/determinism summaries are under `reports/module-data-*`. Labels remain
 agent drafts pending independent review. The two rule-case false positives concern
 empty/uncountable argument bypasses. The next bounded 9C slice can study
 PyISO8601 validator/export handling. Hosting and the human pilot remain deferred.
+
+## Milestone 9C — validator addition and package exports
+
+Started from clean local and remote main at PR #20's merge
+`c1bfd751b0c6f4f64434e3c6d90d08166346b6df`. Before edits, the pinned
+validator report matched the literal-table baseline, with all eight definitions
+selected. The two changed tests used one-node paths. The other six reached the
+package initializer through their own module. The captured adjacent export
+literals parse as one name, `is_iso8601ParseError`. The snapshots retain those
+bytes. [Baseline trace, IDs and evidence](VALIDATOR_EXPORT_REVIEW.md)
+
+The initial synthetic run had three expected failures and 18 passing controls.
+Named and qualified consumers still had package fallback despite using existing
+members. The new two-revision proof audits the additive initializer, the child
+module and the consumer. Wildcards, dynamic or ambiguous binding, unproved
+initialization and test lifecycle retain fallback. The 137 focused tests
+include the new source-only cases, exact retained evidence, historical replay,
+successor receipt tampering and preservation gates.
+
+The validator addition now selects 4/8, with 2 TP, 2 FP, 0 FN and 4 TN
+against its frozen draft labels. The two Hypothesis tests retain their
+conservative package paths because the proof does not model decorated
+execution. Both affected tests retain their exact one-node evidence.
+The four removed recommendations and no other IDs leave the impacted list.
+The 23 nodes, 36 edges and six changes match the predecessor.
+
+| Evaluation | TP / FP / FN / TN | Uncertain selected / unselected | Observed result |
+| --- | ---: | ---: | --- |
+| `make evaluate` | 23 / 0 / 2 / 32 | 2 / 0 | Byte-identical report |
+| `make evaluate-real` | 45 / 0 / 0 / 123 | 11 / 22 | Byte-identical report |
+| `make evaluate-real-v2` | 109 / 205 / 0 / 245 | 13 / 9 | All six analyses and the full 327/581 measurement match |
+| `make evaluate-real-v3` | 42 / 25 / 0 / 41 | 0 / 12 | 67/120 selected. Only the validator addition changes |
+
+The new `additive-exports-v1` receipts link both literal-table receipts and
+their earlier chains. Fresh wrapper 10.0 and holdout wrapper 7.0 use distinct
+output paths. Application report schema 2.0 is preserved. All 237 captured
+protected hashes match, including 117 historical corpus files and all tracked
+UI source, fixtures and baselines. The frozen first runs, provenance and
+draft labels are intact.
+
+All four offline reports match byte for byte under hash seeds 7 and 173.
+Reversed snapshot file order produces the same validated analysis in all
+43 cases, excluding only `stats.elapsed_ms`. `make verify-pilot` passed local
+readiness, built UI, public demo, protected requests, exact frozen report and
+storage checks. No upstream source was run or imported. Independent label
+review is pending.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused synthetic and evaluation regressions | 137 passed |
+| `make check` | Ruff lint and format, mypy (26 modules), 1,036 tests passed, one skip, 93% coverage, TypeScript and production build passed |
+| Frontend formatting | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop and mobile Chromium, Firefox and WebKit |
+| Historical hashes and final `git diff --check` | Passed |
+
+The skip is the Linux-only address-space enforcement test on macOS. Existing
+warnings are the Starlette/httpx test-client deprecation and the browser
+`NO_COLOR` / `FORCE_COLOR` environment warning. Local logs are under
+`reports/validator-*`. The implementation was handed off unstaged and uncommitted.
