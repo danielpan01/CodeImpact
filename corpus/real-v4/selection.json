@@ -1,0 +1,711 @@
+{
+  "cases": [
+    {
+      "base": "6350d9de586f40014296b55427ccbc1d7f47269a",
+      "head": "5152325dcdb68b3684c7ba745a8710df6ea40b9a",
+      "id": "oyaml_registrations",
+      "license": "MIT",
+      "reason": "Register ordered mappings on Python and optional C loaders and dumpers.",
+      "repository": "wimglenn/oyaml"
+    },
+    {
+      "base": "425fd975c063aed8770826b98376a19b83a6c3de",
+      "head": "6350d9de586f40014296b55427ccbc1d7f47269a",
+      "id": "oyaml_error_context",
+      "license": "MIT",
+      "reason": "Preserve contextual errors when constructing mappings with unhashable keys.",
+      "repository": "wimglenn/oyaml"
+    },
+    {
+      "base": "daa30a0672e4588ca75a7072352114fe4232869a",
+      "head": "2d0144ef5f4529564b5fe7f64fc1a86e0a682074",
+      "id": "icecream_source_error",
+      "license": "MIT",
+      "reason": "Change the public message raised when source is unavailable.",
+      "repository": "gruns/icecream"
+    },
+    {
+      "base": "b85b8dc668ad17ddf86742913aaa49b073204567",
+      "head": "792cfdec01fccbe069fe485bad0846940251efa6",
+      "id": "icecream_local_time",
+      "license": "MIT",
+      "reason": "Format source-free call timestamps in local rather than UTC time.",
+      "repository": "gruns/icecream"
+    },
+    {
+      "base": "0cbd1ababec2dcdd71e57856f9b0cce8c4d21b51",
+      "head": "cb0ac5989cea442e5e4b2f4effc3906aad1a1d1a",
+      "id": "humanize_intcomma_locale",
+      "license": "MIT",
+      "reason": "Internationalize the thousands separator used by intcomma.",
+      "repository": "python-humanize/humanize"
+    },
+    {
+      "base": "9d9de69177154b41b2d6ef412d1487639e99833d",
+      "head": "62706fd4cb90ebeb9bf85685bad8ab1fa9d0c742",
+      "id": "humanize_small_delta",
+      "license": "MIT",
+      "reason": "Return a zero minimum unit for a too-small precise delta.",
+      "repository": "python-humanize/humanize"
+    }
+  ],
+  "exclusions": [
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "6d43bde05ed8d6ce6b8740aa1d7ac9eaf4a6af18"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "a335e61779984ae283f424b4e21483cc6e1800ab"
+    },
+    {
+      "reason": "Test-only change.",
+      "repository": "madzak/python-json-logger",
+      "revision": "c0b4ba1efee39b1acd0ff898aad93a1cf447192b"
+    },
+    {
+      "reason": "Test-only change.",
+      "repository": "madzak/python-json-logger",
+      "revision": "bd9e54f5274be970300fdd13940cc1a6eac603f3"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "6083af56e5b001d90896ca70dc841ce80576b068"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "9d5bb1f2de4fbf40ffc8591b470d70bdc667a990"
+    },
+    {
+      "reason": "Test-only change.",
+      "repository": "madzak/python-json-logger",
+      "revision": "83b847aef3c68bc98d1c72af6e3f3272b63e1727"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "41a763dde0bd1967f3cb31df26c1071953b82039"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "e756b9bb8d5edd1cbfa1f975f0b0e560cf5df30a"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "madzak/python-json-logger",
+      "revision": "9876d0411377a9a8cbab72b4207d557f9dc42526"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "madzak/python-json-logger",
+      "revision": "d7fe3fec5f761a0223f2624bc951fa600fad2b6b"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "4006b5cd12684bd3dc4e71054b09c173278a481a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "cf6a8ff14e0214c031918d2e8390e2d74f04178a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "687cc52260876fd2189cbb7c5856e3fbaff65279"
+    },
+    {
+      "reason": "Production candidate in BSD-2-Clause repository, outside the allowlist.",
+      "repository": "madzak/python-json-logger",
+      "revision": "46826c4921a2eff492e4f9fe9044fe4ec6c38187"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "madzak/python-json-logger",
+      "revision": "32aa5120b2b0c32dcf61e528bbba88a0f38d5f36"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "madzak/python-json-logger",
+      "revision": "3a9a9369265822f7db8845a7a9f1b1d0f3b29be1"
+    },
+    {
+      "reason": "Production candidate in BSD-2-Clause repository, outside the allowlist.",
+      "repository": "madzak/python-json-logger",
+      "revision": "88838bd9627ee0eed1e8d9429b42890f7f484c06"
+    },
+    {
+      "reason": "Production candidate in BSD-2-Clause repository, outside the allowlist.",
+      "repository": "madzak/python-json-logger",
+      "revision": "c15337a3d748e5b564f668ef728c61d6f919a74e"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "madzak/python-json-logger",
+      "revision": "12ab1c30c24846cadfba214fa9cd2c00d899ab2a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "218147363a4085c0826a80a83984f3d20e718aa0"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "fe3aae9fd892e87ca24e33086b45bc2ff9f33108"
+    },
+    {
+      "reason": "Docstring-only production change.",
+      "repository": "pydanny/cached-property",
+      "revision": "c97cf414254e2aed83417785b3890a4f2602ba81"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "b4cc28f4f08e9c4bd06b35f92ab0f5a1aa2ae9b7"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "51c2086859cd97f75e38e86c8e472cb7abdb4999"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "1ff7f45d298cd38263133cd8cc2f35516cf4cf0f"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "53dcadfedb92374eec890d58d824c7437c68f05c"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "cb8d53fd100e14dbb564f22bff8ec94868371e1a"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "cdea716046a82de3bc971e0f32a41412f9d657e8"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "537a5ca047aa5240476332a26f39f949c9a15458"
+    },
+    {
+      "reason": "Formatting across the project.",
+      "repository": "pydanny/cached-property",
+      "revision": "93949e7cb4a3cc562d452d379acb86b253454cf7"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "945d81d40fae050efff30e14e6c09da8ddaa40c3"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "20ad6d3e174193b1a4df1802ec64e0c2d6052841"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "863223bab17abf6ede84a34804554c01a95f9ba0"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "55be8e79d2e1cc1eed6d1507feea7a17c4d1700e"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "3ee256b035cd1c9fe491da22f051213e466a2495"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "82ebde2a7aae75b6fa388225ee7d58222d232b0a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "99f1a6eac837e8b3850d70cf9f5e8faa522c6b3f"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "8b45f2cb39900600a10106b416e62f467389a98c"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "cd13b5f0f3de0c8f80af2715bdced5a884b6e23d"
+    },
+    {
+      "reason": "Changes test-only mock imports and packaging.",
+      "repository": "python-humanize/humanize",
+      "revision": "9fe089a2ae88dabd17d74e24e2af42725f5b91c4"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "a43c266c30565e025a26abc77e747d88923dac6b"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "05cc05da3f34d55dc3feb3decaaa9f4e98491a45"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "b0afc5f214bbeccac3751dc8407642e9c9a8f613"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "526baa71a654ac939c246837bbe1bc75bfd662c0"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "56459415de8ad3da0820c2de36823f0e86271620"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "429a7c5f63068b656ff03be42da9f30e5398387f"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "54502fcb5635ce96ae5d6409bbc715fa0a207e50"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "53a9a085df88e2c5d5ab5e9f0f5b6941d543b407"
+    },
+    {
+      "reason": "Example-only change.",
+      "repository": "python-humanize/humanize",
+      "revision": "9fed723dea69bf8b837bbd97fef6e0efd5c9f3a4"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "3299e2e5170475882a8b8e2421931a926df5c10f"
+    },
+    {
+      "reason": "Raw strings retain regex and replacement values, addressing invalid escape warnings.",
+      "repository": "python-humanize/humanize",
+      "revision": "d4f7f998a48581843fbbb597565d225c4a37c446"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "86e6f226fe04626f80e6b4727ca578c469ad4a60"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "2783e8903885f7b7cdc6fa189ecb63ef160a63d0"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "8e5580f2b56350129450a12dda9ea00e57b9be5e"
+    },
+    {
+      "reason": "Translation entry and test whitespace only.",
+      "repository": "python-humanize/humanize",
+      "revision": "bec33540362a04b01a13ae9a639bfeae002c9c96"
+    },
+    {
+      "reason": "Translation data only, no production Python behavior change.",
+      "repository": "python-humanize/humanize",
+      "revision": "019fdcd961e5f4274279d2b3eea7ecc777db256a"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "32c469bc378de22e8eabd5f9565bd7cffe7c7ae0"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "fc4a2303cf8dd31052a51f5c2c4ba3348aa74ce7"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "292a38ad3f2b2bfa61f1c8bef74af4a838be899e"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "wimglenn/oyaml",
+      "revision": "d0195070d26bd982f1e4e604bded5510dd035cd7"
+    },
+    {
+      "reason": "CI, metadata, documentation and tests only.",
+      "repository": "wimglenn/oyaml",
+      "revision": "7381373cec378a464e1cf4ca8b03c6cb8493469b"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "wimglenn/oyaml",
+      "revision": "45bef7ee676e30a68a122fbac9801727e0064aab"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "7bf20d4c6cbc855d3c64d6369a4e0bae753599d8"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "987a00151870a0d99c484e63aff70af658dbf2d2"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "69f203c719d00af230a7bfea5a6ddd783c9ecf2d"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "d5bcaa250ef9e0f59eb70ffcefd892d0ad9de39b"
+    },
+    {
+      "reason": "Release version and changelog only.",
+      "repository": "gruns/icecream",
+      "revision": "fb919b77069f52ef6597b0ac74ea0939873d8298"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "b6a4421e1760ae1972659c404200967af827321e"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "ae9f728be4adcf14f07a0e77cf76af6d99507f48"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "e952dc5b36af4671867b052225863299e396d30c"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "a361a2a9ed97bbec292452f73d170663d217cb8a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "8f92940de9dcb6f2133ff03c004e1d9896847bcf"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "db81565707137d177fa1fcdabe5d9b1cb22b2c4e"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "daa30a0672e4588ca75a7072352114fe4232869a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "9bd62f3c3ae4e0502b8dc7a4ccf25de45ef0bd19"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "52d37e51e8a0808b1d23ada9f46511a76d88a0bd"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "ffefe1b9ceb04a476a4f5ab8dbe56d93d553c3fb"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "90e639ac1bdd26100f2672a05a9c338cd615ce23"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "b0a5a94993efe3eac93e18d36c8aea351bbd57e6"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "gruns/icecream",
+      "revision": "792c59009219e8d8b1f4054acbcecf02ce884034"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "0280d0df84e66f3016cb05c0f4b98c10cd9c0432"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "1925fc694bebff81bc37e29997ac3a0e5fcffd24"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "gruns/icecream",
+      "revision": "cb60412d2881e405c23fe693382345bd828f4471"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "a0f03c137ab33a9b4896789b94edb95ab635f9df"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "97fc008f5b3af03d09e41cfd0afc8ddbeae8f195"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "89b73e0099646ed6d3a7826e8c276a25f4e32d93"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "9b5fa9d1e38429f7a954605ed0c420c242cb5107"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "6ca44f7d14a5bac0d8af2358e97eafe105174c09"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "5195e30c3bad6eb1992300c4920df5fdb5d150cd"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "0cbd1ababec2dcdd71e57856f9b0cce8c4d21b51"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "794a1eb43079bbd21c3898ae930813cb55b81fcc"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "36bc853e382460adb0d56c8237f9813f2c2d2750"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "55b5c18b003efd27a82e330619c3774adf306ebb"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "3b8505d5bfd805462303afb53252f75a2d2069a0"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "c24f3e3b304129fbb779f88cb8eaa64a8e802772"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "93119f292072ea44aa83f705b0c9bdc869cec2b7"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "6d1e98966a47978572c6ce6606f19414499784fe"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "b2785e9671bbbe260a82bc7689a3db0308866592"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "d97c61c00375f7c70654d5901cc39e2e22d63854"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "128717639723f035cca1acc8f9c1e1a427247c34"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "184269e4b8f9415927e19d841891c9021235f6ce"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "2bf7f5bb481238c544a0557a3319659fda6d6fc3"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "aec9dc22412a70c26286f3a9a116164dc7163d2c"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "eaaa1e2ca6d00847973df09cba65ef4a79cf5ae0"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "2d4143e0aecb719a376dc757b439fc7e41b0d773"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "c3152b6d6fe6caa050ca448fa544ec757b7809ef"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "518bae32535ad7f78b8788c9581d947fe67e69de"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "b0fe8eb00d4d6f9699c4def5a2c57ee8d31a93a6"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "python-humanize/humanize",
+      "revision": "b03cd63ccccf9d712cf710641e091fadd073e758"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "python-humanize/humanize",
+      "revision": "809e66b7231b7f1ad4ba5db11b2728b95655d68c"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "409f24286e16ea3086af463edea6b80cdd62deed"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "4adb33246294a6e7370c62212028b9fb152f6157"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "0be6adca6f173ee7d2d0d5ec31d6b01650bac97e"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "f075b4f71741f84b687327948fc3a65e4d858b2c"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "ab48d01ec5b716b7078fa1da06cbf538da9e8ff7"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "6b4e990aca401ef47f7517c914b6b6cda360f9e5"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "4056dca17cfc1bbe18f43819ece998cedb994a28"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "426aa51d08d4c43cd318872c97e8d086abe013b8"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "a5ecd1df8edf1379581f4da37defa7ff1b1d1172"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "deb84ce9c9a53e2ca4969b8aa47dc80795fdf43a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "bad6d273bdedb28e4dc237fa2f4b06b60da1f33a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "d10a9661ae3ae59c60e9edbaa70a639b0dd76ce5"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "831c889ecf17ec2933513d45bbff6eeb1513a6dd"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "46b84eb8ccf7f42598e04aab0b61eb21f0c4a290"
+    },
+    {
+      "reason": "CI, history and tox support metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "f7b6d211c6d1439253ee0ac01898731219bc27e6"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "0990bfdb9694def81227c87879b180153ffb86ea"
+    },
+    {
+      "reason": "Merge copy, excluded by protocol.",
+      "repository": "pydanny/cached-property",
+      "revision": "63c1f67a492d6fc37ea3b72ae6f88e7b87d0bd8a"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "9a1b19a8247c3f8ea7adcdfc2e1404f9937a91e0"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "9cb55ecb394a7e82ebb97a9099b7e87766eadddf"
+    },
+    {
+      "reason": "Documentation, release, packaging or CI/maintenance metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "08a02298bdfd6e8203df7c8620a651be7d03a89f"
+    }
+  ],
+  "policy": "The pre-analysis protocol fixes repository/window ordering and selects two eligible functional first-parent changes per repository. See PROTOCOL.md and CANDIDATES.md.",
+  "schema_version": "1.0"
+}

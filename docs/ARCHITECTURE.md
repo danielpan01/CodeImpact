@@ -923,3 +923,15 @@ both revisions. The mixed branch requires direct registration of every
 changed binding in supported parameter decorators and rejects other table
 uses. Only the test-table seed's contribution is filtered.
 [Source boundary and pinned titleize case](PARAMETER_TABLE_REVIEW.md)
+
+## Frozen fresh-repository evaluation v4
+
+The v4 wrapper reuses the real-source tree, provenance, label and typed path
+validation. It loads labels under the current discovery policy and separately
+audits mixed-case source test names. The frozen inputs pin discovery, the
+source-only review pack and the reference analyzer. Replay verifies the
+complete first stable report hash and the declared discrepancy and uncertain
+selection IDs. The new wrapper's own metadata is versioned separately from
+the unchanged application report. Review decisions are separate source
+records and only a future versioned label receipt can change metrics.
+[Dataset and review workflow](../corpus/real-v4/README.md)

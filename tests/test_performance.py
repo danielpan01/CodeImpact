@@ -158,7 +158,22 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/parameter-tables-v1.json",
     }
     assert set(params["current_sources_sha256"]) == set(exports["current_sources_sha256"])
-    extensions = (current, latest, descriptor, dispatch, tables, exports, params)
+    v4 = json.loads((ROOT / "benchmarks/fresh-v4-preservation.json").read_text())
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/parameter-tables-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == v4["previous_receipt_sha256"]
+    )
+    assert set(v4["changed_historical_sources"]) == {
+        "src/codeimpact/holdout_evaluate.py",
+        "src/codeimpact/real_evaluate.py",
+    }
+    assert all(path.startswith("corpus/real-v4/") for path in v4["added_corpus_sha256"])
+    assert set(v4["current_sources_sha256"]) == set(params["current_sources_sha256"]) | {
+        "src/codeimpact/v4_evaluate.py"
+    }
+    extensions = (current, latest, descriptor, dispatch, tables, exports, params, v4)
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
     assert set(current["current_sources_sha256"]) == {

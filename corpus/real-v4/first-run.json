@@ -1,0 +1,1738 @@
+{
+  "first_report_sha256": "a30130280f6a0f6e65e60cec4a400834a610a8a094e98911e74a725dceda1712",
+  "frozen_inputs_sha256": "2651af86b93b4baecfecaa2069c5f7b0f77c7adb6eae8a242dddb5d89a33d8c1",
+  "initial_regressions": [
+    "humanize_intcomma_locale: false positives: expected [], observed ['tests/test_filesize.py::test_naturalsize', 'tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__', 'tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__', 'tests/test_i18n.py::test_default_locale_path_defined__file__', 'tests/test_i18n.py::test_default_locale_path_null__file__', 'tests/test_i18n.py::test_default_locale_path_undefined__file__', 'tests/test_i18n.py::test_i18n', 'tests/test_number.py::test_apnumber', 'tests/test_number.py::test_fractional', 'tests/test_number.py::test_intword', 'tests/test_number.py::test_intword_powers', 'tests/test_number.py::test_ordinal', 'tests/test_number.py::test_scientific', 'tests/test_time.py::test_date_and_delta', 'tests/test_time.py::test_naturaldate', 'tests/test_time.py::test_naturalday', 'tests/test_time.py::test_naturaldelta', 'tests/test_time.py::test_naturaldelta_minimum_unit_default', 'tests/test_time.py::test_naturaldelta_minimum_unit_explicit', 'tests/test_time.py::test_naturaldelta_nomonths', 'tests/test_time.py::test_naturaldelta_when_explicit', 'tests/test_time.py::test_naturaldelta_when_missing_tzinfo', 'tests/test_time.py::test_naturaltime', 'tests/test_time.py::test_naturaltime_minimum_unit_default', 'tests/test_time.py::test_naturaltime_minimum_unit_explicit', 'tests/test_time.py::test_naturaltime_nomonths', 'tests/test_time.py::test_precisedelta_bogus_call', 'tests/test_time.py::test_precisedelta_custom_format', 'tests/test_time.py::test_precisedelta_multiple_units', 'tests/test_time.py::test_precisedelta_one_unit_enough', 'tests/test_time.py::test_precisedelta_suppress_units', 'tests/test_time.py::test_time_unit']",
+    "humanize_small_delta: false positives: expected [], observed ['tests/test_time.py::test_date_and_delta', 'tests/test_time.py::test_naturaldate', 'tests/test_time.py::test_naturalday', 'tests/test_time.py::test_naturaldelta', 'tests/test_time.py::test_naturaldelta_minimum_unit_default', 'tests/test_time.py::test_naturaldelta_minimum_unit_explicit', 'tests/test_time.py::test_naturaldelta_nomonths', 'tests/test_time.py::test_naturaldelta_when_explicit', 'tests/test_time.py::test_naturaldelta_when_missing_tzinfo', 'tests/test_time.py::test_naturaltime', 'tests/test_time.py::test_naturaltime_minimum_unit_default', 'tests/test_time.py::test_naturaltime_minimum_unit_explicit', 'tests/test_time.py::test_naturaltime_nomonths', 'tests/test_time.py::test_precisedelta_bogus_call', 'tests/test_time.py::test_time_unit']",
+    "oyaml_error_context: false positives: expected [], observed ['test_oyaml.py::test_dump', 'test_oyaml.py::test_dump_all', 'test_oyaml.py::test_dump_and_safe_dump_match', 'test_oyaml.py::test_loads_to_std_dict', 'test_oyaml.py::test_safe_dump', 'test_oyaml.py::test_safe_dump_all', 'test_oyaml.py::test_safe_loads_to_std_dict', 'test_oyaml.py::test_subclass_dump']",
+    "oyaml_error_context: unclassified recommendations: expected [], observed ['test_oyaml.py::test_anchors_and_references', 'test_oyaml.py::test_load', 'test_oyaml.py::test_load_all', 'test_oyaml.py::test_merge', 'test_oyaml.py::test_omap', 'test_oyaml.py::test_omap_flow_style', 'test_oyaml.py::test_safe_load']",
+    "oyaml_registrations: false positives: expected [], observed ['test_oyaml.py::test_loads_to_std_dict', 'test_oyaml.py::test_safe_loads_to_std_dict']",
+    "oyaml_registrations: unclassified recommendations: expected [], observed ['test_oyaml.py::test_anchors_and_references', 'test_oyaml.py::test_load', 'test_oyaml.py::test_load_all', 'test_oyaml.py::test_merge', 'test_oyaml.py::test_omap', 'test_oyaml.py::test_omap_flow_style', 'test_oyaml.py::test_safe_load', 'test_oyaml.py::test_subclass_dump', 'test_oyaml.py::test_unhashable_error_context']"
+  ],
+  "measurement": {
+    "analysis_sha256": {
+      "humanize_intcomma_locale": "5fcdbb644550619e76bca7ccc2d9af1e8d9ea73057ddd66460b71a9312f9575f",
+      "humanize_small_delta": "6e9094aa921eb3295c9bd565a56a36e8623c17afc6194e64b0a3b6b275a6a3ff",
+      "icecream_local_time": "4a2c3ffd5e38db8c6d84eddb132ead064ccb58f30558806c7d3b752e66b5514b",
+      "icecream_source_error": "2660084374a4ad9192e8b555e0cd580eadfb57129bb2f7477b30098f88803ae9",
+      "oyaml_error_context": "8295dc0d8a2a274624c836b2dd2133b43abb5d66f2fe6dbf2ef048715f38e389",
+      "oyaml_registrations": "c647c10c43b3e84e92d3837f1aab059a6cbb2fa2f848b5b759b5df5f79d15772"
+    },
+    "cases": [
+      {
+        "change_url": "https://github.com/python-humanize/humanize/commit/cb0ac5989cea442e5e4b2f4effc3906aad1a1d1a",
+        "coverage": {
+          "base": {
+            "commit": "0cbd1ababec2dcdd71e57856f9b0cce8c4d21b51",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENCE",
+              "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 67,
+            "python_bytes": 63021,
+            "python_files": 11,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "4b94ec76b34dde914c8b2b05b8b53a790b83b6de"
+          },
+          "head": {
+            "commit": "cb0ac5989cea442e5e4b2f4effc3906aad1a1d1a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENCE",
+              "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 67,
+            "python_bytes": 63867,
+            "python_files": 11,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "5168f1f3dfe5511cbb466973aae3f5cb7de2f705"
+          }
+        },
+        "id": "humanize_intcomma_locale",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "0bbcdd229ba46c41c550e829f899a752da19fdbce22f6e64ca7b32fb7381c7d5",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 32,
+            "tn": 0,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 34,
+            "numerator": 2,
+            "value": 0.058823529411764705
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 33,
+          "Test itself changed": 1
+        },
+        "repository": "python-humanize/humanize",
+        "selected_count": 34,
+        "selected_test_ids": [
+          "tests/test_filesize.py::test_naturalsize",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__",
+          "tests/test_i18n.py::test_default_locale_path_defined__file__",
+          "tests/test_i18n.py::test_default_locale_path_null__file__",
+          "tests/test_i18n.py::test_default_locale_path_undefined__file__",
+          "tests/test_i18n.py::test_i18n",
+          "tests/test_i18n.py::test_intcomma",
+          "tests/test_number.py::test_apnumber",
+          "tests/test_number.py::test_fractional",
+          "tests/test_number.py::test_intcomma",
+          "tests/test_number.py::test_intword",
+          "tests/test_number.py::test_intword_powers",
+          "tests/test_number.py::test_ordinal",
+          "tests/test_number.py::test_scientific",
+          "tests/test_time.py::test_date_and_delta",
+          "tests/test_time.py::test_naturaldate",
+          "tests/test_time.py::test_naturalday",
+          "tests/test_time.py::test_naturaldelta",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaldelta_nomonths",
+          "tests/test_time.py::test_naturaldelta_when_explicit",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo",
+          "tests/test_time.py::test_naturaltime",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaltime_nomonths",
+          "tests/test_time.py::test_precisedelta_bogus_call",
+          "tests/test_time.py::test_precisedelta_custom_format",
+          "tests/test_time.py::test_precisedelta_multiple_units",
+          "tests/test_time.py::test_precisedelta_one_unit_enough",
+          "tests/test_time.py::test_precisedelta_suppress_units",
+          "tests/test_time.py::test_time_unit"
+        ],
+        "test_count": 34,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/python-humanize/humanize/commit/62706fd4cb90ebeb9bf85685bad8ab1fa9d0c742",
+        "coverage": {
+          "base": {
+            "commit": "9d9de69177154b41b2d6ef412d1487639e99833d",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENCE",
+              "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 68,
+            "python_bytes": 64574,
+            "python_files": 11,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "a7f213847eae1a0db76de0001008cba3897e2d6d"
+          },
+          "head": {
+            "commit": "62706fd4cb90ebeb9bf85685bad8ab1fa9d0c742",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENCE",
+              "sha256": "8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2010-2020 Jason Moiron and Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 68,
+            "python_bytes": 65074,
+            "python_files": 11,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "947a59fc72003359b4be1603fb2985750e8ef124"
+          }
+        },
+        "id": "humanize_small_delta",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "5efdaa2fd8e2ea4a589b0b42717ed1e3abd7b74c728bd9871a2a34ecaa64313f",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 15,
+            "tn": 13,
+            "tp": 5,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 20,
+            "numerator": 5,
+            "value": 0.25
+          },
+          "recall": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 19,
+          "Test itself changed": 1
+        },
+        "repository": "python-humanize/humanize",
+        "selected_count": 20,
+        "selected_test_ids": [
+          "tests/test_i18n.py::test_i18n",
+          "tests/test_time.py::test_date_and_delta",
+          "tests/test_time.py::test_naturaldate",
+          "tests/test_time.py::test_naturalday",
+          "tests/test_time.py::test_naturaldelta",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaldelta_nomonths",
+          "tests/test_time.py::test_naturaldelta_when_explicit",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo",
+          "tests/test_time.py::test_naturaltime",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaltime_nomonths",
+          "tests/test_time.py::test_precisedelta_bogus_call",
+          "tests/test_time.py::test_precisedelta_custom_format",
+          "tests/test_time.py::test_precisedelta_multiple_units",
+          "tests/test_time.py::test_precisedelta_one_unit_enough",
+          "tests/test_time.py::test_precisedelta_suppress_units",
+          "tests/test_time.py::test_time_unit"
+        ],
+        "test_count": 33,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/gruns/icecream/commit/792cfdec01fccbe069fe485bad0846940251efa6",
+        "coverage": {
+          "base": {
+            "commit": "b85b8dc668ad17ddf86742913aaa49b073204567",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+              "spdx": "MIT",
+              "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+            },
+            "non_python_blob_count": 9,
+            "python_bytes": 36281,
+            "python_files": 9,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "fa9d5a6c489adb1d22329ecf012ec95252adda97"
+          },
+          "head": {
+            "commit": "792cfdec01fccbe069fe485bad0846940251efa6",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+              "spdx": "MIT",
+              "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+            },
+            "non_python_blob_count": 9,
+            "python_bytes": 36278,
+            "python_files": 9,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "a7d2d7fb04852e3cd617d5cc9fe91719b33a3e98"
+          }
+        },
+        "id": "icecream_local_time",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "c1b7b469b5b27e9284c6f6b8acdf2caffa968023960f8ccc27d284499df1d972",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 0,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          },
+          "recall": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          }
+        },
+        "reason_counts": {},
+        "repository": "gruns/icecream",
+        "selected_count": 0,
+        "selected_test_ids": [],
+        "test_count": 0,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/gruns/icecream/commit/2d0144ef5f4529564b5fe7f64fc1a86e0a682074",
+        "coverage": {
+          "base": {
+            "commit": "daa30a0672e4588ca75a7072352114fe4232869a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+              "spdx": "MIT",
+              "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+            },
+            "non_python_blob_count": 9,
+            "python_bytes": 36327,
+            "python_files": 9,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "20ebbe3a26b0d5f2a48582a0d3d4759679197897"
+          },
+          "head": {
+            "commit": "2d0144ef5f4529564b5fe7f64fc1a86e0a682074",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "ed22ae7c29d18ad952a4d75c0fbe95f99e89e170d3c83cc178d4519f5add4554",
+              "spdx": "MIT",
+              "text": "Copyright 2018 Ansgar Grunseid\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+            },
+            "non_python_blob_count": 9,
+            "python_bytes": 36382,
+            "python_files": 9,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "c4c822fa4a5428726e9f10db785349f5fbd0b254"
+          }
+        },
+        "id": "icecream_source_error",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "c1b7b469b5b27e9284c6f6b8acdf2caffa968023960f8ccc27d284499df1d972",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 0,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          },
+          "recall": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          }
+        },
+        "reason_counts": {},
+        "repository": "gruns/icecream",
+        "selected_count": 0,
+        "selected_test_ids": [],
+        "test_count": 0,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/wimglenn/oyaml/commit/6350d9de586f40014296b55427ccbc1d7f47269a",
+        "coverage": {
+          "base": {
+            "commit": "425fd975c063aed8770826b98376a19b83a6c3de",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+              "spdx": "MIT",
+              "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 5,
+            "python_bytes": 7006,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "f79d19166c59556422a04af45f7be2d9126ac6c1"
+          },
+          "head": {
+            "commit": "6350d9de586f40014296b55427ccbc1d7f47269a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+              "spdx": "MIT",
+              "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 5,
+            "python_bytes": 7340,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "6947399251a90e3f90b2b71592da760ec2627eb2"
+          }
+        },
+        "id": "oyaml_error_context",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "7a4bf3ca72a1a1875ae61f031a3a76a6defba9f9fae0070ab7e26475c104fdde",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 8,
+            "tn": 0,
+            "tp": 3,
+            "unclassified_recommendations": 7
+          },
+          "precision": {
+            "denominator": 11,
+            "numerator": 3,
+            "value": 0.2727272727272727
+          },
+          "recall": {
+            "denominator": 3,
+            "numerator": 3,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 17,
+          "Test itself changed": 1
+        },
+        "repository": "wimglenn/oyaml",
+        "selected_count": 18,
+        "selected_test_ids": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_dump",
+          "test_oyaml.py::test_dump_all",
+          "test_oyaml.py::test_dump_and_safe_dump_match",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_loads_to_ordered_dict",
+          "test_oyaml.py::test_loads_to_std_dict",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_dump",
+          "test_oyaml.py::test_safe_dump_all",
+          "test_oyaml.py::test_safe_load",
+          "test_oyaml.py::test_safe_loads_to_ordered_dict",
+          "test_oyaml.py::test_safe_loads_to_std_dict",
+          "test_oyaml.py::test_subclass_dump",
+          "test_oyaml.py::test_unhashable_error_context"
+        ],
+        "test_count": 18,
+        "unclassified_recommendation_count": 7,
+        "unclassified_test_count": 7,
+        "unclassified_test_ids": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_load"
+        ]
+      },
+      {
+        "change_url": "https://github.com/wimglenn/oyaml/commit/5152325dcdb68b3684c7ba745a8710df6ea40b9a",
+        "coverage": {
+          "base": {
+            "commit": "6350d9de586f40014296b55427ccbc1d7f47269a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+              "spdx": "MIT",
+              "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 5,
+            "python_bytes": 7340,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "6947399251a90e3f90b2b71592da760ec2627eb2"
+          },
+          "head": {
+            "commit": "5152325dcdb68b3684c7ba745a8710df6ea40b9a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+              "spdx": "MIT",
+              "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 5,
+            "python_bytes": 7865,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "04fd3194d1916a2b346f8d0247d3253f37d40d36"
+          }
+        },
+        "id": "oyaml_registrations",
+        "label_review": {
+          "author": "Codex source-only draft, November 17, 2026",
+          "drafted_before_analysis": true,
+          "labels_sha256": "686a34c83107ef60542a08a6ccaea0db7a0c7eb6e5dee71f78d04f731a176b85",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 0,
+            "tp": 9,
+            "unclassified_recommendations": 9
+          },
+          "precision": {
+            "denominator": 11,
+            "numerator": 9,
+            "value": 0.8181818181818182
+          },
+          "recall": {
+            "denominator": 9,
+            "numerator": 9,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 18,
+          "Test itself changed": 2
+        },
+        "repository": "wimglenn/oyaml",
+        "selected_count": 20,
+        "selected_test_ids": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_dump",
+          "test_oyaml.py::test_dump_all",
+          "test_oyaml.py::test_dump_and_safe_dump_match",
+          "test_oyaml.py::test_explicit_dumper",
+          "test_oyaml.py::test_explicit_loader",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_loads_to_ordered_dict",
+          "test_oyaml.py::test_loads_to_std_dict",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_dump",
+          "test_oyaml.py::test_safe_dump_all",
+          "test_oyaml.py::test_safe_load",
+          "test_oyaml.py::test_safe_loads_to_ordered_dict",
+          "test_oyaml.py::test_safe_loads_to_std_dict",
+          "test_oyaml.py::test_subclass_dump",
+          "test_oyaml.py::test_unhashable_error_context"
+        ],
+        "test_count": 20,
+        "unclassified_recommendation_count": 9,
+        "unclassified_test_count": 9,
+        "unclassified_test_ids": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_load",
+          "test_oyaml.py::test_subclass_dump",
+          "test_oyaml.py::test_unhashable_error_context"
+        ]
+      }
+    ],
+    "classifications": {
+      "humanize_intcomma_locale": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_filesize.py::test_naturalsize",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__",
+          "tests/test_i18n.py::test_default_locale_path_defined__file__",
+          "tests/test_i18n.py::test_default_locale_path_null__file__",
+          "tests/test_i18n.py::test_default_locale_path_undefined__file__",
+          "tests/test_i18n.py::test_i18n",
+          "tests/test_number.py::test_apnumber",
+          "tests/test_number.py::test_fractional",
+          "tests/test_number.py::test_intword",
+          "tests/test_number.py::test_intword_powers",
+          "tests/test_number.py::test_ordinal",
+          "tests/test_number.py::test_scientific",
+          "tests/test_time.py::test_date_and_delta",
+          "tests/test_time.py::test_naturaldate",
+          "tests/test_time.py::test_naturalday",
+          "tests/test_time.py::test_naturaldelta",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaldelta_nomonths",
+          "tests/test_time.py::test_naturaldelta_when_explicit",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo",
+          "tests/test_time.py::test_naturaltime",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaltime_nomonths",
+          "tests/test_time.py::test_precisedelta_bogus_call",
+          "tests/test_time.py::test_precisedelta_custom_format",
+          "tests/test_time.py::test_precisedelta_multiple_units",
+          "tests/test_time.py::test_precisedelta_one_unit_enough",
+          "tests/test_time.py::test_precisedelta_suppress_units",
+          "tests/test_time.py::test_time_unit"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 32,
+            "tn": 0,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 34,
+            "numerator": 2,
+            "value": 0.058823529411764705
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "tests/test_i18n.py::test_intcomma",
+          "tests/test_number.py::test_intcomma"
+        ],
+        "unclassified_recommendations": []
+      },
+      "humanize_small_delta": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_time.py::test_date_and_delta",
+          "tests/test_time.py::test_naturaldate",
+          "tests/test_time.py::test_naturalday",
+          "tests/test_time.py::test_naturaldelta",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_default",
+          "tests/test_time.py::test_naturaldelta_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaldelta_nomonths",
+          "tests/test_time.py::test_naturaldelta_when_explicit",
+          "tests/test_time.py::test_naturaldelta_when_missing_tzinfo",
+          "tests/test_time.py::test_naturaltime",
+          "tests/test_time.py::test_naturaltime_minimum_unit_default",
+          "tests/test_time.py::test_naturaltime_minimum_unit_explicit",
+          "tests/test_time.py::test_naturaltime_nomonths",
+          "tests/test_time.py::test_precisedelta_bogus_call",
+          "tests/test_time.py::test_time_unit"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 15,
+            "tn": 13,
+            "tp": 5,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 20,
+            "numerator": 5,
+            "value": 0.25
+          },
+          "recall": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "tests/test_filesize.py::test_naturalsize",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__",
+          "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__",
+          "tests/test_i18n.py::test_default_locale_path_defined__file__",
+          "tests/test_i18n.py::test_default_locale_path_null__file__",
+          "tests/test_i18n.py::test_default_locale_path_undefined__file__",
+          "tests/test_number.py::test_apnumber",
+          "tests/test_number.py::test_fractional",
+          "tests/test_number.py::test_intcomma",
+          "tests/test_number.py::test_intword",
+          "tests/test_number.py::test_intword_powers",
+          "tests/test_number.py::test_ordinal",
+          "tests/test_number.py::test_scientific"
+        ],
+        "true_positives": [
+          "tests/test_i18n.py::test_i18n",
+          "tests/test_time.py::test_precisedelta_custom_format",
+          "tests/test_time.py::test_precisedelta_multiple_units",
+          "tests/test_time.py::test_precisedelta_one_unit_enough",
+          "tests/test_time.py::test_precisedelta_suppress_units"
+        ],
+        "unclassified_recommendations": []
+      },
+      "icecream_local_time": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 0,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          },
+          "recall": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [],
+        "unclassified_recommendations": []
+      },
+      "icecream_source_error": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 0,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          },
+          "recall": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [],
+        "unclassified_recommendations": []
+      },
+      "oyaml_error_context": {
+        "false_negatives": [],
+        "false_positives": [
+          "test_oyaml.py::test_dump",
+          "test_oyaml.py::test_dump_all",
+          "test_oyaml.py::test_dump_and_safe_dump_match",
+          "test_oyaml.py::test_loads_to_std_dict",
+          "test_oyaml.py::test_safe_dump",
+          "test_oyaml.py::test_safe_dump_all",
+          "test_oyaml.py::test_safe_loads_to_std_dict",
+          "test_oyaml.py::test_subclass_dump"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 8,
+            "tn": 0,
+            "tp": 3,
+            "unclassified_recommendations": 7
+          },
+          "precision": {
+            "denominator": 11,
+            "numerator": 3,
+            "value": 0.2727272727272727
+          },
+          "recall": {
+            "denominator": 3,
+            "numerator": 3,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "test_oyaml.py::test_loads_to_ordered_dict",
+          "test_oyaml.py::test_safe_loads_to_ordered_dict",
+          "test_oyaml.py::test_unhashable_error_context"
+        ],
+        "unclassified_recommendations": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_load"
+        ]
+      },
+      "oyaml_registrations": {
+        "false_negatives": [],
+        "false_positives": [
+          "test_oyaml.py::test_loads_to_std_dict",
+          "test_oyaml.py::test_safe_loads_to_std_dict"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 0,
+            "tp": 9,
+            "unclassified_recommendations": 9
+          },
+          "precision": {
+            "denominator": 11,
+            "numerator": 9,
+            "value": 0.8181818181818182
+          },
+          "recall": {
+            "denominator": 9,
+            "numerator": 9,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "test_oyaml.py::test_dump",
+          "test_oyaml.py::test_dump_all",
+          "test_oyaml.py::test_dump_and_safe_dump_match",
+          "test_oyaml.py::test_explicit_dumper",
+          "test_oyaml.py::test_explicit_loader",
+          "test_oyaml.py::test_loads_to_ordered_dict",
+          "test_oyaml.py::test_safe_dump",
+          "test_oyaml.py::test_safe_dump_all",
+          "test_oyaml.py::test_safe_loads_to_ordered_dict"
+        ],
+        "unclassified_recommendations": [
+          "test_oyaml.py::test_anchors_and_references",
+          "test_oyaml.py::test_load",
+          "test_oyaml.py::test_load_all",
+          "test_oyaml.py::test_merge",
+          "test_oyaml.py::test_omap",
+          "test_oyaml.py::test_omap_flow_style",
+          "test_oyaml.py::test_safe_load",
+          "test_oyaml.py::test_subclass_dump",
+          "test_oyaml.py::test_unhashable_error_context"
+        ]
+      }
+    },
+    "repositories": {
+      "gruns/icecream": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 0,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          },
+          "recall": {
+            "denominator": 0,
+            "numerator": 0,
+            "value": null
+          }
+        },
+        "reason_counts": {},
+        "selected_count": 0,
+        "selected_tests": [],
+        "test_count": 0,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0
+      },
+      "python-humanize/humanize": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 47,
+            "tn": 13,
+            "tp": 7,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 54,
+            "numerator": 7,
+            "value": 0.12962962962962962
+          },
+          "recall": {
+            "denominator": 7,
+            "numerator": 7,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 52,
+          "Test itself changed": 2
+        },
+        "selected_count": 54,
+        "selected_tests": [
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_filesize.py::test_naturalsize"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::test_default_locale_path_defined__file__"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::test_default_locale_path_null__file__"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::test_default_locale_path_undefined__file__"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::test_i18n"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_i18n.py::test_intcomma"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_apnumber"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_fractional"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_intcomma"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_intword"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_intword_powers"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_ordinal"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_number.py::test_scientific"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_date_and_delta"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldate"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturalday"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_default"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_explicit"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta_nomonths"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta_when_explicit"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaldelta_when_missing_tzinfo"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaltime"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_default"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_explicit"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_naturaltime_nomonths"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_precisedelta_bogus_call"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_precisedelta_custom_format"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_precisedelta_multiple_units"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_precisedelta_one_unit_enough"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_precisedelta_suppress_units"
+          },
+          {
+            "case": "humanize_intcomma_locale",
+            "test_id": "tests/test_time.py::test_time_unit"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_i18n.py::test_i18n"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_date_and_delta"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldate"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturalday"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_default"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_explicit"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta_nomonths"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta_when_explicit"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaldelta_when_missing_tzinfo"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaltime"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_default"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_explicit"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_naturaltime_nomonths"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_precisedelta_bogus_call"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_precisedelta_custom_format"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_precisedelta_multiple_units"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_precisedelta_one_unit_enough"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_precisedelta_suppress_units"
+          },
+          {
+            "case": "humanize_small_delta",
+            "test_id": "tests/test_time.py::test_time_unit"
+          }
+        ],
+        "test_count": 67,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0
+      },
+      "wimglenn/oyaml": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 10,
+            "tn": 0,
+            "tp": 12,
+            "unclassified_recommendations": 16
+          },
+          "precision": {
+            "denominator": 22,
+            "numerator": 12,
+            "value": 0.5454545454545454
+          },
+          "recall": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 35,
+          "Test itself changed": 3
+        },
+        "selected_count": 38,
+        "selected_tests": [
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_anchors_and_references"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_dump"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_dump_all"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_dump_and_safe_dump_match"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_load"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_load_all"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_loads_to_ordered_dict"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_loads_to_std_dict"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_merge"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_omap"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_omap_flow_style"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_safe_dump"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_safe_dump_all"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_safe_load"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_safe_loads_to_ordered_dict"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_safe_loads_to_std_dict"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_subclass_dump"
+          },
+          {
+            "case": "oyaml_error_context",
+            "test_id": "test_oyaml.py::test_unhashable_error_context"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_anchors_and_references"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_dump"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_dump_all"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_dump_and_safe_dump_match"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_explicit_dumper"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_explicit_loader"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_load"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_load_all"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_loads_to_ordered_dict"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_loads_to_std_dict"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_merge"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_omap"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_omap_flow_style"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_safe_dump"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_safe_dump_all"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_safe_load"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_safe_loads_to_ordered_dict"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_safe_loads_to_std_dict"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_subclass_dump"
+          },
+          {
+            "case": "oyaml_registrations",
+            "test_id": "test_oyaml.py::test_unhashable_error_context"
+          }
+        ],
+        "test_count": 38,
+        "unclassified_recommendation_count": 16,
+        "unclassified_test_count": 16
+      }
+    },
+    "summary": {
+      "case_count": 6,
+      "label_status_counts": {
+        "draft": 6
+      },
+      "metrics": {
+        "counts": {
+          "fn": 0,
+          "fp": 57,
+          "tn": 13,
+          "tp": 19,
+          "unclassified_recommendations": 16
+        },
+        "precision": {
+          "denominator": 76,
+          "numerator": 19,
+          "value": 0.25
+        },
+        "recall": {
+          "denominator": 19,
+          "numerator": 19,
+          "value": 1.0
+        }
+      },
+      "reason_counts": {
+        "Conservative module/import dependency": 87,
+        "Test itself changed": 5
+      },
+      "selected_count": 92,
+      "selected_tests": [
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_filesize.py::test_naturalsize"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::TestActivate.test_default_locale_path_null__file__"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::TestActivate.test_default_locale_path_undefined__file__"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::test_default_locale_path_defined__file__"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::test_default_locale_path_null__file__"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::test_default_locale_path_undefined__file__"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::test_i18n"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_i18n.py::test_intcomma"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_apnumber"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_fractional"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_intcomma"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_intword"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_intword_powers"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_ordinal"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_number.py::test_scientific"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_date_and_delta"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldate"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturalday"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_default"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_explicit"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta_nomonths"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta_when_explicit"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaldelta_when_missing_tzinfo"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaltime"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_default"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_explicit"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_naturaltime_nomonths"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_precisedelta_bogus_call"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_precisedelta_custom_format"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_precisedelta_multiple_units"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_precisedelta_one_unit_enough"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_precisedelta_suppress_units"
+        },
+        {
+          "case": "humanize_intcomma_locale",
+          "test_id": "tests/test_time.py::test_time_unit"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_i18n.py::test_i18n"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_date_and_delta"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldate"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturalday"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_default"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta_minimum_unit_explicit"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta_nomonths"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta_when_explicit"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaldelta_when_missing_tzinfo"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaltime"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_default"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaltime_minimum_unit_explicit"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_naturaltime_nomonths"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_precisedelta_bogus_call"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_precisedelta_custom_format"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_precisedelta_multiple_units"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_precisedelta_one_unit_enough"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_precisedelta_suppress_units"
+        },
+        {
+          "case": "humanize_small_delta",
+          "test_id": "tests/test_time.py::test_time_unit"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_anchors_and_references"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_dump"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_dump_all"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_dump_and_safe_dump_match"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_load"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_load_all"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_loads_to_ordered_dict"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_loads_to_std_dict"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_merge"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_omap"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_omap_flow_style"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_safe_dump"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_safe_dump_all"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_safe_load"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_safe_loads_to_ordered_dict"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_safe_loads_to_std_dict"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_subclass_dump"
+        },
+        {
+          "case": "oyaml_error_context",
+          "test_id": "test_oyaml.py::test_unhashable_error_context"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_anchors_and_references"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_dump"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_dump_all"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_dump_and_safe_dump_match"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_explicit_dumper"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_explicit_loader"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_load"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_load_all"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_loads_to_ordered_dict"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_loads_to_std_dict"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_merge"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_omap"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_omap_flow_style"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_safe_dump"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_safe_dump_all"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_safe_load"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_safe_loads_to_ordered_dict"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_safe_loads_to_std_dict"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_subclass_dump"
+        },
+        {
+          "case": "oyaml_registrations",
+          "test_id": "test_oyaml.py::test_unhashable_error_context"
+        }
+      ],
+      "test_count": 105,
+      "unclassified_recommendation_count": 16,
+      "unclassified_test_count": 16
+    }
+  },
+  "reference_commit": "ed728a0851e87308c0ed454071ded12adb37eda8",
+  "schema_version": "1.0"
+}

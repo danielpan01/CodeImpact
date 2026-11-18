@@ -3608,3 +3608,62 @@ The skip is the Linux-only address-space enforcement test on macOS. Existing
 warnings are the Starlette/httpx test-client deprecation and the browser
 `NO_COLOR` / `FORCE_COLOR` warning. Local logs and integrity records are under
 `reports/titleize-*`. The implementation was handed off unstaged and uncommitted.
+
+## Milestone 10 — fresh-repository evaluation v4
+
+Local and remote main were clean at merged PR #22,
+`ed728a0851e87308c0ed454071ded12adb37eda8`. The v4 reference records 16
+source hashes checked against that commit. The two shared evaluation wrappers
+have compatibility changes for the new dataset. The analyzer, discovery,
+scoring and application report contract retained the pinned behavior.
+
+Repository, license and commit screening occurred before measurement. JSON
+Logger was excluded for BSD-2-Clause, and Cached Property's considered windows
+lacked two eligible changes. The protocol records the original and expanded
+windows. The final sample uses six exact first-parent changes across Humanize,
+IceCream and oyaml. All 33 pre-analysis files, including capture receipts,
+complete supported source snapshots, draft labels, MIT notices, discovery
+and source-only review pack, were frozen before analysis. The pre-analysis
+freeze SHA-256 was
+`faaa19165674dcebc5d5eeb16ae9fef4ba44d82b731e9f2ecd45b96423f4b123`.
+[Protocol and decisions](../corpus/real-v4/PROTOCOL.md)
+
+The preserved first stable report selects 92/105, with 19 TP, 57 FP, 0 FN,
+13 TN and all 16 uncertain definitions selected. There are 87 conservative
+and five changed-test explanations. All 64 IceCream mixed-case methods
+remain outside discovery across the two changes. They are reported separately
+from the metrics. The unannotated first run recorded six discrepancy messages.
+The baseline records those exact expected cases, with no source-label changes.
+Replay verifies the complete 2,191,394-byte first stable report by SHA-256 and
+checks the discrepancy IDs again. [V4 results and scope](REAL_EVALUATION_V4.md)
+
+The focused v4 and preservation tests passed, including incomplete and tampered
+source, label partition, review metadata, typed revision evidence, drift and
+a source-only review regeneration. The first focused attempt encountered a
+test-only import path error for the repository scripts. The corrected tests
+use an explicit path to the project scripts. No upstream source was executed
+for capture, review or analysis. Independent review is pending, and the
+review-workflow smoke check used a synthetic record only.
+
+All five offline evaluations matched their recorded baselines. The four prior
+stable reports match their pre-task copies byte for byte. All 121 historical
+corpus files match their starting hashes, including the original labels,
+provenance and `parameter-tables-v1` receipts. The v4 preservation receipt
+records those files and the prior stable report hashes. Under both hash
+seeds 7 and 173, the five full reports match byte for byte, and reversing
+each snapshot's file order produces equal analysis for all 49 cases, excluding
+only `stats.elapsed_ms`. Typed evidence validation passed in those reruns.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused v4, review and preservation tests | 20 passed |
+| `make check` | Ruff lint and format, mypy (27 modules), 1,080 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| All five offline evaluations | Passed. Prior stable reports match byte for byte |
+| `make verify-pilot` | Passed for the existing local pilot and frozen v3 input |
+| Frontend formatting and desktop/mobile browser suite | Formatting passed, 253 browser tests passed |
+| Determinism and final `git diff --check` | Passed. No staged files |
+
+The skip is the Linux-only address-space enforcement test on macOS. Existing
+warnings are the Starlette/httpx test-client deprecation and the browser
+`NO_COLOR` / `FORCE_COLOR` notice. Local logs and smoke-check records are
+under `reports/v4-*`. The implementation was handed off unstaged and uncommitted.

@@ -33,7 +33,8 @@ The 9C literal-table slice merged in [PR #20](https://github.com/danielpan01/Cod
 at `c1bfd751b0c6f4f64434e3c6d90d08166346b6df`.
 The 9C validator/export slice merged in [PR #21](https://github.com/danielpan01/CodeImpact/pull/21)
 at `7f1f99d6b565fa90833f09c864661c45fb7629fe`. The 9C parameter-table slice
-is implemented.
+merged in [PR #22](https://github.com/danielpan01/CodeImpact/pull/22) at
+`ed728a0851e87308c0ed454071ded12adb37eda8`.
 [Literal-table review](MODULE_DATA_REVIEW.md) · [Validator/export review](VALIDATOR_EXPORT_REVIEW.md) · [Parameter-table review](PARAMETER_TABLE_REVIEW.md)
 See [the discovery receipt](TEST_DISCOVERY.md) and VALIDATION.md.
 The repository-review reference above remains historical.
@@ -74,7 +75,7 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 9C — literal tables merged | Existing literal rule-table edits | 14 Inflection rule-case false positives removed, six affected definitions retained | Production and test-module contributions audited independently with exact replacement evidence |
 | 9C — validator/export merged | Additive package exports with unchanged explicit members | Four validator-addition false positives removed. Two decorated tests retain fallback | Exact evidence, two-revision proof and separately versioned receipts |
 | 9C — parameter tables implemented | Inflection titleize body and test parameter data | 20 unrelated recommendations removed, one mutation/cleanup case retains fallback | Separate evidence for the source function and test-module table, measured with preserved labels |
-| 10 | Fresh evaluation and reviewed-label release evidence | Existing cases will have informed the next fixes | Unused changes and labels are frozen before evaluation; discovery coverage is included; independent review status and remaining mistakes are recorded honestly |
+| 10 — implemented, review pending | Fresh v4 evaluation and source-label review workflow | 92/105 selected with 57 draft false positives, 16 uncertain selections and 64 outside discovery | Six frozen changes, source-only review and strict offline replay. Independent label review remains pending |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -82,8 +83,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
 remain active. **Milestone 7 is merged** with one filename extension,
 a pre-analysis source-label draft, separately versioned measurements and preserved
-history. The three 9C slices have source and evidence reviews. Milestone 10 is
-the next evaluation milestone.
+history. Milestone 10 adds frozen v4 inputs and a separate evidence review
+workflow. The next analyzer candidate is bounded unittest mixed-case method
+discovery, based on the IceCream coverage gap. [V4 results](REAL_EVALUATION_V4.md)
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
@@ -175,10 +177,9 @@ valid affected paths merely to reduce selection size. Heuristic scores are not
 probabilities. Fixture injection and runtime imports remain separate authored
 limitations; prioritize them after new evidence establishes a bounded useful scope.
 
-Milestone 10 must include test-discovery coverage in its denominators and retain
-uncertain/outside-policy cases. Reserve its unused examples before tuning. Source-only
-review packs support independent review; no reviewed ground truth or runtime failure
-claim is valid without separate evidence. Human source-label review is pending and
+Milestone 10 records discovery coverage and uncertainty separately. Its v4
+examples were frozen before analysis. The source-only review pack supports
+independent review of draft labels and proposed revisions. Human source-label review is pending and
 can proceed whenever an actual reviewer is available; it is distinct from the
 owner-deferred usability pilot.
 

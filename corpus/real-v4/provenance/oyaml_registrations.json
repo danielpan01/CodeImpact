@@ -1,0 +1,190 @@
+{
+  "base": {
+    "commit": {
+      "message": "preserve contextual error when patching the loader (#18)\n\nresolves https://github.com/wimglenn/oyaml/issues/17",
+      "parents": [
+        {
+          "sha": "425fd975c063aed8770826b98376a19b83a6c3de"
+        }
+      ],
+      "sha": "6350d9de586f40014296b55427ccbc1d7f47269a",
+      "tree": {
+        "sha": "6947399251a90e3f90b2b71592da760ec2627eb2"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+      "spdx": "MIT",
+      "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "oyaml.py": "70ce7bdb7c46821f3077b5ee639dacd5d91f4f67bd0495e346b90017e81091df",
+      "setup.py": "fe42cf3497288236135203d944d90df5e14c2ca38888710522e7009a242ed8de",
+      "test_oyaml.py": "a41f935c45c779a05727ea78ba59271b91bd598b2bf773fca1edf5ea0f178700"
+    },
+    "tree": {
+      "sha": "6947399251a90e3f90b2b71592da760ec2627eb2",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "348c753cca00dfd1646b7b6e23f0a0329b3829a3",
+          "size": 608,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "cd956c56118033687a58e012f0cb56b68795f274",
+          "size": 1066,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "1aba38f67a2211cf5b09466d7b411206cb7223bf",
+          "size": 16,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "83c0a6aac4973f13de9b8c298b370c17ecf9d4de",
+          "size": 904,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "oyaml.py",
+          "sha": "0d8886564e636278db7f663143e93cf6d3ae0405",
+          "size": 1596,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "ed8a958e0a8da154b0db9b1edca6e47e5dae146a",
+          "size": 63,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "a09cccf1604b9f5352326a12c3468565782a66b4",
+          "size": 402,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_oyaml.py",
+          "sha": "bc6136ea417ea1ab06b690cb6b0376be77c080a9",
+          "size": 5342,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/wimglenn/oyaml/commit/5152325dcdb68b3684c7ba745a8710df6ea40b9a",
+  "head": {
+    "commit": {
+      "message": "c loaders/dumpers",
+      "parents": [
+        {
+          "sha": "6350d9de586f40014296b55427ccbc1d7f47269a"
+        }
+      ],
+      "sha": "5152325dcdb68b3684c7ba745a8710df6ea40b9a",
+      "tree": {
+        "sha": "04fd3194d1916a2b346f8d0247d3253f37d40d36"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "31a959cfa4c49a3871ff28c5ee583dc8b88609314c69532038133d30a9978940",
+      "spdx": "MIT",
+      "text": "MIT License\n\nCopyright (c) 2018 wim glenn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "source_sha256": {
+      "oyaml.py": "998ebf0b1ee377bf351d1438db8fe297fe3bc16417f866865bbb69b6668add49",
+      "setup.py": "a1349bfded181f6f20ea91d4bfda3e8e0048ce274edf3153fa5349830bfac4d8",
+      "test_oyaml.py": "92a846c2752e77a21801d1b4b74b6062ce6db094d202896d0149e50b09ed4880"
+    },
+    "tree": {
+      "sha": "04fd3194d1916a2b346f8d0247d3253f37d40d36",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".travis.yml",
+          "sha": "8d841538b432085eb56bf0556e84a032002dd931",
+          "size": 604,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "cd956c56118033687a58e012f0cb56b68795f274",
+          "size": 1066,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "1aba38f67a2211cf5b09466d7b411206cb7223bf",
+          "size": 16,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "83c0a6aac4973f13de9b8c298b370c17ecf9d4de",
+          "size": 904,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "oyaml.py",
+          "sha": "9de26fa928c48384039b38998fb015622e3d5c31",
+          "size": 1560,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "ed8a958e0a8da154b0db9b1edca6e47e5dae146a",
+          "size": 63,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "07dcb631ecd20218d4bfd342ccda983adb9df44c",
+          "size": 402,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "test_oyaml.py",
+          "sha": "8058c22fa16b74acf8634537b85180b8db32c129",
+          "size": 5903,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "oyaml_registrations",
+  "label_review": {
+    "author": "Codex source-only draft, November 17, 2026",
+    "drafted_before_analysis": true,
+    "labels_sha256": "686a34c83107ef60542a08a6ccaea0db7a0c7eb6e5dee71f78d04f731a176b85",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "wimglenn/oyaml",
+  "schema_version": "1.0",
+  "selection_reason": "Register ordered mappings on Python and optional C loaders and dumpers.",
+  "warnings": []
+}

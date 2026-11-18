@@ -24,6 +24,7 @@ from codeimpact.corpus import (
     _unique_object,
     load_corpus,
 )
+from codeimpact.discovery import LEGACY_POLICY, DiscoveryPolicy
 from codeimpact.evaluate import Counts, evaluate, metrics
 from codeimpact.github import (
     EXCLUDED_DIRS,
@@ -278,6 +279,8 @@ def read_metadata(path: Path) -> tuple[Any, int]:
 
 def load_real(
     directory: Path,
+    *,
+    discovery_policy: DiscoveryPolicy = LEGACY_POLICY,
 ) -> tuple[Selection, list[CorpusCase], dict[str, Provenance], dict[str, Any]]:
     for path in (directory, directory / "cases", directory / "provenance"):
         require(
@@ -288,7 +291,7 @@ def load_real(
     selection = Selection.model_validate(raw_selection)
     # These captured datasets were labeled under the original filename policy.
     # Validate their frozen labels first; current extensions are explicit overlays.
-    cases = load_corpus(directory / "cases", discovery_policy="test-files-v1")
+    cases = load_corpus(directory / "cases", discovery_policy=discovery_policy)
     selected = {s.id: s for s in selection.cases}
     require({c.id for c in cases} == set(selected), "Case IDs differ from selection")
     require(
@@ -359,8 +362,9 @@ def evaluate_real(
     *,
     annotations: dict[str, dict[str, Any]] | None = None,
     label_extensions: dict[str, dict[str, Any]] | None = None,
+    discovery_policy: DiscoveryPolicy = LEGACY_POLICY,
 ) -> dict[str, Any]:
-    selection, cases, provenance, coverage = load_real(directory)
+    selection, cases, provenance, coverage = load_real(directory, discovery_policy=discovery_policy)
     original_cases = cases
     if annotations is not None:
         require(set(annotations) == {case.id for case in cases}, "Baseline case inventory mismatch")
