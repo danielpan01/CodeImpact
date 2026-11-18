@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import PurePosixPath
 from typing import Literal
 
+from codeimpact.additive_exports import AdditiveExports
 from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
 from codeimpact.descriptor_binding import DescriptorFallback
@@ -695,6 +696,7 @@ def analyze(request: AnalysisRequest) -> Report:
 
     dispatch = DispatchFallback(before, after, call_arguments)
     module_data = ModuleDataFallback(before, after, {nodes[sid].path for sid in active})
+    exports = AdditiveExports(before, after, {nodes[sid].path for sid in active})
 
     def walk(
         seeds: list[str],
@@ -749,6 +751,7 @@ def analyze(request: AnalysisRequest) -> Report:
                 if nodes[sid].path not in arguments.changes
                 and nodes[sid].path not in call_arguments.changes
                 and nodes[sid].path not in module_data.changes
+                and not (nodes[sid].kind == "module" and nodes[sid].path in exports.changes)
             ],
             calls_only,
         )
@@ -762,6 +765,16 @@ def analyze(request: AnalysisRequest) -> Report:
             group = [sid for sid in seeds if nodes[sid].path == source_path]
             for sid, candidate in walk(group, calls_only).items():
                 if nodes[sid].kind == "test" and not module_data.allows(sid, source_path):
+                    continue
+                current = result.get(sid)
+                if current is None or (len(candidate), candidate) < (len(current), current):
+                    result[sid] = candidate
+        for source_path in exports.changes:
+            seed = f"{source_path}::<module>"
+            if seed not in seeds:
+                continue
+            for sid, candidate in walk([seed], calls_only).items():
+                if nodes[sid].kind == "test" and not exports.allows(sid, source_path):
                     continue
                 current = result.get(sid)
                 if current is None or (len(candidate), candidate) < (len(current), current):

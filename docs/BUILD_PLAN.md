@@ -29,8 +29,10 @@ at `383b819667f91e3bcf6a39e23c1cf5a7b6b3554e`. Its
 The 9B Slugify slice merged in [PR #19](https://github.com/danielpan01/CodeImpact/pull/19)
 at `614e18bfd5d7f38b0a1a8564ba470f2fc34ded20`, with
 [post-merge quality checks passing](https://github.com/danielpan01/CodeImpact/actions/runs/43984577616).
-The first 9C literal-table slice is implemented.
-[Source and measurement review](MODULE_DATA_REVIEW.md)
+The 9C literal-table slice merged in [PR #20](https://github.com/danielpan01/CodeImpact/pull/20)
+at `c1bfd751b0c6f4f64434e3c6d90d08166346b6df`.
+The 9C validator/export slice is implemented.
+[Literal-table review](MODULE_DATA_REVIEW.md) · [Validator/export review](VALIDATOR_EXPORT_REVIEW.md)
 See [the discovery receipt](TEST_DISCOVERY.md) and VALIDATION.md.
 The repository-review reference above remains historical.
 
@@ -66,8 +68,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 9A — merged | Cachetools fallback refinement | Literal-raising local callback proof removes one LFU false positive; 124 remain | All six affected/eight uncertain LFU selections and retained evidence preserved; separate `lfu-callback-v1` receipts |
 | 9B — descriptor merged | Bounded ordinary descriptor binding | One removed false positive and 30 remain | All five selected uncertain IDs and retained evidence match the prior replay |
 | 9B — Slugify merged | Known legacy dispatch avoids modern truncation | 66 Boundary false positives removed and 51 Slugify false positives remain across both cases | All affected and uncertain outcomes preserved with dedicated receipts |
-| 9C — literal tables implemented | Existing literal rule-table edits | 14 Inflection rule-case false positives removed, six affected definitions retained | Production and test-module contributions audited independently with exact replacement evidence |
-| 9C — next slice | One bounded validator/export mechanism | Six PyISO8601 validator-addition false positives remain, alongside 21 titleize and two rule-case mistakes | Separate source proof, regressions, preservation receipts and full verification |
+| 9C — literal tables merged | Existing literal rule-table edits | 14 Inflection rule-case false positives removed, six affected definitions retained | Production and test-module contributions audited independently with exact replacement evidence |
+| 9C — validator/export implemented | Additive package exports with unchanged explicit members | Four validator-addition false positives removed. Two decorated tests retain fallback | Exact evidence, two-revision proof and separately versioned receipts |
+| 9C — remaining candidate | Inflection titleize | 21 false positives from a different mix of function and test-data changes | A separate source proof and measurement if pursued |
 | 10 | Fresh evaluation and reviewed-label release evidence | Existing cases will have informed the next fixes | Unused changes and labels are frozen before evaluation; discovery coverage is included; independent review status and remaining mistakes are recorded honestly |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
@@ -76,8 +79,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
 remain active. **Milestone 7 is merged** with one filename extension,
 a pre-analysis source-label draft, separately versioned measurements and preserved
-history. **The next task is one bounded 9C validator/export mechanism.**
-Do not start all of milestone 9 as one rewrite.
+history. Both 9C slices have source and evidence reviews. Titleize remains a
+separate candidate before the fresh evaluation in milestone 10.
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
@@ -156,8 +159,9 @@ keep 8A/8B evidence intact. Milestone 7 retains these gates and is implemented.
 See [the bounded callback proof and measurement](LFU_CALLBACK_REVIEW.md).
 The 9B descriptor slice removes one false positive and preserves all eight
 uncertain outcomes. The Slugify slice removes 66 conservative Boundary false positives.
-The first 9C literal-table slice is implemented. The next task studies
-one validator/export mechanism. [Slugify results](SLUGIFY_FALLBACK_REVIEW.md)
+The 9C literal-table slice is merged and the validator/export slice is implemented.
+The remaining titleize case has a different change shape.
+[Slugify results](SLUGIFY_FALLBACK_REVIEW.md) · [Validator/export results](VALIDATOR_EXPORT_REVIEW.md)
 
 ### Later analyzer and evaluation work
 

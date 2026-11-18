@@ -9,13 +9,26 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-literal-tables-v1-evaluation.json (current)
+# reports/real-v3-additive-exports-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current measurement — milestone 9C literal rule tables
+## Current measurement — milestone 9C additive package exports
+
+The validator addition selects **4/8**, down from 8/8. The two changed tests
+retain their exact evidence. Four plain tests using existing explicit members
+lose their package fallback. Two Hypothesis tests retain it because decorated
+execution is outside the proof. The case is **2 TP / 2 FP / 0 FN / 4 TN**.
+
+Expanded v3 selects **67/120** with **42 TP / 25 FP / 0 FN / 41 TN**.
+All 12 uncertain definitions stay unselected. The other five analysis hashes
+match the literal-table receipt. Holdout wrapper **7.0** verifies
+`additive-exports-v1` and its predecessor chain.
+[Exact IDs, evidence and source boundaries](VALIDATOR_EXPORT_REVIEW.md)
+
+## Preserved measurement — milestone 9C literal rule tables
 
 The Inflection rule case selects **8/22**, with **6 TP / 2 FP / 0 FN / 14 TN**.
 Its six affected definitions remain selected. Fourteen unrelated tests lose
@@ -25,7 +38,7 @@ use existing production evidence and receive the existing distance-based score.
 
 Expanded v3 selects **71/120**, with **42 TP / 29 FP / 0 FN / 37 TN** and all
 12 uncertain definitions unselected. The other five v3 analyses match their
-prior hashes, including titleize and both validator cases. All six v2 analyses
+prior hashes, including titleize and both PyISO8601 cases. All six v2 analyses
 also match their predecessors. Holdout wrapper **6.0** verifies the new
 `literal-tables-v1` measurement and its `legacy-dispatch-v1` predecessor.
 
@@ -60,7 +73,7 @@ original and discovery-era report filenames are preserved. See
 
 Literal `test.py` is now supported. The separate `test-discovery-v1` label draft
 was created before expanded analysis: 1 affected, 17 unaffected, 12 uncertain.
-Current v3 selects **85/120** definitions: **42 TP / 43 FP / 0 FN / 23 TN**,
+The expanded milestone 7 run selects **85/120** definitions: **42 TP / 43 FP / 0 FN / 23 TN**,
 with **12 uncertain definitions, none selected**. Only `test_pop` is newly selected
 via conservative module/import evidence. The other five analysis hashes are
 unchanged. The old 90-definition denominator and 30 exclusions remain explicit
@@ -93,7 +106,7 @@ PyISO8601 4 TP / 6 FP / 0 FN / 6 TN, 10/16 selected;
 Ordered Set 30 TP / 0 FP / 0 FN / 0 TN, 30/30 discovered definitions selected,
 with the other change's 30 definitions outside discovery.
 
-## Findings and boundaries
+## First-measurement findings and boundaries
 
 - Changed module data retains broad fallback: Inflection contributes 37 false
   positives; adding/exporting the ISO validator contributes six. All 43 remain

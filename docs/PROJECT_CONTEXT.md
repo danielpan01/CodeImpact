@@ -2,16 +2,13 @@
 
 ## Current priority — November 17, 2026
 
-The 9B Slugify milestone merged through PR #19 at
-`614e18bfd5d7f38b0a1a8564ba470f2fc34ded20`. The first 9C slice is implemented
-locally. Literal rule-table edits are audited independently for production and
-test parameter data. Inflection rules now selects 8/22, retaining all six
-affected definitions and removing 14 false positives. Expanded v3 is 71/120,
-with 42 TP / 29 FP / 0 FN / 37 TN and all 12 uncertain definitions unselected.
-Titleize and PyISO8601 keep their prior analysis hashes, as does the entire v2
-measurement. New `literal-tables-v1` receipts preserve all historical baselines.
-The next slice studies one PyISO8601 validator/export pattern.
-[Source and evidence review](MODULE_DATA_REVIEW.md)
+The 9C literal-table slice merged through PR #20 at
+`c1bfd751b0c6f4f64434e3c6d90d08166346b6df`. The validator/export slice is
+implemented. PyISO8601 validator addition selects 4/8, with two changed
+tests and two conservative Hypothesis recommendations. Expanded v3 is 67/120
+with 42 TP / 25 FP / 0 FN / 41 TN. New `additive-exports-v1` receipts link the
+literal-table baselines. Titleize and Inflection argument bypasses are separate.
+[Source and evidence review](VALIDATOR_EXPORT_REVIEW.md)
 
 ## Preserved milestone context
 
@@ -74,7 +71,7 @@ comparisons/48 accessibility scans remain; two intentionally changed screenshots
 have new filenames, preserving the old 16. Read [TEST_DISCOVERY.md](TEST_DISCOVERY.md)
 and [VALIDATION.md](VALIDATION.md) for the exact results and remaining findings.
 
-**Next: one bounded validator/export pattern in milestone 9C.**
+**Separate 9C candidate: the Inflection titleize case.**
 The 124 remaining LFU false positives are a separate scope. Live
 hosting and the human pilot remain owner-deferred; independent source-label review
 remains pending. Automated/agent review is not accessibility certification or

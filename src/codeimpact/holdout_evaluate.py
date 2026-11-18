@@ -16,6 +16,7 @@ from codeimpact.fresh_evaluate import (
     MAPPING_BASELINE_FILE,
     MAPPING_SOURCES,
     PROJECT,
+    TABLES_SOURCES,
     CaseBaseline,
     FirstRun,
     file_hash,
@@ -48,13 +49,15 @@ DISCOVERY_BASELINE_FILE = "baselines/test-discovery-v1.json"
 LFU_BASELINE_FILE = "baselines/lfu-callback-v1.json"
 DESCRIPTOR_BASELINE_FILE = "baselines/descriptor-binding-v1.json"
 LEGACY_BASELINE_FILE = "baselines/legacy-dispatch-v1.json"
-BASELINE_FILE = "baselines/literal-tables-v1.json"
+TABLES_BASELINE_FILE = "baselines/literal-tables-v1.json"
+BASELINE_FILE = "baselines/additive-exports-v1.json"
 LABELS_FILE = "baselines/test-discovery-v1-labels.json"
 V2_DISCOVERY_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
 V2_LFU_REPLAY = "corpus/real-v2/baselines/lfu-callback-v1.json"
 V2_DESCRIPTOR_REPLAY = "corpus/real-v2/baselines/descriptor-binding-v1.json"
 V2_LEGACY_REPLAY = "corpus/real-v2/baselines/legacy-dispatch-v1.json"
-V2_REPLAY = "corpus/real-v2/baselines/literal-tables-v1.json"
+V2_TABLES_REPLAY = "corpus/real-v2/baselines/literal-tables-v1.json"
+V2_REPLAY = "corpus/real-v2/baselines/additive-exports-v1.json"
 
 
 class DraftLabel(StrictModel):
@@ -87,6 +90,7 @@ class DiscoveryBaseline(StrictModel):
         "descriptor-binding-v1",
         "legacy-dispatch-v1",
         "literal-tables-v1",
+        "additive-exports-v1",
     ]
     explanation: Nonblank
     frozen_inputs_sha256: SHA256
@@ -104,12 +108,27 @@ def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBasel
     baseline = DiscoveryBaseline.model_validate(
         read_metadata(safe_file(directory, BASELINE_FILE))[0]
     )
-    require(baseline.name == "literal-tables-v1", "Current baseline name mismatch")
+    require(baseline.name == "additive-exports-v1", "Current baseline name mismatch")
     require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
     for path, expected in baseline.analyzer_sha256.items():
         require(file_hash(safe_file(project, path)) == expected, f"Engine changed: {path}")
     require(
-        file_hash(safe_file(directory, LEGACY_BASELINE_FILE)) == baseline.previous_baseline_sha256,
+        file_hash(safe_file(directory, TABLES_BASELINE_FILE)) == baseline.previous_baseline_sha256,
+        "Preserved literal tables baseline changed",
+    )
+    tables = DiscoveryBaseline.model_validate(
+        read_metadata(safe_file(directory, TABLES_BASELINE_FILE))[0]
+    )
+    require(tables.name == "literal-tables-v1", "Literal tables baseline name mismatch")
+    require(
+        set(tables.analyzer_sha256) == TABLES_SOURCES, "Historical literal tables engine inventory"
+    )
+    require(
+        file_hash(safe_file(project, V2_TABLES_REPLAY)) == tables.v2_replay_sha256,
+        "Historical v2 literal tables receipt changed",
+    )
+    require(
+        file_hash(safe_file(directory, LEGACY_BASELINE_FILE)) == tables.previous_baseline_sha256,
         "Preserved legacy dispatch baseline changed",
     )
     legacy = DiscoveryBaseline.model_validate(
@@ -327,7 +346,14 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
     }
     require(
         set(receipt.corpus_sha256)
-        | {V2_DISCOVERY_REPLAY, V2_LFU_REPLAY, V2_DESCRIPTOR_REPLAY, V2_LEGACY_REPLAY, V2_REPLAY}
+        | {
+            V2_DISCOVERY_REPLAY,
+            V2_LFU_REPLAY,
+            V2_DESCRIPTOR_REPLAY,
+            V2_LEGACY_REPLAY,
+            V2_TABLES_REPLAY,
+            V2_REPLAY,
+        }
         == historical,
         "Historical corpus inventory changed",
     )
@@ -368,6 +394,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
             LFU_BASELINE_FILE,
             DESCRIPTOR_BASELINE_FILE,
             LEGACY_BASELINE_FILE,
+            TABLES_BASELINE_FILE,
             BASELINE_FILE,
             LABELS_FILE,
         },
@@ -387,6 +414,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
         LFU_BASELINE_FILE,
         DESCRIPTOR_BASELINE_FILE,
         LEGACY_BASELINE_FILE,
+        TABLES_BASELINE_FILE,
         LABELS_FILE,
     ):
         if (directory / path).exists():
@@ -443,10 +471,12 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
     matches = measurement(report) == initial.measurement
     current_matches = measurement(report) == baseline.measurement
     if not current_matches:
-        report["evaluation"]["regressions"].append("v3: measurement differs from literal-tables-v1")
+        report["evaluation"]["regressions"].append(
+            "v3: measurement differs from additive-exports-v1"
+        )
     report.update(
-        holdout_evaluation_schema_version="6.0",
-        previous_baseline="legacy-dispatch-v1",
+        holdout_evaluation_schema_version="7.0",
+        previous_baseline="literal-tables-v1",
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         active_baseline=baseline.name,
         active_baseline_sha256=canonical_hash(baseline.model_dump()),
@@ -462,7 +492,7 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         initial_regressions=initial.initial_regressions,
         discovery=discovery,
         interpretation=(
-            "Versioned v3 literal-tables-v1 measurement; prior receipts preserved; "
+            "Versioned v3 additive-exports-v1 measurement; prior receipts preserved; "
             "original 90-test first measurement "
             "and excluded inventory preserved. "
             "New source labels were drafted before expanded analysis; human review pending. "
@@ -479,7 +509,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_holdout,
         default_corpus=Path("corpus/real-v3"),
-        default_output=Path("reports/real-v3-literal-tables-v1-evaluation.json"),
+        default_output=Path("reports/real-v3-additive-exports-v1-evaluation.json"),
     )
 
 

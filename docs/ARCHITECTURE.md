@@ -899,3 +899,15 @@ Unknown effects, aliases/re-exports, rebinding and other reachable change shapes
 decline the proof. The original graph supplies every retained path. The query
 uses a 12,000-step and 24-level bound and reads source as AST data.
 [Supported initialization and exact boundaries](MODULE_DATA_REVIEW.md)
+
+## Additive package exports
+
+For a top-level package whose initializer contains only explicit child imports
+and a literal `__all__`, an additive edit can isolate its initialization seed.
+`AdditiveExports` verifies the child module's existing source, the new functions'
+passive headers, and the consumer's collection and explicit member use in both
+revisions. The analyzer can then omit that seed's contribution to an unrelated
+plain test. Wildcard consumers and unproved dynamic access, initialization, and
+test execution retain conservative paths. Each added callable still has its
+separate seed, and all retained recommendations use the original graph.
+[Source boundary and pinned case](VALIDATOR_EXPORT_REVIEW.md)
