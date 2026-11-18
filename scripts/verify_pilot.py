@@ -11,12 +11,16 @@ from pathlib import Path
 
 import httpx
 
+from codeimpact.holdout_evaluate import current_baseline
 from codeimpact.real_evaluate import canonical_hash
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def verify():
+    dataset = ROOT / "corpus/real-v3"
+    expected = current_baseline(dataset).measurement["analysis_sha256"]["inflection_title"]
+    request = json.loads((dataset / "cases/inflection_title.json").read_text())["request"]
     key = secrets.token_urlsafe(32)
     with socket.socket() as probe:
         probe.bind(("127.0.0.1", 0))
@@ -59,9 +63,6 @@ def verify():
                 assert client.get("/api/config").json() == {"access_required": True}
                 assert client.get("/api/demo").status_code == 200
                 assert client.post("/api/analyze", content="unparsed source").status_code == 401
-                request = json.loads(
-                    (ROOT / "corpus/real-v3/cases/inflection_title.json").read_text()
-                )["request"]
                 response = client.post(
                     "/api/analyze", json=request, headers={"Authorization": f"Bearer {key}"}
                 )
@@ -70,11 +71,7 @@ def verify():
                 assert key not in response.text
                 report = response.json()
                 report["stats"].pop("elapsed_ms")
-                first = json.loads((ROOT / "corpus/real-v3/first-run.json").read_text())
-                assert (
-                    canonical_hash(report)
-                    == first["measurement"]["analysis_sha256"]["inflection_title"]
-                )
+                assert canonical_hash(report) == expected
                 assert (
                     client.post(
                         "/api/github/pr", json={"url": "https://github.com/acme/repo/pull/1"}
@@ -85,7 +82,7 @@ def verify():
                 assert client.get("/api/reports/unknown").status_code == 404
                 print(
                     "Local pilot verified: readiness, static UI, public demo, protected analyses, "
-                    "exact frozen report, no report storage."
+                    "exact current report for the frozen input, no report storage."
                 )
         finally:
             server.terminate()

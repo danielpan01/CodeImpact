@@ -1,0 +1,38 @@
+{
+  "added_corpus_sha256": {
+    "corpus/real-v2/baselines/parameter-tables-v1.json": "cc8690d41415e84b9bb6cddd3f679df6abdfd4d5733909686ba125b3cffed578",
+    "corpus/real-v3/baselines/parameter-tables-v1.json": "465c4f5b89b48e3aa6ef2be8b9dd6d049b70f478251e18c50f719977e1bdb63a"
+  },
+  "changed_historical_sources": [
+    "src/codeimpact/fresh_evaluate.py",
+    "src/codeimpact/holdout_evaluate.py",
+    "src/codeimpact/module_data.py"
+  ],
+  "current_sources_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/additive_exports.py": "04ef713ad252b862fe07f96588e5169fe2c36ba9f1e02f76cf80ce08162dd23e",
+    "src/codeimpact/analyzer.py": "910f5de113989458d92d21bc4c7482768a4f0e2f30cdcbb84a68ae3d85958d46",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/cli.py": "76761ebb0c31cbecd5f75959ba9f524d8ba05016c72b38cfaefad3142483ed2e",
+    "src/codeimpact/corpus.py": "073619e9c20c8a2cb5b9df77d3bf8fb247490e1f21466dcd45f9120fb72015f5",
+    "src/codeimpact/demo.py": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ebd6854864a3287616e0df3a3a7a834413fa60a58ca85f4ea0f7a3d614cb883b",
+    "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
+    "src/codeimpact/evaluate.py": "bc9f81bd69dceaf5f4201d2df7202c15f628e0016a6118765e12ddcec623f3c2",
+    "src/codeimpact/fresh_evaluate.py": "242e546a4c401980db4ef92d452c27ea39438686bc34863181968b01266999a9",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/holdout_evaluate.py": "a9c0be04ff856d8fe033a96466edced2528b302d24c69eceb1801996cdeab84c",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/module_data.py": "0f662cab9b11d74c5f30a9a0302c841927afc88e4318a418fe4cc0e2c20aa8e2",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/real_evaluate.py": "8d845b2334306fb343f9f10d6d8c107d57599258aeb52f08064d7ae3b4ee5c7a",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c"
+  },
+  "explanation": "Preserve the earlier corpus and receipts. Pin the mixed parameter-table engine and its current replay and measurement.",
+  "name": "parameter-tables-v1",
+  "previous_receipt_sha256": "00b822a9b623f65ee804e81cc531a78a8e90441f1bbe4647ef493c491cdf2c62",
+  "schema_version": "1.0"
+}

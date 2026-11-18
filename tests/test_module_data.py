@@ -185,9 +185,11 @@ def test_eager_rule_mutation_rejects_external_callback():
     assert "test_lib.py::test_independent" in selected(review(lib=lib))
 
 
-def test_parameter_table_plus_other_function_edit_keeps_broad_fallback():
+def test_parameter_table_filter_preserves_a_path_to_an_edited_function():
     report = review(head={"lib.py": LIB.replace("upper()", "lower()")})
-    assert "test_lib.py::test_independent" in selected(report)
+    result = next(r for r in report.recommendations if r.symbol == "test_lib.py::test_independent")
+    assert result.evidence_path == [result.symbol, "lib.py::independent"]
+    assert result.path_revision == "both"
 
 
 @pytest.mark.parametrize(

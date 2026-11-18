@@ -315,3 +315,11 @@ All six v2 analyses and the complete measurement match: 327/581 selected, with
 Fresh wrapper 10.0 writes `reports/real-v2-additive-exports-v1-evaluation.json`.
 The observed selection change is in the v3 validator addition.
 [Source and evidence review](VALIDATOR_EXPORT_REVIEW.md)
+
+## Milestone 9C test parameter tables
+
+The `parameter-tables-v1` successor pins the current engine and links
+`additive-exports-v1`. All six v2 analyses and the complete measurement match
+that receipt. Fresh wrapper 11.0 writes
+`reports/real-v2-parameter-tables-v1-evaluation.json`. The selection change is
+limited to the v3 titleize case. [Source and evidence review](PARAMETER_TABLE_REVIEW.md)

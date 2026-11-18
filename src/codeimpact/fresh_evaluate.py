@@ -40,7 +40,8 @@ LFU_BASELINE_FILE = "baselines/lfu-callback-v1.json"
 DESCRIPTOR_BASELINE_FILE = "baselines/descriptor-binding-v1.json"
 LEGACY_BASELINE_FILE = "baselines/legacy-dispatch-v1.json"
 TABLES_BASELINE_FILE = "baselines/literal-tables-v1.json"
-BASELINE_FILE = "baselines/additive-exports-v1.json"
+EXPORTS_BASELINE_FILE = "baselines/additive-exports-v1.json"
+BASELINE_FILE = "baselines/parameter-tables-v1.json"
 PARTIAL_SOURCES = FROZEN_SOURCES | {"src/codeimpact/partial_bindings.py"}
 ARGUMENT_SOURCES = PARTIAL_SOURCES | {"src/codeimpact/call_arguments.py"}
 MAPPING_SOURCES = ARGUMENT_SOURCES | {"src/codeimpact/mapping_protocols.py"}
@@ -97,6 +98,7 @@ class RegressionBaseline(StrictModel):
         "legacy-dispatch-v1",
         "literal-tables-v1",
         "additive-exports-v1",
+        "parameter-tables-v1",
     ]
     previous_baseline_sha256: SHA256 | None = None
     explanation: Nonblank
@@ -120,6 +122,7 @@ class RegressionBaseline(StrictModel):
             "legacy-dispatch-v1": LEGACY_SOURCES,
             "literal-tables-v1": TABLES_SOURCES,
             "additive-exports-v1": CURRENT_SOURCES,
+            "parameter-tables-v1": CURRENT_SOURCES,
         }
         require(
             set(self.analyzer_sha256) == sources[self.name],
@@ -134,9 +137,15 @@ class RegressionBaseline(StrictModel):
 
 def active_baseline(directory: Path, project: Path = PROJECT) -> RegressionBaseline:
     baseline = RegressionBaseline.model_validate(read_metadata(directory / BASELINE_FILE)[0])
-    require(baseline.name == "additive-exports-v1", "Active baseline name mismatch")
+    require(baseline.name == "parameter-tables-v1", "Active baseline name mismatch")
     require(
-        file_hash(directory / TABLES_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        file_hash(directory / EXPORTS_BASELINE_FILE) == baseline.previous_baseline_sha256,
+        "Preserved additive exports baseline changed",
+    )
+    exports = RegressionBaseline.model_validate(read_metadata(directory / EXPORTS_BASELINE_FILE)[0])
+    require(exports.name == "additive-exports-v1", "Additive exports baseline name mismatch")
+    require(
+        file_hash(directory / TABLES_BASELINE_FILE) == exports.previous_baseline_sha256,
         "Preserved literal tables baseline changed",
     )
     tables = RegressionBaseline.model_validate(read_metadata(directory / TABLES_BASELINE_FILE)[0])
@@ -274,6 +283,7 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             "frozen-inputs.json",
             "first-run.json",
             BASELINE_FILE,
+            EXPORTS_BASELINE_FILE,
             TABLES_BASELINE_FILE,
             LEGACY_BASELINE_FILE,
             DESCRIPTOR_BASELINE_FILE,
@@ -306,12 +316,15 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
     current_matches = observed == baseline.measurement
     if not current_matches:
         report["evaluation"]["regressions"].append(
-            "v2: measurement differs from additive-exports-v1"
+            "v2: measurement differs from parameter-tables-v1"
         )
     argument = RegressionBaseline.model_validate(
         read_metadata(directory / ARGUMENT_BASELINE_FILE)[0]
     )
-    previous = RegressionBaseline.model_validate(read_metadata(directory / TABLES_BASELINE_FILE)[0])
+    previous = RegressionBaseline.model_validate(
+        read_metadata(directory / EXPORTS_BASELINE_FILE)[0]
+    )
+    tables = RegressionBaseline.model_validate(read_metadata(directory / TABLES_BASELINE_FILE)[0])
     legacy = RegressionBaseline.model_validate(read_metadata(directory / LEGACY_BASELINE_FILE)[0])
     descriptor = RegressionBaseline.model_validate(
         read_metadata(directory / DESCRIPTOR_BASELINE_FILE)[0]
@@ -323,12 +336,15 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
     mapping = RegressionBaseline.model_validate(read_metadata(directory / MAPPING_BASELINE_FILE)[0])
     partial = RegressionBaseline.model_validate(read_metadata(directory / PARTIAL_BASELINE_FILE)[0])
     report.update(
-        fresh_evaluation_schema_version="10.0",
+        fresh_evaluation_schema_version="11.0",
         previous_baseline=previous.name,
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         previous_summary=previous.measurement["summary"],
+        tables_baseline=tables.name,
+        tables_baseline_sha256=previous.previous_baseline_sha256,
+        tables_summary=tables.measurement["summary"],
         legacy_baseline=legacy.name,
-        legacy_baseline_sha256=previous.previous_baseline_sha256,
+        legacy_baseline_sha256=tables.previous_baseline_sha256,
         legacy_summary=legacy.measurement["summary"],
         descriptor_baseline=descriptor.name,
         descriptor_baseline_sha256=legacy.previous_baseline_sha256,
@@ -373,10 +389,11 @@ def evaluate_fresh(directory: Path) -> dict[str, Any]:
             },
         },
         interpretation=(
-            "Development/regression evaluation with additive-exports-v1; "
+            "Development/regression evaluation with parameter-tables-v1; "
             "original bef99db first run, module-partial-v1, argument-guards-v1 "
             "mapping-fallback-v1, test-discovery-v1, lfu-callback-v1 and "
-            "descriptor-binding-v1, legacy-dispatch-v1 and literal-tables-v1 preserved. "
+            "descriptor-binding-v1, legacy-dispatch-v1, literal-tables-v1 and "
+            "additive-exports-v1 preserved. "
             "agent-drafted labels, not independent review or runtime failures. "
             "Matching the baseline preserves mistakes; it does not certify safe test skipping."
         ),
@@ -389,7 +406,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_fresh,
         default_corpus=Path("corpus/real-v2"),
-        default_output=Path("reports/real-v2-additive-exports-v1-evaluation.json"),
+        default_output=Path("reports/real-v2-parameter-tables-v1-evaluation.json"),
     )
 
 

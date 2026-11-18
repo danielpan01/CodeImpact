@@ -9,13 +9,26 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-additive-exports-v1-evaluation.json (current)
+# reports/real-v3-parameter-tables-v1-evaluation.json (current)
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current measurement — milestone 9C additive package exports
+## Current measurement — milestone 9C test parameter tables
+
+The titleize case selects **2/22**, down from 22/22, with
+**1 TP / 1 FP / 0 FN / 20 TN**. Its resolved titleize call path and the
+conservative mutation/cleanup path retain their exact evidence. The 20
+removed paths came from the changed test module.
+
+Expanded v3 selects **47/120** with **42 TP / 5 FP / 0 FN / 61 TN**.
+All 12 uncertain definitions stay unselected. Only the titleize case changes.
+Holdout wrapper **8.0** verifies the `parameter-tables-v1` measurement and
+the preserved `additive-exports-v1` and earlier receipts.
+[Exact IDs, source proof and retained evidence](PARAMETER_TABLE_REVIEW.md)
+
+## Preserved measurement — milestone 9C additive package exports
 
 The validator addition selects **4/8**, down from 8/8. The two changed tests
 retain their exact evidence. Four plain tests using existing explicit members

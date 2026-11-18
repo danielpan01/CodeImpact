@@ -911,3 +911,15 @@ plain test. Wildcard consumers and unproved dynamic access, initialization, and
 test execution retain conservative paths. Each added callable still has its
 separate seed, and all retained recommendations use the original graph.
 [Source boundary and pinned case](VALIDATOR_EXPORT_REVIEW.md)
+
+## Test parameter tables alongside production body edits
+
+The literal-table audit has a separate mixed-change branch for tests in the
+edited table's own module. It can inspect a reachable production module with
+one changed, undecorated top-level function body and identical definition
+header and surrounding statements. The import-time audit rejects any eager
+invocation of that edited function. Each test is still audited separately in
+both revisions. The mixed branch requires direct registration of every
+changed binding in supported parameter decorators and rejects other table
+uses. Only the test-table seed's contribution is filtered.
+[Source boundary and pinned titleize case](PARAMETER_TABLE_REVIEW.md)

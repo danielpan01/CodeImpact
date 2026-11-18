@@ -5,6 +5,7 @@ import copy
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from codeimpact.discovery import is_test_file
 from codeimpact.selection import MAX_DEPTH
 
 if TYPE_CHECKING:
@@ -154,10 +155,48 @@ def changed_tables(before: "Index", after: "Index", path: str) -> set[str]:
     return names
 
 
+def deferred_body_edit(before: "Index", after: "Index", path: str) -> str | None:
+    """Recognize one existing top-level function with an unchanged definition header."""
+    if is_test_file(path):
+        return None
+    old, new = (i.syntax.get(f"{path}::<module>") for i in (before, after))
+    if not isinstance(old, ast.Module) or not isinstance(new, ast.Module):
+        return None
+    if len(old.body) != len(new.body):
+        return None
+    edited = None
+    for a, b in zip(old.body, new.body, strict=True):
+        if ast.dump(a) == ast.dump(b):
+            continue
+        if (
+            edited is not None
+            or not isinstance(a, ast.FunctionDef)
+            or not isinstance(b, ast.FunctionDef)
+            or a.decorator_list
+            or b.decorator_list
+        ):
+            return None
+        old_header, new_header = copy.copy(a), copy.copy(b)
+        old_header.body = new_header.body = []
+        if ast.dump(old_header) != ast.dump(new_header):
+            return None
+        edited = a.name
+    return edited
+
+
 class Query:
-    def __init__(self, index: "Index", path: str, names: set[str], safe_modules: set[str]):
+    def __init__(
+        self,
+        index: "Index",
+        path: str,
+        names: set[str],
+        safe_modules: set[str],
+        body_edits: dict[str, str],
+    ):
         self.index = index
         self.safe_modules = safe_modules
+        self.body_edits = body_edits
+        self.used_body_edit = False
         self.changed = {(path, name) for name in names}
         self.modules: dict[str, Scope] = {}
         self.initializing: set[str] = set()
@@ -166,6 +205,8 @@ class Query:
         self.stack: set[tuple[ast.AST, bool]] = set()
         self.parameter_tables: set[tuple[str, str]] = set()
         self.mutated_tables: set[tuple[str, str]] = set()
+        self.parameter_references: set[ast.expr] = set()
+        self.other_collection = False
         resolver = index.partials
         if resolver is None:
             raise Unknown("source resolver unavailable")
@@ -193,7 +234,9 @@ class Query:
 
     def module(self, path: str) -> Scope:
         self.tick()
-        if path not in self.safe_modules:
+        if path in self.body_edits:
+            self.used_body_edit = True
+        elif path not in self.safe_modules:
             raise Unknown("reachable module has another kind of change")
         if path in self.initializing:
             raise Unknown("eager cycle")
@@ -338,11 +381,22 @@ class Query:
             if set(names) != expected or len(names) != len(expected):
                 raise Unknown("unproved fixture argument")
             self.parameters(values, data, len(names))
+        if fn.decorator_list and (
+            len(fn.decorator_list) != 1
+            or args.kwonlyargs
+            or args.posonlyargs
+            or args.vararg
+            or args.kwarg
+            or args.defaults
+        ):
+            self.other_collection = True
 
-    def parameters(self, node: ast.AST, data: Data, arity: int) -> None:
+    def parameters(self, node: ast.expr, data: Data, arity: int) -> None:
         """Audit collection effects for this contribution's changed parameter data."""
         if data.table not in self.changed:
             return
+        if isinstance(node, ast.Name):
+            self.parameter_references.add(node)
         if data.table is not None:
             if data.table in self.mutated_tables:
                 raise Unknown("mutated parameter data")
@@ -377,6 +431,12 @@ class Query:
     ) -> Data:
         self.tick()
         node = fn.node
+        if (
+            eager
+            and isinstance(node, ast.FunctionDef)
+            and self.body_edits.get(fn.scope.path) == node.name
+        ):
+            raise Unknown("initializer can invoke an edited function")
         for v in [*args, *kwargs.values()]:
             self.data(v)
         if (node, eager) in self.stack:
@@ -586,7 +646,24 @@ class Query:
         if node.args.args and not node.decorator_list:
             return False
         self.function(Function(node, module), [DATA] * len(node.args.args), {}, False)
+        if self.used_body_edit:
+            self.only_parameter_references(path)
         return True
+
+    def only_parameter_references(self, path: str) -> None:
+        """Allow mixed edits only for local tables used directly in known decorators."""
+        if self.other_collection or not self.changed <= self.parameter_tables:
+            raise Unknown("unproved parameter collection")
+        tree = self.index.syntax[f"{path}::<module>"]
+        for node in ast.walk(tree):
+            self.tick()
+            if (
+                isinstance(node, ast.Name)
+                and isinstance(node.ctx, ast.Load)
+                and (path, node.id) in self.changed
+                and node not in self.parameter_references
+            ):
+                raise Unknown("table used outside a supported parameter decorator")
 
 
 class ModuleDataFallback:
@@ -607,6 +684,15 @@ class ModuleDataFallback:
             for p in before.sources.keys() & after.sources.keys()
             if before.sources[p] == after.sources[p]
         }
+        self.body_edits = (
+            {
+                p: name
+                for p in sorted(paths - self.safe_modules)
+                if (name := deferred_body_edit(before, after, p)) is not None
+            }
+            if self.changes
+            else {}
+        )
         self.cache: dict[tuple[str, str], bool] = {}
 
     def allows(self, sid: str, path: str) -> bool:
@@ -617,9 +703,15 @@ class ModuleDataFallback:
             keep = False
             for index in self.indexes:
                 try:
-                    keep |= not Query(index, path, self.changes[path], self.safe_modules).excludes(
-                        sid
+                    # Only a test in the changed table's own module is eligible.
+                    body_edits = (
+                        self.body_edits
+                        if index.nodes.get(sid) and (index.nodes[sid].path == path)
+                        else {}
                     )
+                    keep |= not Query(
+                        index, path, self.changes[path], self.safe_modules, body_edits
+                    ).excludes(sid)
                 except (ReadsTable, Unknown, RecursionError):
                     keep = True
             self.cache[key] = keep
