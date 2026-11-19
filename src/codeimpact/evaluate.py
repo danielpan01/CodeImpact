@@ -123,7 +123,11 @@ def _evidence_key(item: DependencyEvidence) -> tuple[int, int, str]:
 
 
 def validate_report(
-    request: AnalysisRequest, report: Report, *, policy: DiscoveryPolicy = CURRENT_POLICY
+    request: AnalysisRequest,
+    report: Report,
+    *,
+    policy: DiscoveryPolicy = CURRENT_POLICY,
+    reexports: bool = True,
 ) -> None:
     """Check path contracts independently of selection labels.
 
@@ -131,8 +135,8 @@ def validate_report(
     it does not certify that the index resolves Python semantics correctly. The
     authored labels, separate discovery and existing analyzer tests cover that gap.
     """
-    before = build_index(request.base, policy=policy)
-    after = build_index(request.head, policy=policy)
+    before = build_index(request.base, policy=policy, reexports=reexports)
+    after = build_index(request.head, policy=policy, reexports=reexports)
     nodes = {node.id: node for node in report.nodes}
     _require(len(nodes) == len(report.nodes), "duplicate nodes")
     _require(set(nodes) == before.nodes.keys() | after.nodes.keys(), "node union")
@@ -235,9 +239,16 @@ def evaluate_case(
     policy: DiscoveryPolicy = CURRENT_POLICY,
     variadic: bool = True,
     parameter_rows: bool = True,
+    reexports: bool = True,
 ) -> CaseResult:
-    report = analyze(case.request, policy=policy, variadic=variadic, parameter_rows=parameter_rows)
-    validate_report(case.request, report, policy=policy)
+    report = analyze(
+        case.request,
+        policy=policy,
+        variadic=variadic,
+        parameter_rows=parameter_rows,
+        reexports=reexports,
+    )
+    validate_report(case.request, report, policy=policy, reexports=reexports)
     result = classify(case, {rec.symbol for rec in report.recommendations})
     regressions = []
     for label, actual, expected in (
@@ -278,12 +289,19 @@ def evaluate(
     policy: DiscoveryPolicy = CURRENT_POLICY,
     variadic: bool = True,
     parameter_rows: bool = True,
+    reexports: bool = True,
 ) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
         raise ValueError("Evaluation needs nonempty cases with unique IDs")
     cases = sorted(cases, key=lambda case: case.id)
     results = [
-        evaluate_case(case, policy=policy, variadic=variadic, parameter_rows=parameter_rows)
+        evaluate_case(
+            case,
+            policy=policy,
+            variadic=variadic,
+            parameter_rows=parameter_rows,
+            reexports=reexports,
+        )
         for case in cases
     ]
     canonical = json.dumps(
@@ -364,7 +382,9 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError(f"Unknown case: {args.case_id}")
         if args.output.resolve().is_relative_to(args.corpus.resolve()):
             raise ValueError("Report output must be outside the corpus directory")
-        report = evaluate(cases, policy=V2_POLICY, variadic=False, parameter_rows=False)
+        report = evaluate(
+            cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
+        )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n",

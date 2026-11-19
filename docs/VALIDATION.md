@@ -3821,3 +3821,48 @@ The macOS skip covers the Linux-only address-space enforcement test.
 Existing warnings are the Starlette/httpx test-client deprecation and
 Playwright's `NO_COLOR` / `FORCE_COLOR` notice. Local logs are under
 `reports/humanize-*`. The implementation was handed off unstaged and uncommitted.
+
+## Explicit package re-export evidence
+
+Clean local main started at PR #26,
+`876a42268979ef6ddc2c7dfba0d7afd8d178cafa`. The `parameter-rows-v1`
+baseline replayed at 20/33 for Humanize small delta. The source audit
+checked the explicit import from `humanize.time`, the defining function and
+all seven call sites across the five affected tests. Package initialization
+imports uncaptured `pkg_resources` and calls `get_distribution` after
+binding the export. The time tests also use uncaptured `freezegun` setup.
+
+Before implementation, four positive synthetic tests failed and 17
+conservative controls passed. The proof checks passive eager imports and
+unique, read-only source bindings in each revision. The regressions establish
+a direct qualified call, preserve changed-test precedence and independent
+module paths, and retain exact before-only and removed-target evidence.
+The pinned case adds no call edges or path replacements. All 20 selected
+IDs stay selected, with 19 conservative paths and one changed-test path.
+The 5 draft TP, 15 FP, 0 FN and 13 TN are unchanged. Independent label
+review is pending.
+
+All five non-target v4 analyses match their predecessors. All 161 existing
+corpus files and 13 benchmark receipts match their starting hashes. The
+eight prior reports are byte-identical. Enabling the proof across those 67
+case replays also preserves every analysis except for timing. The new offline
+gate verifies the predecessor report and the stable successor measurement
+with exact selected IDs and evidence delta. Upstream source was read as AST
+data.
+[Call-site trace and exact IDs](REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused re-export, import binding, typed evidence and preservation tests | 248 passed |
+| `make check` | Ruff lint and formatting, mypy (34 modules), 1,188 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| All nine offline evaluations | Matched their recorded measurements and evidence |
+| `make verify-pilot` | Local readiness, demo, access control and exact pinned report passed |
+| `npm run format:check` | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop/mobile Chromium, Firefox and desktop/mobile WebKit |
+| Determinism and evidence | All nine reports matched byte for byte under hash seeds 7 and 173. Each seed also matched all 73 reversed-file replays, excluding only `stats.elapsed_ms`, with typed evidence validated |
+| `git diff --check` | Passed with an empty staging area |
+
+The macOS skip covers Linux-only address-space enforcement. Existing
+warnings are the Starlette/httpx test-client deprecation and Playwright's
+`NO_COLOR` / `FORCE_COLOR` notice. Local logs are under
+`reports/reexports-*`. The implementation was handed off unstaged and uncommitted.

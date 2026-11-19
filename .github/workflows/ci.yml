@@ -35,6 +35,8 @@ jobs:
         run: make evaluate-real-v4-variadic
       - name: Offline v4 inline parameter row evaluation
         run: make evaluate-real-v4-parameter-rows
+      - name: Offline v4 explicit re-export evidence evaluation
+        run: make evaluate-real-v4-reexports
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

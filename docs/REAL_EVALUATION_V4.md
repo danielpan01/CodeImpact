@@ -277,3 +277,50 @@ make evaluate-real-v4-parameter-rows
 The new offline gate verifies the prior variadic baseline and report, the
 current engine, the stable measurement and the exact recommendation delta.
 [Verification](VALIDATION.md#inline-pytest-parameter-row-fallback)
+
+## Humanize explicit re-export successor
+
+The `parameter-rows-v1` baseline selects 20 of 33 small-delta definitions
+with 5 draft TP, 15 FP, 0 FN and 13 TN. In both revisions,
+`src/humanize/__init__.py` lines 6–12 explicitly import `precisedelta`
+from `humanize.time`. The source function appears at
+`src/humanize/time.py` lines 378–520 before and 378–534 after.
+[Pinned source pair](../corpus/real-v4/cases/humanize_small_delta.json)
+
+| Draft-affected test | `humanize.precisedelta` call lines before / after | Evidence kept |
+| --- | --- | --- |
+| `tests/test_time.py::test_precisedelta_multiple_units` | 502 / 507 | Changed-test evidence for the added parameter row |
+| `tests/test_time.py::test_precisedelta_one_unit_enough` | 453 / 453 | Conservative path to the changed test module |
+| `tests/test_time.py::test_precisedelta_custom_format` | 551 / 556 | Conservative path to the changed test module |
+| `tests/test_time.py::test_precisedelta_suppress_units` | 627 / 632 | Conservative path to the changed test module |
+| `tests/test_i18n.py::test_i18n` | 14, 20, 26 / 14, 20, 26 | Conservative path through the test module, the package initializer and the changed production module |
+
+The initializer imports the uncaptured `pkg_resources` module and calls
+`get_distribution(__name__)` after binding the export. The time test module
+also runs uncaptured `freezegun` setup during initialization. The new proof
+leaves those effects unknown. It cannot establish a resolved call for any
+of the seven affected call sites. `test_precisedelta_bogus_call`, a draft
+false positive with two calls to the same export, also keeps fallback.
+
+The closed-source controls establish a direct resolved call and exact
+before-only evidence. The pinned successor keeps all 20 selected IDs, with
+zero additions, removals, evidence replacements or added call edges.
+Nineteen recommendations still have conservative evidence and the
+changed parameterized test keeps its zero-hop path. Counts remain
+**5 TP, 15 FP, 0 FN and 13 TN**. The other five v4 analyses match their preceding
+reports. Independent label review remains pending.
+[Successor receipt and exact retained IDs](../corpus/real-v4-successors/explicit-reexports-v1/baseline.json)
+
+```sh
+make evaluate-real-v4-parameter-rows
+make evaluate-real-v4-reexports
+# reports/real-v4-explicit-reexports-v1-evaluation.json
+```
+
+The offline gate checks the predecessor and complete successor reports,
+selected IDs and typed evidence. The next audit should establish a pinned
+source basis for the import and distribution lookup before modeling any
+initializer effects. The i18n test module's external imports and its
+`importlib`-based namespace access also need review. The `freezegun` setup
+is a separate proof for the time tests.
+[Verification](VALIDATION.md#explicit-package-re-export-evidence)

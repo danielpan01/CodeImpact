@@ -78,7 +78,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | 10 — merged, PR #23; review pending | Fresh v4 evaluation and source-label review workflow | Frozen v4 selects 92/105 with 57 draft false positives, 16 uncertain selections and 64 outside discovery | Six frozen changes, source-only review and strict offline replay. Independent label review remains pending |
 | Post-10 discovery — merged, PR #24 | Bounded mixed-case `unittest.TestCase` method discovery | Both IceCream changes now cover all 32 definitions each, with 48 draft false positives across the two changes | Frozen v4 stays runnable. A separately versioned evaluation records the new denominator, exact IDs and evidence |
 | Post-10 timestamp fallback — merged, PR #25 | Guarded variadic calls on a bound instance | Synthetic controls exclude the nonempty-only path. The pinned timestamp case retains all 32 paths because initialization and external calls are unproved | The successor records zero removals. Further IceCream precision needs source evidence for those initialization and call effects |
-| Post-10 inline parameter row — bounded proof implemented | One added row registered by a known pytest decorator | Closed-source controls shed the unrelated test-module contribution. The pinned small-delta case retains its 20 paths | The successor records the exact result. Further precision depends on closing the bootstrap and collection audit |
+| Post-10 inline parameter row — merged, PR #26 | One added row registered by a known pytest decorator | Closed-source controls shed the unrelated test-module contribution. The pinned small-delta case retains its 20 paths | The successor records the exact result. Further precision depends on closing the bootstrap and collection audit |
+| Post-10 explicit package re-export — bounded proof implemented | Qualified package calls and passive source initialization | Closed-source controls gain exact call evidence without changing selected IDs. The pinned Humanize paths stay conservative | The successor locks the exact evidence delta. Humanize still needs a source-backed proof of initialization effects |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -97,6 +98,12 @@ The inline-row follow-up separates a bounded `datetime.timedelta` parameter
 cell from a changed production body. Humanize's pinned package initialization
 and collection dependencies still retain the test-module fallback.
 [Humanize row replay](REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor)
+
+The next evidence audit starts with the initializer's `pkg_resources` import
+and distribution lookup after the explicit re-export. Establish a pinned
+source basis for those effects before attempting a narrower Humanize edge.
+Audit `freezegun` collection separately for the time tests.
+[Humanize re-export trace](REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
@@ -214,7 +221,8 @@ No database, queue or new framework is an automatic next step.
 Run focused tests plus `make check`, `make evaluate`, `make evaluate-real`,
 `make evaluate-real-v2`, `make evaluate-real-v3`, `make evaluate-real-v4`,
 `make evaluate-real-v4-unittest`, `make evaluate-real-v4-variadic`,
-`make evaluate-real-v4-parameter-rows`, `make verify-pilot`, and
+`make evaluate-real-v4-parameter-rows`, `make evaluate-real-v4-reexports`,
+`make verify-pilot`, and
 `cd web && npm run test:e2e` for application changes. Include frontend formatting
 for UI work. Verify relevant determinism and unchanged historical receipts, update
 actual results, and leave changes unstaged/uncommitted for the owner's publication.

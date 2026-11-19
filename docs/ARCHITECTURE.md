@@ -160,6 +160,25 @@ scores. A resolved partial target does not establish branch reachability, runtim
 execution or valid arguments. General monkeypatching, reflective alias mutation,
 control flow and dispatch-argument pruning remain outside this bounded inference.
 
+### Qualified calls through explicit package re-exports
+
+`explicit_reexports.py` checks `package.member(...)` in an undecorated top-level
+source function. One direct module-scope import must bind the package or its
+alias. The package initializer must re-export the member through one explicit
+from-import from an immediate source module, where a unique plain function
+defines it. The proof follows captured eager imports and permits only passive
+initialization statements. A missing or external import, cycle, competing
+binding, namespace escape, observed mutation or reflective access declines
+the proof.
+
+The analyzer adds the typed call edge after the existing selection walks.
+It can replace a selected test's conservative explanation with a direct
+resolved edge to a changed function. Existing resolved or changed-test
+explanations retain precedence. Independent module edges and selection
+membership stay intact. Upgraded paths use the existing scoring formula.
+Each revision supplies its own caller and callee ranges.
+[Humanize source trace and measured result](REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
+
 ### Bounded function-local imports
 
 An `import` or `from ... import` statement directly in a function/async-function

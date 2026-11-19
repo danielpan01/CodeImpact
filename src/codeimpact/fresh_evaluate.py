@@ -257,10 +257,19 @@ def replay_source_matches(project: Path, path: str, expected: str) -> bool:
         return False
     rows, _ = read_metadata(rows_path)
     rows_hash: str | None = rows["current_sources_sha256"].get(path)
+    if file_hash(transition) != rows["previous_receipt_sha256"]:
+        return False
+    if expected in {previous_hash, current_hash, latest_hash} and actual == rows_hash:
+        return True
+    export_path = project / "benchmarks/explicit-reexports-v1-preservation.json"
+    if not export_path.is_file():
+        return False
+    export, _ = read_metadata(export_path)
+    export_hash: str | None = export["current_sources_sha256"].get(path)
     return (
-        file_hash(transition) == rows["previous_receipt_sha256"]
-        and expected in {previous_hash, current_hash, latest_hash}
-        and actual == rows_hash
+        file_hash(rows_path) == export["previous_receipt_sha256"]
+        and expected in {previous_hash, current_hash, latest_hash, rows_hash}
+        and actual == export_hash
     )
 
 
