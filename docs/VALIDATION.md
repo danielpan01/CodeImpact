@@ -3772,3 +3772,52 @@ The macOS skip covers Linux-only address-space enforcement. Existing warnings
 are the Starlette/httpx test-client deprecation and the Playwright
 `NO_COLOR` / `FORCE_COLOR` notice. Local verification logs are under
 `reports/icecream-*`. The implementation was handed off unstaged and uncommitted.
+
+## Inline pytest parameter row fallback
+
+Clean local main started at PR #25,
+`ca15245a128583f3b63b7e4794c163778a698acd`. Before changes, the variadic
+successor reproduced the pinned Humanize small-delta case at 20/33
+selected, with 5 draft TP, 15 FP, 0 FN and 13 TN. The source and evidence
+audit separated the edited `precisedelta` body from the new decorator row.
+All 15 false positives and three of the true positives ended at the changed
+test module. The isolated decorator audit accepted the eight base rows and
+nine head rows with the direct `pytest` and `datetime` imports.
+
+Before the implementation, two synthetic exclusion tests failed and 21
+controls passed. The implemented proof isolates a single added, inline
+row and permits a proven `datetime.timedelta` call with bounded numeric
+literal keywords. It drops the unrelated closed-source test's module-only
+recommendation and preserves direct, transitive and separate valid
+dependencies. The existing literal-table query keeps the pinned Humanize
+paths conservative. In both revisions, it encounters the uncaptured
+`pkg_resources` import while inspecting the package initializer. The source
+also contains an uncaptured `freeze_time` context and test decorators.
+The successor therefore leaves all 20 recommendations, all 15 draft false
+positives and all evidence paths intact. The source remains draft-labeled
+and independent review is pending.
+
+The new offline gate pins the original variadic report and the successor
+measurement and recommendation delta. The other five v4 analyses match,
+including both IceCream cases, Humanize locale grouping and oyaml. Upstream
+sources were read as data. All 160 pre-existing corpus files and 12
+benchmark receipts match their starting hashes. All seven prior reports are
+byte-identical. The active proof also preserves every complete analysis in the
+61 prior case replays, excluding only timing.
+[Source trace and exact IDs](REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused parameter-row, literal-table, replay and preservation tests | 93 passed |
+| `make check` | Ruff lint and formatting, mypy (32 modules), 1,162 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| All eight offline evaluations | Matched their recorded measurements and evidence |
+| `make verify-pilot` | Local readiness, public demo, access gate and exact pinned report passed |
+| `npm run format:check` | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop/mobile Chromium, Firefox and desktop/mobile WebKit |
+| Determinism and evidence | All eight reports matched byte for byte under hash seeds 7 and 173. Each seed also matched all 67 reversed-file replays, excluding only `stats.elapsed_ms`, with typed evidence validated |
+| `git diff --check` | Passed with an empty staging area |
+
+The macOS skip covers the Linux-only address-space enforcement test.
+Existing warnings are the Starlette/httpx test-client deprecation and
+Playwright's `NO_COLOR` / `FORCE_COLOR` notice. Local logs are under
+`reports/humanize-*`. The implementation was handed off unstaged and uncommitted.

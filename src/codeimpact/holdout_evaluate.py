@@ -382,6 +382,7 @@ def validate_preservation(directory: Path, project: Path = PROJECT) -> Preservat
         and not p.is_relative_to(project / "corpus/real-v4")
         and not p.is_relative_to(project / "corpus/real-v4-successors/unittest-discovery-v1")
         and not p.is_relative_to(project / "corpus/real-v4-successors/variadic-dispatch-v1")
+        and not p.is_relative_to(project / "corpus/real-v4-successors/parameter-rows-v1")
     }
     require(
         set(receipt.corpus_sha256)

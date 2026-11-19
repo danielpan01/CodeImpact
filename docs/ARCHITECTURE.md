@@ -949,6 +949,21 @@ changed binding in supported parameter decorators and rejects other table
 uses. Only the test-table seed's contribution is filtered.
 [Source boundary and pinned titleize case](PARAMETER_TABLE_REVIEW.md)
 
+## Inline pytest parameter rows
+
+`parameter_rows.py` isolates one added row in one existing top-level
+`pytest.mark.parametrize` decorator. The rest of the module must match.
+It checks argument names, row arity and each cell in both revisions. The
+constructor exception requires a direct standard-library `datetime` module
+binding and bounded numeric literal keywords to `timedelta`.
+
+The query reuses the literal-table initialization and source-call audit.
+A read of an edited production body or an unproved lifecycle, state mutation
+or call retains fallback. Only the owning test module's contribution to an
+unrelated sibling can be removed. Changed-test and production paths use their
+existing traversals and typed edges.
+[Measurement and source trace](REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor)
+
 ## Frozen fresh-repository evaluation v4
 
 The v4 wrapper reuses the real-source tree, provenance, label and typed path

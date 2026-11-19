@@ -133,7 +133,13 @@ def label_extensions(
     return extensions
 
 
-def measure(directory: Path, receipt: DiscoveryLabels, *, variadic: bool = False) -> dict[str, Any]:
+def measure(
+    directory: Path,
+    receipt: DiscoveryLabels,
+    *,
+    variadic: bool = False,
+    parameter_rows: bool = False,
+) -> dict[str, Any]:
     _, cases, old_audit = validate_frozen(directory)
     audit = inventories(cases, policy=CURRENT_POLICY)
     extensions = label_extensions(directory, receipt, cases, old_audit, audit)
@@ -143,6 +149,7 @@ def measure(directory: Path, receipt: DiscoveryLabels, *, variadic: bool = False
         analysis_policy=CURRENT_POLICY,
         label_extensions=extensions,
         variadic=variadic,
+        parameter_rows=parameter_rows,
     )
     attach_coverage(report, audit)
     report.update(

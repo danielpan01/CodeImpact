@@ -33,6 +33,8 @@ jobs:
         run: make evaluate-real-v4-unittest
       - name: Offline v4 guarded variadic dispatch evaluation
         run: make evaluate-real-v4-variadic
+      - name: Offline v4 inline parameter row evaluation
+        run: make evaluate-real-v4-parameter-rows
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

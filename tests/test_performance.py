@@ -221,6 +221,33 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "src/codeimpact/variadic_fallback.py",
         "src/codeimpact/variadic_evaluate.py",
     }
+    rows = json.loads((ROOT / "benchmarks/parameter-rows-v1-preservation.json").read_text())
+    assert (
+        hashlib.sha256(
+            (ROOT / "benchmarks/variadic-dispatch-v1-preservation.json").read_bytes()
+        ).hexdigest()
+        == rows["previous_receipt_sha256"]
+    )
+    assert set(rows["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "analyzer",
+            "evaluate",
+            "fresh_evaluate",
+            "holdout_evaluate",
+            "real_evaluate",
+            "unittest_evaluate",
+            "v4_evaluate",
+            "variadic_evaluate",
+        )
+    }
+    assert set(rows["added_corpus_sha256"]) == {
+        "corpus/real-v4-successors/parameter-rows-v1/baseline.json",
+    }
+    assert set(rows["current_sources_sha256"]) == set(variadic["current_sources_sha256"]) | {
+        "src/codeimpact/parameter_rows.py",
+        "src/codeimpact/parameter_rows_evaluate.py",
+    }
     extensions = (
         current,
         latest,
@@ -232,6 +259,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         v4,
         unittest,
         variadic,
+        rows,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
