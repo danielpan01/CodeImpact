@@ -167,7 +167,8 @@ source function. One direct module-scope import must bind the package or its
 alias. The package initializer must re-export the member through one explicit
 from-import from an immediate source module, where a unique plain function
 defines it. The proof follows captured eager imports and permits only passive
-initialization statements. A missing or external import, cycle, competing
+initialization statements. A function containing a local import is outside this
+proof. A missing or external import, cycle, competing
 binding, namespace escape, observed mutation or reflective access declines
 the proof.
 

@@ -278,7 +278,9 @@ def add_reexport_edges(index: "Index") -> set[tuple[str, str, str]]:
             | scope.blocked
             | {arg.arg for arg in ast.walk(node.args) if isinstance(arg, ast.arg)}
         )
-        if scope.wildcard:
+        if scope.wildcard or any(
+            isinstance(stmt, (ast.Import, ast.ImportFrom)) for stmt in ast.walk(node)
+        ):
             continue
         for call, root, member in calls(node.body):
             binding = resolver.binding(path, root)

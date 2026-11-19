@@ -3842,6 +3842,10 @@ IDs stay selected, with 19 conservative paths and one changed-test path.
 The 5 draft TP, 15 FP, 0 FN and 13 TN are unchanged. Independent label
 review is pending.
 
+Publication review added two regressions for a local import before the qualified
+call. The proof now declines both `import` and `from ... import` in the caller
+body because their effects have not been audited. Historical receipts are unchanged.
+
 All five non-target v4 analyses match their predecessors. All 161 existing
 corpus files and 13 benchmark receipts match their starting hashes. The
 eight prior reports are byte-identical. Enabling the proof across those 67
@@ -3854,7 +3858,7 @@ data.
 | Verification | Observed result |
 | --- | --- |
 | Focused re-export, import binding, typed evidence and preservation tests | 248 passed |
-| `make check` | Ruff lint and formatting, mypy (34 modules), 1,188 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| Implementation `make check` | Ruff lint and formatting, mypy (34 modules), 1,188 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
 | All nine offline evaluations | Matched their recorded measurements and evidence |
 | `make verify-pilot` | Local readiness, demo, access control and exact pinned report passed |
 | `npm run format:check` | Passed |

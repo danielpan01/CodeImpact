@@ -1,6 +1,6 @@
 {
   "added_corpus_sha256": {
-    "corpus/real-v4-successors/explicit-reexports-v1/baseline.json": "0904e03e49fd0faaa547636a4917a9672476dcdcd8e0ae889cb1a86354a2fb1c"
+    "corpus/real-v4-successors/explicit-reexports-v1/baseline.json": "a44f70ffb4bbd268442d702f9ed78570b424a35ddf73d8f0383cefb882505cc0"
   },
   "changed_historical_sources": [
     "src/codeimpact/analyzer.py",
@@ -25,7 +25,7 @@
     "src/codeimpact/discovery.py": "ff16cc9bfc00c2ed9dd51d8ad102ec355fe8218f3fedd2d6c78942573ceb4ff7",
     "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
     "src/codeimpact/evaluate.py": "438a297ee70f02f9860ee9660de42aff49855b6e1de6e94c3fd1812c6a126e19",
-    "src/codeimpact/explicit_reexports.py": "2b068a53061cf7af2ff6a79a2ae6eb1ee7f381b5242cd2ada6d544fd01c3039c",
+    "src/codeimpact/explicit_reexports.py": "f3e252f448d845f4d59baf8d09543d650582cf6b5438e12eb4c3c276f5630315",
     "src/codeimpact/explicit_reexports_evaluate.py": "b405cb46780e684a828c9adcd5ffaf94f1fb116973884e4c0722ef7b0c36b735",
     "src/codeimpact/fresh_evaluate.py": "922681a08c4633582b47fe2db6fca0348dc2d35ade1e796341e724519678e64f",
     "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",

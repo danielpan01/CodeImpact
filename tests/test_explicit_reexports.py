@@ -123,6 +123,8 @@ def test_unproved_exports_or_eager_effects_add_no_call(initializer):
         TEST.replace("test_normalize()", "test_normalize(parcel)"),
         TEST.replace("    assert", "    parcel = factory()\n    assert"),
         TEST.replace("    assert", "    import fake as parcel\n    assert"),
+        TEST.replace("    assert", "    import external_plugin\n    assert"),
+        TEST.replace("    assert", "    from external_plugin import configure\n    assert"),
         TEST + "parcel.normalize = replacement\n",
         TEST + "copy = parcel\ncopy.normalize = replacement\n",
         TEST.replace("    assert", "    setattr(parcel, 'normalize', replacement)\n    assert"),
