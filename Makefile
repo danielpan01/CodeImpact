@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows pilot benchmark serve verify-pilot
+.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports pilot benchmark serve verify-pilot
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -30,6 +30,8 @@ evaluate-real-v4-variadic:
 	.venv/bin/python -m codeimpact.variadic_evaluate
 evaluate-real-v4-parameter-rows:
 	.venv/bin/python -m codeimpact.parameter_rows_evaluate
+evaluate-real-v4-reexports:
+	.venv/bin/python -m codeimpact.explicit_reexports_evaluate
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:

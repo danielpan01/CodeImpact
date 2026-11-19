@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from codeimpact.corpus import StrictModel
-from codeimpact.fresh_evaluate import PROJECT, file_hash
+from codeimpact.fresh_evaluate import PROJECT, file_hash, replay_source_matches
 from codeimpact.holdout_evaluate import safe_file
 from codeimpact.models import Recommendation
 from codeimpact.real_evaluate import SHA256, read_metadata, require
@@ -84,7 +84,10 @@ def evaluate_rows(
     )
     require(set(baseline.analyzer_sha256) == ENGINE, "Parameter row engine inventory differs")
     for path, expected in baseline.analyzer_sha256.items():
-        require(file_hash(PROJECT / path) == expected, f"Parameter row analyzer changed: {path}")
+        require(
+            replay_source_matches(PROJECT, path, expected),
+            f"Parameter row analyzer changed: {path}",
+        )
     previous = evaluate_variadic(directory)
     require(
         not previous["evaluation"]["regressions"]

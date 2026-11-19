@@ -25,6 +25,7 @@ from codeimpact.discovery import (
     shadows_unittest,
 )
 from codeimpact.dispatch_fallback import DispatchFallback
+from codeimpact.explicit_reexports import add_reexport_edges
 from codeimpact.models import (
     AnalysisRequest,
     DependencyEvidence,
@@ -326,7 +327,9 @@ class Index:
             edge.evidence.append(item)
 
 
-def build_index(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Index:
+def build_index(
+    snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY, reexports: bool = True
+) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
     modules: dict[str, str] = {}
@@ -525,6 +528,8 @@ def build_index(snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY)
                     if name == qualified or name.startswith(qualified + ".")
                 ],
             )
+    if reexports:
+        add_reexport_edges(index)
     return index
 
 
@@ -688,10 +693,11 @@ def analyze(
     policy: DiscoveryPolicy = CURRENT_POLICY,
     variadic: bool = True,
     parameter_rows: bool = True,
+    reexports: bool = True,
 ) -> Report:
     started = time.perf_counter()
-    before = build_index(request.base, policy=policy)
-    after = build_index(request.head, policy=policy)
+    before = build_index(request.base, policy=policy, reexports=False)
+    after = build_index(request.head, policy=policy, reexports=False)
     nodes = before.nodes | after.nodes
     edges = merge_edges(before, after)
     changed = sorted(
@@ -866,21 +872,45 @@ def analyze(
             if current is None or (len(candidate), candidate) < (len(current), current):
                 paths[sid] = candidate
     call_paths = active_paths(True)
+    added_calls: dict[str, str] = {}
+    added_incoming: dict[str, set[str]] = defaultdict(set)
+    if reexports:
+        # The existing graph selects tests. New edges can explain those tests
+        # without expanding, pruning or rerouting the selection walk.
+        additions = add_reexport_edges(before) | add_reexport_edges(after)
+        if additions:
+            edges = merge_edges(before, after)
+            active_targets = set(active)
+            for source, target, _ in sorted(additions):
+                added_incoming[target].add(source)
+                if (
+                    source in paths
+                    and nodes[source].kind == "test"
+                    and source not in call_paths
+                    and target in active_targets
+                    and call_arguments.allows(source, target, nodes[target].path)
+                ):
+                    added_calls.setdefault(source, target)
     recommendations = []
     for sid in sorted(paths):
         if nodes[sid].kind != "test" or sid not in after.nodes:
             continue
-        precise = sid in call_paths
-        path = call_paths.get(sid, paths[sid])
+        proof = added_calls.get(sid)
+        precise = sid in call_paths or proof is not None
+        path = [sid, proof] if proof else call_paths.get(sid, paths[sid])
         distance = len(path) - 1
-        fan_in = len(reverse[path[-1]])
+        fan_in = len(reverse[proof] | added_incoming[proof]) if proof else len(reverse[path[-1]])
         score = min(100, max(1, (90 if precise else 50) - 10 * distance + min(10, fan_in)))
         reason = "Resolved call path" if precise else "Conservative module/import dependency"
         if distance == 0:
             reason = "Test itself changed"
         # Edges are sorted by (source, target, kind), preferring call on a tied pair.
         # Retain scoring and typed-edge preference while identifying each exact hop.
-        used_edges = [typed_pairs[(a, b)][0] for a, b in zip(path, path[1:], strict=False)]
+        if proof:
+            used_edges = [edges[(sid, proof, "call")]]
+        else:
+            original = [typed_pairs[(a, b)][0] for a, b in zip(path, path[1:], strict=False)]
+            used_edges = [edges[(e.source, e.target, e.kind)] for e in original]
         in_before = sid in before.nodes and all(e.before for e in used_edges)
         in_after = sid in after.nodes and all(e.after for e in used_edges)
         recommendations.append(

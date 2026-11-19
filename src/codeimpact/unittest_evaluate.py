@@ -139,6 +139,7 @@ def measure(
     *,
     variadic: bool = False,
     parameter_rows: bool = False,
+    reexports: bool = False,
 ) -> dict[str, Any]:
     _, cases, old_audit = validate_frozen(directory)
     audit = inventories(cases, policy=CURRENT_POLICY)
@@ -150,6 +151,7 @@ def measure(
         label_extensions=extensions,
         variadic=variadic,
         parameter_rows=parameter_rows,
+        reexports=reexports,
     )
     attach_coverage(report, audit)
     report.update(
