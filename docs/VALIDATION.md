@@ -3947,3 +3947,37 @@ The existing Starlette TestClient deprecation and Playwright `NO_COLOR` /
 
 Logs and reproducibility receipts are under the ignored local
 `reports/titleize-set-cleanup/` directory.
+
+## Humanize re-export post-merge recheck
+
+On November 19, 2026, clean main was at
+`39c8ab6a875379ce72b097ddbd5d7dc9b757d45c` (PR #28), with the parameter-row
+baseline from PR #26 and the bounded re-export proof from PR #27 already merged.
+The seven affected call sites in both pinned revisions call
+`humanize.precisedelta`. The initializer's `pkg_resources` effects remain
+unproved, and the time tests still depend on uncaptured `freezegun` setup.
+The synthetic controls still produce resolved and before-only evidence where
+source establishes the binding.
+[Source trace and scope](REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
+
+Both Humanize gates reproduced 20/33 selected with 5 draft true positives,
+15 false positives, 0 false negatives, and 13 true negatives. The
+parameterized `test_precisedelta_multiple_units` retains changed-test evidence.
+The other 19 paths stay conservative, including `test_i18n`. The exact IDs,
+evidence and all five non-target v4 analyses matched. Independent label review
+remains pending. The recheck changes only documentation.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused re-export, binding, replay and preservation tests | 105 passed. |
+| `make check` | Passed Ruff, mypy, Python tests, TypeScript and the production build. Python reported 1,212 passed, one Linux-only skip on macOS, the existing Starlette TestClient deprecation warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. All ten saved evaluation files match their starting bytes, including both v3 report versions. |
+| Hash seeds 7 and 173 and reversed files | Each seed reproduced all nine current outputs byte for byte. All 73 reversed-file replays per seed matched with only `stats.elapsed_ms` excluded. Every recommendation passed typed evidence validation. |
+| Pilot and frontend | `make verify-pilot` and frontend formatting passed. All 253 browser tests passed across five desktop and mobile projects. |
+| Protected artifacts | SHA-256 verification passed for 178 existing corpus and benchmark files. Git history since PR #26 shows only added successor receipts in those directories. |
+| Whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+The next evidence-backed candidate is the known empty-string argument in
+Inflection's `test_pluralize_empty_string`. Audit whether it bypasses the
+edited rule tables in both pinned revisions and trace the test-module seed
+on its own. [Current roadmap](BUILD_PLAN.md#milestone-sequence-and-remaining-work)

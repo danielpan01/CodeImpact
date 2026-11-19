@@ -324,3 +324,10 @@ the i18n sibling tests' dynamic child-module lookups separately from the
 affected test's qualified calls. The existing evidence and receipt stand.
 [Package initialization audit](HUMANIZE_INITIALIZATION_AUDIT.md) ·
 [Re-export verification](VALIDATION.md#explicit-package-re-export-evidence)
+
+The November 19 recheck on main after PR #28 reproduced both Humanize
+reports byte for byte. The roadmap now points to auditing whether the known
+empty argument in `test_pluralize_empty_string` returns before either
+edited Inflection rule table is read.
+[Post-merge recheck](VALIDATION.md#humanize-re-export-post-merge-recheck) ·
+[Current roadmap](BUILD_PLAN.md#milestone-sequence-and-remaining-work)
