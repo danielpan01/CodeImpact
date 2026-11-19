@@ -41,6 +41,7 @@ from codeimpact.models import (
     SymbolChange,
 )
 from codeimpact.module_data import ModuleDataFallback
+from codeimpact.parameter_rows import ParameterRows
 from codeimpact.partial_bindings import PartialBindings
 from codeimpact.selection import AggregateFallback, propagation_changes
 from codeimpact.variadic_fallback import VariadicFallback
@@ -682,7 +683,11 @@ def merge_edges(before: Index, after: Index) -> dict[tuple[str, str, str], Edge]
 
 
 def analyze(
-    request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLICY, variadic: bool = True
+    request: AnalysisRequest,
+    *,
+    policy: DiscoveryPolicy = CURRENT_POLICY,
+    variadic: bool = True,
+    parameter_rows: bool = True,
 ) -> Report:
     started = time.perf_counter()
     before = build_index(request.base, policy=policy)
@@ -717,11 +722,18 @@ def analyze(
     dispatch = DispatchFallback(before, after, call_arguments)
     module_data = ModuleDataFallback(before, after, {nodes[sid].path for sid in active})
     exports = AdditiveExports(before, after, {nodes[sid].path for sid in active})
+    rows = ParameterRows(
+        before, after, {nodes[sid].path for sid in active} if parameter_rows else set()
+    )
     guarded = VariadicFallback(
         fallback.before,
         fallback.after,
         {nodes[sid].path for sid in changed if nodes[sid].kind == "module"} if variadic else set(),
     )
+
+    def module_allows(sid: str, seed: str) -> bool:
+        path = nodes[seed].path
+        return guarded.allows(sid, path) and rows.allows(sid, path)
 
     def walk(
         seeds: list[str],
@@ -778,31 +790,32 @@ def analyze(
             and not (nodes[sid].kind == "module" and nodes[sid].path in exports.changes)
         ]
         result = walk(ordinary, calls_only)
-        guarded_seeds = {
+        filtered_seeds = {
             sid
             for sid in ordinary
-            if nodes[sid].kind == "module" and nodes[sid].path in guarded.changes
+            if nodes[sid].kind == "module"
+            and (nodes[sid].path in guarded.changes or nodes[sid].path in rows.changes)
         }
         excluded = {
             sid
             for sid, path in result.items()
             if nodes[sid].kind == "test"
-            and path[-1] in guarded_seeds
-            and not guarded.allows(sid, nodes[path[-1]].path)
+            and path[-1] in filtered_seeds
+            and not module_allows(sid, path[-1])
         }
         if excluded:
             # Reroute only tests whose winning module path was excluded. Keep
             # the original multi-source traversal for every other test.
-            alternate = walk([sid for sid in ordinary if sid not in guarded_seeds], calls_only)
+            alternate = walk([sid for sid in ordinary if sid not in filtered_seeds], calls_only)
             for sid in excluded:
                 result.pop(sid)
                 if sid in alternate:
                     result[sid] = alternate[sid]
-            for seed in sorted(guarded_seeds):
+            for seed in sorted(filtered_seeds):
                 candidates = walk([seed], calls_only)
                 for sid in sorted(excluded & candidates.keys()):
                     candidate, current = candidates[sid], result.get(sid)
-                    if guarded.allows(sid, nodes[seed].path) and (
+                    if module_allows(sid, seed) and (
                         current is None or (len(candidate), candidate) < (len(current), current)
                     ):
                         result[sid] = candidate

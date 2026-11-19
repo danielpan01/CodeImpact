@@ -248,10 +248,19 @@ def replay_source_matches(project: Path, path: str, expected: str) -> bool:
         return False
     latest, _ = read_metadata(transition)
     latest_hash: str | None = latest["current_sources_sha256"].get(path)
+    if file_hash(receipt_path) != latest["previous_receipt_sha256"]:
+        return False
+    if expected in {previous_hash, current_hash} and actual == latest_hash:
+        return True
+    rows_path = project / "benchmarks/parameter-rows-v1-preservation.json"
+    if not rows_path.is_file():
+        return False
+    rows, _ = read_metadata(rows_path)
+    rows_hash: str | None = rows["current_sources_sha256"].get(path)
     return (
-        file_hash(receipt_path) == latest["previous_receipt_sha256"]
-        and expected in {previous_hash, current_hash}
-        and actual == latest_hash
+        file_hash(transition) == rows["previous_receipt_sha256"]
+        and expected in {previous_hash, current_hash, latest_hash}
+        and actual == rows_hash
     )
 
 

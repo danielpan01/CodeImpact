@@ -215,3 +215,65 @@ make evaluate-real-v4-variadic   # reports/real-v4-variadic-dispatch-v1-evaluati
 The latter gate checks the predecessor receipt and stable report, reuses its
 labels, and verifies the current engine, full stable measurement, and exact
 selection and evidence delta. [Verification](VALIDATION.md#guarded-variadic-timestamp-fallback)
+
+## Humanize inline parameter row successor
+
+Before the refinement, the timestamp successor selects 20 of 33 small-delta
+definitions. The production body of `precisedelta` adds a minimum-unit branch
+when nothing has been rendered yet. Independently, the test module adds one row
+to `test_precisedelta_multiple_units`, pairing
+`dt.timedelta(seconds=0.01)` with `"minutes"` and `"0 minutes"`.
+The production body, changed test and changed test module are active seeds.
+The changed production module fingerprint supplies aggregate fallback.
+[Pinned source pair](../corpus/real-v4/cases/humanize_small_delta.json)
+
+| Definitions in the original 20 selections | Source dependency and original evidence |
+| --- | --- |
+| `test_precisedelta_multiple_units` | The edited decorator registers the new case. The recommendation starts and ends at the changed test. |
+| `test_precisedelta_one_unit_enough`, `test_precisedelta_custom_format`, `test_precisedelta_suppress_units` | Each calls the explicitly re-exported `humanize.precisedelta`. Their only selected paths end at `tests/test_time.py::<module>`. |
+| `tests/test_i18n.py::test_i18n` | Calls `precisedelta` and travels through its own test module, the package and the changed production module. |
+| `test_date_and_delta`, `test_time_unit` | Exercise the unchanged converter and enum respectively. Both use the test-module fallback. |
+| `test_naturaldelta`, `test_naturaldelta_minimum_unit_default`, `test_naturaldelta_minimum_unit_explicit`, `test_naturaldelta_nomonths`, `test_naturaldelta_when_explicit`, `test_naturaldelta_when_missing_tzinfo` | Exercise natural delta formatting directly or through a local helper. All use the test-module fallback. |
+| `test_naturaltime`, `test_naturaltime_minimum_unit_default`, `test_naturaltime_minimum_unit_explicit`, `test_naturaltime_nomonths`, `test_naturalday`, `test_naturaldate` | Exercise natural time/date formatters directly or through a local helper. All use the test-module fallback. Some also use the external `freeze_time` decorator. |
+| `test_precisedelta_bogus_call` | Calls the edited function. Its draft label reflects the specific assertions, while this proof treats reaching the edited body as a dependency. Its evidence still ends at the test module. |
+
+The proof recognizes the one-row edit and separately checks each supported
+cell. A named constructor must resolve through a direct `datetime` import,
+such as `import datetime as dt`, with no captured shadow. `timedelta` calls
+use only bounded numeric literal keywords. The checks also validate the
+`pytest` binding, matching names and row arity. They parse the expressions as
+data. Closed-source regressions establish exclusions and preserve direct,
+transitive and independent dependency evidence.
+
+The isolated decorator audit accepted the eight base rows and nine head rows
+under the visible direct imports. The surrounding source still needs a separate
+initialization and dependency proof.
+
+In the pinned data, both audits stop at the package initializer's uncaptured
+`pkg_resources` import. The unchanged test bootstrap also uses an external
+`freezegun.freeze_time` context, derived globals, and stacked decorators on
+some tests. These effects exceed the existing closed initialization and
+collection audit. All 15 draft false positives retain the module path.
+The three affected tests with the same fallback also keep it.
+
+| Small-delta replay | Discovered | Selected | TP | FP | FN | TN |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `variadic-dispatch-v1` | 33 | 20 | 5 | 15 | 0 | 13 |
+| `parameter-rows-v1` | 33 | 20 | 5 | 15 | 0 | 13 |
+
+The receipt records zero additions, removals or evidence replacements. All
+20 retained IDs keep their complete paths and revision evidence. The five
+other v4 cases, including both IceCream cases and Humanize locale grouping,
+retain their complete analyses. Source labels remain drafts pending independent
+review.
+[Successor receipt and exact retained IDs](../corpus/real-v4-successors/parameter-rows-v1/baseline.json)
+
+```sh
+make evaluate-real-v4-variadic
+make evaluate-real-v4-parameter-rows
+# reports/real-v4-parameter-rows-v1-evaluation.json
+```
+
+The new offline gate verifies the prior variadic baseline and report, the
+current engine, the stable measurement and the exact recommendation delta.
+[Verification](VALIDATION.md#inline-pytest-parameter-row-fallback)
