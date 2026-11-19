@@ -3719,3 +3719,56 @@ The final run had no failures. The macOS skip covers Linux-only address-space
 enforcement. The existing warnings are the Starlette/httpx test-client
 deprecation and Playwright's `NO_COLOR` / `FORCE_COLOR` notice.
 The local verification logs are under `reports/unittest-*`.
+
+## Guarded variadic timestamp fallback
+
+Clean local main started at PR #24,
+`58da6a4fa6505344ada8e965bd84e2a54ebc382f`. The predecessor replay selected
+all 32 timestamp definitions. The source audit distinguished the edited
+method, the display-only class fingerprint, and the independent module seed
+from reordering the adjacent standard-library imports. It also traced the
+package re-export, the singleton constructor, the existing unittest setup,
+and the forwarded arguments in both revisions.
+
+The pre-implementation synthetic run failed the two new exclusion and
+replacement-evidence assertions, with 12 controls passing. The guarded
+variadic proof now excludes the closed nonempty-only call and retains
+empty, mixed, unknown, opaque and one-revision paths. A synthetic test with an
+independent dependency keeps its recommendation and gets an exact alternate
+module path. The actual IceCream proof declines the conditional bindings,
+dynamic package initialization and uncaptured frame-based helper effects.
+Consequently the timestamp replay still selects 32/32, with 7 TP, 22 FP,
+0 FN, 0 TN and all 3 uncertain definitions selected. All 32 IDs and their
+conservative two-revision evidence are retained. There are no replacements.
+
+Prepublication review reproduced four incorrect exclusions with captured
+collection hooks or module lifecycle bindings. Those four regressions now pass:
+the refinement declines when a captured `conftest.py` or an unsupported module
+hook is present. No historical baseline was rewritten.
+
+All 159 pre-existing corpus files and 11 pre-existing benchmark receipts
+match their starting hashes, including the v4 labels, discovery overlay and
+previous measurements. The six previous reports are byte-identical. Running
+the active filter across their 55 case replays also leaves every complete
+analysis unchanged, apart from the excluded timing field. The new
+`make evaluate-real-v4-variadic` gate pins the successor measurement and
+its exact delta. The five other v4 cases retain their complete analyses.
+No upstream source was executed. The source labels remain drafts pending
+independent review.
+[Timestamp replay and exact IDs](REAL_EVALUATION_V4.md#icecream-timestamp-successor)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused fallback, discovery, replay and preservation tests | 56 passed |
+| Implementation `make check` | Ruff lint and formatting, mypy (30 modules), 1,133 tests passed, one expected skip, 93% coverage, TypeScript and production build passed |
+| All seven offline evaluations | Matched all recorded measurements and evidence |
+| `make verify-pilot` | Local readiness, public demo, access gate and exact pinned report passed |
+| `npm run format:check` | Passed |
+| `npm run test:e2e -- --workers=1` | 253 passed across desktop/mobile Chromium, Firefox and desktop/mobile WebKit |
+| Determinism and evidence | All seven full reports matched byte for byte under hash seeds 7 and 173. Each seed also matched all 61 reversed-snapshot replays, excluding only `stats.elapsed_ms`, with typed evidence validated |
+| `git diff --check` | Passed with an empty staging area |
+
+The macOS skip covers Linux-only address-space enforcement. Existing warnings
+are the Starlette/httpx test-client deprecation and the Playwright
+`NO_COLOR` / `FORCE_COLOR` notice. Local verification logs are under
+`reports/icecream-*`. The implementation was handed off unstaged and uncommitted.

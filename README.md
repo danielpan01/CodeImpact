@@ -267,6 +267,12 @@ evidence. The additional draft labels were frozen before expanded analysis.
 No upstream tests ran, and independent review is pending.
 [Results](docs/REAL_EVALUATION_V4.md) · [Source label review](corpus/real-v4/REVIEW_WORKFLOW.md)
 
+`make evaluate-real-v4-variadic` checks the guarded variadic fallback proof.
+The proof removes a module contribution in the closed-source synthetic controls.
+The pinned IceCream timestamp case still selects **32/32** with 22 draft false
+positives because initialization and frame-reader effects remain unproved.
+[Timestamp replay](docs/REAL_EVALUATION_V4.md#icecream-timestamp-successor)
+
 ## Quality checks
 
 ```sh
@@ -277,6 +283,7 @@ make evaluate-real-v2
 make evaluate-real-v3
 make evaluate-real-v4
 make evaluate-real-v4-unittest
+make evaluate-real-v4-variadic
 make verify-pilot
 cd web
 npm run install:browsers
@@ -287,7 +294,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all six offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all seven offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

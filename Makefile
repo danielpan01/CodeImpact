@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest pilot benchmark serve verify-pilot
+.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic pilot benchmark serve verify-pilot
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -26,6 +26,8 @@ evaluate-real-v4:
 	.venv/bin/python -m codeimpact.v4_evaluate
 evaluate-real-v4-unittest:
 	.venv/bin/python -m codeimpact.unittest_evaluate
+evaluate-real-v4-variadic:
+	.venv/bin/python -m codeimpact.variadic_evaluate
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:

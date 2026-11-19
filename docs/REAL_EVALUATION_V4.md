@@ -156,3 +156,62 @@ the same pinned source spans and record proposed revisions separately.
 [Successor baseline](../corpus/real-v4-successors/unittest-discovery-v1/baseline.json)
 · [Discovery boundaries](TEST_DISCOVERY.md#mixed-case-unittest-methods)
 · [Verification](VALIDATION.md#mixed-case-unittest-discovery)
+
+## IceCream timestamp successor
+
+The reference replay before the refinement selects all 32 timestamp tests.
+The pinned change has three displayed symbols. The body of
+`IceCreamDebugger._formatTime` changes from `datetime.utcnow()` to
+`datetime.now()`. The enclosing class fingerprint changes with the method,
+but its initialization and method headers stay identical, so the class is
+display-only. Swapping the adjacent `datetime` and `contextlib` imports
+changes the module outline and gives it an independent propagation seed.
+All 32 original recommendations use that seed. The edited method also has
+its own seed.
+[Pinned source pair](../corpus/real-v4/cases/icecream_local_time.json)
+
+In both revisions, the package initializer re-exports `ic` from its
+implementation module using a wildcard. The implementation binds a singleton
+`ic = IceCreamDebugger()`. The test setup changes `ic._pairDelimiter` and
+the output context managers can replace and restore callbacks and streams.
+The instance's `__call__` and `format` forward positional arguments to
+`_format`. That method calls `_formatTime` only from `if not args`, so an
+ordinary bound call with an argument bypasses the timestamp on that route.
+
+The proof can follow this pattern in closed source with a unique instance
+binding, passive imports and modeled lifecycle. It excludes the nonempty-only
+synthetic test and retains empty calls, mixed calls and an independent changed
+dependency. It declines the pinned IceCream module contribution in both
+revisions. The argument count alone does not settle these effects:
+
+- The test module conditionally binds `StringIO`, and the package uses a
+  wildcard import and dynamically reads a version file into its namespace.
+- The implementation calls the external `executing.Source` through a frame
+  object before the guard. The argument branch also reads source through that
+  dependency. The frozen snapshots do not contain that implementation.
+- Context-managed callback changes, formatting and output add further
+  dependencies in some tests. In the installation tests the binding also
+  depends on builtins state. The source-error branch and `testNoSourceAvailable`'s
+  dynamic call retain their existing evidence.
+
+| Timestamp replay | Selected | TP | FP | FN | TN | Uncertain selected / unselected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `unittest-discovery-v1` | 32/32 | 7 | 22 | 0 | 0 | 3 / 0 |
+| `variadic-dispatch-v1` | 32/32 | 7 | 22 | 0 | 0 | 3 / 0 |
+
+The successor records zero added or removed IDs and zero evidence replacements.
+Every retained ID appears in the receipt. Each path remains conservative with
+evidence in both revisions. The full report retains the original 31
+test-module paths and the direct package path from the local import in
+`testDifferentName`. The source-error, Humanize and oyaml reports are identical.
+All labels remain draft pending independent review.
+[Successor receipt and exact retained IDs](../corpus/real-v4-successors/variadic-dispatch-v1/baseline.json)
+
+```sh
+make evaluate-real-v4-unittest   # frozen discovery successor
+make evaluate-real-v4-variadic   # reports/real-v4-variadic-dispatch-v1-evaluation.json
+```
+
+The latter gate checks the predecessor receipt and stable report, reuses its
+labels, and verifies the current engine, full stable measurement, and exact
+selection and evidence delta. [Verification](VALIDATION.md#guarded-variadic-timestamp-fallback)

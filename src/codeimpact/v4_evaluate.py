@@ -32,6 +32,7 @@ from codeimpact.real_evaluate import main as real_main
 REFERENCE = "ed728a0851e87308c0ed454071ded12adb37eda8"
 DIRECTORY = Path("corpus/real-v4")
 SUCCESSOR = Path("corpus/real-v4-successors/unittest-discovery-v1")
+VARIADIC_SUCCESSOR = SUCCESSOR.with_name("variadic-dispatch-v1")
 ENGINE = CURRENT_SOURCES | {"src/codeimpact/corpus.py", "src/codeimpact/evaluate.py"}
 FREEZE = "frozen-inputs.json"
 FIRST = "first-run.json"
@@ -137,6 +138,7 @@ def validate_history(directory: Path, project: Path) -> Preservation:
         if p.is_file()
         and not p.is_relative_to(project / DIRECTORY)
         and not p.is_relative_to(project / SUCCESSOR)
+        and not p.is_relative_to(project / VARIADIC_SUCCESSOR)
     }
     require(set(receipt.corpus_sha256) == prior, "Historical corpus inventory differs")
     require(

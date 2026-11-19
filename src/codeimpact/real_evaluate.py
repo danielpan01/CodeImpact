@@ -364,6 +364,7 @@ def evaluate_real(
     label_extensions: dict[str, dict[str, Any]] | None = None,
     discovery_policy: DiscoveryPolicy = LEGACY_POLICY,
     analysis_policy: DiscoveryPolicy = V2_POLICY,
+    variadic: bool = False,
 ) -> dict[str, Any]:
     selection, cases, provenance, coverage = load_real(directory, discovery_policy=discovery_policy)
     original_cases = cases
@@ -417,7 +418,7 @@ def evaluate_real(
         )
     cases = current_cases
     # evaluate() validates every recommendation's typed path and revision evidence.
-    evaluation = evaluate(cases, policy=analysis_policy)
+    evaluation = evaluate(cases, policy=analysis_policy, variadic=variadic)
     results = []
     for result in evaluation.cases:
         case = result.case

@@ -224,6 +224,7 @@ POLICY_SOURCE_CHANGES = {
     "src/codeimpact/discovery.py",
     "src/codeimpact/evaluate.py",
 }
+VARIADIC_SOURCE_CHANGES = {"src/codeimpact/analyzer.py", "src/codeimpact/evaluate.py"}
 
 
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
@@ -240,7 +241,18 @@ def replay_source_matches(project: Path, path: str, expected: str) -> bool:
     previous, _ = read_metadata(predecessor)
     previous_hash: str | None = previous["current_sources_sha256"].get(path)
     current_hash: str | None = receipt["current_sources_sha256"].get(path)
-    return expected == previous_hash and actual == current_hash
+    if expected == previous_hash and actual == current_hash:
+        return True
+    transition = project / "benchmarks/variadic-dispatch-v1-preservation.json"
+    if path not in VARIADIC_SOURCE_CHANGES or not transition.is_file():
+        return False
+    latest, _ = read_metadata(transition)
+    latest_hash: str | None = latest["current_sources_sha256"].get(path)
+    return (
+        file_hash(receipt_path) == latest["previous_receipt_sha256"]
+        and expected in {previous_hash, current_hash}
+        and actual == latest_hash
+    )
 
 
 def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:

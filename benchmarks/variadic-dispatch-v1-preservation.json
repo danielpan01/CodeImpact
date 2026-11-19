@@ -1,0 +1,45 @@
+{
+  "added_corpus_sha256": {
+    "corpus/real-v4-successors/variadic-dispatch-v1/baseline.json": "febf02537dd6de785303b1cd49fba4506bc2f8012f08a240b44cd82ec4b34b20"
+  },
+  "changed_historical_sources": [
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/evaluate.py",
+    "src/codeimpact/fresh_evaluate.py",
+    "src/codeimpact/holdout_evaluate.py",
+    "src/codeimpact/real_evaluate.py",
+    "src/codeimpact/unittest_evaluate.py",
+    "src/codeimpact/v4_evaluate.py"
+  ],
+  "current_sources_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/additive_exports.py": "04ef713ad252b862fe07f96588e5169fe2c36ba9f1e02f76cf80ce08162dd23e",
+    "src/codeimpact/analyzer.py": "6d5647b0c7575a04037de9e41cb44d58970c3885d9a6adf39afdcb8b9b6d487c",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/cli.py": "76761ebb0c31cbecd5f75959ba9f524d8ba05016c72b38cfaefad3142483ed2e",
+    "src/codeimpact/corpus.py": "cd866958fd2bb0eb49ad1a10267f90ab1d1b0009c9ebc8da9905ce0397a8696c",
+    "src/codeimpact/demo.py": "9ade36a828843216d55c70aae30b151b7c10573f5b04beea7ccec13c0de7d95e",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ff16cc9bfc00c2ed9dd51d8ad102ec355fe8218f3fedd2d6c78942573ceb4ff7",
+    "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
+    "src/codeimpact/evaluate.py": "67cb6af0013cdf2affd47d04b34703977888fad42a98a5de281601c17f089aad",
+    "src/codeimpact/fresh_evaluate.py": "00985befb525382fd66a1f91877abbbe9b551f933cc98c9722c90b15b4805dd4",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/holdout_evaluate.py": "b6df0a02b36cbda60eab566dc967b518cfc04b08b9fb764ab5c89d03b8f065a4",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/module_data.py": "0f662cab9b11d74c5f30a9a0302c841927afc88e4318a418fe4cc0e2c20aa8e2",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/real_evaluate.py": "354834d405fecb5885bc4019972cf0c5b6b0d19e0e5a3b5a0ecbe1dd55af4a12",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c",
+    "src/codeimpact/unittest_evaluate.py": "cbb2477e019c4b16b01856b996294498db72e7170b622e880ec43d7f091f4341",
+    "src/codeimpact/v4_evaluate.py": "584d409b8bfb55b34bc19bb1e17b8282a9834410f78f25bf1b4ccac552fe5664",
+    "src/codeimpact/variadic_evaluate.py": "120ccd9741e87e2feeff762acc07bcc55411f9423214431563b6d8561a53e0cc",
+    "src/codeimpact/variadic_fallback.py": "e71c799fbb1c345172be11cb79678670dcdd2145128b6ffa794df68c1ffac4e0"
+  },
+  "explanation": "Pin the guarded variadic engine and preserve the previous engine replay, snapshots, labels and reports.",
+  "name": "variadic-dispatch-v1",
+  "previous_receipt_sha256": "ec831d6b4c32c2cfa83a9c861eed78a4111d00005adaa8cbb28374e4fb4662c2",
+  "schema_version": "1.0"
+}

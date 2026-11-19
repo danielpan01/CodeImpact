@@ -229,8 +229,10 @@ def validate_report(
         _require(rec.path_revision == path_revision, "path revision intersection")
 
 
-def evaluate_case(case: CorpusCase, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> CaseResult:
-    report = analyze(case.request, policy=policy)
+def evaluate_case(
+    case: CorpusCase, *, policy: DiscoveryPolicy = CURRENT_POLICY, variadic: bool = True
+) -> CaseResult:
+    report = analyze(case.request, policy=policy, variadic=variadic)
     validate_report(case.request, report, policy=policy)
     result = classify(case, {rec.symbol for rec in report.recommendations})
     regressions = []
@@ -266,11 +268,13 @@ def _aggregate(results: list[CaseResult]) -> Metrics:
     return metrics(counts)
 
 
-def evaluate(cases: list[CorpusCase], *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Evaluation:
+def evaluate(
+    cases: list[CorpusCase], *, policy: DiscoveryPolicy = CURRENT_POLICY, variadic: bool = True
+) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
         raise ValueError("Evaluation needs nonempty cases with unique IDs")
     cases = sorted(cases, key=lambda case: case.id)
-    results = [evaluate_case(case, policy=policy) for case in cases]
+    results = [evaluate_case(case, policy=policy, variadic=variadic) for case in cases]
     canonical = json.dumps(
         [case.model_dump(mode="json") for case in cases], sort_keys=True, separators=(",", ":")
     )
@@ -349,7 +353,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError(f"Unknown case: {args.case_id}")
         if args.output.resolve().is_relative_to(args.corpus.resolve()):
             raise ValueError("Report output must be outside the corpus directory")
-        report = evaluate(cases, policy=V2_POLICY)
+        report = evaluate(cases, policy=V2_POLICY, variadic=False)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n",
