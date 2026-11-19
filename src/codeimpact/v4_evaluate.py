@@ -11,6 +11,7 @@ from codeimpact.discovery import CURRENT_POLICY, V2_POLICY, DiscoveryPolicy, is_
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
     PROJECT,
+    V3_SET_CLEANUP,
     CaseBaseline,
     FirstRun,
     file_hash,
@@ -138,6 +139,7 @@ def validate_history(directory: Path, project: Path) -> Preservation:
         p.relative_to(project).as_posix()
         for p in (project / "corpus").rglob("*")
         if p.is_file()
+        and p.relative_to(project).as_posix() != V3_SET_CLEANUP
         and not p.is_relative_to(project / DIRECTORY)
         and not p.is_relative_to(project / SUCCESSOR)
         and not p.is_relative_to(project / VARIADIC_SUCCESSOR)

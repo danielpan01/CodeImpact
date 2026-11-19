@@ -20,6 +20,41 @@ RETAINED = {
 }
 
 
+def test_set_cleanup_successor_removes_only_the_conservative_titleize_sibling(monkeypatch):
+    dataset = ROOT / "corpus/real-v3"
+    current = holdout_evaluate.evaluate_holdout(dataset)
+    successor = json.loads((dataset / "baselines/set-cleanup-v1.json").read_text())
+    previous = json.loads((dataset / "baselines/parameter-tables-v1.json").read_text())
+    hashes = fresh_evaluate.measurement(current)["analysis_sha256"]
+    assert fresh_evaluate.measurement(current) == successor["measurement"]
+    assert {
+        cid for cid in hashes if hashes[cid] != previous["measurement"]["analysis_sha256"][cid]
+    } == {CASE}
+
+    request = AnalysisRequest.model_validate(
+        json.loads((dataset / f"cases/{CASE}.json").read_text())["request"]
+    )
+    after = analyze(request)
+    validate_report(request, after)
+    monkeypatch.setattr(module_data.Query, "restored_set_test", lambda *_: False)
+    before = analyze(request)
+    validate_report(request, before)
+    assert (
+        canonical_hash(before.model_dump(mode="json", exclude={"stats": {"elapsed_ms"}}))
+        == (previous["measurement"]["analysis_sha256"][CASE])
+    )
+    assert after.recommendations == before.recommendations[:1]
+    assert after.recommendations[0].evidence_path == [
+        "test_inflection.py::test_titleize",
+        "inflection.py::titleize",
+    ]
+    removed = "test_inflection.py::test_uncountable_word_is_not_greedy"
+    assert before.recommendations[1].symbol == removed
+    assert after.impacted == [sid for sid in before.impacted if sid != removed]
+    for field in ("nodes", "edges", "changed", "changes", "removed", "source_files", "warnings"):
+        assert getattr(after, field) == getattr(before, field)
+
+
 def test_titleize_retains_exact_evidence_for_both_remaining_tests(monkeypatch):
     dataset = ROOT / "corpus/real-v3"
     case = json.loads((dataset / f"cases/{CASE}.json").read_text())
@@ -29,6 +64,7 @@ def test_titleize_retains_exact_evidence_for_both_remaining_tests(monkeypatch):
     hashes = previous["measurement"]["analysis_sha256"]
     successor = current["measurement"]["analysis_sha256"]
     assert {k for k, digest in successor.items() if digest != hashes[k]} == {CASE}
+    monkeypatch.setattr(module_data.Query, "restored_set_test", lambda *_: False)
     after = analyze(request)
     validate_report(request, after)
     monkeypatch.setattr(module_data, "deferred_body_edit", lambda *_: None)
@@ -70,3 +106,15 @@ def test_additive_exports_receipt_is_verified_before_analysis(
     monkeypatch.setattr(module, "evaluate_real", lambda *_a, **_k: pytest.fail("ran analysis"))
     with pytest.raises(ValueError, match="Preserved additive exports baseline changed"):
         evaluate(directory)
+
+
+def test_parameter_tables_receipt_is_verified_before_analysis(tmp_path, monkeypatch):
+    directory = tmp_path / "real-v3"
+    shutil.copytree(ROOT / "corpus/real-v3", directory)
+    with (directory / "baselines/parameter-tables-v1.json").open("ab") as stream:
+        stream.write(b"\n")
+    monkeypatch.setattr(
+        holdout_evaluate, "evaluate_real", lambda *_a, **_k: pytest.fail("ran analysis")
+    )
+    with pytest.raises(ValueError, match="Preserved parameter tables baseline changed"):
+        holdout_evaluate.evaluate_holdout(directory)

@@ -318,9 +318,9 @@ make evaluate-real-v4-reexports
 ```
 
 The offline gate checks the predecessor and complete successor reports,
-selected IDs and typed evidence. The next audit should establish a pinned
-source basis for the import and distribution lookup before modeling any
-initializer effects. The i18n test module's external imports and its
-`importlib`-based namespace access also need review. The `freezegun` setup
-is a separate proof for the time tests.
-[Verification](VALIDATION.md#explicit-package-re-export-evidence)
+selected IDs and typed evidence. The follow-up audit found no verifiable
+setuptools pin in the two frozen trees or their CI metadata. It also traced
+the i18n sibling tests' dynamic child-module lookups separately from the
+affected test's qualified calls. The existing evidence and receipt stand.
+[Package initialization audit](HUMANIZE_INITIALIZATION_AUDIT.md) ·
+[Re-export verification](VALIDATION.md#explicit-package-re-export-evidence)

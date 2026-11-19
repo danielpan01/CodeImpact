@@ -9,13 +9,25 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-parameter-tables-v1-evaluation.json (current)
+# reports/real-v3-set-cleanup-v1-evaluation.json (current)
+# reports/real-v3-parameter-tables-v1-evaluation.json remains preserved
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current measurement — milestone 9C test parameter tables
+## Current measurement — Inflection set cleanup
+
+The titleize case selects **1/22**, with **1 TP / 0 FP / 0 FN / 21 TN**.
+The two-revision proof audits one set insertion and matching `finally` removal.
+`test_uncountable_word_is_not_greedy` loses its test-module fallback. The
+resolved `test_titleize` call keeps its exact evidence. Expanded v3 selects
+**46/120**, with **42 TP / 4 FP / 0 FN / 62 TN**. All 12 uncertain definitions
+stay unselected and the other five analyses match their predecessor. Holdout
+wrapper **9.0** verifies `set-cleanup-v1` and the preserved receipt chain.
+[Source audit, exact change and proof limits](SET_CLEANUP_REVIEW.md)
+
+## Preserved measurement — milestone 9C test parameter tables
 
 The titleize case selects **2/22**, down from 22/22, with
 **1 TP / 1 FP / 0 FN / 20 TN**. Its resolved titleize call path and the

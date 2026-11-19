@@ -53,7 +53,7 @@ The repository-review reference above remains historical.
 Current measured limits matter more than a milestone count: authored data retains
 two misses; v2 retains 205 false positives; the original v3 result retains 43 false positives and **30 excluded definitions**.
 Milestone 7 adds those 30 definitions to the expanded measurement. After the
-three 9C slices, it selects 47/120, with 42 TP / 5 FP / 0 FN / 61 TN.
+set-cleanup refinement, it selects 46/120, with 42 TP / 4 FP / 0 FN / 62 TN.
 All 12 uncertain definitions remain unselected.
 The original 90-definition denominator and its exclusions remain frozen. All labels still require independent
 review. Preserve the historical datasets and measurements through subsequent work.
@@ -79,7 +79,9 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Post-10 discovery — merged, PR #24 | Bounded mixed-case `unittest.TestCase` method discovery | Both IceCream changes now cover all 32 definitions each, with 48 draft false positives across the two changes | Frozen v4 stays runnable. A separately versioned evaluation records the new denominator, exact IDs and evidence |
 | Post-10 timestamp fallback — merged, PR #25 | Guarded variadic calls on a bound instance | Synthetic controls exclude the nonempty-only path. The pinned timestamp case retains all 32 paths because initialization and external calls are unproved | The successor records zero removals. Further IceCream precision needs source evidence for those initialization and call effects |
 | Post-10 inline parameter row — merged, PR #26 | One added row registered by a known pytest decorator | Closed-source controls shed the unrelated test-module contribution. The pinned small-delta case retains its 20 paths | The successor records the exact result. Further precision depends on closing the bootstrap and collection audit |
-| Post-10 explicit package re-export — bounded proof implemented | Qualified package calls and passive source initialization | Closed-source controls gain exact call evidence without changing selected IDs. The pinned Humanize paths stay conservative | The successor locks the exact evidence delta. Humanize still needs a source-backed proof of initialization effects |
+| Post-10 explicit package re-export — merged, PR #27 | Qualified package calls and passive source initialization | Closed-source controls gain exact call evidence without changing selected IDs. The pinned Humanize paths stay conservative | The successor locks the exact evidence delta |
+| Humanize package initialization — audited | Check runtime dependency provenance before extending resolution | Both pinned trees lack an exact setuptools pin or a recorded environment sufficient to prove its effects | Keep the current fallback. Move the next proof to a captured dependency with a measured discrepancy |
+| Inflection set cleanup — implemented | One source-owned literal set insertion with matching `finally` cleanup | `inflection_title` selects 1/22. Its resolved `titleize` path is retained and its only draft false positive is removed | Two-revision proof, exact evidence and `set-cleanup-v1` receipt. [Source review](SET_CLEANUP_REVIEW.md) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -99,11 +101,16 @@ cell from a changed production body. Humanize's pinned package initialization
 and collection dependencies still retain the test-module fallback.
 [Humanize row replay](REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor)
 
-The next evidence audit starts with the initializer's `pkg_resources` import
-and distribution lookup after the explicit re-export. Establish a pinned
-source basis for those effects before attempting a narrower Humanize edge.
-Audit `freezegun` collection separately for the time tests.
-[Humanize re-export trace](REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
+The Humanize audit found no verifiable setuptools pin in either revision's
+packaging or CI metadata. The source shows the re-export, but the
+`pkg_resources` import and distribution lookup keep the binding unproved.
+[Package initialization audit](HUMANIZE_INITIALIZATION_AUDIT.md)
+
+The next analyzer candidate is `test_pluralize_empty_string` in the pinned v3
+`inflection_rules` case. Audit whether the known empty argument returns before
+reading either edited rule table in both revisions. Trace the test-module table
+contribution separately and keep fallback if either dependency is unproved.
+[Remaining rule-case discrepancies](MODULE_DATA_REVIEW.md)
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 

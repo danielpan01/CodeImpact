@@ -1,5 +1,7 @@
 """Literal module-table dependency proofs read source without executing it."""
 
+from textwrap import indent
+
 import pytest
 
 from codeimpact.analyzer import analyze
@@ -248,3 +250,116 @@ def test_parameter_row_arity_change_keeps_collection_fallback():
 def test_mutated_parameter_data_keeps_collection_fallback():
     tests = TESTS + "\nCASES.append(('wrong',))\n"
     assert "test_lib.py::test_independent" in selected(review(tests=tests))
+
+
+SET_LIB = """WORDS = {'existing'}
+OTHER = {'existing'}
+def reader(word): return word in WORDS
+def changed(word): return word.upper()
+"""
+SET_TESTS = """import pytest
+import lib
+CASES = [('old', 'OLD')]
+@pytest.mark.parametrize(('word', 'expected'), CASES)
+def test_changed(word, expected): assert lib.changed(word) == expected
+"""
+SET_TEST = "test_lib.py::test_set"
+
+
+def set_test(
+    *,
+    prefix="key = 'new'",
+    receiver="lib.WORDS",
+    body="assert lib.reader(key)",
+    cleanup="lib.WORDS.remove(key)",
+    clause="",
+):
+    return (
+        "def test_set():\n"
+        + indent(f"{prefix}\n{receiver}.add(key)\ntry:\n", "    ")
+        + indent(body, "        ")
+        + "\n"
+        + indent(clause, "    ")
+        + "    finally:\n"
+        + indent(cleanup, "        ")
+        + "\n"
+    )
+
+
+def set_review(*, lib=SET_LIB, test=None, production_head=None):
+    return review(
+        lib=lib,
+        tests=SET_TESTS + (test or set_test()),
+        head={"lib.py": production_head or lib.replace("word.upper()", "word.lower()")},
+    )
+
+
+def test_restored_set_reader_sheds_only_unrelated_parameter_table():
+    report = set_review()
+    assert selected(report) == {"test_lib.py::test_changed"}
+    item = report.recommendations[0]
+    assert item.evidence_path == [item.symbol, "lib.py::changed"]
+    assert item.path_revision == "both"
+
+
+@pytest.mark.parametrize(
+    "shape",
+    [
+        {"prefix": "key = 'existing'"},
+        {"prefix": "key = unknown()"},
+        {
+            "prefix": "key = 'new'\nalias = lib.WORDS",
+            "receiver": "alias",
+            "cleanup": "alias.remove(key)",
+        },
+        {"cleanup": "lib.OTHER.remove(key)"},
+        {"cleanup": "lib.WORDS.remove('other')"},
+        {"cleanup": "lib.WORDS.discard(key)"},
+        {"cleanup": "lib.WORDS.remove(key)\nunknown(key)"},
+        {"body": "assert lib.reader(key)\nkey = 'other'"},
+        {"clause": "except Exception:\n    pass\n"},
+        {"clause": "except Exception:\n    pass\nelse:\n    pass\n"},
+        {"body": "assert CASES and lib.reader(key)"},
+        {"body": "assert unknown(lib.WORDS)"},
+    ],
+)
+def test_incomplete_set_restoration_or_table_read_keeps_fallback(shape):
+    item = next(
+        r for r in set_review(test=set_test(**shape)).recommendations if r.symbol == SET_TEST
+    )
+    assert item.evidence_path == [SET_TEST, "test_lib.py::<module>"]
+    assert item.path_revision == "both"
+
+
+@pytest.mark.parametrize(
+    "library",
+    [
+        SET_LIB.replace("{'existing'}", "['existing']"),
+        SET_LIB + "WORDS.add('new')\n",
+        SET_LIB + "WORDS = {'other'}\n",
+        SET_LIB.replace("return word in WORDS", "WORDS.remove(word); return True"),
+        SET_LIB.replace("return word in WORDS", "return publish(WORDS)"),
+    ],
+)
+def test_unproved_literal_set_binding_or_transitive_effect_keeps_fallback(library):
+    assert SET_TEST in selected(set_review(lib=library))
+
+
+def test_reaching_edited_body_inside_guard_preserves_resolved_evidence():
+    report = set_review(test=set_test(body="assert lib.changed(key)"))
+    item = next(r for r in report.recommendations if r.symbol == SET_TEST)
+    assert item.evidence_path == [SET_TEST, "lib.py::changed"]
+    assert item.path_revision == "both"
+
+
+def test_unproved_cleanup_on_one_revision_keeps_fallback():
+    test = SET_TESTS + set_test()
+    after_test = test.replace("('old', 'OLD')", "('new', 'NEW')").replace(
+        "WORDS.remove(key)", "WORDS.remove('other')"
+    )
+    report = review(
+        lib=SET_LIB,
+        tests=test,
+        head={"lib.py": SET_LIB.replace("upper()", "lower()"), "test_lib.py": after_test},
+    )
+    assert SET_TEST in selected(report)
