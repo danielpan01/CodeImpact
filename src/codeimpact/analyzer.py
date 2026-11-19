@@ -43,6 +43,7 @@ from codeimpact.models import (
 from codeimpact.module_data import ModuleDataFallback
 from codeimpact.partial_bindings import PartialBindings
 from codeimpact.selection import AggregateFallback, propagation_changes
+from codeimpact.variadic_fallback import VariadicFallback
 
 DEFINITIONS = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
 
@@ -680,7 +681,9 @@ def merge_edges(before: Index, after: Index) -> dict[tuple[str, str, str], Edge]
     return result
 
 
-def analyze(request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLICY) -> Report:
+def analyze(
+    request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLICY, variadic: bool = True
+) -> Report:
     started = time.perf_counter()
     before = build_index(request.base, policy=policy)
     after = build_index(request.head, policy=policy)
@@ -714,6 +717,11 @@ def analyze(request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLIC
     dispatch = DispatchFallback(before, after, call_arguments)
     module_data = ModuleDataFallback(before, after, {nodes[sid].path for sid in active})
     exports = AdditiveExports(before, after, {nodes[sid].path for sid in active})
+    guarded = VariadicFallback(
+        fallback.before,
+        fallback.after,
+        {nodes[sid].path for sid in changed if nodes[sid].kind == "module"} if variadic else set(),
+    )
 
     def walk(
         seeds: list[str],
@@ -761,17 +769,43 @@ def analyze(request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLIC
 
     def active_paths(calls_only: bool) -> dict[str, list[str]]:
         seeds = [sid for sid in active if not calls_only or nodes[sid].kind != "module"]
-        result = walk(
-            [
-                sid
-                for sid in seeds
-                if nodes[sid].path not in arguments.changes
-                and nodes[sid].path not in call_arguments.changes
-                and nodes[sid].path not in module_data.changes
-                and not (nodes[sid].kind == "module" and nodes[sid].path in exports.changes)
-            ],
-            calls_only,
-        )
+        ordinary = [
+            sid
+            for sid in seeds
+            if nodes[sid].path not in arguments.changes
+            and nodes[sid].path not in call_arguments.changes
+            and nodes[sid].path not in module_data.changes
+            and not (nodes[sid].kind == "module" and nodes[sid].path in exports.changes)
+        ]
+        result = walk(ordinary, calls_only)
+        guarded_seeds = {
+            sid
+            for sid in ordinary
+            if nodes[sid].kind == "module" and nodes[sid].path in guarded.changes
+        }
+        excluded = {
+            sid
+            for sid, path in result.items()
+            if nodes[sid].kind == "test"
+            and path[-1] in guarded_seeds
+            and not guarded.allows(sid, nodes[path[-1]].path)
+        }
+        if excluded:
+            # Reroute only tests whose winning module path was excluded. Keep
+            # the original multi-source traversal for every other test.
+            alternate = walk([sid for sid in ordinary if sid not in guarded_seeds], calls_only)
+            for sid in excluded:
+                result.pop(sid)
+                if sid in alternate:
+                    result[sid] = alternate[sid]
+            for seed in sorted(guarded_seeds):
+                candidates = walk([seed], calls_only)
+                for sid in sorted(excluded & candidates.keys()):
+                    candidate, current = candidates[sid], result.get(sid)
+                    if guarded.allows(sid, nodes[seed].path) and (
+                        current is None or (len(candidate), candidate) < (len(current), current)
+                    ):
+                        result[sid] = candidate
         for source_path in call_arguments.changes:
             group = [sid for sid in seeds if nodes[sid].path == source_path]
             for sid, candidate in walk(group, calls_only, body_path=source_path).items():
@@ -812,6 +846,7 @@ def analyze(request: AnalysisRequest, *, policy: DiscoveryPolicy = CURRENT_POLIC
             if nodes[sid].kind == "test" and (
                 not descriptors.allows(sid, nodes[module].path)
                 or not dispatch.allows(sid, nodes[module].path)
+                or not guarded.allows(sid, nodes[module].path)
             ):
                 continue
             current = paths.get(sid)

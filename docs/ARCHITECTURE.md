@@ -895,6 +895,24 @@ active/resolved evidence follow their existing traversals. The capture boundary
 and budgets are described in the
 [Slugify review](SLUGIFY_FALLBACK_REVIEW.md).
 
+## Guarded variadic method fallback
+
+`variadic_fallback.py` handles an existing instance method whose only edit
+is in its body. An unchanged method on the same class must call it inside an
+empty-varargs branch. The module comparison can commute the two recognized
+standard-library imports when adjacent and unshadowed. Other initialization
+changes retain their contribution.
+
+The proof reuses the source binding query to trace a direct unittest method,
+its optional `setUp`, the instance constructor and bound forwarding into
+the guarded method. It checks the remaining helpers and callbacks. Both
+revisions must demonstrate a nonempty call, avoid the edited body and agree
+on source-module and callable traces. Unknown expansions, dynamic initialization,
+competing bindings, unproved hooks and uncaptured calls keep fallback. Only
+the winning module contribution can be dropped. Its surviving alternatives
+come from the original graph and the method seed remains independent.
+[Timestamp replay and source boundaries](REAL_EVALUATION_V4.md#icecream-timestamp-successor)
+
 ## Literal module-data dependencies
 
 `ModuleDataFallback` recognizes full module edits confined to existing literal

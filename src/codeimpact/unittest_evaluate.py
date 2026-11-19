@@ -8,7 +8,7 @@ from typing import Any, Literal
 from codeimpact.corpus import CorpusCase, Nonblank, StrictModel
 from codeimpact.discovery import CURRENT_POLICY, V2_POLICY, mixed_case_methods
 from codeimpact.evaluate import Classification, Metrics
-from codeimpact.fresh_evaluate import PROJECT, file_hash, measurement
+from codeimpact.fresh_evaluate import PROJECT, file_hash, measurement, replay_source_matches
 from codeimpact.holdout_evaluate import DraftLabel, safe_file
 from codeimpact.real_evaluate import SHA256, evaluate_real, read_metadata, require
 from codeimpact.real_evaluate import main as real_main
@@ -133,7 +133,7 @@ def label_extensions(
     return extensions
 
 
-def measure(directory: Path, receipt: DiscoveryLabels) -> dict[str, Any]:
+def measure(directory: Path, receipt: DiscoveryLabels, *, variadic: bool = False) -> dict[str, Any]:
     _, cases, old_audit = validate_frozen(directory)
     audit = inventories(cases, policy=CURRENT_POLICY)
     extensions = label_extensions(directory, receipt, cases, old_audit, audit)
@@ -142,6 +142,7 @@ def measure(directory: Path, receipt: DiscoveryLabels) -> dict[str, Any]:
         discovery_policy=V2_POLICY,
         analysis_policy=CURRENT_POLICY,
         label_extensions=extensions,
+        variadic=variadic,
     )
     attach_coverage(report, audit)
     report.update(
@@ -167,7 +168,9 @@ def evaluate_unittest(directory: Path, *, successor: Path = PROJECT / SUCCESSOR)
     )
     require(set(baseline.analyzer_sha256) == ENGINE, "Successor engine inventory differs")
     for path, expected in baseline.analyzer_sha256.items():
-        require(file_hash(PROJECT / path) == expected, f"Successor analyzer changed: {path}")
+        require(
+            replay_source_matches(PROJECT, path, expected), f"Successor analyzer changed: {path}"
+        )
     receipt = DiscoveryLabels.model_validate(read_metadata(label_file)[0])
     original = evaluate_v4(directory)
     require(
