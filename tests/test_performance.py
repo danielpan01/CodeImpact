@@ -277,6 +277,21 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "src/codeimpact/explicit_reexports.py",
         "src/codeimpact/explicit_reexports_evaluate.py",
     }
+    previous = ROOT / "benchmarks/explicit-reexports-v1-preservation.json"
+    cleanup = json.loads((ROOT / "benchmarks/set-cleanup-v1-preservation.json").read_text())
+    assert hashlib.sha256(previous.read_bytes()).hexdigest() == cleanup["previous_receipt_sha256"]
+    assert set(cleanup["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "explicit_reexports_evaluate",
+            "fresh_evaluate",
+            "holdout_evaluate",
+            "module_data",
+            "v4_evaluate",
+        )
+    }
+    assert set(cleanup["added_corpus_sha256"]) == {"corpus/real-v3/baselines/set-cleanup-v1.json"}
+    assert set(cleanup["current_sources_sha256"]) == set(reexports["current_sources_sha256"])
     extensions = (
         current,
         latest,
@@ -290,6 +305,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         variadic,
         rows,
         reexports,
+        cleanup,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()

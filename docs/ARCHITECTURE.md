@@ -969,6 +969,13 @@ changed binding in supported parameter decorators and rejects other table
 uses. Only the test-table seed's contribution is filtered.
 [Source boundary and pinned titleize case](PARAMETER_TABLE_REVIEW.md)
 
+The mixed-change audit also supports one temporary insertion into an imported
+source-owned literal string set. A plain test can add an initially absent string,
+run audited assertions in an immediately following `try`, and remove the same
+key in `finally`. Both revisions must prove the binding and cleanup. An edited
+call, table read, or unproved effect retains the contribution. The graph and
+report schema stay the same. [Source audit and successor replay](SET_CLEANUP_REVIEW.md)
+
 ## Inline pytest parameter rows
 
 `parameter_rows.py` isolates one added row in one existing top-level

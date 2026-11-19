@@ -1,14 +1,14 @@
 # CodeImpact project context
 
-## Current priority — November 17, 2026
+## Current priority — November 18, 2026
 
 The 9C literal-table and validator/export slices merged through PRs #20 and #21.
-The test parameter-table slice merged through PR #22. Inflection titleize
-selects 2/22 with one resolved call and one conservative mutation/cleanup path.
-Expanded v3 is 47/120, with 42 TP / 5 FP / 0 FN / 61 TN and all 12 uncertain
-definitions unselected. New `parameter-tables-v1` receipts preserve the
-additive-export and literal-table records. Labels await independent review.
-[Titleize source and evidence review](PARAMETER_TABLE_REVIEW.md)
+The test parameter-table slice merged through PR #22. The local set-cleanup
+follow-up leaves `inflection_title` at 1/22 with its original resolved call.
+Expanded v3 is 46/120, with 42 TP / 4 FP / 0 FN / 62 TN and all 12 uncertain
+definitions unselected. `set-cleanup-v1` preserves the `parameter-tables-v1`
+receipt and links to earlier records. Labels await independent review.
+[Titleize set-cleanup proof and evidence](SET_CLEANUP_REVIEW.md)
 
 The v4 dataset and offline replay use the frozen PR #22 engine.
 It selects 92/105 with 19 TP / 57 FP / 0 FN / 13 TN, all 16 uncertain

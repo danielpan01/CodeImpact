@@ -1,0 +1,1583 @@
+{
+  "analyzer_sha256": {
+    "src/codeimpact/__init__.py": "4e35a809f5601b124b14f41ef3f30beb28d6ad52c07e123ec8880a4df59a49c3",
+    "src/codeimpact/additive_exports.py": "04ef713ad252b862fe07f96588e5169fe2c36ba9f1e02f76cf80ce08162dd23e",
+    "src/codeimpact/analyzer.py": "7e06809e86e80ea35266458083c52e99b0b8c57c7335ca37c61a7810cb945310",
+    "src/codeimpact/arguments.py": "c88ef8bc3ed5133a561a65f4a8422a172fbbdee6b0aa781c3042b1b1910cccf0",
+    "src/codeimpact/call_arguments.py": "7bbc7cae209f02495de9b54b33d03b5cb96424bc911d7c875587d109eb3ceda0",
+    "src/codeimpact/descriptor_binding.py": "d6765891c4111302d1f318083bd5aad7b25b0d95cf6b1f992691f5534e4cc5a1",
+    "src/codeimpact/discovery.py": "ff16cc9bfc00c2ed9dd51d8ad102ec355fe8218f3fedd2d6c78942573ceb4ff7",
+    "src/codeimpact/dispatch_fallback.py": "f26bffd1bb006d5cffb4fa2b80fabf801ae86cfe6e7d847ad8a6530c272ab4ce",
+    "src/codeimpact/github.py": "3e037e74fb0a787fba4932842a1f7c5a5d7acb37a629303b18f2a941343b2269",
+    "src/codeimpact/mapping_protocols.py": "6bb18a227d4c237e06eeac67c96a8cf4cdf32e3ef870efc9b54942e4c7399cba",
+    "src/codeimpact/models.py": "bb9f0a102b189155346bb0c2a6ec880ea218c1c62d0f2eb8ce966805a8a94885",
+    "src/codeimpact/module_data.py": "6e55962ced153e53fdd787f85531dafa38157400ca669390a37798cbcaf15b91",
+    "src/codeimpact/partial_bindings.py": "53555e0025fffd428da9a280dee69322281e0828440ab15d2e4351b634baff86",
+    "src/codeimpact/selection.py": "a9d494f5e401cf8a9a6685d1515868f56c77c494ded7df442e4fe14a20a1c36c"
+  },
+  "annotations": {
+    "inflection_rules": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "test_inflection.py::test_pluralize_empty_string": "Conservative production-module evidence retains this early-return control; its unrelated test-module contribution was excluded. The literal empty input returns before pluralize reads PLURALS; no rule-table dependency on this path.",
+          "test_inflection.py::test_uncountability": "Conservative production-module evidence retains this early-return control; its unrelated test-module contribution was excluded. Parameters come from unchanged UNCOUNTABLES. Both pluralize and singularize return on these entries before consulting the edited rule tables."
+        }
+      },
+      "limitations": [
+        "Literal rule-table reads and changed parameter decorators remain conservative dependencies. Fourteen unrelated definitions are excluded after separately proving production and test-module contributions. Empty and uncountable inputs remain two draft false positives because this slice does not prune data reads by arguments. Labels remain agent drafts."
+      ]
+    },
+    "inflection_title": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "The parameter-table and set-cleanup proofs account for separate source dependencies in both revisions. Inter-test state and runner behavior are outside this static proof."
+      ]
+    },
+    "iso8601_errors": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition."
+      ]
+    },
+    "iso8601_validator": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {
+          "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Timezone-aware generated strings go to unchanged parse_date; no dependency on is_iso8601.",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes": "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls. Generated datetime strings go to unchanged parse_date; no validator call in this test or parse_date."
+        }
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "Adding a definition and changing exports retains module/import fallback to unchanged parser and offset controls.",
+        "Two Hypothesis tests keep package fallback because decorated execution is outside the proof. Labels remain drafts."
+      ]
+    },
+    "ordered_set_pop": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Static definition discovery is not pytest collection; runtime fixture, parametrization and inherited execution coverage remain outside scope.",
+        "Twelve newly included definitions have uncertain source-dependency labels because external/inherited routes are absent from the pinned source; these remain outside classified accuracy metrics.",
+        "The selected test_pop retains conservative module/import evidence; this milestone does not resolve instance dispatch or predict runtime failures."
+      ]
+    },
+    "ordered_set_syntax": {
+      "category": "known_limitation",
+      "known_discrepancies": {
+        "false_negatives": {},
+        "false_positives": {}
+      },
+      "limitations": [
+        "Agent-drafted source dependency labels; independent review pending. No upstream tests were run. Parameter variants count as one definition.",
+        "The base module has a syntax error. All discovered test labels concern module loadability, not observed runtime failures or per-method reachability."
+      ]
+    }
+  },
+  "discovery": {
+    "inflection_rules": {
+      "discovered_ids": [
+        "test_inflection.py::test_camelize",
+        "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+        "test_inflection.py::test_camelize_with_underscores",
+        "test_inflection.py::test_dasherize",
+        "test_inflection.py::test_humanize",
+        "test_inflection.py::test_ordinal",
+        "test_inflection.py::test_ordinalize",
+        "test_inflection.py::test_parameterize",
+        "test_inflection.py::test_parameterize_and_normalize",
+        "test_inflection.py::test_parameterize_with_custom_separator",
+        "test_inflection.py::test_parameterize_with_multi_character_separator",
+        "test_inflection.py::test_parameterize_with_no_separator",
+        "test_inflection.py::test_pluralize_empty_string",
+        "test_inflection.py::test_pluralize_plural",
+        "test_inflection.py::test_pluralize_plurals",
+        "test_inflection.py::test_pluralize_singular",
+        "test_inflection.py::test_singularize_plural",
+        "test_inflection.py::test_tableize",
+        "test_inflection.py::test_titleize",
+        "test_inflection.py::test_uncountability",
+        "test_inflection.py::test_uncountable_word_is_not_greedy",
+        "test_inflection.py::test_underscore"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 22,
+      "unparseable_files": []
+    },
+    "inflection_title": {
+      "discovered_ids": [
+        "test_inflection.py::test_camelize",
+        "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+        "test_inflection.py::test_camelize_with_underscores",
+        "test_inflection.py::test_dasherize",
+        "test_inflection.py::test_humanize",
+        "test_inflection.py::test_ordinal",
+        "test_inflection.py::test_ordinalize",
+        "test_inflection.py::test_parameterize",
+        "test_inflection.py::test_parameterize_and_normalize",
+        "test_inflection.py::test_parameterize_with_custom_separator",
+        "test_inflection.py::test_parameterize_with_multi_character_separator",
+        "test_inflection.py::test_parameterize_with_no_separator",
+        "test_inflection.py::test_pluralize_empty_string",
+        "test_inflection.py::test_pluralize_plural",
+        "test_inflection.py::test_pluralize_plurals",
+        "test_inflection.py::test_pluralize_singular",
+        "test_inflection.py::test_singularize_plural",
+        "test_inflection.py::test_tableize",
+        "test_inflection.py::test_titleize",
+        "test_inflection.py::test_uncountability",
+        "test_inflection.py::test_uncountable_word_is_not_greedy",
+        "test_inflection.py::test_underscore"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 22,
+      "unparseable_files": []
+    },
+    "iso8601_errors": {
+      "discovered_ids": [
+        "iso8601/test_iso8601.py::test_fixedoffset_eq",
+        "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone",
+        "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes",
+        "iso8601/test_iso8601.py::test_iso8601_regex",
+        "iso8601/test_iso8601.py::test_parse_invalid_date",
+        "iso8601/test_iso8601.py::test_parse_no_timezone_different_default",
+        "iso8601/test_iso8601.py::test_parse_utc_different_default",
+        "iso8601/test_iso8601.py::test_parse_valid_date"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 8,
+      "unparseable_files": []
+    },
+    "iso8601_validator": {
+      "discovered_ids": [
+        "iso8601/test_iso8601.py::test_fixedoffset_eq",
+        "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone",
+        "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes",
+        "iso8601/test_iso8601.py::test_iso8601_regex",
+        "iso8601/test_iso8601.py::test_parse_invalid_date",
+        "iso8601/test_iso8601.py::test_parse_no_timezone_different_default",
+        "iso8601/test_iso8601.py::test_parse_utc_different_default",
+        "iso8601/test_iso8601.py::test_parse_valid_date"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 8,
+      "unparseable_files": []
+    },
+    "ordered_set_pop": {
+      "discovered_ids": [
+        "test.py::test_binary_operations",
+        "test.py::test_bitwise_and_consistency",
+        "test.py::test_clear",
+        "test.py::test_comparisons",
+        "test.py::test_empty_pickle",
+        "test.py::test_empty_repr",
+        "test.py::test_eq_wrong_type",
+        "test.py::test_fancy_index_class",
+        "test.py::test_getitem_type_error",
+        "test.py::test_indexing",
+        "test.py::test_operator_consistency_difference",
+        "test.py::test_operator_consistency_disjoint",
+        "test.py::test_operator_consistency_isect",
+        "test.py::test_operator_consistency_subset",
+        "test.py::test_operator_consistency_superset",
+        "test.py::test_operator_consistency_union",
+        "test.py::test_operator_consistency_xor",
+        "test.py::test_order",
+        "test.py::test_ordered_equality",
+        "test.py::test_ordered_inequality",
+        "test.py::test_pandas_compat",
+        "test.py::test_pickle",
+        "test.py::test_pop",
+        "test.py::test_remove",
+        "test.py::test_remove_error",
+        "test.py::test_tuples",
+        "test.py::test_unordered_equality",
+        "test.py::test_unordered_inequality",
+        "test.py::test_update",
+        "test.py::test_update_value_error"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 30,
+      "unparseable_files": []
+    },
+    "ordered_set_syntax": {
+      "discovered_ids": [
+        "test/test_ordered_set.py::test_binary_operations",
+        "test/test_ordered_set.py::test_bitwise_and_consistency",
+        "test/test_ordered_set.py::test_clear",
+        "test/test_ordered_set.py::test_comparisons",
+        "test/test_ordered_set.py::test_empty_pickle",
+        "test/test_ordered_set.py::test_empty_repr",
+        "test/test_ordered_set.py::test_eq_wrong_type",
+        "test/test_ordered_set.py::test_fancy_index_class",
+        "test/test_ordered_set.py::test_getitem_type_error",
+        "test/test_ordered_set.py::test_indexing",
+        "test/test_ordered_set.py::test_operator_consistency_difference",
+        "test/test_ordered_set.py::test_operator_consistency_disjoint",
+        "test/test_ordered_set.py::test_operator_consistency_isect",
+        "test/test_ordered_set.py::test_operator_consistency_subset",
+        "test/test_ordered_set.py::test_operator_consistency_superset",
+        "test/test_ordered_set.py::test_operator_consistency_union",
+        "test/test_ordered_set.py::test_operator_consistency_xor",
+        "test/test_ordered_set.py::test_order",
+        "test/test_ordered_set.py::test_ordered_equality",
+        "test/test_ordered_set.py::test_ordered_inequality",
+        "test/test_ordered_set.py::test_pandas_compat",
+        "test/test_ordered_set.py::test_pickle",
+        "test/test_ordered_set.py::test_pop",
+        "test/test_ordered_set.py::test_remove",
+        "test/test_ordered_set.py::test_remove_error",
+        "test/test_ordered_set.py::test_tuples",
+        "test/test_ordered_set.py::test_unordered_equality",
+        "test/test_ordered_set.py::test_unordered_inequality",
+        "test/test_ordered_set.py::test_update",
+        "test/test_ordered_set.py::test_update_value_error"
+      ],
+      "outside_discovery": {},
+      "test_shaped_definition_count": 30,
+      "unparseable_files": []
+    }
+  },
+  "expected_unclassified_recommendations": [],
+  "explanation": "Audit one literal string-set insertion with immediate matching finally cleanup in both revisions. The unchanged titleize path is retained and the only removed recommendation is the unrelated set-mutation test.",
+  "frozen_inputs_sha256": "b62a8dbfd1695ae2aa8d9ea7e9bc1e295ec81ccfa882bbcd95e9089713eac17b",
+  "labels_sha256": "bb40f5912e4cc8e535c8aa908db2c44871a355336ca9f4457df862356653b879",
+  "measurement": {
+    "analysis_sha256": {
+      "inflection_rules": "e74670bc394ac30f73dd0657aa9824990c6e62e73343960abe50bd894fc3e126",
+      "inflection_title": "58a8cbd365ed42ed18a28b0b91cce6acbe8e877b531cdf553ad4474efe78ccb2",
+      "iso8601_errors": "4b938420ea57fdeb2dc7df56157892d4db26f88a367444a490085cae2f791093",
+      "iso8601_validator": "c1fc36778c24c011f7e2c4b56c563f584b0f1768e99aa1ccbbb21d78cf39d558",
+      "ordered_set_pop": "59180be41377ca9b7749263b4143f5ee86a1fef1155fd48f8572be70690ed8be",
+      "ordered_set_syntax": "7943a20b8f34b21c5049cb3ed4b76a0d658ccab100e8bd6d440463d0b529c21b"
+    },
+    "cases": [
+      {
+        "change_url": "https://github.com/jpvanhal/inflection/commit/1969b3a06a9ff06d023863e388cf8af01978d297",
+        "coverage": {
+          "base": {
+            "commit": "2d2d37951f6c8871d27a1c74a2c0c1fe6a9354fb",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+              "spdx": "MIT",
+              "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 11,
+            "python_bytes": 32243,
+            "python_files": 4,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "d4f8bcf400b80b1d664deab4298f36624a003b6b"
+          },
+          "head": {
+            "commit": "1969b3a06a9ff06d023863e388cf8af01978d297",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+              "spdx": "MIT",
+              "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 11,
+            "python_bytes": 32348,
+            "python_files": 4,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "a01f38e75eb5bbd59839aa3186c455c0bbc48d00"
+          }
+        },
+        "id": "inflection_rules",
+        "label_review": {
+          "author": "Codex (agent draft, November 14, 2026)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "06a2d53a2397dc754219ac7538efdec41fdb5ebc1c264b835c1e9062a8d4f0e1",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 14,
+            "tp": 6,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 8,
+            "numerator": 6,
+            "value": 0.75
+          },
+          "recall": {
+            "denominator": 6,
+            "numerator": 6,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 8
+        },
+        "repository": "jpvanhal/inflection",
+        "selected_count": 8,
+        "selected_test_ids": [
+          "test_inflection.py::test_pluralize_empty_string",
+          "test_inflection.py::test_pluralize_plural",
+          "test_inflection.py::test_pluralize_plurals",
+          "test_inflection.py::test_pluralize_singular",
+          "test_inflection.py::test_singularize_plural",
+          "test_inflection.py::test_tableize",
+          "test_inflection.py::test_uncountability",
+          "test_inflection.py::test_uncountable_word_is_not_greedy"
+        ],
+        "test_count": 22,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/jpvanhal/inflection/commit/e32443bb7dc1ba91a15336b5baab908d25f4b93a",
+        "coverage": {
+          "base": {
+            "commit": "1969b3a06a9ff06d023863e388cf8af01978d297",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+              "spdx": "MIT",
+              "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 11,
+            "python_bytes": 32348,
+            "python_files": 4,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "a01f38e75eb5bbd59839aa3186c455c0bbc48d00"
+          },
+          "head": {
+            "commit": "e32443bb7dc1ba91a15336b5baab908d25f4b93a",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148",
+              "spdx": "MIT",
+              "text": "Copyright (C) 2012-2015 Janne Vanhala\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+            },
+            "non_python_blob_count": 11,
+            "python_bytes": 32445,
+            "python_files": 4,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "1c5d9ddf0e0096e37f11da05e10aace23cff589b"
+          }
+        },
+        "id": "inflection_title",
+        "label_review": {
+          "author": "Codex (agent draft, November 14, 2026)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "4f521b67239bc737ddf718fd76d093f45767f6c4210e8832bac061e68f47e698",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 21,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Resolved call path": 1
+        },
+        "repository": "jpvanhal/inflection",
+        "selected_count": 1,
+        "selected_test_ids": [
+          "test_inflection.py::test_titleize"
+        ],
+        "test_count": 22,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/micktwomey/pyiso8601/commit/fde429d40d82057d2507c657b9a7bbd30e369aa8",
+        "coverage": {
+          "base": {
+            "commit": "21f536815328987631d374421d928aab2255e3da",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 17,
+            "python_bytes": 25247,
+            "python_files": 6,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "dcedc4a04cb8284dee591c3a7069e414599a65d9"
+          },
+          "head": {
+            "commit": "fde429d40d82057d2507c657b9a7bbd30e369aa8",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 17,
+            "python_bytes": 25259,
+            "python_files": 6,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "20335c77d93d6e7e36abc02874f6ede493ce41a7"
+          }
+        },
+        "id": "iso8601_errors",
+        "label_review": {
+          "author": "Codex (agent draft, November 14, 2026)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "1a8505dca9133aeb4312f6133ebc9942e65a62f3ea8fb92267bbadc5f5381604",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 6,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Resolved call path": 2
+        },
+        "repository": "micktwomey/pyiso8601",
+        "selected_count": 2,
+        "selected_test_ids": [
+          "iso8601/test_iso8601.py::test_parse_invalid_date",
+          "iso8601/test_iso8601.py::test_parse_valid_date"
+        ],
+        "test_count": 8,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/micktwomey/pyiso8601/commit/21f536815328987631d374421d928aab2255e3da",
+        "coverage": {
+          "base": {
+            "commit": "406db6f23ffbf6815a320c30be070b89d28e2974",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 17,
+            "python_bytes": 24762,
+            "python_files": 6,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "89acfd46be3516fff7bdd7eb4c410c6e232c9ba4"
+          },
+          "head": {
+            "commit": "21f536815328987631d374421d928aab2255e3da",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "516b02cd11e78c37a04f9effadd85af0483dda7ab1e715eef1cc94f97dc49e13",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2007 - 2022 Michael Twomey\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 17,
+            "python_bytes": 25247,
+            "python_files": 6,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "dcedc4a04cb8284dee591c3a7069e414599a65d9"
+          }
+        },
+        "id": "iso8601_validator",
+        "label_review": {
+          "author": "Codex (agent draft, November 14, 2026)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "1a8505dca9133aeb4312f6133ebc9942e65a62f3ea8fb92267bbadc5f5381604",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 4,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 4,
+            "numerator": 2,
+            "value": 0.5
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 2,
+          "Test itself changed": 2
+        },
+        "repository": "micktwomey/pyiso8601",
+        "selected_count": 4,
+        "selected_test_ids": [
+          "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes",
+          "iso8601/test_iso8601.py::test_parse_invalid_date",
+          "iso8601/test_iso8601.py::test_parse_valid_date"
+        ],
+        "test_count": 8,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      },
+      {
+        "change_url": "https://github.com/rspeer/ordered-set/commit/1f93c9d7376dec495e1573c9c02837bce96e1c9f",
+        "coverage": {
+          "base": {
+            "commit": "34f08cef01e5a555c8441ac0bfd9d950ed823164",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "MIT-LICENSE",
+              "sha256": "4ef444eea51250171dd2896cef080d7f7cc31042565bb92fed60d1c92acc0411",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2018 Luminoso Technologies, Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 28531,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "f4deaa8434a14fa5eb4fe44d15f7b84c2c6949d2"
+          },
+          "head": {
+            "commit": "1f93c9d7376dec495e1573c9c02837bce96e1c9f",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "MIT-LICENSE",
+              "sha256": "4ef444eea51250171dd2896cef080d7f7cc31042565bb92fed60d1c92acc0411",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2018 Luminoso Technologies, Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 28598,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "f251492ae7629c6d4aae3345663b39d61b04feea"
+          }
+        },
+        "id": "ordered_set_pop",
+        "label_review": {
+          "author": "Codex (source-only discovery extension; see versioned label receipt)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "135606d0961ab1b492f5a0a15a4eb5bbc1f2e596226ea8145243d8537b13f4ac",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 17,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 1
+        },
+        "repository": "rspeer/ordered-set",
+        "selected_count": 1,
+        "selected_test_ids": [
+          "test.py::test_pop"
+        ],
+        "test_count": 30,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 12,
+        "unclassified_test_ids": [
+          "test.py::test_binary_operations",
+          "test.py::test_comparisons",
+          "test.py::test_empty_pickle",
+          "test.py::test_operator_consistency_difference",
+          "test.py::test_operator_consistency_disjoint",
+          "test.py::test_operator_consistency_subset",
+          "test.py::test_operator_consistency_superset",
+          "test.py::test_operator_consistency_union",
+          "test.py::test_operator_consistency_xor",
+          "test.py::test_pickle",
+          "test.py::test_remove",
+          "test.py::test_remove_error"
+        ]
+      },
+      {
+        "change_url": "https://github.com/rspeer/ordered-set/commit/b6bb881ea69c8ddde087691c1bfd5e37952ca928",
+        "coverage": {
+          "base": {
+            "commit": "8c837171201e3d089630e8b67645cb813b57c8dd",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "MIT-LICENSE",
+              "sha256": "0cf8f55f36dc1306b3fe89bf29e29a0c742f279f038d149244319e593ab16ca4",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2012-2022 Elia Robyn Lake\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 28932,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "e7c0164fc97250b04ee2603caf88158ef67c97a5"
+          },
+          "head": {
+            "commit": "b6bb881ea69c8ddde087691c1bfd5e37952ca928",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "MIT-LICENSE",
+              "sha256": "0cf8f55f36dc1306b3fe89bf29e29a0c742f279f038d149244319e593ab16ca4",
+              "spdx": "MIT",
+              "text": "Copyright (c) 2012-2022 Elia Robyn Lake\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the \"Software\"),\nto deal in the Software without restriction, including without limitation\nthe rights to use, copy, modify, merge, publish, distribute, sublicense,\nand/or sell copies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 28933,
+            "python_files": 3,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "8f4ad5990f3318a7c5d8a83c954af6b8598d8380"
+          }
+        },
+        "id": "ordered_set_syntax",
+        "label_review": {
+          "author": "Codex (agent draft, November 14, 2026)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "bfee4b6be5ef0e239fe30ac5478abd02c7e9d3dd8c9d65a057a2d1b8a1b9de39",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 30,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 30,
+            "numerator": 30,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 30,
+            "numerator": 30,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Resolved call path": 30
+        },
+        "repository": "rspeer/ordered-set",
+        "selected_count": 30,
+        "selected_test_ids": [
+          "test/test_ordered_set.py::test_binary_operations",
+          "test/test_ordered_set.py::test_bitwise_and_consistency",
+          "test/test_ordered_set.py::test_clear",
+          "test/test_ordered_set.py::test_comparisons",
+          "test/test_ordered_set.py::test_empty_pickle",
+          "test/test_ordered_set.py::test_empty_repr",
+          "test/test_ordered_set.py::test_eq_wrong_type",
+          "test/test_ordered_set.py::test_fancy_index_class",
+          "test/test_ordered_set.py::test_getitem_type_error",
+          "test/test_ordered_set.py::test_indexing",
+          "test/test_ordered_set.py::test_operator_consistency_difference",
+          "test/test_ordered_set.py::test_operator_consistency_disjoint",
+          "test/test_ordered_set.py::test_operator_consistency_isect",
+          "test/test_ordered_set.py::test_operator_consistency_subset",
+          "test/test_ordered_set.py::test_operator_consistency_superset",
+          "test/test_ordered_set.py::test_operator_consistency_union",
+          "test/test_ordered_set.py::test_operator_consistency_xor",
+          "test/test_ordered_set.py::test_order",
+          "test/test_ordered_set.py::test_ordered_equality",
+          "test/test_ordered_set.py::test_ordered_inequality",
+          "test/test_ordered_set.py::test_pandas_compat",
+          "test/test_ordered_set.py::test_pickle",
+          "test/test_ordered_set.py::test_pop",
+          "test/test_ordered_set.py::test_remove",
+          "test/test_ordered_set.py::test_remove_error",
+          "test/test_ordered_set.py::test_tuples",
+          "test/test_ordered_set.py::test_unordered_equality",
+          "test/test_ordered_set.py::test_unordered_inequality",
+          "test/test_ordered_set.py::test_update",
+          "test/test_ordered_set.py::test_update_value_error"
+        ],
+        "test_count": 30,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": []
+      }
+    ],
+    "classifications": {
+      "inflection_rules": {
+        "false_negatives": [],
+        "false_positives": [
+          "test_inflection.py::test_pluralize_empty_string",
+          "test_inflection.py::test_uncountability"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 14,
+            "tp": 6,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 8,
+            "numerator": 6,
+            "value": 0.75
+          },
+          "recall": {
+            "denominator": 6,
+            "numerator": 6,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "test_inflection.py::test_camelize",
+          "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+          "test_inflection.py::test_camelize_with_underscores",
+          "test_inflection.py::test_dasherize",
+          "test_inflection.py::test_humanize",
+          "test_inflection.py::test_ordinal",
+          "test_inflection.py::test_ordinalize",
+          "test_inflection.py::test_parameterize",
+          "test_inflection.py::test_parameterize_and_normalize",
+          "test_inflection.py::test_parameterize_with_custom_separator",
+          "test_inflection.py::test_parameterize_with_multi_character_separator",
+          "test_inflection.py::test_parameterize_with_no_separator",
+          "test_inflection.py::test_titleize",
+          "test_inflection.py::test_underscore"
+        ],
+        "true_positives": [
+          "test_inflection.py::test_pluralize_plural",
+          "test_inflection.py::test_pluralize_plurals",
+          "test_inflection.py::test_pluralize_singular",
+          "test_inflection.py::test_singularize_plural",
+          "test_inflection.py::test_tableize",
+          "test_inflection.py::test_uncountable_word_is_not_greedy"
+        ],
+        "unclassified_recommendations": []
+      },
+      "inflection_title": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 21,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "test_inflection.py::test_camelize",
+          "test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+          "test_inflection.py::test_camelize_with_underscores",
+          "test_inflection.py::test_dasherize",
+          "test_inflection.py::test_humanize",
+          "test_inflection.py::test_ordinal",
+          "test_inflection.py::test_ordinalize",
+          "test_inflection.py::test_parameterize",
+          "test_inflection.py::test_parameterize_and_normalize",
+          "test_inflection.py::test_parameterize_with_custom_separator",
+          "test_inflection.py::test_parameterize_with_multi_character_separator",
+          "test_inflection.py::test_parameterize_with_no_separator",
+          "test_inflection.py::test_pluralize_empty_string",
+          "test_inflection.py::test_pluralize_plural",
+          "test_inflection.py::test_pluralize_plurals",
+          "test_inflection.py::test_pluralize_singular",
+          "test_inflection.py::test_singularize_plural",
+          "test_inflection.py::test_tableize",
+          "test_inflection.py::test_uncountability",
+          "test_inflection.py::test_uncountable_word_is_not_greedy",
+          "test_inflection.py::test_underscore"
+        ],
+        "true_positives": [
+          "test_inflection.py::test_titleize"
+        ],
+        "unclassified_recommendations": []
+      },
+      "iso8601_errors": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 6,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "iso8601/test_iso8601.py::test_fixedoffset_eq",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes",
+          "iso8601/test_iso8601.py::test_iso8601_regex",
+          "iso8601/test_iso8601.py::test_parse_no_timezone_different_default",
+          "iso8601/test_iso8601.py::test_parse_utc_different_default"
+        ],
+        "true_positives": [
+          "iso8601/test_iso8601.py::test_parse_invalid_date",
+          "iso8601/test_iso8601.py::test_parse_valid_date"
+        ],
+        "unclassified_recommendations": []
+      },
+      "iso8601_validator": {
+        "false_negatives": [],
+        "false_positives": [
+          "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone",
+          "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 4,
+            "tp": 2,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 4,
+            "numerator": 2,
+            "value": 0.5
+          },
+          "recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "iso8601/test_iso8601.py::test_fixedoffset_eq",
+          "iso8601/test_iso8601.py::test_iso8601_regex",
+          "iso8601/test_iso8601.py::test_parse_no_timezone_different_default",
+          "iso8601/test_iso8601.py::test_parse_utc_different_default"
+        ],
+        "true_positives": [
+          "iso8601/test_iso8601.py::test_parse_invalid_date",
+          "iso8601/test_iso8601.py::test_parse_valid_date"
+        ],
+        "unclassified_recommendations": []
+      },
+      "ordered_set_pop": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 17,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [
+          "test.py::test_bitwise_and_consistency",
+          "test.py::test_clear",
+          "test.py::test_empty_repr",
+          "test.py::test_eq_wrong_type",
+          "test.py::test_fancy_index_class",
+          "test.py::test_getitem_type_error",
+          "test.py::test_indexing",
+          "test.py::test_operator_consistency_isect",
+          "test.py::test_order",
+          "test.py::test_ordered_equality",
+          "test.py::test_ordered_inequality",
+          "test.py::test_pandas_compat",
+          "test.py::test_tuples",
+          "test.py::test_unordered_equality",
+          "test.py::test_unordered_inequality",
+          "test.py::test_update",
+          "test.py::test_update_value_error"
+        ],
+        "true_positives": [
+          "test.py::test_pop"
+        ],
+        "unclassified_recommendations": []
+      },
+      "ordered_set_syntax": {
+        "false_negatives": [],
+        "false_positives": [],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "tp": 30,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 30,
+            "numerator": 30,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 30,
+            "numerator": 30,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "test/test_ordered_set.py::test_binary_operations",
+          "test/test_ordered_set.py::test_bitwise_and_consistency",
+          "test/test_ordered_set.py::test_clear",
+          "test/test_ordered_set.py::test_comparisons",
+          "test/test_ordered_set.py::test_empty_pickle",
+          "test/test_ordered_set.py::test_empty_repr",
+          "test/test_ordered_set.py::test_eq_wrong_type",
+          "test/test_ordered_set.py::test_fancy_index_class",
+          "test/test_ordered_set.py::test_getitem_type_error",
+          "test/test_ordered_set.py::test_indexing",
+          "test/test_ordered_set.py::test_operator_consistency_difference",
+          "test/test_ordered_set.py::test_operator_consistency_disjoint",
+          "test/test_ordered_set.py::test_operator_consistency_isect",
+          "test/test_ordered_set.py::test_operator_consistency_subset",
+          "test/test_ordered_set.py::test_operator_consistency_superset",
+          "test/test_ordered_set.py::test_operator_consistency_union",
+          "test/test_ordered_set.py::test_operator_consistency_xor",
+          "test/test_ordered_set.py::test_order",
+          "test/test_ordered_set.py::test_ordered_equality",
+          "test/test_ordered_set.py::test_ordered_inequality",
+          "test/test_ordered_set.py::test_pandas_compat",
+          "test/test_ordered_set.py::test_pickle",
+          "test/test_ordered_set.py::test_pop",
+          "test/test_ordered_set.py::test_remove",
+          "test/test_ordered_set.py::test_remove_error",
+          "test/test_ordered_set.py::test_tuples",
+          "test/test_ordered_set.py::test_unordered_equality",
+          "test/test_ordered_set.py::test_unordered_inequality",
+          "test/test_ordered_set.py::test_update",
+          "test/test_ordered_set.py::test_update_value_error"
+        ],
+        "unclassified_recommendations": []
+      }
+    },
+    "repositories": {
+      "jpvanhal/inflection": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 35,
+            "tp": 7,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 9,
+            "numerator": 7,
+            "value": 0.7777777777777778
+          },
+          "recall": {
+            "denominator": 7,
+            "numerator": 7,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 8,
+          "Resolved call path": 1
+        },
+        "selected_count": 9,
+        "selected_tests": [
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_pluralize_empty_string"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_pluralize_plural"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_pluralize_plurals"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_pluralize_singular"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_singularize_plural"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_tableize"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_uncountability"
+          },
+          {
+            "case": "inflection_rules",
+            "test_id": "test_inflection.py::test_uncountable_word_is_not_greedy"
+          },
+          {
+            "case": "inflection_title",
+            "test_id": "test_inflection.py::test_titleize"
+          }
+        ],
+        "test_count": 44,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0
+      },
+      "micktwomey/pyiso8601": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 2,
+            "tn": 10,
+            "tp": 4,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 6,
+            "numerator": 4,
+            "value": 0.6666666666666666
+          },
+          "recall": {
+            "denominator": 4,
+            "numerator": 4,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 2,
+          "Resolved call path": 2,
+          "Test itself changed": 2
+        },
+        "selected_count": 6,
+        "selected_tests": [
+          {
+            "case": "iso8601_errors",
+            "test_id": "iso8601/test_iso8601.py::test_parse_invalid_date"
+          },
+          {
+            "case": "iso8601_errors",
+            "test_id": "iso8601/test_iso8601.py::test_parse_valid_date"
+          },
+          {
+            "case": "iso8601_validator",
+            "test_id": "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone"
+          },
+          {
+            "case": "iso8601_validator",
+            "test_id": "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes"
+          },
+          {
+            "case": "iso8601_validator",
+            "test_id": "iso8601/test_iso8601.py::test_parse_invalid_date"
+          },
+          {
+            "case": "iso8601_validator",
+            "test_id": "iso8601/test_iso8601.py::test_parse_valid_date"
+          }
+        ],
+        "test_count": 16,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0
+      },
+      "rspeer/ordered-set": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 0,
+            "tn": 17,
+            "tp": 31,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 31,
+            "numerator": 31,
+            "value": 1.0
+          },
+          "recall": {
+            "denominator": 31,
+            "numerator": 31,
+            "value": 1.0
+          }
+        },
+        "reason_counts": {
+          "Conservative module/import dependency": 1,
+          "Resolved call path": 30
+        },
+        "selected_count": 31,
+        "selected_tests": [
+          {
+            "case": "ordered_set_pop",
+            "test_id": "test.py::test_pop"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_binary_operations"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_bitwise_and_consistency"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_clear"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_comparisons"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_empty_pickle"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_empty_repr"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_eq_wrong_type"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_fancy_index_class"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_getitem_type_error"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_indexing"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_difference"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_disjoint"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_isect"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_subset"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_superset"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_union"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_operator_consistency_xor"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_order"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_ordered_equality"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_ordered_inequality"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_pandas_compat"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_pickle"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_pop"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_remove"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_remove_error"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_tuples"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_unordered_equality"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_unordered_inequality"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_update"
+          },
+          {
+            "case": "ordered_set_syntax",
+            "test_id": "test/test_ordered_set.py::test_update_value_error"
+          }
+        ],
+        "test_count": 60,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 12
+      }
+    },
+    "summary": {
+      "case_count": 6,
+      "label_status_counts": {
+        "draft": 6
+      },
+      "metrics": {
+        "counts": {
+          "fn": 0,
+          "fp": 4,
+          "tn": 62,
+          "tp": 42,
+          "unclassified_recommendations": 0
+        },
+        "precision": {
+          "denominator": 46,
+          "numerator": 42,
+          "value": 0.9130434782608695
+        },
+        "recall": {
+          "denominator": 42,
+          "numerator": 42,
+          "value": 1.0
+        }
+      },
+      "reason_counts": {
+        "Conservative module/import dependency": 11,
+        "Resolved call path": 33,
+        "Test itself changed": 2
+      },
+      "selected_count": 46,
+      "selected_tests": [
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_pluralize_empty_string"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_pluralize_plural"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_pluralize_plurals"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_pluralize_singular"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_singularize_plural"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_tableize"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_uncountability"
+        },
+        {
+          "case": "inflection_rules",
+          "test_id": "test_inflection.py::test_uncountable_word_is_not_greedy"
+        },
+        {
+          "case": "inflection_title",
+          "test_id": "test_inflection.py::test_titleize"
+        },
+        {
+          "case": "iso8601_errors",
+          "test_id": "iso8601/test_iso8601.py::test_parse_invalid_date"
+        },
+        {
+          "case": "iso8601_errors",
+          "test_id": "iso8601/test_iso8601.py::test_parse_valid_date"
+        },
+        {
+          "case": "iso8601_validator",
+          "test_id": "iso8601/test_iso8601.py::test_hypothesis_valid_datetimes_with_timezone"
+        },
+        {
+          "case": "iso8601_validator",
+          "test_id": "iso8601/test_iso8601.py::test_hypothesis_valid_naive_datetimes"
+        },
+        {
+          "case": "iso8601_validator",
+          "test_id": "iso8601/test_iso8601.py::test_parse_invalid_date"
+        },
+        {
+          "case": "iso8601_validator",
+          "test_id": "iso8601/test_iso8601.py::test_parse_valid_date"
+        },
+        {
+          "case": "ordered_set_pop",
+          "test_id": "test.py::test_pop"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_binary_operations"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_bitwise_and_consistency"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_clear"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_comparisons"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_empty_pickle"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_empty_repr"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_eq_wrong_type"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_fancy_index_class"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_getitem_type_error"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_indexing"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_difference"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_disjoint"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_isect"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_subset"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_superset"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_union"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_operator_consistency_xor"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_order"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_ordered_equality"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_ordered_inequality"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_pandas_compat"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_pickle"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_pop"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_remove"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_remove_error"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_tuples"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_unordered_equality"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_unordered_inequality"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_update"
+        },
+        {
+          "case": "ordered_set_syntax",
+          "test_id": "test/test_ordered_set.py::test_update_value_error"
+        }
+      ],
+      "test_count": 120,
+      "unclassified_recommendation_count": 0,
+      "unclassified_test_count": 12
+    }
+  },
+  "name": "set-cleanup-v1",
+  "previous_baseline_sha256": "465c4f5b89b48e3aa6ef2be8b9dd6d049b70f478251e18c50f719977e1bdb63a",
+  "schema_version": "1.0",
+  "v2_replay_sha256": "cc8690d41415e84b9bb6cddd3f679df6abdfd4d5733909686ba125b3cffed578"
+}

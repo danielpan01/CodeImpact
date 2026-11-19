@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from codeimpact.corpus import StrictModel
-from codeimpact.fresh_evaluate import PROJECT, file_hash
+from codeimpact.fresh_evaluate import PROJECT, file_hash, replay_source_matches
 from codeimpact.holdout_evaluate import safe_file
 from codeimpact.models import Edge
 from codeimpact.parameter_rows_evaluate import ENGINE as ROWS_ENGINE
@@ -75,7 +75,12 @@ def evaluate_reexports(
     )
     require(set(baseline.analyzer_sha256) == ENGINE, "Re-export engine inventory differs")
     for path, expected in baseline.analyzer_sha256.items():
-        require(file_hash(PROJECT / path) == expected, f"Re-export analyzer changed: {path}")
+        matches = (
+            replay_source_matches(PROJECT, path, expected)
+            if path == "src/codeimpact/module_data.py"
+            else file_hash(PROJECT / path) == expected
+        )
+        require(matches, f"Re-export analyzer changed: {path}")
     previous = evaluate_rows(directory)
     require(
         not previous["evaluation"]["regressions"]

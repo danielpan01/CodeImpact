@@ -3870,3 +3870,80 @@ The macOS skip covers Linux-only address-space enforcement. Existing
 warnings are the Starlette/httpx test-client deprecation and Playwright's
 `NO_COLOR` / `FORCE_COLOR` notice. Local logs are under
 `reports/reexports-*`. The implementation was handed off unstaged and uncommitted.
+
+## Humanize package initialization audit
+
+Clean main and its tracking ref began at PR #27,
+`4b712eea8e9c9e231430610c42cac8470fcb300b`. Fifteen metadata and license
+files matched both pinned Git trees by blob ID and byte length. The audit
+found unpinned setuptools declarations, no dependency lock or constraints
+file, and no installed-version record in either exact-SHA Actions query.
+It traced the import before the export, captured child module initialization,
+the distribution lookup after the export, and the i18n sibling tests'
+`importlib` usage. The source did not establish a narrower resolved call.
+The decision was to retain the existing analyzer and gate. This is a
+documentation-only audit. [Source-linked audit](HUMANIZE_INITIALIZATION_AUDIT.md)
+
+| Verification | Observed result |
+| --- | --- |
+| `make evaluate-real-v4-reexports` | 20/33 selected in Humanize small delta with one changed-test path and 19 conservative paths. The existing receipt matched. |
+| Historical reports and protected files | All nine report files matched their starting bytes. All 332 tracked source, test, corpus, benchmark, web and build files checked matched their starting SHA-256 hashes. |
+| Two hash seeds and reversed files | Under seeds 7 and 173, all nine offline evaluations reproduced the starting report bytes. All 73 reversed-file case replays per seed matched excluding only `stats.elapsed_ms`, with typed evidence validated. |
+| Whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+External metadata and reproducibility logs are under the ignored local
+`reports/humanize-init-audit/` directory. The frozen snapshots, draft labels
+and receipts were preserved. The next roadmap candidate is the remaining
+draft false positive in v3's `inflection_title` case.
+
+## Inflection set mutation and finally cleanup
+
+Started from main at `4b712eea8e9c9e231430610c42cac8470fcb300b` with the
+earlier uncommitted Humanize audit in the working tree. Replayed the pinned
+`parameter-tables-v1` titleize analysis and validated both recommendation paths
+before changing the engine. The first focused run showed one failing positive
+control: the plain literal-set insertion and matching cleanup still selected
+the unrelated test. Nineteen controls passed. Upstream Python was read as data.
+[Source trace, proof boundaries and exact evidence](SET_CLEANUP_REVIEW.md)
+
+The `set-cleanup-v1` successor removes only
+`test_inflection.py::test_uncountable_word_is_not_greedy` in `inflection_title`.
+The case is 1/22 selected, with 1 TP, 0 FP, 0 FN and 21 TN. Its sole resolved
+recommendation retains its exact score and evidence. Expanded v3 is 46/120,
+with 42 TP, 4 FP, 0 FN and 62 TN. All 12 uncertain definitions remain
+unselected. The other five v3 analysis hashes match. The original snapshots,
+provenance and draft labels are preserved. Independent review remains pending.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused table, pinned evidence and v3 replay regressions | 105 passed |
+| Focused benchmark preservation checks | 3 passed after linking the new corpus receipt to the existing source-hash chain. |
+| Final `make check` | Passed Ruff, strict mypy across 34 source files, Python tests, TypeScript and the production build. Python reported 1,212 passed, one expected skip, one warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. Eight current reports matched their predecessor bytes. V3 wrote `real-v3-set-cleanup-v1-evaluation.json`, and its previous report was preserved. |
+| Hash seeds 7 and 173 and reversed inputs | Each seed reproduced all nine current report files byte for byte. All 73 reversed-file replays per seed matched with only `stats.elapsed_ms` excluded, and every recommendation passed typed evidence validation. |
+| `make verify-pilot` | Passed readiness, public demo, protected snapshot analysis, exact report and storage checks. |
+| Frontend formatting | Passed. |
+| Full desktop/mobile browser suite | 253 passed across all five projects after updating the exact pilot expectation. |
+| Canonical Linux ARM64 visual and accessibility checks | 16 visual comparisons and 48 accessibility checks passed. Axe reported zero enabled-rule violations and six incomplete color-contrast assessments. |
+| Historical integrity | All 162 existing tracked corpus files and all nine previous reports matched their starting bytes. Existing benchmark receipts, visual baselines and frontend application source matched HEAD. |
+| Final whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+The first native browser run was interrupted after sandbox browser launches
+failed with `SIGABRT` and `EPERM`. It recorded 83 failures, 22 passes,
+6 interrupted tests and 142 unrun tests. The authorized run then exposed the
+pilot test's stale expectation of two titleize-case rows. That run stopped after
+2 failures, 134 passes, 1 interrupted test and 116 unrun tests. The pilot test
+now requires exactly one `test_titleize` row. The other pilot assertions and
+browser settings still apply.
+
+The first `make check` flagged the preservation test's expected corpus
+inventory. A [successor preservation receipt](../benchmarks/set-cleanup-v1-preservation.json)
+pins the new baseline and changed source hashes, with the project’s existing
+receipt chain intact.
+
+The expected macOS skip is the Linux-only address-space enforcement test.
+The existing Starlette TestClient deprecation and Playwright `NO_COLOR` /
+`FORCE_COLOR` warnings were observed.
+
+Logs and reproducibility receipts are under the ignored local
+`reports/titleize-set-cleanup/` directory.

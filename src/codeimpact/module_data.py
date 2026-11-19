@@ -184,6 +184,19 @@ def deferred_body_edit(before: "Index", after: "Index", path: str) -> str | None
     return edited
 
 
+def qualified_mutation(stmt: ast.stmt, method: str) -> tuple[ast.Attribute, ast.expr] | None:
+    match stmt:
+        case ast.Expr(
+            value=ast.Call(
+                func=ast.Attribute(value=ast.Attribute(value=ast.Name()) as receiver, attr=name),
+                args=[key],
+                keywords=[],
+            )
+        ) if name == method:
+            return receiver, key
+    return None
+
+
 class Query:
     def __init__(
         self,
@@ -197,6 +210,7 @@ class Query:
         self.safe_modules = safe_modules
         self.body_edits = body_edits
         self.used_body_edit = False
+        self.auditing_set_cleanup = False
         self.changed = {(path, name) for name in names}
         self.modules: dict[str, Scope] = {}
         self.initializing: set[str] = set()
@@ -432,11 +446,11 @@ class Query:
         self.tick()
         node = fn.node
         if (
-            eager
+            (eager or self.auditing_set_cleanup)
             and isinstance(node, ast.FunctionDef)
             and self.body_edits.get(fn.scope.path) == node.name
         ):
-            raise Unknown("initializer can invoke an edited function")
+            raise Unknown("initializer or guarded assertion can invoke an edited function")
         for v in [*args, *kwargs.values()]:
             self.data(v)
         if (node, eager) in self.stack:
@@ -645,10 +659,91 @@ class Query:
         self.header(node, module, False)
         if node.args.args and not node.decorator_list:
             return False
-        self.function(Function(node, module), [DATA] * len(node.args.args), {}, False)
+        if not (self.used_body_edit and self.restored_set_test(node, module)):
+            self.function(Function(node, module), [DATA] * len(node.args.args), {}, False)
         if self.used_body_edit:
             self.only_parameter_references(path)
         return True
+
+    def restored_set_test(self, node: ast.FunctionDef, module: Scope) -> bool:
+        """Audit one literal insertion guarded by immediate try/finally cleanup."""
+        args = node.args
+        if node.decorator_list or args.args or args.posonlyargs or args.kwonlyargs:
+            return False
+        if args.vararg or args.kwarg or len(node.body) < 2:
+            return False
+        insert, guard = node.body[-2:]
+        if (
+            not isinstance(guard, ast.Try)
+            or guard.handlers
+            or guard.orelse
+            or len(guard.finalbody) != 1
+            or not (add := qualified_mutation(insert, "add"))
+            or not (remove := qualified_mutation(guard.finalbody[0], "remove"))
+            or tuple(map(ast.dump, add)) != tuple(map(ast.dump, remove))
+        ):
+            return False
+
+        local = Scope(module.path, parent=module)
+        strings: dict[str, str] = {}
+        for stmt in node.body[:-2]:
+            self.tick()
+            match stmt:
+                case ast.Assign(
+                    targets=[ast.Name(id=name)], value=ast.Constant(value=str() as text)
+                ):
+                    if name in strings:
+                        raise Unknown("rebound set key or receiver")
+                    strings[name] = text
+                    local.values[name] = DATA
+                case _:
+                    raise Unknown("unproved setup before set insertion")
+
+        receiver, key = add
+        owner = self.expr(receiver.value, local, False)
+        if not isinstance(owner, Module) or owner.path not in self.body_edits:
+            raise Unknown("unproved set owner")
+        binding = (owner.path, receiver.attr)
+        if self.expr(receiver, local, False) != Data(binding) or binding in self.mutated_tables:
+            raise Unknown("unproved set binding at initialization")
+        match key:
+            case ast.Constant(value=str() as text):
+                inserted = text
+            case ast.Name(id=name) if name in strings:
+                inserted = strings[name]
+            case _:
+                raise Unknown("unproved set element")
+        self.check_fresh_set_element(binding, inserted)
+
+        if not all(isinstance(stmt, ast.Assert) for stmt in guard.body):
+            raise Unknown("unproved statements between insertion and cleanup")
+        self.auditing_set_cleanup = True
+        try:
+            self.block(guard.body, local, False)
+        finally:
+            self.auditing_set_cleanup = False
+        return True
+
+    def check_fresh_set_element(self, binding: tuple[str, str], inserted: str) -> None:
+        path, name = binding
+        tree = self.index.syntax[f"{path}::<module>"]
+        assert isinstance(tree, ast.Module)  # Already audited by module().
+        for stmt in tree.body:
+            self.tick()
+            match stmt:
+                case ast.Assign(targets=[ast.Name(id=target)], value=ast.Set(elts=elements)) if (
+                    target == name
+                ):
+                    for element in elements:
+                        self.tick()
+                        if (
+                            not isinstance(element, ast.Constant)
+                            or not isinstance(element.value, str)
+                            or element.value == inserted
+                        ):
+                            raise Unknown("set contains the key or non-string data")
+                    return
+        raise Unknown("missing literal string set initializer")
 
     def only_parameter_references(self, path: str) -> None:
         """Allow mixed edits only for local tables used directly in known decorators."""
