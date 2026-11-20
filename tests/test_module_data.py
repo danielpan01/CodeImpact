@@ -252,6 +252,110 @@ def test_mutated_parameter_data_keeps_collection_fallback():
     assert "test_lib.py::test_independent" in selected(review(tests=tests))
 
 
+GUARDED_LIB = """RULES = [('x', 'xs')]
+EXCEPTIONS = {'yes'}
+def guarded(word):
+    if not word or word.lower() in EXCEPTIONS:
+        return word
+    else:
+        return RULES[0][1]
+"""
+GUARDED_TESTS = """import pytest
+import lib
+CASES = [('old', 'OLD')]
+@pytest.mark.parametrize(('word', 'expected'), CASES)
+def test_parameters(word, expected): assert word != expected
+"""
+GUARDED_TEST = "test_lib.py::test_guard"
+
+
+def guard_review(
+    body="assert lib.guarded('') == ''", *, library=GUARDED_LIB, extra=None, test_table=True
+):
+    test = "def test_guard():\n" + indent(body, "    ") + "\n"
+    tests = GUARDED_TESTS + test
+    head = None if test_table else {"test_lib.py": tests}
+    return review(lib=library, tests=tests, extra=extra, head=head)
+
+
+@pytest.mark.parametrize("condition", ["not word", "not word or word.lower() in EXCEPTIONS"])
+def test_literal_empty_string_bypasses_the_edited_rule_table(condition):
+    library = GUARDED_LIB.replace("not word or word.lower() in EXCEPTIONS", condition)
+    assert selected(guard_review(library=library)) == {"test_lib.py::test_parameters"}
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "assert lib.guarded('x') == 'xs'",
+        "assert lib.guarded('') == ''; assert lib.guarded('x') == 'xs'",
+        "word = ''; word = 'x'; assert lib.guarded(word) == 'xs'",
+        "word = ''; assert lib.guarded(word) == ''",
+        "assert lib.guarded(unknown())",
+        "assert lib.guarded(*('',)) == ''",
+        "assert lib.guarded(word='') == ''",
+    ],
+)
+def test_nonempty_mixed_or_unproved_arguments_keep_rule_dependency(body):
+    report = guard_review(body, test_table=False)
+    rec = next(item for item in report.recommendations if item.symbol == GUARDED_TEST)
+    assert rec.evidence_path[-1] == "lib.py::<module>"
+    assert rec.path_revision == "both"
+
+
+@pytest.mark.parametrize(
+    "library",
+    [
+        GUARDED_LIB.replace("not word", "not probe(word)"),
+        GUARDED_LIB.replace("word.lower() in EXCEPTIONS", "probe(word)"),
+        GUARDED_LIB.replace("    if", "    rules = RULES\n    if"),
+        GUARDED_LIB.replace("    if", "    word = 'x'\n    if"),
+        GUARDED_LIB.replace("return RULES", "yield RULES"),
+        GUARDED_LIB + "configure()\n",
+        GUARDED_LIB + "def setup_module(module): pass\n",
+    ],
+)
+def test_unproved_guard_prefix_body_or_initialization_keeps_fallback(library):
+    assert GUARDED_TEST in selected(guard_review(library=library, test_table=False))
+
+
+def test_captured_collection_hook_keeps_empty_call_conservative():
+    report = guard_review(
+        extra={"conftest.py": "def pytest_collection_modifyitems(items): pass\n"},
+        test_table=False,
+    )
+    assert GUARDED_TEST in selected(report)
+
+
+def test_empty_bypass_keeps_independent_test_table_path():
+    report = guard_review("assert lib.guarded('') == '' and CASES[0][0]")
+    rec = next(item for item in report.recommendations if item.symbol == GUARDED_TEST)
+    assert rec.evidence_path == [GUARDED_TEST, "test_lib.py::<module>"]
+    assert rec.path_revision == "both"
+
+
+def test_before_only_guard_read_retains_its_typed_evidence():
+    before = GUARDED_LIB.replace("    if", "    rules = RULES\n    if")
+    tests = GUARDED_TESTS + "def test_guard(): assert lib.guarded('') == ''\n"
+    report = review(lib=before, tests=tests)
+    result = next(item for item in report.recommendations if item.symbol == GUARDED_TEST)
+    assert result.evidence_path[-1] == "lib.py::<module>"
+    changed = GUARDED_LIB.replace("('x', 'xs')", "('y', 'ys')")
+    report = review(lib=before, tests=tests, head={"lib.py": changed})
+    result = next(item for item in report.recommendations if item.symbol == GUARDED_TEST)
+    assert result.evidence_path == [GUARDED_TEST, "lib.py::guarded"]
+    assert result.path_revision == "both"
+
+    deleted = changed.split("def guarded(")[0]
+    report = review(lib=before, tests=tests, head={"lib.py": deleted})
+    result = next(item for item in report.recommendations if item.symbol == GUARDED_TEST)
+    call = next(edge for edge in report.edges if edge.id in result.evidence_edges)
+    assert result.evidence_path == [GUARDED_TEST, "lib.py::guarded"]
+    assert "lib.py::guarded" in report.removed
+    assert result.path_revision == call.revision == "before"
+    assert call.before[0].location.path == "test_lib.py" and not call.after
+
+
 SET_LIB = """WORDS = {'existing'}
 OTHER = {'existing'}
 def reader(word): return word in WORDS

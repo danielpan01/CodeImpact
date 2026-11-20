@@ -43,6 +43,7 @@ TABLES_BASELINE_FILE = "baselines/literal-tables-v1.json"
 EXPORTS_BASELINE_FILE = "baselines/additive-exports-v1.json"
 BASELINE_FILE = "baselines/parameter-tables-v1.json"
 V3_SET_CLEANUP = "corpus/real-v3/baselines/set-cleanup-v1.json"
+V3_EMPTY_STRING_GUARD = "corpus/real-v3/baselines/empty-string-guard-v1.json"
 PARTIAL_SOURCES = FROZEN_SOURCES | {"src/codeimpact/partial_bindings.py"}
 ARGUMENT_SOURCES = PARTIAL_SOURCES | {"src/codeimpact/call_arguments.py"}
 MAPPING_SOURCES = ARGUMENT_SOURCES | {"src/codeimpact/mapping_protocols.py"}
@@ -232,7 +233,7 @@ def replay_source_matches(project: Path, path: str, expected: str) -> bool:
     actual = file_hash(project / path)
     if actual == expected:
         return True
-    # Historical replays keep their pinned measurement through this one v3 change.
+    # Historical replays admit only the recorded module-data transitions.
     if path == "src/codeimpact/module_data.py":
         cleanup_path = project / V3_SET_CLEANUP
         if not cleanup_path.is_file():
@@ -244,7 +245,16 @@ def replay_source_matches(project: Path, path: str, expected: str) -> bool:
         previous, _ = read_metadata(parameters)
         parameter_tables_hash: str = previous["analyzer_sha256"][path]
         cleanup_hash: str = cleanup["analyzer_sha256"][path]
-        return expected == parameter_tables_hash and actual == cleanup_hash
+        if expected == parameter_tables_hash and actual == cleanup_hash:
+            return True
+        guard_path = project / V3_EMPTY_STRING_GUARD
+        if not guard_path.is_file():
+            return False
+        guard, _ = read_metadata(guard_path)
+        if file_hash(cleanup_path) != guard["previous_baseline_sha256"]:
+            return False
+        guard_hash: str = guard["analyzer_sha256"][path]
+        return expected in {parameter_tables_hash, cleanup_hash} and actual == guard_hash
     receipt_path = project / "benchmarks/unittest-discovery-v1-preservation.json"
     if path not in POLICY_SOURCE_CHANGES or not receipt_path.is_file():
         return False

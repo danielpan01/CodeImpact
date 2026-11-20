@@ -3981,3 +3981,35 @@ The next evidence-backed candidate is the known empty-string argument in
 Inflection's `test_pluralize_empty_string`. Audit whether it bypasses the
 edited rule tables in both pinned revisions and trace the test-module seed
 on its own. [Current roadmap](BUILD_PLAN.md#milestone-sequence-and-remaining-work)
+
+## Inflection literal empty-string guard
+
+Started from clean main at PR #29,
+`17a2962a3232500a79c84e051fcad16c7f6e82c6`. The pinned `set-cleanup-v1`
+replay selected 8 of 22 definitions in `inflection_rules`. The before and
+after source both return the literal empty string before reading the edited
+production rule tables. The test-module table already had a separate proof
+of independence. Before implementation, the literal-empty control failed
+and 15 controls passed. Upstream source was analyzed as data.
+[Source audit and proof boundary](EMPTY_STRING_GUARD_REVIEW.md)
+
+The successor removes only `test_inflection.py::test_pluralize_empty_string`.
+The rule case selects 7/22, with 6 draft true positives, 1 false positive,
+0 false negatives, and 15 true negatives. All seven retained recommendations
+match their complete prior evidence, including `test_uncountability`.
+Expanded v3 selects 45/120, with 42 TP, 3 FP, 0 FN, and 63 TN. All 12
+uncertain definitions remain unselected. Independent label review is pending.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused module-data, exact evidence, historical replay and preservation tests | 90 passed. |
+| `make check` | Passed Ruff, mypy across 34 source files, Python tests, TypeScript and the production build. Python reported 1,233 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning, and 93% statement coverage. |
+| All nine offline evaluations | Matched their recorded measurements. `make evaluate-real-v3` writes a new output and the other eight reports match their prior bytes. Only the `inflection_rules` analysis changes within v3. |
+| Hash seeds 7 and 173 and reversed files | Each seed reproduced all nine current outputs byte for byte. All 73 reversed-file replays per seed matched with only `stats.elapsed_ms` excluded. Every recommendation passed typed evidence validation. |
+| Pilot and frontend | `make verify-pilot` and frontend formatting passed. All 253 browser tests passed across five desktop and mobile projects. |
+| Protected files and reports | All 178 existing tracked corpus and benchmark files and all ten saved predecessor reports matched their starting bytes. |
+| Whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+The [successor preservation receipt](../benchmarks/empty-string-guard-v1-preservation.json)
+pins the new baseline and changed source hashes. Logs and deterministic replay
+receipts are under the ignored local `reports/inflection-empty-string/` directory.

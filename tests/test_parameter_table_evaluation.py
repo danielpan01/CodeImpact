@@ -22,9 +22,15 @@ RETAINED = {
 
 def test_set_cleanup_successor_removes_only_the_conservative_titleize_sibling(monkeypatch):
     dataset = ROOT / "corpus/real-v3"
-    current = holdout_evaluate.evaluate_holdout(dataset)
     successor = json.loads((dataset / "baselines/set-cleanup-v1.json").read_text())
     previous = json.loads((dataset / "baselines/parameter-tables-v1.json").read_text())
+    monkeypatch.setattr(module_data.Query, "empty_string_return", lambda *_: False)
+    _, extensions = holdout_evaluate.label_extension(
+        dataset, successor["expected_unclassified_recommendations"]
+    )
+    current = holdout_evaluate.evaluate_real(
+        dataset, annotations=successor["annotations"], label_extensions=extensions
+    )
     hashes = fresh_evaluate.measurement(current)["analysis_sha256"]
     assert fresh_evaluate.measurement(current) == successor["measurement"]
     assert {

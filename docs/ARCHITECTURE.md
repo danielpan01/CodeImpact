@@ -945,6 +945,14 @@ decline the proof. The original graph supplies every retained path. The query
 uses a 12,000-step and 24-level bound and reads source as AST data.
 [Supported initialization and exact boundaries](MODULE_DATA_REVIEW.md)
 
+The query can also prove a direct literal empty-string call returns before
+an edited production table is read. The audited source function must begin
+with a return of its required parameter under `not parameter`, optionally
+followed by a supported short-circuit membership operand. The existing
+initialization, collection, and two-revision checks still apply. Other calls
+and independent module contributions retain their ordinary evidence.
+[Source audit and exact result](EMPTY_STRING_GUARD_REVIEW.md)
+
 ## Additive package exports
 
 For a top-level package whose initializer contains only explicit child imports

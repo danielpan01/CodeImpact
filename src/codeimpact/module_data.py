@@ -211,6 +211,7 @@ class Query:
         self.body_edits = body_edits
         self.used_body_edit = False
         self.auditing_set_cleanup = False
+        self.empty_guard_caller: ast.FunctionDef | None = None
         self.changed = {(path, name) for name in names}
         self.modules: dict[str, Scope] = {}
         self.initializing: set[str] = set()
@@ -549,6 +550,8 @@ class Query:
                     raise Unknown("unknown or effectful data method")
             fn = self.expr(node.func, scope, eager)
             if isinstance(fn, Function):
+                if not eager and self.empty_string_return(node, fn):
+                    return DATA
                 return self.function(fn, args, kwargs, eager)
             if isinstance(fn, External) and fn.name in BUILTINS | EXTERNAL_CALLS:
                 for v in [*args, *kwargs.values()]:
@@ -659,10 +662,98 @@ class Query:
         self.header(node, module, False)
         if node.args.args and not node.decorator_list:
             return False
+        args = node.args
+        if not (
+            node.decorator_list
+            or args.args
+            or args.posonlyargs
+            or args.kwonlyargs
+            or args.vararg
+            or args.kwarg
+        ):
+            self.empty_guard_caller = node
         if not (self.used_body_edit and self.restored_set_test(node, module)):
             self.function(Function(node, module), [DATA] * len(node.args.args), {}, False)
         if self.used_body_edit:
             self.only_parameter_references(path)
+        return True
+
+    def empty_string_return(self, call: ast.Call, fn: Function) -> bool:
+        """Prove one direct literal call returns before reaching edited rule data."""
+        if not (
+            self.empty_guard_caller is not None
+            and self.stack == {(self.empty_guard_caller, False)}
+            and isinstance(call.func, ast.Attribute)
+            and isinstance(call.func.value, ast.Name)
+            and len(call.args) == 1
+            and isinstance(call.args[0], ast.Constant)
+            and call.args[0].value == ""
+            and not call.keywords
+            and not is_test_file(fn.scope.path)
+            and any(path == fn.scope.path for path, _ in self.changed)
+            and fn.scope is self.modules.get(fn.scope.path)
+        ):
+            return False
+        node = fn.node
+        if not isinstance(node, ast.FunctionDef) or node.decorator_list:
+            return False
+        args = node.args
+        if (
+            len(args.args) != 1
+            or args.posonlyargs
+            or args.kwonlyargs
+            or args.vararg
+            or args.kwarg
+            or args.defaults
+        ):
+            return False
+        word = args.args[0].arg
+        body = node.body
+        if isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
+            if isinstance(body[0].value.value, str):
+                body = body[1:]
+        if not body or not isinstance(guard := body[0], ast.If):
+            return False
+        match guard.body:
+            case [ast.Return(value=ast.Name(id=result))] if result == word:
+                pass
+            case _:
+                return False
+
+        condition = guard.test
+        if isinstance(condition, ast.BoolOp) and isinstance(condition.op, ast.Or):
+            if len(condition.values) != 2:
+                return False
+            condition, tail = condition.values
+            match tail:
+                case ast.Compare(
+                    left=ast.Call(
+                        func=ast.Attribute(value=ast.Name(id=receiver), attr="lower"),
+                        args=[],
+                        keywords=[],
+                    ),
+                    ops=[ast.In()],
+                    comparators=[ast.Name(id=container)],
+                ) if receiver == word and container != word:
+                    if self.data(self.lookup(container, fn.scope, False)).table != (
+                        fn.scope.path,
+                        container,
+                    ):
+                        return False
+                case _:
+                    return False
+        if not (
+            isinstance(condition, ast.UnaryOp)
+            and isinstance(condition.op, ast.Not)
+            and isinstance(condition.operand, ast.Name)
+            and condition.operand.id == word
+        ):
+            return False
+        # Even a syntactically unreachable yield changes what calling the function does.
+        for child in ast.walk(node):
+            self.tick()
+            if isinstance(child, (ast.Yield, ast.YieldFrom)):
+                return False
         return True
 
     def restored_set_test(self, node: ast.FunctionDef, module: Scope) -> bool:

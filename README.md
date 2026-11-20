@@ -238,10 +238,14 @@ Hypothesis recommendations. The **9C parameter-table slice** removes 20
 titleize case false positives while retaining its resolved call evidence.
 The **set-cleanup follow-up** removes its last draft false positive after
 auditing one literal set insertion and its `finally` cleanup in both revisions.
-Current v3 is **46/120 selected**, with **42 TP, 4 FP, 0 FN and 62 TN**.
+The **empty-string guard** follow-up excludes one Inflection rule-case
+recommendation because the literal empty call returns before reading the
+edited tables in both revisions. Current v3 is **45/120 selected**, with
+**42 TP, 3 FP, 0 FN and 63 TN**.
 All 12 uncertain definitions remain unselected.
-Current output is `reports/real-v3-set-cleanup-v1-evaluation.json`.
+Current output is `reports/real-v3-empty-string-guard-v1-evaluation.json`.
 [Rule-table review](docs/MODULE_DATA_REVIEW.md) · [Validator/export review](docs/VALIDATOR_EXPORT_REVIEW.md) · [Parameter-table review](docs/PARAMETER_TABLE_REVIEW.md) · [Set-cleanup review](docs/SET_CLEANUP_REVIEW.md).
+[Empty-string guard review](docs/EMPTY_STRING_GUARD_REVIEW.md).
 
 The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.

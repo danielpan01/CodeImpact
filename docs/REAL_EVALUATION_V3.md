@@ -9,14 +9,29 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-set-cleanup-v1-evaluation.json (current)
+# reports/real-v3-empty-string-guard-v1-evaluation.json (current)
+# reports/real-v3-set-cleanup-v1-evaluation.json remains preserved
 # reports/real-v3-parameter-tables-v1-evaluation.json remains preserved
 # reports/real-v3-evaluation.json remains the preserved original
 make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current measurement — Inflection set cleanup
+## Current measurement — Inflection literal empty-string guard
+
+`inflection_rules` selects **7/22**, with **6 TP / 1 FP / 0 FN / 15 TN**.
+`test_pluralize_empty_string` loses its only remaining contribution because
+the explicit empty-string argument returns before either edited production
+table is read in both revisions. All seven retained recommendations match,
+including the conservative path for `test_uncountability`.
+
+Expanded v3 selects **45/120**, with **42 TP / 3 FP / 0 FN / 63 TN**.
+All 12 uncertain definitions stay unselected, and the other five analyses
+match the `set-cleanup-v1` receipt. Holdout wrapper **10.0** verifies the
+new `empty-string-guard-v1` baseline and the predecessor chain.
+[Exact result and proof boundary](EMPTY_STRING_GUARD_REVIEW.md)
+
+## Preserved measurement — Inflection set cleanup
 
 The titleize case selects **1/22**, with **1 TP / 0 FP / 0 FN / 21 TN**.
 The two-revision proof audits one set insertion and matching `finally` removal.
