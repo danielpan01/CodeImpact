@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-19** (America/New_York).
+Checked on **2026-11-20** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -39,6 +39,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/EMPTY_STRING_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/FRONTEND_MILESTONE8A.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
@@ -77,6 +78,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: CORPUS.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: EMPTY_STRING_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -95,6 +97,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md#mixed-case-unittest-methods | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/empty-string-guard-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/milestone6.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/set-cleanup-v1-preservation.json | PASS | Local target exists; fragment not checked |
@@ -113,6 +116,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: EMPTY_STRING_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_MILESTONE8A.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
@@ -177,7 +181,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | anyio | ==4.16.0 | 4.16.0 | >=3.10 |
 | certifi | ==2026.10.23 | 2026.10.23 | >=3.7 |
 | click | ==8.5.0 | 8.5.1 | >=3.10 |
-| coverage | ==7.17.2 | 7.17.3 | >=3.11 |
+| coverage | ==7.17.2 | 7.17.4 | >=3.11 |
 | fastapi | ==0.162.0 | 0.165.0 | >=3.11 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
