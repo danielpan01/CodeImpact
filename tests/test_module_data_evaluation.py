@@ -10,13 +10,14 @@ from codeimpact import fresh_evaluate, holdout_evaluate
 from codeimpact.analyzer import analyze
 from codeimpact.evaluate import validate_report
 from codeimpact.models import AnalysisRequest
-from codeimpact.module_data import ModuleDataFallback
+from codeimpact.module_data import ModuleDataFallback, Query
 from codeimpact.real_evaluate import canonical_hash
 
 ROOT = Path(__file__).parents[1]
 
 
 def test_both_module_contributions_and_affected_paths_match_history(monkeypatch):
+    monkeypatch.setattr(Query, "empty_string_return", lambda *_: False)
     dataset = ROOT / "corpus/real-v3"
     case = json.loads((dataset / "cases/inflection_rules.json").read_text())
     old = json.loads((dataset / "baselines/legacy-dispatch-v1.json").read_text())["measurement"]
@@ -66,6 +67,47 @@ def test_both_module_contributions_and_affected_paths_match_history(monkeypatch)
     assert case["expected_affected"].keys() <= {r.symbol for r in current.recommendations}
     for field in ("nodes", "edges", "changed", "changes", "removed", "source_files", "warnings"):
         assert getattr(current, field) == getattr(predecessor, field)
+
+
+def test_empty_string_successor_changes_only_the_pinned_production_contribution(monkeypatch):
+    dataset = ROOT / "corpus/real-v3"
+    case_id = "inflection_rules"
+    case = json.loads((dataset / f"cases/{case_id}.json").read_text())
+    request = AnalysisRequest.model_validate(case["request"])
+    old = json.loads((dataset / "baselines/set-cleanup-v1.json").read_text())["measurement"]
+    new = holdout_evaluate.current_baseline(dataset).measurement
+    assert {
+        key for key, value in new["analysis_sha256"].items() if value != old["analysis_sha256"][key]
+    } == {case_id}
+
+    current = analyze(request)
+    monkeypatch.setattr(Query, "empty_string_return", lambda *_: False)
+    previous = analyze(request)
+    for report, measurement in ((previous, old), (current, new)):
+        validate_report(request, report)
+        stable = report.model_dump(mode="json", exclude={"stats": {"elapsed_ms"}})
+        assert canonical_hash(stable) == measurement["analysis_sha256"][case_id]
+    removed = "test_inflection.py::test_pluralize_empty_string"
+    assert current.recommendations == [r for r in previous.recommendations if r.symbol != removed]
+    selected = {r.symbol for r in current.recommendations}
+    assert selected == case["expected_affected"].keys() | {
+        "test_inflection.py::test_uncountability"
+    }
+    assert current.impacted == [sid for sid in previous.impacted if sid != removed]
+    for field in ("nodes", "edges", "changed", "changes", "removed", "source_files", "warnings"):
+        assert getattr(current, field) == getattr(previous, field)
+
+
+def test_set_cleanup_receipt_is_verified_before_analysis(tmp_path, monkeypatch):
+    directory = tmp_path / "real-v3"
+    shutil.copytree(ROOT / "corpus/real-v3", directory)
+    with (directory / "baselines/set-cleanup-v1.json").open("ab") as stream:
+        stream.write(b"\n")
+    monkeypatch.setattr(
+        holdout_evaluate, "evaluate_real", lambda *_a, **_k: pytest.fail("ran analysis")
+    )
+    with pytest.raises(ValueError, match="Preserved set cleanup baseline changed"):
+        holdout_evaluate.evaluate_holdout(directory)
 
 
 @pytest.mark.parametrize(
