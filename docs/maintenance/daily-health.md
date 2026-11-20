@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-18** (America/New_York).
+Checked on **2026-11-19** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -53,7 +53,11 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V4.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
@@ -82,11 +86,18 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: TEST_DISCOVERY.md#mixed-case-unittest-methods | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/milestone6.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/preservation.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/set-cleanup-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real-v3/baselines/test-discovery-v1-labels.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real-v4/PROTOCOL.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
@@ -97,6 +108,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: ../web/tests/quality/baselines/zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: BUILD_PLAN.md#milestone-sequence-and-remaining-work | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -105,6 +117,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: FRONTEND_MILESTONE8B.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: HUMANIZE_INITIALIZATION_AUDIT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -114,7 +127,12 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: REAL_EVALUATION_V2.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V3.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V4.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V4.md#mixed-case-unittest-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -166,7 +184,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | httpx | ==0.28.1 | 0.28.1 | >=3.8 |
 | idna | ==3.20 | 3.20 | >=3.9 |
 | iniconfig | ==2.3.1 | 2.3.1 | >=3.10 |
-| librt | ==0.16.0 | 0.16.0 | >=3.9 |
+| librt | ==0.16.0 | 0.17.0 | >=3.10 |
 | mypy | ==1.20.2 | 2.4.1 | >=3.10 |
 | mypy_extensions | ==1.2.0 | 1.2.0 | >=3.10 |
 | opentelemetry-api | ==1.45.2 | 1.45.2 | >=3.10 |
@@ -174,11 +192,11 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | pathspec | ==1.1.1 | 1.1.1 | >=3.9 |
 | pluggy | ==1.7.0 | 1.7.0 | >=3.10 |
 | psutil | ==7.2.2 | 7.2.2 | >=3.6 |
-| pydantic | ==2.14.3 | 2.14.3 | >=3.10 |
-| pydantic_core | ==2.50.4 | 2.50.4 | >=3.10 |
+| pydantic | ==2.14.3 | 2.14.4 | >=3.10 |
+| pydantic_core | ==2.50.4 | 2.50.5 | >=3.10 |
 | pytest-cov | ==7.1.0 | 7.1.0 | >=3.9 |
 | pytest | ==9.2.0 | 9.2.0 | >=3.10 |
-| ruff | ==0.17.4 | 0.17.5 | >=3.7 |
+| ruff | ==0.17.4 | 0.17.6 | >=3.7 |
 | starlette | ==1.10.0 | 1.10.0 | >=3.11 |
 | types-psutil | ==7.2.2.20261111 | 7.2.2.20261111 | >=3.10 |
 | typing-inspection | ==0.4.5 | 0.4.5 | >=3.10 |
