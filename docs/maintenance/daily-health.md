@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-21** (America/New_York).
+Checked on **2026-11-22** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -202,7 +202,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | pytest | ==9.2.0 | 9.2.0 | >=3.10 |
 | ruff | ==0.17.4 | 0.17.6 | >=3.7 |
 | starlette | ==1.10.0 | 1.10.0 | >=3.11 |
-| types-psutil | ==7.2.2.20261111 | 7.2.2.20261111 | >=3.10 |
+| types-psutil | ==7.2.2.20261111 | 7.2.2.20261122 | >=3.10 |
 | typing-inspection | ==0.4.5 | 0.4.5 | >=3.10 |
 | typing_extensions | ==4.16.0 | 4.16.0 | >=3.9 |
 | uvicorn | ==0.54.0 | 0.54.0 | >=3.10 |
