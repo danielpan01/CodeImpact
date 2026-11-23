@@ -32,6 +32,19 @@ match their `empty-string-guard-v1` hashes. Holdout wrapper **11.0** verifies
 `finite-string-guards-v1` and the preserved receipt chain.
 [Source audit, exact delta and scope](UNCOUNTABLE_GUARD_REVIEW.md)
 
+### Validator wrapper audit
+
+The two remaining draft false positives are
+`test_hypothesis_valid_naive_datetimes` and
+`test_hypothesis_valid_datetimes_with_timezone`. The validator case stays at
+**4/8**, with **2 TP / 2 FP / 0 FN / 4 TN**. The source confirms their
+unchanged parser bodies and the Poetry pins. Nox installs test dependencies
+without those pins, and the locked Hypothesis release uses import-time
+entry points and pytest hooks. Both package fallback paths and the two
+changed-test paths retain their exact evidence. The existing baseline still
+matches, and independent label review is pending.
+[Source and workflow audit](HYPOTHESIS_VALIDATOR_AUDIT.md)
+
 ## Preserved measurement — Inflection literal empty-string guard
 
 `inflection_rules` selects **7/22**, with **6 TP / 1 FP / 0 FN / 15 TN**.
