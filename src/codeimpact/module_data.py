@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from codeimpact.discovery import is_test_file
+from codeimpact.partial_bindings import audit
 from codeimpact.selection import MAX_DEPTH
 
 if TYPE_CHECKING:
@@ -197,6 +198,19 @@ def qualified_mutation(stmt: ast.stmt, method: str) -> tuple[ast.Attribute, ast.
     return None
 
 
+def ascii_word(value: str) -> bool:
+    return value.isascii() and value.isalpha() and value.islower()
+
+
+def returns_parameter(node: ast.If, parameter: str) -> bool:
+    return (
+        len(node.body) == 1
+        and isinstance(returned := node.body[0], ast.Return)
+        and isinstance(returned.value, ast.Name)
+        and returned.value.id == parameter
+    )
+
+
 class Query:
     def __init__(
         self,
@@ -211,6 +225,7 @@ class Query:
         self.body_edits = body_edits
         self.used_body_edit = False
         self.auditing_set_cleanup = False
+        self.auditing_collection_effects = False
         self.empty_guard_caller: ast.FunctionDef | None = None
         self.changed = {(path, name) for name in names}
         self.modules: dict[str, Scope] = {}
@@ -233,7 +248,12 @@ class Query:
             raise Unknown("table proof budget")
 
     def touch(self, value: Value, eager: bool) -> Value:
-        if not eager and isinstance(value, Data) and value.table in self.changed:
+        if (
+            not eager
+            and not self.auditing_collection_effects
+            and isinstance(value, Data)
+            and value.table in self.changed
+        ):
             raise ReadsTable()
         return value
 
@@ -662,6 +682,8 @@ class Query:
         self.header(node, module, False)
         if node.args.args and not node.decorator_list:
             return False
+        if node.decorator_list and self.finite_string_test(node, module):
+            return True
         args = node.args
         if not (
             node.decorator_list
@@ -677,6 +699,200 @@ class Query:
         if self.used_body_edit:
             self.only_parameter_references(path)
         return True
+
+    def finite_string_test(self, test: ast.FunctionDef, module: Scope) -> bool:
+        """Prove identity returns for every row of one literal-set comprehension."""
+        args = test.args
+        if (
+            len(args.args) != 1
+            or len(test.decorator_list) != 1
+            or self.other_collection
+            or self.used_body_edit
+            or (args.posonlyargs or args.kwonlyargs or args.vararg or args.kwarg or args.defaults)
+        ):
+            return False
+        parameter = args.args[0].arg
+        # The existing header audit has checked decorator binding and columns.
+        match test.decorator_list[0]:
+            case ast.Call(
+                args=[
+                    _,
+                    ast.ListComp(
+                        elt=ast.Tuple(elts=[ast.Name(id=element)]),
+                        generators=[
+                            ast.comprehension(
+                                target=ast.Name(id=target),
+                                iter=ast.Attribute(value=ast.Name()) as collection,
+                                ifs=[],
+                                is_async=0,
+                            )
+                        ],
+                    ),
+                ]
+            ) if element == target:
+                pass
+            case _:
+                return False
+        owner = self.expr(collection.value, module, False)
+        if not isinstance(owner, Module) or not any(path == owner.path for path, _ in self.changed):
+            return False
+        binding = (owner.path, collection.attr)
+        if (
+            is_test_file(owner.path)
+            or self.expr(collection, module, False) != Data(binding)
+            or binding in self.mutated_tables
+            or any(is_test_file(path) and path != module.path for path in self.index.sources)
+        ):
+            return False
+        words = self.literal_string_set(binding)
+        if not words or not all(ascii_word(word) for word in words):
+            return False
+        for stmt in test.body:
+            self.tick()
+            match stmt:
+                case ast.Assert(
+                    test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right]), msg=None
+                ):
+                    if not all(
+                        self.identity_operand(operand, parameter, module, binding)
+                        for operand in (left, right)
+                    ):
+                        return False
+                case _:
+                    return False
+        self.audit_collection_effects(test, module, binding)
+        return True
+
+    def identity_operand(
+        self, node: ast.expr, parameter: str, module: Scope, binding: tuple[str, str]
+    ) -> bool:
+        for _ in range(MAX_DEPTH):
+            self.tick()
+            match node:
+                case ast.Name(id=name):
+                    return name == parameter
+                case ast.Call(
+                    func=ast.Attribute(value=ast.Name(id=root)) as callee,
+                    args=[argument],
+                    keywords=[],
+                ) if root != parameter:
+                    fn = self.expr(callee, module, False)
+                    if not (
+                        isinstance(fn, Function)
+                        and fn.scope is self.modules[binding[0]]
+                        and self.identity_guard(fn, binding[1])
+                    ):
+                        return False
+                    node = argument
+                case _:
+                    return False
+        return False
+
+    def identity_guard(self, fn: Function, set_name: str) -> bool:
+        node = fn.node
+        if not isinstance(node, ast.FunctionDef) or node.decorator_list:
+            return False
+        args = node.args
+        if (
+            len(args.args) != 1
+            or args.posonlyargs
+            or args.kwonlyargs
+            or args.vararg
+            or args.kwarg
+            or args.defaults
+        ):
+            return False
+        parameter = args.args[0].arg
+        body = node.body
+        if isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
+            if isinstance(body[0].value.value, str):
+                body = body[1:]
+        if not body or parameter == set_name:
+            return False
+        protected = {set_name, parameter}
+        match body[0]:
+            case (
+                ast.If(
+                    test=ast.BoolOp(
+                        op=ast.Or(),
+                        values=[
+                            ast.UnaryOp(op=ast.Not(), operand=ast.Name(id=first)),
+                            ast.Compare(
+                                left=ast.Call(
+                                    func=ast.Attribute(value=ast.Name(id=receiver), attr="lower"),
+                                    args=[],
+                                    keywords=[],
+                                ),
+                                ops=[ast.In()],
+                                comparators=[ast.Name(id=container)],
+                            ),
+                        ],
+                    )
+                ) as guard
+            ) if first == receiver == parameter and container == set_name:
+                if not returns_parameter(guard, parameter):
+                    return False
+            case ast.For(
+                target=ast.Name(id=member),
+                iter=ast.Name(id=container),
+                body=[
+                    ast.If(
+                        test=ast.Call(
+                            func=ast.Attribute(value=ast.Name(id=regex), attr="search"),
+                            args=[
+                                ast.BinOp(
+                                    left=ast.Constant(value=r"(?i)\b(%s)\Z"),
+                                    op=ast.Mod(),
+                                    right=ast.Name(id=inserted),
+                                ),
+                                ast.Name(id=searched),
+                            ],
+                            keywords=[],
+                        ),
+                        orelse=[],
+                    ) as guard,
+                ],
+                orelse=[],
+            ) if (
+                container == set_name
+                and member == inserted
+                and searched == parameter
+                and member not in {set_name, parameter, regex}
+                and regex not in protected
+            ):
+                if fn.scope.values.get(regex) != External("re") or not returns_parameter(
+                    guard, parameter
+                ):
+                    return False
+                protected.add(regex)
+            case _:
+                return False
+        # A later binding can shadow the guard's globals. Yield anywhere makes the call a generator.
+        for child in ast.walk(node):
+            self.tick()
+            if isinstance(child, (ast.Yield, ast.YieldFrom)):
+                return False
+        locals_ = audit(body, local=True)
+        return not (locals_.wildcard or protected & (set(locals_.counts) | locals_.blocked))
+
+    def audit_collection_effects(
+        self, test: ast.FunctionDef, module: Scope, binding: tuple[str, str]
+    ) -> None:
+        """Inspect captured peer tests for effects independently of their table reads."""
+        self.auditing_collection_effects = True
+        try:
+            for name, fn in module.values.items():
+                if not name.startswith("test_") or not isinstance(fn, Function) or fn.node is test:
+                    continue
+                peer = fn.node
+                if not isinstance(peer, ast.FunctionDef) or (
+                    peer.args.args and not peer.decorator_list
+                ):
+                    raise Unknown("unproved peer test lifecycle")
+                if not self.restored_set_test(peer, fn.scope, collection=binding):
+                    self.function(fn, [DATA] * len(peer.args.args), {}, False)
+        finally:
+            self.auditing_collection_effects = False
 
     def empty_string_return(self, call: ast.Call, fn: Function) -> bool:
         """Prove one direct literal call returns before reaching edited rule data."""
@@ -756,7 +972,9 @@ class Query:
                 return False
         return True
 
-    def restored_set_test(self, node: ast.FunctionDef, module: Scope) -> bool:
+    def restored_set_test(
+        self, node: ast.FunctionDef, module: Scope, *, collection: tuple[str, str] | None = None
+    ) -> bool:
         """Audit one literal insertion guarded by immediate try/finally cleanup."""
         args = node.args
         if node.decorator_list or args.args or args.posonlyargs or args.kwonlyargs:
@@ -792,9 +1010,14 @@ class Query:
 
         receiver, key = add
         owner = self.expr(receiver.value, local, False)
-        if not isinstance(owner, Module) or owner.path not in self.body_edits:
+        if not isinstance(owner, Module):
             raise Unknown("unproved set owner")
         binding = (owner.path, receiver.attr)
+        supported_owner = (
+            binding == collection if collection is not None else owner.path in self.body_edits
+        )
+        if not supported_owner:
+            raise Unknown("unproved set owner")
         if self.expr(receiver, local, False) != Data(binding) or binding in self.mutated_tables:
             raise Unknown("unproved set binding at initialization")
         match key:
@@ -804,7 +1027,10 @@ class Query:
                 inserted = strings[name]
             case _:
                 raise Unknown("unproved set element")
-        self.check_fresh_set_element(binding, inserted)
+        if inserted in self.literal_string_set(binding) or (
+            collection and not ascii_word(inserted)
+        ):
+            raise Unknown("set insertion may affect an original member or the fixed pattern")
 
         if not all(isinstance(stmt, ast.Assert) for stmt in guard.body):
             raise Unknown("unproved statements between insertion and cleanup")
@@ -815,7 +1041,7 @@ class Query:
             self.auditing_set_cleanup = False
         return True
 
-    def check_fresh_set_element(self, binding: tuple[str, str], inserted: str) -> None:
+    def literal_string_set(self, binding: tuple[str, str]) -> frozenset[str]:
         path, name = binding
         tree = self.index.syntax[f"{path}::<module>"]
         assert isinstance(tree, ast.Module)  # Already audited by module().
@@ -825,15 +1051,15 @@ class Query:
                 case ast.Assign(targets=[ast.Name(id=target)], value=ast.Set(elts=elements)) if (
                     target == name
                 ):
+                    strings: set[str] = set()
                     for element in elements:
                         self.tick()
-                        if (
-                            not isinstance(element, ast.Constant)
-                            or not isinstance(element.value, str)
-                            or element.value == inserted
+                        if not isinstance(element, ast.Constant) or not isinstance(
+                            element.value, str
                         ):
-                            raise Unknown("set contains the key or non-string data")
-                    return
+                            raise Unknown("set contains non-string data")
+                        strings.add(element.value)
+                    return frozenset(strings)
         raise Unknown("missing literal string set initializer")
 
     def only_parameter_references(self, path: str) -> None:

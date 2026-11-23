@@ -1,15 +1,16 @@
 # CodeImpact project context
 
-## Current priority — November 19, 2026
+## Current priority — November 22, 2026
 
 The 9C literal-table and validator/export slices merged through PRs #20 and #21.
 The test parameter-table slice merged through PR #22. The set-cleanup
 follow-up merged in PR #28 and leaves `inflection_title` at 1/22 with its
-original resolved call. The local empty-string refinement leaves
-`inflection_rules` at 7/22. Expanded v3 is 45/120, with 42 TP / 3 FP / 0 FN /
-63 TN and all 12 uncertain definitions unselected. `empty-string-guard-v1`
-links the preserved `set-cleanup-v1` receipt. Labels await independent review.
-[Current source proof and evidence](EMPTY_STRING_GUARD_REVIEW.md)
+original resolved call. The literal-empty refinement merged in PR #30.
+The finite-set guard leaves `inflection_rules` at 6/22. Expanded v3
+is 44/120, with 42 TP / 2 FP / 0 FN / 64 TN and all 12 uncertain definitions
+unselected. `finite-string-guards-v1` links the preserved `empty-string-guard-v1`
+receipt. Labels await independent review.
+[Current source proof and evidence](UNCOUNTABLE_GUARD_REVIEW.md)
 
 The v4 dataset and offline replay use the frozen PR #22 engine.
 It selects 92/105 with 19 TP / 57 FP / 0 FN / 13 TN, all 16 uncertain

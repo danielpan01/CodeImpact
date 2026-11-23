@@ -4013,3 +4013,37 @@ uncertain definitions remain unselected. Independent label review is pending.
 The [successor preservation receipt](../benchmarks/empty-string-guard-v1-preservation.json)
 pins the new baseline and changed source hashes. Logs and deterministic replay
 receipts are under the ignored local `reports/inflection-empty-string/` directory.
+
+## Inflection finite uncountability guard
+
+Started from clean main at PR #30, `c1572b796410ce01a3b945287122a5f4fbff7d06`.
+The `empty-string-guard-v1` replay selected 7/22 definitions in `inflection_rules`.
+The source walkthrough verified the nine literal parameters and identity
+returns in both revisions, including the sibling test's balanced set cleanup.
+The captured third assertion compares two independent calls. The synthetic
+suite covers the nested form and a case where one input reaches the rules.
+Before implementation, two positive controls failed and 15 controls passed.
+Upstream source and its regex template were examined as data.
+[Source walkthrough and proof scope](UNCOUNTABLE_GUARD_REVIEW.md)
+
+Only `test_inflection.py::test_uncountability` loses its recommendation and
+impact entry. The rule case is 6/22 selected, with 6 draft true positives,
+0 false positives, 0 false negatives, and 16 true negatives. The earlier
+empty-string exclusion and the six affected paths are preserved. Expanded v3
+is 44/120, with 42 TP, 2 FP, 0 FN, and 64 TN. All twelve uncertain definitions
+remain unselected. Independent label review is pending.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused finite-set, module-data, historical replay and preservation tests | 111 passed. |
+| `make check` | Passed Ruff, mypy across 34 source files, Python tests, TypeScript and the production build. Python reported 1,254 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning, and 93% statement coverage. |
+| All nine offline evaluations | Matched their receipts. Only `inflection_rules` changes within v3. The successor uses a separate output file, and the other eight outputs match their saved bytes. |
+| Hash seeds 7 and 173 and reversed files | Each seed reproduced all nine current reports byte for byte. All 73 reversed-file replays per seed matched with only `stats.elapsed_ms` excluded. Every recommendation passed typed evidence validation. |
+| Independent eager path | A source-only probe excluded the production contribution and retained a separate changed-module initialization path with evidence in both revisions. |
+| Pilot and frontend | `make verify-pilot` and frontend formatting passed. All 253 browser tests passed across five desktop and mobile projects. |
+| Protected artifacts | All 180 existing tracked corpus and benchmark files and all eleven saved predecessor reports matched their starting bytes. |
+| Whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+The [successor preservation receipt](../benchmarks/finite-string-guards-v1-preservation.json)
+pins the analyzer transition and new measurement. Logs and deterministic replay
+receipts are under the ignored local `reports/inflection-uncountable/` directory.

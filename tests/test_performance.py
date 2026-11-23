@@ -303,6 +303,14 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         "corpus/real-v3/baselines/empty-string-guard-v1.json"
     }
     assert set(guard["current_sources_sha256"]) == set(cleanup["current_sources_sha256"])
+    previous = ROOT / "benchmarks/empty-string-guard-v1-preservation.json"
+    finite = json.loads((ROOT / "benchmarks/finite-string-guards-v1-preservation.json").read_text())
+    assert hashlib.sha256(previous.read_bytes()).hexdigest() == finite["previous_receipt_sha256"]
+    assert finite["changed_historical_sources"] == guard["changed_historical_sources"]
+    assert set(finite["added_corpus_sha256"]) == {
+        "corpus/real-v3/baselines/finite-string-guards-v1.json"
+    }
+    assert set(finite["current_sources_sha256"]) == set(guard["current_sources_sha256"])
     extensions = (
         current,
         latest,
@@ -318,6 +326,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         reexports,
         cleanup,
         guard,
+        finite,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()

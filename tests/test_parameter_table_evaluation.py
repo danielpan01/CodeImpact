@@ -25,6 +25,7 @@ def test_set_cleanup_successor_removes_only_the_conservative_titleize_sibling(mo
     successor = json.loads((dataset / "baselines/set-cleanup-v1.json").read_text())
     previous = json.loads((dataset / "baselines/parameter-tables-v1.json").read_text())
     monkeypatch.setattr(module_data.Query, "empty_string_return", lambda *_: False)
+    monkeypatch.setattr(module_data.Query, "finite_string_test", lambda *_: False)
     _, extensions = holdout_evaluate.label_extension(
         dataset, successor["expected_unclassified_recommendations"]
     )

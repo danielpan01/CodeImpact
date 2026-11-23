@@ -9,7 +9,8 @@ audit and review pack were frozen first. No analyzer tuning followed measurement
 
 ```sh
 make evaluate-real-v3
-# reports/real-v3-empty-string-guard-v1-evaluation.json (current)
+# reports/real-v3-finite-string-guards-v1-evaluation.json (current)
+# reports/real-v3-empty-string-guard-v1-evaluation.json remains preserved
 # reports/real-v3-set-cleanup-v1-evaluation.json remains preserved
 # reports/real-v3-parameter-tables-v1-evaluation.json remains preserved
 # reports/real-v3-evaluation.json remains the preserved original
@@ -17,7 +18,21 @@ make pilot
 # reports/developer-pilot/{inflection_title,ordered_set_pop}.json
 ```
 
-## Current measurement — Inflection literal empty-string guard
+## Current measurement — Inflection finite uncountability guard
+
+`inflection_rules` selects **6/22**, with **6 TP / 0 FP / 0 FN / 16 TN**.
+Every collected lowercase ASCII word returns unchanged through both
+guards. The proof removes the production fallback for `test_uncountability`.
+All six affected recommendations retain their exact evidence. The earlier
+literal-empty exclusion still applies.
+
+Expanded v3 selects **44/120**, with **42 TP / 2 FP / 0 FN / 64 TN**.
+All twelve uncertain definitions stay unselected. The other five analyses
+match their `empty-string-guard-v1` hashes. Holdout wrapper **11.0** verifies
+`finite-string-guards-v1` and the preserved receipt chain.
+[Source audit, exact delta and scope](UNCOUNTABLE_GUARD_REVIEW.md)
+
+## Preserved measurement — Inflection literal empty-string guard
 
 `inflection_rules` selects **7/22**, with **6 TP / 1 FP / 0 FN / 15 TN**.
 `test_pluralize_empty_string` loses its only remaining contribution because
