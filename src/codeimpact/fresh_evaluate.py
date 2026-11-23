@@ -230,8 +230,34 @@ POLICY_SOURCE_CHANGES = {
 VARIADIC_SOURCE_CHANGES = {"src/codeimpact/analyzer.py", "src/codeimpact/evaluate.py"}
 
 
+FIXTURE_SOURCE_CHANGES = {
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/evaluate.py",
+    "src/codeimpact/models.py",
+}
+
+
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
     actual = file_hash(project / path)
+    if _recorded_source_matches(project, path, expected, actual):
+        return True
+    fixture_path = project / "benchmarks/pytest-fixtures-v1-preservation.json"
+    if path not in FIXTURE_SOURCE_CHANGES or not fixture_path.is_file():
+        return False
+    predecessor = project / "benchmarks/finite-string-guards-v1-preservation.json"
+    fixture, _ = read_metadata(fixture_path)
+    if (
+        file_hash(predecessor) != fixture["previous_receipt_sha256"]
+        or actual != fixture["current_sources_sha256"][path]
+    ):
+        return False
+    previous, _ = read_metadata(predecessor)
+    return _recorded_source_matches(
+        project, path, expected, previous["current_sources_sha256"][path]
+    )
+
+
+def _recorded_source_matches(project: Path, path: str, expected: str, actual: str) -> bool:
     if actual == expected:
         return True
     # Historical replays admit only the recorded module-data transitions.

@@ -28,8 +28,8 @@ module, class, function or test. Policy `test-files-v2` recognizes functions nam
 directory depth, including direct class methods and nested functions. This shared
 filename predicate is also used by the independent corpus walker and discovery
 audit. It is static discovery, not pytest collection. Arbitrary production files,
-parametrized executions, inherited test executions and fixture injection are not
-collected. See [bounded scope and versioned measurements](TEST_DISCOVERY.md).
+parametrized executions and inherited test executions are outside static discovery.
+Fixture injection is a separate dependency analysis. See [bounded scope and versioned measurements](TEST_DISCOVERY.md).
 
 The default `test-files-v3` policy also recognizes direct methods whose names
 start with `test` and an ASCII capital letter. The module must have one unique
@@ -59,6 +59,7 @@ as removal and addition.
 Edges point **from dependent to dependency**:
 
 - `call`: a supported lexical/imported call resolves to a known symbol.
+- `fixture`: one required test parameter binds to a supported same-directory pytest fixture.
 - `import`: a module, or a function with a supported direct local import, imports a known module.
 - `module`: a symbol depends conservatively on its own module's initialization.
 
@@ -69,6 +70,29 @@ Function-local imports and module import rebinding have the bounded support desc
 below. Re-exports, inherited methods, runtime mutation, closures with complex assignments and
 dynamic dispatch are incomplete. Even a resolved edge is a
 static inference, not proof that a call executes.
+
+### Bounded pytest fixture injection
+
+The resolver recognizes a plain, top-level, synchronous test with one required
+positional-or-keyword parameter. Its same-directory `conftest.py` must define a
+unique, top-level, zero-argument synchronous function of the same name, decorated
+with bare `@pytest.fixture` after a direct, unaliased `import pytest`. The test is
+already discovered under the existing filename policy. Each revision is checked
+independently. An edge records the argument line and the fixture declaration range,
+starting at its decorator. [Pytest fixture availability](https://docs.pytest.org/en/stable/reference/fixtures.html#fixture-availability)
+
+The proof reuses the lexical binding audit and the passive initialization checks
+for captured imports. It declines on ancestor conftests, shadowing, competing
+registrations, eager initialization or collection hooks, test decorators,
+fixture options, fixture chains, and yield fixtures. Runtime plugin loading and
+pytest configuration are outside the Python snapshot proof.
+
+Recommendation selection uses the fixture edge followed by existing call edges
+to a changed definition, with the full path present in at least one revision.
+A removed fixture can serve as the changed target with before-only evidence.
+Existing changed-test and resolved-call paths keep precedence. The resolved-path
+score formula is shared, with the fixture hop counted in distance. Fixture edges
+do not enter the existing selection traversals or their fan-in calculations.
 
 ### Bounded module-level rebinding
 
@@ -322,9 +346,9 @@ A local module/class `@pytest.fixture(...)` provider is considered only when its
 body is a single return (apart from a docstring), its parameters are limited to
 `self`/`request`, and its factory variants are statically available. Direct literal
 data returns can supply argument values too. This narrowly supports fixture-provided
-partial factories and constant options; general fixture dependency discovery,
-conftest resolution, arbitrary setup effects and inherited fixture contexts remain
-unsupported. It does not repair the authored fixture-injection miss. Function-local
+partial factories and constant options. Same-directory conftest injection uses the
+separate proof above. Arbitrary setup effects and inherited fixture contexts remain
+outside that proof. Function-local
 aliases become available only after their direct import statement.
 
 Unresolved arguments/calls, arbitrary imported settings that may be `None`, mutable
@@ -425,14 +449,15 @@ measurable optimization once correctness is stable.
 
 `GET /health`, `GET /ready`, `GET /api/config`, `GET /api/demo`, `GET /api/demo/snapshots`, `POST /api/analyze` and
 `POST /api/github/pr` are implemented. OpenAPI is at `/docs`. All report-producing
-interfaces (including the CLI) emit schema 2.0, described below.
+interfaces (including the CLI) emit schema 2.1 when the graph contains fixture
+injection edges and schema 2.0 otherwise.
 
 React Flow displays dependency arrows, search, module filtering, selection and
 evidence highlighting using exact edge IDs. The dashboard uses real API results,
 including the explicitly loaded demo. Successful requests open Tests and collapse
 input behind New analysis. Light and dark workspaces share semantic CSS tokens and local
 system fonts. The shell, input, report context, Tests, Map and evidence inspector are
-separate React components; report types and API requests are unchanged. Focus moves
+separate React components. API request schemas are shared by both report versions. Focus moves
 after React commits a destination. Selection and expanded evidence persist when
 switching review views; mobile/tablet evidence replaces the primary pane.
 Metrics include module nodes where labeled. Search filters the visible graph only;
@@ -514,20 +539,20 @@ Back/Escape navigation. Tablets also use a separate evidence pane. Previews may 
 the changed statement in a large module; select the individual definition where
 available or export the full source. There is no inline line-diff or rename matching.
 
-## Report 2.0 contract
+## Report 2.0 and 2.1 contracts
 
-This is an intentional breaking report version. `AnalysisRequest`/snapshot upload
-input and GitHub request input remain unchanged. IDs, edge direction, semantic
-comparison, ranking and deleted-test exclusion remain unchanged. The API's response
-models/OpenAPI, CLI JSON, TypeScript types and browser exports share this version.
-The dashboard rejects older response versions with an actionable restart message.
+Report 2.0 defines typed evidence and full changed-file source. Report 2.1 adds
+the `fixture` edge kind and the `Resolved fixture dependency` recommendation
+reason. Both versions use the same fields and input contracts. The API response
+models/OpenAPI, CLI JSON, TypeScript types and browser exports support both
+versions. The dashboard rejects other response versions with a restart message.
 There is no old-report importer or automatic conversion; re-analyze the original
 snapshots. Old reports alone lack enough source/revision information to reconstruct
 2.0 faithfully. The package/API release number is independent of the report schema.
 
 | Field | Contract |
 | --- | --- |
-| `schema_version` | Literal `"2.0"` |
+| `schema_version` | `"2.1"` with fixture edges, otherwise `"2.0"` |
 | `changed`, `removed`, `impacted`, `nodes` | Existing IDs/order/meaning retained; union nodes prefer after metadata |
 | `changes[]` | One entry per changed ID: `symbol`, `path`, `status` (`added`, `modified`, `removed`), nullable `before`/`after` inclusive `{line, end_line}` |
 | `source_files[]` | Sorted changed file paths only; each `before`/`after` is null for absent file, otherwise `{text, parse_status}` with complete original text and `parsed`/`unparseable` |
@@ -562,8 +587,10 @@ check is separate from analyzer recommendation generation; neither executes sour
 
 `python -m codeimpact.evaluate` invokes the existing analyzer, validates typed paths
 and revision evidence, compares selections to labels, and emits readable results
-plus a separate evaluation schema **1.0**. It preserves analysis report **2.0** and
-removes only elapsed timing from the embedded report. JSON is deterministic; cases
+plus a separate evaluation schema **1.0**. The historical authored replay embeds
+report **2.0**. The `--fixtures` successor also uses report **2.1** and checks the
+original report digest alongside the current result. Both omit only elapsed timing
+from embedded reports. JSON is deterministic; cases
 are sorted and no timestamps are added. Known limitations remain in overall totals
 as well as their own group. Exact FP/FN and unclassified-selection baselines fail
 on any change, including an improvement requiring reviewed annotations.
@@ -575,8 +602,8 @@ Re-indexed evidence checks establish structural consistency, not independent pro
 of Python semantics. See [the corpus guide](CORPUS.md) for limits, schema, all 25
 cases, observed mistakes and the workflow for adding a case. The corpus milestone
 left the analyzer unchanged; the later local-import milestone extends resolution
-within the bounds above. Scoring rules, stable IDs, report versions, input contract
-and dashboard remain unchanged.
+within the bounds above. The fixture milestone adds a typed edge while reusing
+the existing resolved-path scoring, stable ID rules, and snapshot input contract.
 
 ## Real-repository evaluation v1
 
@@ -824,7 +851,7 @@ deadline covers ingestion, not analyzer CPU time. Timings in report stats contin
 measure analysis, excluding network retrieval. Live hosting still needs verification
 of the actual host, TLS/secrets and resource configuration.
 
-The PR response is an additive `GitHubPRReport`: schema 2.0 report fields
+The PR response is an additive `GitHubPRReport`: schema 2.0 or 2.1 report fields
 plus a required `source` object (`kind`, repository/head repository, PR number/URL,
 title, `base_sha`, `head_sha`, `merge_base_sha`, `analyzer_version`). Demo and upload
 responses use the same 2.0 core without GitHub provenance. `base_sha` records the

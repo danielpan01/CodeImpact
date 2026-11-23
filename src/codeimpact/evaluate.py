@@ -53,7 +53,7 @@ class CaseResult(BaseModel):
 
 class Evaluation(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
-    analysis_schema_version: Literal["2.0"] = "2.0"
+    analysis_schema_version: Literal["2.0", "2.1"] = "2.0"
     interpretation: str = (
         "Agreement with authored dependency labels; not externally validated ground truth, "
         "runtime failure probabilities or permission to skip the full test suite."
@@ -128,6 +128,7 @@ def validate_report(
     *,
     policy: DiscoveryPolicy = CURRENT_POLICY,
     reexports: bool = True,
+    fixtures: bool = True,
 ) -> None:
     """Check path contracts independently of selection labels.
 
@@ -135,8 +136,8 @@ def validate_report(
     it does not certify that the index resolves Python semantics correctly. The
     authored labels, separate discovery and existing analyzer tests cover that gap.
     """
-    before = build_index(request.base, policy=policy, reexports=reexports)
-    after = build_index(request.head, policy=policy, reexports=reexports)
+    before = build_index(request.base, policy=policy, reexports=reexports, fixtures=fixtures)
+    after = build_index(request.head, policy=policy, reexports=reexports, fixtures=fixtures)
     nodes = {node.id: node for node in report.nodes}
     _require(len(nodes) == len(report.nodes), "duplicate nodes")
     _require(set(nodes) == before.nodes.keys() | after.nodes.keys(), "node union")
@@ -148,6 +149,8 @@ def validate_report(
     _require(len(edges) == len(report.edges) == len(set(keys)), "duplicate edges")
     _require(set(keys) == before.edges.keys() | after.edges.keys(), "typed edge union")
     _require(keys == sorted(keys), "edge ordering")
+    has_fixtures = any(kind == "fixture" for _, _, kind in keys)
+    _require(report.schema_version == ("2.1" if has_fixtures else "2.0"), "fixture schema version")
     for edge in report.edges:
         key = edge.source, edge.target, edge.kind
         _require(edge.source in nodes and edge.target in nodes, "unknown edge endpoint")
@@ -222,6 +225,11 @@ def validate_report(
                 if rec.symbol in index.nodes
             }
             reason = "Test itself changed"
+        elif kinds[0] == "fixture":
+            _require(all(kind == "call" for kind in kinds[1:]), "fixture path must end in calls")
+            _require(bool(available), "fixture path must exist in one revision")
+            _require(nodes[path[-1]].kind != "module", "fixture path must end at a definition")
+            reason = "Resolved fixture dependency"
         elif all(kind == "call" for kind in kinds) and nodes[path[-1]].kind != "module":
             reason = "Resolved call path"
         else:
@@ -240,6 +248,8 @@ def evaluate_case(
     variadic: bool = True,
     parameter_rows: bool = True,
     reexports: bool = True,
+    fixtures: bool = False,
+    resolved_false_negatives: tuple[str, ...] = (),
 ) -> CaseResult:
     report = analyze(
         case.request,
@@ -247,13 +257,23 @@ def evaluate_case(
         variadic=variadic,
         parameter_rows=parameter_rows,
         reexports=reexports,
+        fixtures=fixtures,
     )
-    validate_report(case.request, report, policy=policy, reexports=reexports)
+    validate_report(case.request, report, policy=policy, reexports=reexports, fixtures=fixtures)
     result = classify(case, {rec.symbol for rec in report.recommendations})
+    historical_misses = set(case.known_discrepancies.false_negatives)
+    _require(
+        set(resolved_false_negatives) <= historical_misses,
+        f"{case.id}: resolved fixture misses must come from frozen discrepancies",
+    )
     regressions = []
     for label, actual, expected in (
         ("false positives", result.false_positives, case.known_discrepancies.false_positives),
-        ("false negatives", result.false_negatives, case.known_discrepancies.false_negatives),
+        (
+            "false negatives",
+            result.false_negatives,
+            historical_misses.difference(resolved_false_negatives),
+        ),
         (
             "unclassified recommendations",
             result.unclassified_recommendations,
@@ -290,10 +310,14 @@ def evaluate(
     variadic: bool = True,
     parameter_rows: bool = True,
     reexports: bool = True,
+    fixtures: bool = False,
+    resolved_false_negatives: dict[str, tuple[str, ...]] | None = None,
 ) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
         raise ValueError("Evaluation needs nonempty cases with unique IDs")
     cases = sorted(cases, key=lambda case: case.id)
+    resolved = resolved_false_negatives or {}
+    _require(set(resolved) <= {case.id for case in cases}, "unknown resolved fixture case")
     results = [
         evaluate_case(
             case,
@@ -301,6 +325,8 @@ def evaluate(
             variadic=variadic,
             parameter_rows=parameter_rows,
             reexports=reexports,
+            fixtures=fixtures,
+            resolved_false_negatives=resolved.get(case.id, ()),
         )
         for case in cases
     ]
@@ -313,6 +339,9 @@ def evaluate(
     }
     return Evaluation.model_validate(
         {
+            "analysis_schema_version": (
+                "2.1" if any(r.analysis["schema_version"] == "2.1" for r in results) else "2.0"
+            ),
             "corpus_sha256": hashlib.sha256(canonical.encode()).hexdigest(),
             "case_count": len(results),
             "group_case_counts": {key: len(value) for key, value in groups.items()},
@@ -368,28 +397,81 @@ def readable(report: Evaluation) -> str:
     return "\n".join(lines)
 
 
+class FixtureMeasurement(BaseModel):
+    baseline: Literal["pytest-fixtures-v1"]
+    historical_report_sha256: str
+    report_sha256: str
+    resolved_false_negatives: dict[str, tuple[str, ...]]
+
+
+def report_text(report: Evaluation) -> str:
+    return json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n"
+
+
+def evaluate_fixtures(cases: list[CorpusCase], receipt: FixtureMeasurement) -> Evaluation:
+    previous = evaluate(
+        cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
+    )
+    _require(
+        not previous.regressions
+        and hashlib.sha256(report_text(previous).encode()).hexdigest()
+        == receipt.historical_report_sha256,
+        "Historical authored report drift",
+    )
+    current = evaluate(
+        cases,
+        policy=V2_POLICY,
+        variadic=False,
+        parameter_rows=False,
+        reexports=False,
+        fixtures=True,
+        resolved_false_negatives=receipt.resolved_false_negatives,
+    )
+    _require(
+        hashlib.sha256(report_text(current).encode()).hexdigest() == receipt.report_sha256,
+        "pytest-fixtures-v1 authored report drift",
+    )
+    return current
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, default=Path("corpus/cases"))
-    parser.add_argument("--output", type=Path, default=Path("reports/corpus-evaluation.json"))
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--case", dest="case_id", help="Evaluate one stable case ID")
+    parser.add_argument(
+        "--fixtures", action="store_true", help="Replay the pytest-fixtures-v1 gate"
+    )
     args = parser.parse_args(argv)
+    if args.output is None:
+        args.output = Path(
+            "reports/corpus-pytest-fixtures-v1-evaluation.json"
+            if args.fixtures
+            else "reports/corpus-evaluation.json"
+        )
     try:
         cases = load_corpus(args.corpus, discovery_policy=V2_POLICY)
+        if args.fixtures and args.case_id:
+            raise ValueError("The fixture replay validates the entire authored corpus")
         if args.case_id:
             cases = [case for case in cases if case.id == args.case_id]
             if not cases:
                 raise ValueError(f"Unknown case: {args.case_id}")
         if args.output.resolve().is_relative_to(args.corpus.resolve()):
             raise ValueError("Report output must be outside the corpus directory")
-        report = evaluate(
-            cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
-        )
+        if args.fixtures:
+            path = (
+                Path(__file__).resolve().parents[2]
+                / "benchmarks/pytest-fixtures-v1-preservation.json"
+            )
+            receipt = FixtureMeasurement.model_validate(json.loads(path.read_text())["measurement"])
+            report = evaluate_fixtures(cases, receipt)
+        else:
+            report = evaluate(
+                cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
+            )
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(
-            json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
+        args.output.write_text(report_text(report), encoding="utf-8")
     except (OSError, ValueError, RecursionError) as exc:
         print(f"Evaluation error: {exc}", file=sys.stderr)
         return 2

@@ -90,7 +90,7 @@ class DependencyEvidence(BaseModel):
     target_location: SourceLocation
 
 
-EdgeKind = Literal["call", "import", "module"]
+EdgeKind = Literal["call", "fixture", "import", "module"]
 RevisionPresence = Literal["before", "after", "both"]
 
 
@@ -115,7 +115,7 @@ class Recommendation(BaseModel):
 
 
 class Report(BaseModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["2.0", "2.1"] = "2.0"
     label: str
     nodes: list[Symbol]
     edges: list[Edge]

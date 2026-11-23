@@ -4078,3 +4078,47 @@ pinned replay regression. Labels remain drafts pending independent review.
 
 Audit source bytes, Git blob and SHA-256 records, and validation logs are
 under the ignored local `reports/hypothesis-validator-audit/` directory.
+
+## Bounded pytest fixture dependency resolution
+
+Started from clean main at `9d252cd` (PR #32). The original authored replay
+reproduced 23 TP, 2 FN, 0 FP, 32 TN and 2 unclassified selections. Before the
+resolver change, source-only tests reproduced the missing fixture path, the
+missing before-only path on fixture removal, and the missing after-only path
+on fixture registration.
+
+The successor adds one recommendation, at score 71 and distance 2.
+
+```text
+tests/test_fixture.py::test_quote
+  → tests/conftest.py::quoted  [fixture injection, parameter line 1 → declaration lines 4–6]
+  → core.py::price             [call, line 6 → lines 1–2]
+```
+
+Both edges exist in both revisions. The control remains unselected.
+`tests/test_worker.py::test_read` remains the reflective runtime-import miss.
+The 25-case total is now 24 TP, 1 FN, 0 FP, 32 TN and 2 unclassified selections.
+The [versioned receipt](../benchmarks/pytest-fixtures-v1-preservation.json)
+pins the original and successor report bytes without editing authored snapshots,
+labels or discrepancy annotations.
+
+The proof accepts one required parameter on a plain synchronous top-level test
+and a unique, zero-argument same-directory fixture with bare `@pytest.fixture`.
+It declines on competing registrations, parametrization, ancestor conftests,
+unproved initialization or pytest binding, and the reserved fixture name
+`request`. New paths never join evidence from different revisions. The UI
+labels the injection separately in the inspector, explanation filter and map,
+and exports the exact schema 2.1 report. Reports without fixture edges use 2.0.
+[Architecture and proof scope](ARCHITECTURE.md#bounded-pytest-fixture-injection)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused fixture, evaluation and preservation regressions | 82 passed, including 21 fixture-specific cases. Altered report digests and a fixture edge under schema 2.0 were rejected. |
+| `make check` | Ruff, strict mypy, TypeScript and production build passed. Python reported 1,277 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. All eight real-evaluation outputs match their saved bytes. With fixture resolution enabled in the current analyzer, all 24 real cases also match the corresponding runs with fixture resolution disabled. |
+| Seeds 7 and 173 with reversed snapshots | Each seed reproduced ten stable reports and passed 98 reversed-snapshot checks. Comparison of analysis reports excluded only `stats.elapsed_ms`. |
+| Frontend and pilot | Prettier passed. The full browser rerun passed all 255 tests across five projects after correcting the new fixture-edge locator. `make verify-pilot` passed the protected local deployment checks. |
+| Historical artifacts | All 182 existing corpus and benchmark files and all twelve previously saved reports match their starting bytes. |
+| Whitespace and staging | `git diff --check` passed. The staging area is empty. |
+
+Replay logs are under the ignored local `reports/pytest-fixture-proof/` directory.

@@ -1,4 +1,9 @@
-import { loadDemo, openAnalysis, openChangedCode } from "./helpers";
+import {
+  loadDemo,
+  openAnalysis,
+  openChangedCode,
+  showEvidence,
+} from "./helpers";
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import type { Report } from "../src/types";
@@ -28,6 +33,58 @@ test("demo graph and explanation show real backend results", async ({
   await expect(page.locator(".evidence-path li")).toHaveCount(4);
   await expect(page.locator(".evidence-path li").last()).toContainText(
     "discount",
+  );
+});
+
+test("fixture injection has its own evidence, map edge, and export", async ({
+  page,
+}) => {
+  const { request } = JSON.parse(
+    await readFile(
+      new URL("../../corpus/cases/pytest_fixtures.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  await page.goto("/");
+  const upload = page.waitForResponse((response) =>
+    response.url().endsWith("/analyze"),
+  );
+  await page.getByLabel("Upload snapshot JSON").setInputFiles({
+    name: "fixture.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(request)),
+  });
+  const report: Report = await (await upload).json();
+  await expect(page.getByRole("button", { name: /^Tests 1$/ })).toBeVisible();
+  await page.getByLabel("Explanation", { exact: true }).selectOption("fixture");
+  await expect(page.getByRole("button", { name: /test_quote/ })).toBeVisible();
+  await showEvidence(page);
+  const injection = page
+    .locator(".edge-evidence")
+    .filter({ hasText: "Pytest fixture injection" });
+  await expect(injection).toBeVisible();
+  await injection
+    .getByText("After: 1 evidence location", { exact: true })
+    .click();
+  await expect(injection).toContainText("tests/test_fixture.py:1–1");
+  await expect(injection).toContainText("tests/conftest.py:4–6");
+  await expect(
+    page.locator(".edge-evidence").filter({ hasText: "Resolved call" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Map", exact: true }).click();
+  await page.getByRole("button", { name: "Focus path", exact: true }).click();
+  const fixtureEdge = page.getByRole("group", {
+    name: /^Pytest fixture injection:.*test_quote.*→.*quoted/,
+  });
+  await expect(fixtureEdge).toHaveCount(1);
+  await expect(fixtureEdge).toHaveClass(/evidence-edge/);
+  await expect(page.getByText(/dotted: fixture injection/)).toBeVisible();
+  expect(report.schema_version).toBe("2.1");
+  const downloadable = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export report" }).click();
+  const download = await downloadable;
+  expect(JSON.parse(await readFile((await download.path())!, "utf8"))).toEqual(
+    report,
   );
 });
 

@@ -1,5 +1,16 @@
 import type { DependencyEdge, Recommendation } from "./types";
 
+export function dependencyLabel(kind: DependencyEdge["kind"]) {
+  switch (kind) {
+    case "call":
+      return "Resolved call";
+    case "fixture":
+      return "Pytest fixture injection";
+    default:
+      return `Conservative ${kind} dependency`;
+  }
+}
+
 export function PathRevision({
   recommendation,
 }: {
@@ -42,11 +53,7 @@ export function EdgeEvidence({ edge }: { edge: DependencyEdge }) {
   return (
     <div className="edge-evidence">
       <p>
-        <b>
-          {edge.kind === "call"
-            ? "Resolved call"
-            : `Conservative ${edge.kind} dependency`}
-        </b>{" "}
+        <b>{dependencyLabel(edge.kind)}</b>{" "}
         <span className={`revision-badge ${edge.revision}`}>
           {presence[edge.revision]}
         </span>

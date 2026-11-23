@@ -44,6 +44,7 @@ from codeimpact.models import (
 from codeimpact.module_data import ModuleDataFallback
 from codeimpact.parameter_rows import ParameterRows
 from codeimpact.partial_bindings import PartialBindings
+from codeimpact.pytest_fixtures import add_fixture_edges
 from codeimpact.selection import AggregateFallback, propagation_changes
 from codeimpact.variadic_fallback import VariadicFallback
 
@@ -328,7 +329,11 @@ class Index:
 
 
 def build_index(
-    snapshot: Snapshot, *, policy: DiscoveryPolicy = CURRENT_POLICY, reexports: bool = True
+    snapshot: Snapshot,
+    *,
+    policy: DiscoveryPolicy = CURRENT_POLICY,
+    reexports: bool = True,
+    fixtures: bool = True,
 ) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
@@ -530,6 +535,8 @@ def build_index(
             )
     if reexports:
         add_reexport_edges(index)
+    if fixtures:
+        add_fixture_edges(index)
     return index
 
 
@@ -694,10 +701,11 @@ def analyze(
     variadic: bool = True,
     parameter_rows: bool = True,
     reexports: bool = True,
+    fixtures: bool = True,
 ) -> Report:
     started = time.perf_counter()
-    before = build_index(request.base, policy=policy, reexports=False)
-    after = build_index(request.head, policy=policy, reexports=False)
+    before = build_index(request.base, policy=policy, reexports=False, fixtures=False)
+    after = build_index(request.head, policy=policy, reexports=False, fixtures=False)
     nodes = before.nodes | after.nodes
     edges = merge_edges(before, after)
     changed = sorted(
@@ -747,9 +755,12 @@ def analyze(
         aggregate_path: str | None = None,
         initialization_path: str | None = None,
         body_path: str | None = None,
+        revision: Literal["before", "after"] | None = None,
     ) -> dict[str, list[str]]:
         adjacency: dict[str, set[str]] = defaultdict(set)
         for edge in edges.values():
+            if revision is not None and not getattr(edge, revision):
+                continue
             if not calls_only or edge.kind == "call":
                 if (
                     body_path is not None
@@ -872,6 +883,27 @@ def analyze(
             if current is None or (len(candidate), candidate) < (len(current), current):
                 paths[sid] = candidate
     call_paths = active_paths(True)
+    fixture_paths: dict[str, list[str]] = {}
+    old_fixtures = add_fixture_edges(before) if fixtures else set()
+    new_fixtures = add_fixture_edges(after) if fixtures else set()
+    # A new path must exist in one revision from injection through the call trail.
+    # Keep the existing selection and ranking for paths that already have call evidence.
+    fixture_seeds = [sid for sid in active if nodes[sid].kind != "module"]
+    revision_injections: tuple[
+        tuple[Literal["before", "after"], set[tuple[str, str, str]]], ...
+    ] = (("before", old_fixtures), ("after", new_fixtures))
+    for revision, injections in revision_injections:
+        if not injections:
+            continue
+        revision_calls = walk(fixture_seeds, True, revision=revision)
+        for source, target, _ in sorted(injections):
+            tail = revision_calls.get(target)
+            if tail is None or source in call_paths or source in tail:
+                continue
+            candidate = [source, *tail]
+            current = fixture_paths.get(source)
+            if current is None or (len(candidate), candidate) < (len(current), current):
+                fixture_paths[source] = candidate
     added_calls: dict[str, str] = {}
     added_incoming: dict[str, set[str]] = defaultdict(set)
     if reexports:
@@ -879,7 +911,6 @@ def analyze(
         # without expanding, pruning or rerouting the selection walk.
         additions = add_reexport_edges(before) | add_reexport_edges(after)
         if additions:
-            edges = merge_edges(before, after)
             active_targets = set(active)
             for source, target, _ in sorted(additions):
                 added_incoming[target].add(source)
@@ -891,13 +922,18 @@ def analyze(
                     and call_arguments.allows(source, target, nodes[target].path)
                 ):
                     added_calls.setdefault(source, target)
+    for source, path in fixture_paths.items():
+        paths.setdefault(source, path)
+    if old_fixtures or new_fixtures or added_incoming:
+        edges = merge_edges(before, after)
     recommendations = []
     for sid in sorted(paths):
         if nodes[sid].kind != "test" or sid not in after.nodes:
             continue
         proof = added_calls.get(sid)
-        precise = sid in call_paths or proof is not None
-        path = [sid, proof] if proof else call_paths.get(sid, paths[sid])
+        injection = fixture_paths.get(sid)
+        precise = sid in call_paths or proof is not None or injection is not None
+        path = [sid, proof] if proof else call_paths.get(sid) or injection or paths[sid]
         distance = len(path) - 1
         fan_in = len(reverse[proof] | added_incoming[proof]) if proof else len(reverse[path[-1]])
         score = min(100, max(1, (90 if precise else 50) - 10 * distance + min(10, fan_in)))
@@ -908,6 +944,12 @@ def analyze(
         # Retain scoring and typed-edge preference while identifying each exact hop.
         if proof:
             used_edges = [edges[(sid, proof, "call")]]
+        elif injection:
+            reason = "Resolved fixture dependency"
+            used_edges = [edges[(sid, injection[1], "fixture")]]
+            used_edges.extend(
+                edges[(a, b, "call")] for a, b in zip(path[1:], path[2:], strict=False)
+            )
         else:
             original = [typed_pairs[(a, b)][0] for a, b in zip(path, path[1:], strict=False)]
             used_edges = [edges[(e.source, e.target, e.kind)] for e in original]
@@ -932,6 +974,7 @@ def analyze(
         )
     recommendations.sort(key=lambda item: (-item.score, item.symbol))
     return Report(
+        schema_version="2.1" if old_fixtures or new_fixtures else "2.0",
         label=request.label,
         nodes=[nodes[sid] for sid in sorted(nodes)],
         edges=[edges[key] for key in sorted(edges)],

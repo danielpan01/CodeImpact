@@ -1,6 +1,6 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — updated November 22, 2026
+## Active roadmap — updated November 23, 2026
 
 **Milestones 1–6 match their implemented technical scope. The product still has
 explicit coverage, accuracy and release-readiness work.** Live hosting and the human
@@ -84,7 +84,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Inflection set cleanup — merged, PR #28 | One source-owned literal set insertion with matching `finally` cleanup | `inflection_title` selects 1/22. Its resolved `titleize` path is retained and its only draft false positive is removed | Two-revision proof, exact evidence and `set-cleanup-v1` receipt. [Source review](SET_CLEANUP_REVIEW.md) |
 | Inflection empty-string guard — merged, PR #30 | Direct known empty argument returns before reading edited rule tables | `inflection_rules` selects 7/22. All six affected paths and the conservative `test_uncountability` path are retained | Two-revision proof and separate `empty-string-guard-v1` receipt. [Source review](EMPTY_STRING_GUARD_REVIEW.md) |
 | Inflection finite uncountability guard — merged, PR #31 | Prove identity returns and rule-table bypass for every collected literal-set member | `inflection_rules` selects 6/22. The six affected paths match their prior evidence | Two-revision source and effects audit with a separate `finite-string-guards-v1` receipt. [Source review](UNCOUNTABLE_GUARD_REVIEW.md) |
-| PyISO8601 Hypothesis wrappers — audited | Compare the pinned decorator, strategies and runner provenance | The validator case stays at 4/8. Nox leaves test dependencies unpinned, and the locked Hypothesis release uses installed entry points and pytest hooks | Retain both package paths and protect their execution boundary with regressions. [Source audit](HYPOTHESIS_VALIDATOR_AUDIT.md) |
+| PyISO8601 Hypothesis wrappers — audited, PR #32 | Compare the pinned decorator, strategies and runner provenance | The validator case stays at 4/8. Nox leaves test dependencies unpinned, and the locked Hypothesis release uses installed entry points and pytest hooks | Retain both package paths and protect their execution boundary with regressions. [Source audit](HYPOTHESIS_VALIDATOR_AUDIT.md) |
+| Bounded pytest fixture dependencies — implemented | Connect a plain test's required parameter to its same-directory conftest fixture | The authored `test_quote` now reaches `core.price`, raising authored recall from 23/25 to 24/25 | Typed fixture evidence per revision, a separate authored receipt, and identical real-corpus replays. [Results](CORPUS.md#pytest-fixture-successor) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -202,8 +203,10 @@ For every 9-series milestone, choose one source pattern, add failing regressions
 retain unknown/rebound/side-effect controls, preserve original labels and baseline
 files, and record changes in a new measurement. An improvement must not remove
 valid affected paths merely to reduce selection size. Heuristic scores are not
-probabilities. Fixture injection and runtime imports remain separate authored
-limitations; prioritize them after new evidence establishes a bounded useful scope.
+probabilities. The next authored miss is `runtime_import`. Audit its literal
+`importlib.import_module` and reflective member lookup in both revisions before
+deciding whether their bindings and initialization support a precise edge. Preserve
+fallback for ambiguous imports, rebinding, and dynamic names.
 
 Milestone 10 records discovery coverage and uncertainty separately. Its v4
 examples were frozen before analysis. The source-only review pack supports
