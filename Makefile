@@ -21,7 +21,7 @@ evaluate-real:
 evaluate-real-v2:
 	.venv/bin/python -m codeimpact.fresh_evaluate --corpus corpus/real-v2 --output reports/real-v2-parameter-tables-v1-evaluation.json
 evaluate-real-v3:
-	.venv/bin/python -m codeimpact.holdout_evaluate --corpus corpus/real-v3 --output reports/real-v3-empty-string-guard-v1-evaluation.json
+	.venv/bin/python -m codeimpact.holdout_evaluate --corpus corpus/real-v3 --output reports/real-v3-finite-string-guards-v1-evaluation.json
 evaluate-real-v4:
 	.venv/bin/python -m codeimpact.v4_evaluate
 evaluate-real-v4-unittest:

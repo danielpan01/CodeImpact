@@ -208,7 +208,7 @@ def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monk
     receipt = json.loads((DATA / "first-run.json").read_text())
     report = holdout.evaluate_holdout(DATA)
     assert report == holdout.evaluate_holdout(DATA)
-    assert report["holdout_evaluation_schema_version"] == "10.0"
+    assert report["holdout_evaluation_schema_version"] == "11.0"
     assert not report["first_measurement_matches"]
     assert report["current_measurement_matches"]
     assert report["original_summary"] == receipt["measurement"]["summary"]
@@ -225,13 +225,13 @@ def test_no_upstream_import_network_or_subprocess_and_versioned_measurement(monk
     assert report["evaluation"]["regressions"] == []
     assert len(report["initial_regressions"]) == 3
     assert report["summary"]["test_count"] == 120
-    assert report["summary"]["selected_count"] == 45
+    assert report["summary"]["selected_count"] == 44
     assert report["summary"]["label_status_counts"] == {"draft": 6}
     assert report["summary"]["metrics"]["counts"] == {
         "tp": 42,
-        "fp": 3,
+        "fp": 2,
         "fn": 0,
-        "tn": 63,
+        "tn": 64,
         "unclassified_recommendations": 0,
     }
     missing = next(case for case in report["cases"] if case["id"] == "ordered_set_pop")
@@ -290,7 +290,7 @@ def test_measurement_drift_fails_gate(monkeypatch):
     report = holdout.evaluate_holdout(DATA)
     assert not report["first_measurement_matches"]
     assert report["evaluation"]["regressions"] == [
-        "v3: measurement differs from empty-string-guard-v1",
+        "v3: measurement differs from finite-string-guards-v1",
     ]
 
 

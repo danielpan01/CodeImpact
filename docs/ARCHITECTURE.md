@@ -953,6 +953,13 @@ initialization, collection, and two-revision checks still apply. Other calls
 and independent module contributions retain their ordinary evidence.
 [Source audit and exact result](EMPTY_STRING_GUARD_REVIEW.md)
 
+One supported parameter comprehension supplies exact rows from a source-owned
+literal set of lowercase ASCII strings. The query proves that every collected
+value returns unchanged through the matching membership or fixed word-boundary
+guard. That result can feed another supported call. The proof also audits peer
+test effects, including balanced insertion and removal of an absent literal.
+It filters only the proven production-table contribution. [Source proof and scope](UNCOUNTABLE_GUARD_REVIEW.md)
+
 ## Additive package exports
 
 For a top-level package whose initializer contains only explicit child imports

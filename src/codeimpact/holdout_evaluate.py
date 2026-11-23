@@ -25,6 +25,7 @@ from codeimpact.fresh_evaluate import (
     PROJECT,
     TABLES_SOURCES,
     V3_EMPTY_STRING_GUARD,
+    V3_FINITE_STRING_GUARDS,
     V3_SET_CLEANUP,
     CaseBaseline,
     FirstRun,
@@ -63,7 +64,8 @@ TABLES_BASELINE_FILE = "baselines/literal-tables-v1.json"
 EXPORTS_BASELINE_FILE = "baselines/additive-exports-v1.json"
 PARAMETERS_BASELINE_FILE = "baselines/parameter-tables-v1.json"
 SET_CLEANUP_BASELINE_FILE = V3_SET_CLEANUP.removeprefix("corpus/real-v3/")
-BASELINE_FILE = V3_EMPTY_STRING_GUARD.removeprefix("corpus/real-v3/")
+EMPTY_GUARD_BASELINE_FILE = V3_EMPTY_STRING_GUARD.removeprefix("corpus/real-v3/")
+BASELINE_FILE = V3_FINITE_STRING_GUARDS.removeprefix("corpus/real-v3/")
 LABELS_FILE = "baselines/test-discovery-v1-labels.json"
 V2_DISCOVERY_REPLAY = "corpus/real-v2/baselines/test-discovery-v1.json"
 V2_LFU_REPLAY = "corpus/real-v2/baselines/lfu-callback-v1.json"
@@ -108,6 +110,7 @@ class DiscoveryBaseline(StrictModel):
         "parameter-tables-v1",
         "set-cleanup-v1",
         "empty-string-guard-v1",
+        "finite-string-guards-v1",
     ]
     explanation: Nonblank
     frozen_inputs_sha256: SHA256
@@ -125,13 +128,29 @@ def current_baseline(directory: Path, project: Path = PROJECT) -> DiscoveryBasel
     baseline = DiscoveryBaseline.model_validate(
         read_metadata(safe_file(directory, BASELINE_FILE))[0]
     )
-    require(baseline.name == "empty-string-guard-v1", "Current baseline name mismatch")
+    require(baseline.name == "finite-string-guards-v1", "Current baseline name mismatch")
     require(set(baseline.analyzer_sha256) == CURRENT_SOURCES, "Current engine inventory mismatch")
     for path, expected in baseline.analyzer_sha256.items():
         require(replay_source_matches(project, path, expected), f"Engine changed: {path}")
+    guard_path = safe_file(directory, EMPTY_GUARD_BASELINE_FILE)
+    require(
+        file_hash(guard_path) == baseline.previous_baseline_sha256,
+        "Preserved empty string guard baseline changed",
+    )
+    guard = DiscoveryBaseline.model_validate(read_metadata(guard_path)[0])
+    require(guard.name == "empty-string-guard-v1", "Empty string guard baseline name mismatch")
+    require(
+        set(guard.analyzer_sha256) == CURRENT_SOURCES, "Historical empty string guard inventory"
+    )
+    require(
+        guard.v2_replay_sha256 == baseline.v2_replay_sha256
+        and guard.labels_sha256 == baseline.labels_sha256
+        and guard.frozen_inputs_sha256 == baseline.frozen_inputs_sha256,
+        "Empty string guard dependency receipts changed",
+    )
     cleanup_path = safe_file(directory, SET_CLEANUP_BASELINE_FILE)
     require(
-        file_hash(cleanup_path) == baseline.previous_baseline_sha256,
+        file_hash(cleanup_path) == guard.previous_baseline_sha256,
         "Preserved set cleanup baseline changed",
     )
     cleanup = DiscoveryBaseline.model_validate(read_metadata(cleanup_path)[0])
@@ -482,6 +501,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
             EXPORTS_BASELINE_FILE,
             PARAMETERS_BASELINE_FILE,
             SET_CLEANUP_BASELINE_FILE,
+            EMPTY_GUARD_BASELINE_FILE,
             BASELINE_FILE,
             LABELS_FILE,
         },
@@ -505,6 +525,7 @@ def validate_frozen(directory: Path, project: Path = PROJECT) -> FrozenInputs:
         EXPORTS_BASELINE_FILE,
         PARAMETERS_BASELINE_FILE,
         SET_CLEANUP_BASELINE_FILE,
+        EMPTY_GUARD_BASELINE_FILE,
         LABELS_FILE,
     ):
         if (directory / path).exists():
@@ -565,11 +586,11 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
     current_matches = measurement(report) == baseline.measurement
     if not current_matches:
         report["evaluation"]["regressions"].append(
-            "v3: measurement differs from empty-string-guard-v1"
+            "v3: measurement differs from finite-string-guards-v1"
         )
     report.update(
-        holdout_evaluation_schema_version="10.0",
-        previous_baseline="set-cleanup-v1",
+        holdout_evaluation_schema_version="11.0",
+        previous_baseline="empty-string-guard-v1",
         previous_baseline_sha256=baseline.previous_baseline_sha256,
         active_baseline=baseline.name,
         active_baseline_sha256=canonical_hash(baseline.model_dump()),
@@ -585,7 +606,7 @@ def evaluate_holdout(directory: Path) -> dict[str, Any]:
         initial_regressions=initial.initial_regressions,
         discovery=discovery,
         interpretation=(
-            "Versioned v3 empty-string-guard-v1 measurement; prior receipts preserved; "
+            "Versioned v3 finite-string-guards-v1 measurement; prior receipts preserved; "
             "original 90-test first measurement "
             "and excluded inventory preserved. "
             "New source labels were drafted before expanded analysis; human review pending. "
@@ -602,7 +623,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         evaluator=evaluate_holdout,
         default_corpus=Path("corpus/real-v3"),
-        default_output=Path("reports/real-v3-empty-string-guard-v1-evaluation.json"),
+        default_output=Path("reports/real-v3-finite-string-guards-v1-evaluation.json"),
     )
 
 

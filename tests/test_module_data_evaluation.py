@@ -18,6 +18,7 @@ ROOT = Path(__file__).parents[1]
 
 def test_both_module_contributions_and_affected_paths_match_history(monkeypatch):
     monkeypatch.setattr(Query, "empty_string_return", lambda *_: False)
+    monkeypatch.setattr(Query, "finite_string_test", lambda *_: False)
     dataset = ROOT / "corpus/real-v3"
     case = json.loads((dataset / "cases/inflection_rules.json").read_text())
     old = json.loads((dataset / "baselines/legacy-dispatch-v1.json").read_text())["measurement"]
@@ -70,12 +71,13 @@ def test_both_module_contributions_and_affected_paths_match_history(monkeypatch)
 
 
 def test_empty_string_successor_changes_only_the_pinned_production_contribution(monkeypatch):
+    monkeypatch.setattr(Query, "finite_string_test", lambda *_: False)
     dataset = ROOT / "corpus/real-v3"
     case_id = "inflection_rules"
     case = json.loads((dataset / f"cases/{case_id}.json").read_text())
     request = AnalysisRequest.model_validate(case["request"])
     old = json.loads((dataset / "baselines/set-cleanup-v1.json").read_text())["measurement"]
-    new = holdout_evaluate.current_baseline(dataset).measurement
+    new = json.loads((dataset / "baselines/empty-string-guard-v1.json").read_text())["measurement"]
     assert {
         key for key, value in new["analysis_sha256"].items() if value != old["analysis_sha256"][key]
     } == {case_id}
@@ -98,15 +100,49 @@ def test_empty_string_successor_changes_only_the_pinned_production_contribution(
         assert getattr(current, field) == getattr(previous, field)
 
 
-def test_set_cleanup_receipt_is_verified_before_analysis(tmp_path, monkeypatch):
+def test_finite_guard_successor_preserves_every_other_recommendation(monkeypatch):
+    dataset = ROOT / "corpus/real-v3"
+    case_id = "inflection_rules"
+    case = json.loads((dataset / f"cases/{case_id}.json").read_text())
+    request = AnalysisRequest.model_validate(case["request"])
+    old = json.loads((dataset / "baselines/empty-string-guard-v1.json").read_text())["measurement"]
+    new = holdout_evaluate.current_baseline(dataset).measurement
+    assert {
+        case
+        for case, current in new["analysis_sha256"].items()
+        if current != old["analysis_sha256"][case]
+    } == {case_id}
+
+    after = analyze(request)
+    monkeypatch.setattr(Query, "finite_string_test", lambda *_: False)
+    before = analyze(request)
+    for report, receipt in ((before, old), (after, new)):
+        validate_report(request, report)
+        stable = report.model_dump(mode="json", exclude={"stats": {"elapsed_ms"}})
+        assert canonical_hash(stable) == receipt["analysis_sha256"][case_id]
+    removed = "test_inflection.py::test_uncountability"
+    assert after.recommendations == [r for r in before.recommendations if r.symbol != removed]
+    assert {r.symbol for r in after.recommendations} == case["expected_affected"].keys()
+    assert after.impacted == [sid for sid in before.impacted if sid != removed]
+    for field in ("nodes", "edges", "changed", "changes", "removed", "source_files", "warnings"):
+        assert getattr(after, field) == getattr(before, field)
+
+
+@pytest.mark.parametrize(
+    ("receipt", "expected"),
+    [("set-cleanup-v1", "set cleanup"), ("empty-string-guard-v1", "empty string guard")],
+)
+def test_guard_predecessor_receipt_is_verified_before_analysis(
+    tmp_path, monkeypatch, receipt, expected
+):
     directory = tmp_path / "real-v3"
     shutil.copytree(ROOT / "corpus/real-v3", directory)
-    with (directory / "baselines/set-cleanup-v1.json").open("ab") as stream:
+    with (directory / f"baselines/{receipt}.json").open("ab") as stream:
         stream.write(b"\n")
     monkeypatch.setattr(
         holdout_evaluate, "evaluate_real", lambda *_a, **_k: pytest.fail("ran analysis")
     )
-    with pytest.raises(ValueError, match="Preserved set cleanup baseline changed"):
+    with pytest.raises(ValueError, match=f"Preserved {expected} baseline changed"):
         holdout_evaluate.evaluate_holdout(directory)
 
 

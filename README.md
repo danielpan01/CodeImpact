@@ -240,12 +240,15 @@ The **set-cleanup follow-up** removes its last draft false positive after
 auditing one literal set insertion and its `finally` cleanup in both revisions.
 The **empty-string guard** follow-up excludes one Inflection rule-case
 recommendation because the literal empty call returns before reading the
-edited tables in both revisions. Current v3 is **45/120 selected**, with
-**42 TP, 3 FP, 0 FN and 63 TN**.
+edited tables in both revisions. The **finite-set guard** follow-up proves
+that all nine collected uncountability parameters return unchanged through
+both helpers before either edited rule table is read. `inflection_rules` now
+selects 6/22. Current v3 is **44/120 selected**, with **42 TP, 2 FP, 0 FN and 64 TN**.
 All 12 uncertain definitions remain unselected.
-Current output is `reports/real-v3-empty-string-guard-v1-evaluation.json`.
+Current output is `reports/real-v3-finite-string-guards-v1-evaluation.json`.
 [Rule-table review](docs/MODULE_DATA_REVIEW.md) · [Validator/export review](docs/VALIDATOR_EXPORT_REVIEW.md) · [Parameter-table review](docs/PARAMETER_TABLE_REVIEW.md) · [Set-cleanup review](docs/SET_CLEANUP_REVIEW.md).
 [Empty-string guard review](docs/EMPTY_STRING_GUARD_REVIEW.md).
+[Finite-set guard review](docs/UNCOUNTABLE_GUARD_REVIEW.md).
 
 The dashboard explains
 static discovery scope and distinguishes zero discovery from zero recommendations.

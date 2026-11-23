@@ -252,6 +252,133 @@ def test_mutated_parameter_data_keeps_collection_fallback():
     assert "test_lib.py::test_independent" in selected(review(tests=tests))
 
 
+FINITE_LIB = r"""import re
+RULES = [('x', 'xs')]
+EXEMPT = {'fish', 'rice'}
+def plural(word):
+    if not word or word.lower() in EXEMPT:
+        return word
+    return RULES[0][1]
+def singular(word):
+    for exception in EXEMPT:
+        if re.search(r'(?i)\b(%s)\Z' % exception, word):
+            return word
+    return RULES[0][0]
+"""
+FINITE_TESTS = """import pytest
+import lib
+CASES = [('old', 'OLD')]
+@pytest.mark.parametrize(('word',), [(item,) for item in lib.EXEMPT])
+def test_members(word):
+    assert lib.plural(word) == word
+    assert lib.singular(word) == word
+    assert lib.singular(lib.plural(word)) == word
+"""
+FINITE_TEST = "test_lib.py::test_members"
+
+
+def test_finite_members_bypass_edited_rules_including_nested_call():
+    assert FINITE_TEST not in selected(review(lib=FINITE_LIB, tests=FINITE_TESTS))
+
+
+def test_a_member_can_reach_edited_rules_through_one_callee():
+    library = FINITE_LIB.replace("def singular", "SINGULAR_EXEMPT = {'fish'}\ndef singular")
+    library = library.replace("for exception in EXEMPT", "for exception in SINGULAR_EXEMPT")
+    report = review(lib=library, tests=FINITE_TESTS)
+    item = next(r for r in report.recommendations if r.symbol == FINITE_TEST)
+    assert item.evidence_path[-1] == "lib.py::<module>"
+    assert item.path_revision == "both"
+
+
+@pytest.mark.parametrize(
+    "library",
+    [
+        FINITE_LIB.replace("{'fish', 'rice'}", "unknown()"),
+        FINITE_LIB.replace("'rice'", "'r.ce'"),
+        FINITE_LIB + "EXEMPT.add('oil')\n",
+        FINITE_LIB.replace("import re", "re = 'shadowed'"),
+        FINITE_LIB.replace("return RULES[0][0]", "re = 'local'; return RULES[0][0]"),
+        FINITE_LIB.replace("(?i)", "(?im)"),
+        FINITE_LIB.replace("% exception, word)", "% exception, word, flags=0)"),
+        FINITE_LIB.replace("return word", "return 'changed'", 1),
+    ],
+)
+def test_unproved_collection_regex_or_return_stays_conservative(library):
+    report = review(lib=library, tests=FINITE_TESTS, head={"test_lib.py": FINITE_TESTS})
+    assert FINITE_TEST in selected(report)
+
+
+@pytest.mark.parametrize(
+    "peer",
+    [
+        "def test_peer(): lib.EXEMPT.add('oil')\n",
+        "def test_peer(): lib.EXEMPT.remove('fish')\n",
+        "def test_peer(): mutate(lib.EXEMPT)\n",
+        "def setup_function(fn): pass\n",
+    ],
+)
+def test_unproved_peer_or_lifecycle_effects_keep_fallback(peer):
+    tests = FINITE_TESTS + peer
+    report = review(lib=FINITE_LIB, tests=tests, head={"test_lib.py": tests})
+    assert FINITE_TEST in selected(report)
+
+
+def test_parameter_shadows_qualified_module_binding():
+    tests = (
+        FINITE_TESTS.split("@pytest")[0]
+        + """@pytest.mark.parametrize(('lib',), [(item,) for item in lib.EXEMPT])
+def test_members(lib): assert lib.plural(lib) == lib
+"""
+    )
+    assert FINITE_TEST in selected(review(lib=FINITE_LIB, tests=tests))
+
+
+def test_captured_collection_hook_blocks_finite_proof():
+    report = review(
+        lib=FINITE_LIB,
+        tests=FINITE_TESTS,
+        extra={"conftest.py": "def pytest_collection_modifyitems(items): pass\n"},
+        head={"test_lib.py": FINITE_TESTS},
+    )
+    assert FINITE_TEST in selected(report)
+
+
+def test_balanced_sibling_insertion_keeps_the_original_members():
+    sibling = """
+def test_peer():
+    extra = 'oil'
+    lib.EXEMPT.add(extra)
+    try:
+        assert lib.plural('different')
+    finally:
+        lib.EXEMPT.remove(extra)
+"""
+    report = review(lib=FINITE_LIB, tests=FINITE_TESTS + sibling)
+    assert FINITE_TEST not in selected(report)
+    assert "test_lib.py::test_peer" in selected(report)
+
+
+def test_finite_bypass_preserves_an_independent_path():
+    tests = FINITE_TESTS + "    assert CASES[0][0]\n"
+    report = review(lib=FINITE_LIB, tests=tests)
+    item = next(r for r in report.recommendations if r.symbol == FINITE_TEST)
+    assert item.evidence_path == [FINITE_TEST, "test_lib.py::<module>"]
+    assert item.path_revision == "both"
+
+
+def test_deleted_finite_callee_retains_its_before_only_path():
+    report = review(
+        lib=FINITE_LIB,
+        tests=FINITE_TESTS,
+        head={"lib.py": FINITE_LIB.split("def singular(")[0]},
+    )
+    item = next(r for r in report.recommendations if r.symbol == FINITE_TEST)
+    edge = next(e for e in report.edges if e.id in item.evidence_edges)
+    assert item.evidence_path == [FINITE_TEST, "lib.py::singular"]
+    assert item.path_revision == edge.revision == "before" and not edge.after
+    assert "lib.py::singular" in report.removed
+
+
 GUARDED_LIB = """RULES = [('x', 'xs')]
 EXCEPTIONS = {'yes'}
 def guarded(word):
