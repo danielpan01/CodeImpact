@@ -38,6 +38,21 @@ def test_validator_receipt_and_retained_evidence(monkeypatch):
     stable = current.model_dump(mode="json")
     stable["stats"].pop("elapsed_ms")
     assert canonical_hash(stable) == after["analysis_sha256"]["iso8601_validator"]
+    finite = json.loads((dataset / "baselines/finite-string-guards-v1.json").read_text())
+    assert canonical_hash(stable) == finite["measurement"]["analysis_sha256"]["iso8601_validator"]
+    wrapped = [rec for rec in current.recommendations if rec.distance != 0]
+    assert {rec.symbol for rec in wrapped} == {
+        PREFIX + "test_hypothesis_valid_naive_datetimes",
+        PREFIX + "test_hypothesis_valid_datetimes_with_timezone",
+    }
+    for rec in wrapped:
+        assert rec.reason == "Conservative module/import dependency"
+        assert rec.evidence_path == [
+            rec.symbol,
+            "iso8601/test_iso8601.py::<module>",
+            "iso8601/__init__.py::<module>",
+        ]
+        assert (rec.score, rec.distance, rec.path_revision) == (32, 2, "both")
     monkeypatch.setattr(AdditiveExports, "allows", lambda *_: True)
     previous = analyze(request)
     validate_report(request, previous)

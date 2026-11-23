@@ -15,6 +15,16 @@ ADDITION = "\ndef validate(text: str) -> bool: return bool(text)\n"
 NAMED = "from pkg import parse\ndef test_parse(): assert parse('1') == 1\n"
 QUALIFIED = "import pkg\ndef test_parse(): assert pkg.parse('1') == 1\n"
 CHILD = "from pkg import api\ndef test_parse(): assert api.parse('1') == 1\n"
+HYPOTHESIS = """import hypothesis
+import hypothesis.extra.pytz
+import hypothesis.strategies
+import pkg
+
+@hypothesis.given(s=hypothesis.strategies.datetimes({timezone}))
+def test_wrapped(s): assert pkg.parse('1') == 1
+
+def test_plain(): assert pkg.parse('1') == 1
+"""
 
 
 def review(
@@ -78,6 +88,21 @@ def test_alternative_changed_dependency_keeps_exact_evidence():
         "test_api.py::test_parse",
         "other.py::helper",
     ]
+
+
+@pytest.mark.parametrize(
+    "timezone",
+    ["", "timezones=hypothesis.extra.pytz.timezones()"],
+    ids=["naive", "timezone-aware"],
+)
+def test_supported_collection_does_not_prove_hypothesis_execution(timezone):
+    report = review(HYPOTHESIS.format(timezone=timezone))
+    result = recommendations(report)
+    assert set(result) == {"test_api.py::test_wrapped"}
+    rec = result["test_api.py::test_wrapped"]
+    assert rec.reason == "Conservative module/import dependency"
+    assert rec.evidence_path == [rec.symbol, "test_api.py::<module>", "pkg/__init__.py::<module>"]
+    assert rec.path_revision == "both"
 
 
 @pytest.mark.parametrize(

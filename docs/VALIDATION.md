@@ -4047,3 +4047,34 @@ remain unselected. Independent label review is pending.
 The [successor preservation receipt](../benchmarks/finite-string-guards-v1-preservation.json)
 pins the analyzer transition and new measurement. Logs and deterministic replay
 receipts are under the ignored local `reports/inflection-uncountable/` directory.
+
+## PyISO8601 Hypothesis wrapper audit
+
+Started from clean main at PR #31, `3618b40f13da19aefcedac7db69a9c2b75257a8b`.
+The `finite-string-guards-v1` replay reproduced 4/8 selected in the validator
+case, with 2 draft true positives, 2 false positives, 0 false negatives,
+and 4 true negatives. The audit checked both captured decorators and bodies,
+the package export change, the Poetry pin and artifact metadata, and the
+unpinned Nox test session. Static inspection of Hypothesis 6.27.1 exposed
+entry-point loading and pytest collection and execution hooks. No installed
+runner or plugin inventory was established for either PyISO8601 revision.
+[Source and workflow audit](HYPOTHESIS_VALIDATOR_AUDIT.md)
+
+Both wrapped paths retain their exact typed evidence, score 32 and revision
+`both`. Both edited validator tests keep their exact changed-test evidence.
+The analyzer and receipts stay as published. Added two source-only controls
+for recognized naive and aware strategy construction and strengthened the
+pinned replay regression. Labels remain drafts pending independent review.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused additive-export and pinned-replay tests | 30 passed. |
+| `make check` | Passed Ruff, mypy across 34 source files, Python tests, TypeScript and the production build. Python reported 1,256 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning, and 93% statement coverage. |
+| All nine offline evaluations | Matched their existing measurements. The validator analysis hash and all five other v3 analysis hashes match. |
+| Hash seeds 7 and 173 and reversed files | Each seed reproduced nine report files byte for byte and passed all 73 reversed-file replays with only `stats.elapsed_ms` excluded. Typed evidence was validated. |
+| Pilot and frontend | `make verify-pilot` and frontend formatting passed. All 253 browser tests passed across five desktop and mobile projects. |
+| Protected artifacts | The 182 existing tracked corpus and benchmark files and all twelve saved reports matched their starting bytes. |
+| Whitespace and staging | `git diff --check` passed and the staging area was empty. |
+
+Audit source bytes, Git blob and SHA-256 records, and validation logs are
+under the ignored local `reports/hypothesis-validator-audit/` directory.

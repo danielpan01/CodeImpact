@@ -83,7 +83,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Humanize package initialization — audited, PR #28 | Check runtime dependency provenance before extending resolution | Both pinned trees lack an exact setuptools pin or a recorded environment sufficient to prove its effects | Keep the current fallback. Move the next proof to a captured dependency with a measured discrepancy |
 | Inflection set cleanup — merged, PR #28 | One source-owned literal set insertion with matching `finally` cleanup | `inflection_title` selects 1/22. Its resolved `titleize` path is retained and its only draft false positive is removed | Two-revision proof, exact evidence and `set-cleanup-v1` receipt. [Source review](SET_CLEANUP_REVIEW.md) |
 | Inflection empty-string guard — merged, PR #30 | Direct known empty argument returns before reading edited rule tables | `inflection_rules` selects 7/22. All six affected paths and the conservative `test_uncountability` path are retained | Two-revision proof and separate `empty-string-guard-v1` receipt. [Source review](EMPTY_STRING_GUARD_REVIEW.md) |
-| Inflection finite uncountability guard — implemented | Prove identity returns and rule-table bypass for every collected literal-set member | `inflection_rules` selects 6/22. The six affected paths match their prior evidence | Two-revision source and effects audit with a separate `finite-string-guards-v1` receipt. [Source review](UNCOUNTABLE_GUARD_REVIEW.md) |
+| Inflection finite uncountability guard — merged, PR #31 | Prove identity returns and rule-table bypass for every collected literal-set member | `inflection_rules` selects 6/22. The six affected paths match their prior evidence | Two-revision source and effects audit with a separate `finite-string-guards-v1` receipt. [Source review](UNCOUNTABLE_GUARD_REVIEW.md) |
+| PyISO8601 Hypothesis wrappers — audited | Compare the pinned decorator, strategies and runner provenance | The validator case stays at 4/8. Nox leaves test dependencies unpinned, and the locked Hypothesis release uses installed entry points and pytest hooks | Retain both package paths and protect their execution boundary with regressions. [Source audit](HYPOTHESIS_VALIDATOR_AUDIT.md) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -108,10 +109,12 @@ packaging or CI metadata. The source shows the re-export, but the
 `pkg_resources` import and distribution lookup keep the binding unproved.
 [Package initialization audit](HUMANIZE_INITIALIZATION_AUDIT.md)
 
-The finite-set proof removes the remaining draft false positive in
-`inflection_rules`. The two remaining v3 discrepancies are conservative
-Hypothesis paths in the validator-addition case. Their collection and execution
-effects require a separate audit. [Current v3 results](REAL_EVALUATION_V3.md)
+The two remaining v3 discrepancies are conservative Hypothesis paths in the
+validator-addition case. The audit reproduced the locked dependency metadata
+and found that Nox does not use it to install test dependencies. A narrower
+execution proof would need a verified runner and plugin inventory in addition
+to the decorator source. [Current v3 results](REAL_EVALUATION_V3.md) ·
+[Workflow and effects audit](HYPOTHESIS_VALIDATOR_AUDIT.md)
 
 ### Milestone 7: bounded test-discovery coverage — implemented
 
