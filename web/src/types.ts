@@ -39,7 +39,7 @@ export interface DependencyEdge {
   id: string;
   source: string;
   target: string;
-  kind: "call" | "import" | "module";
+  kind: "call" | "fixture" | "import" | "module";
   revision: "before" | "after" | "both";
   before: DependencyEvidence[];
   after: DependencyEvidence[];
@@ -57,7 +57,7 @@ export interface Report {
     merge_base_sha: string;
     analyzer_version: string;
   };
-  schema_version: "2.0";
+  schema_version: "2.0" | "2.1";
   label: string;
   nodes: SymbolNode[];
   edges: DependencyEdge[];

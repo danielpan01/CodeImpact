@@ -24,6 +24,12 @@ export function DiscoveryScope({ report }: { report: Report }) {
         conditional, loop or try blocks are not indexed. Parameter variants,
         inherited test executions and fixture injection are not collected.
       </p>
+      {report.schema_version === "2.1" && (
+        <p>
+          Fixture evidence links a test parameter to a supported same-directory
+          conftest fixture.
+        </p>
+      )}
       {outside.length > 0 && (
         <p>
           {outside.length} indexed test-shaped{" "}

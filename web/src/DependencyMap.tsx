@@ -15,6 +15,7 @@ import {
 } from "@xyflow/react";
 import type { Report } from "./types";
 import type { Theme } from "./theme";
+import { dependencyLabel } from "./Evidence";
 
 function frameNodes(
   flow: ReactFlowInstance,
@@ -228,7 +229,7 @@ export function DependencyMap({
           target: e.target,
           animated: false,
           className: highlighted ? "evidence-edge" : "context-edge",
-          ariaLabel: `${e.kind === "call" ? "Resolved call" : `Conservative ${e.kind} dependency`}: ${e.source} → ${e.target}, ${e.revision} revisions`,
+          ariaLabel: `${dependencyLabel(e.kind)}: ${e.source} → ${e.target}, ${e.revision} revisions`,
           markerEnd: {
             type: MarkerType.ArrowClosed,
             color: highlighted ? "var(--graph-evidence)" : "var(--graph-edge)",
@@ -236,7 +237,12 @@ export function DependencyMap({
           style: {
             stroke: highlighted ? "var(--graph-evidence)" : "var(--graph-edge)",
             strokeWidth: highlighted ? 3 : 1.5,
-            strokeDasharray: e.kind === "call" ? undefined : "5 4",
+            strokeDasharray:
+              e.kind === "call"
+                ? undefined
+                : e.kind === "fixture"
+                  ? "1 4"
+                  : "5 4",
           },
         };
       });
@@ -453,6 +459,9 @@ export function DependencyMap({
         <small>
           Arrows: caller → dependency · solid: resolved call · dashed:
           conservative fallback
+          {report.schema_version === "2.1"
+            ? " · dotted: fixture injection"
+            : ""}
           {recommendation ? " · cobalt: selected evidence path" : ""}
         </small>
       </div>

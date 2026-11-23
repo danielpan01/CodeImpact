@@ -53,9 +53,9 @@ export async function getReport(
       "CodeImpact returned an unreadable response. Retry the request, or restart the local API.",
     );
   });
-  if (report?.schema_version !== "2.0") {
+  if (report?.schema_version !== "2.0" && report?.schema_version !== "2.1") {
     throw new Error(
-      "Unsupported report version. Restart the API and refresh the dashboard together (schema 2.0 required).",
+      "Unsupported report version. Restart the API and refresh the dashboard together (schema 2.0 or 2.1 required).",
     );
   }
   return report;

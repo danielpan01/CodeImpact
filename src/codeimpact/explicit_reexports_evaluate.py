@@ -75,12 +75,9 @@ def evaluate_reexports(
     )
     require(set(baseline.analyzer_sha256) == ENGINE, "Re-export engine inventory differs")
     for path, expected in baseline.analyzer_sha256.items():
-        matches = (
-            replay_source_matches(PROJECT, path, expected)
-            if path == "src/codeimpact/module_data.py"
-            else file_hash(PROJECT / path) == expected
+        require(
+            replay_source_matches(PROJECT, path, expected), f"Re-export analyzer changed: {path}"
         )
-        require(matches, f"Re-export analyzer changed: {path}")
     previous = evaluate_rows(directory)
     require(
         not previous["evaluation"]["regressions"]

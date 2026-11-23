@@ -22,14 +22,18 @@ make evaluate
 
 This prints every case's selected/missed affected tests, selected/unselected
 unaffected tests, unclassified recommendations, ratios and limitation notes. It
-writes `reports/corpus-evaluation.json`, which is ignored by Git and can be
-regenerated. The explicit equivalent is:
+writes `reports/corpus-pytest-fixtures-v1-evaluation.json`. It checks the exact
+original and successor report bytes against the versioned receipt. Both reports
+are ignored by Git and can be regenerated:
 
 ```sh
+.venv/bin/python -m codeimpact.evaluate --fixtures
+
+# The historical replay retains the original fixture miss.
 .venv/bin/python -m codeimpact.evaluate \
   --corpus corpus/cases --output reports/corpus-evaluation.json
 
-# Inspect one example; use a separate output so the full report stays available.
+# Inspect one historical example in a separate output.
 .venv/bin/python -m codeimpact.evaluate --case module_overselection \
   --output reports/module-overselection.json
 
@@ -44,8 +48,9 @@ Exit status **0** means every observed discrepancy matches its explicit baseline
 it does **not** mean the analyzer has no mistakes. Status **1** means a false
 positive, false negative or unclassified selection changed; the report is still
 written for review. Status **2** means invalid input, a broken evidence contract or
-an input/output error; the diagnostic goes to stderr. A previous output can remain
-after a status-2 error, so do not mistake it for a new successful evaluation.
+an input/output error; the diagnostic goes to stderr. The fixture successor also
+uses status 2 if the pinned original or current report digest differs. A previous
+output can remain after a status-2 error, so check the exit status before using it.
 Unknown `--case` IDs fail. Output inside the corpus directory is refused.
 
 To read actual source with physical newlines instead of JSON escape sequences:
@@ -92,14 +97,15 @@ never automatically unaffected. Removed tests belong only to the base snapshot
 and cannot be head labels or recommendations. All cases include an independent
 unchanged control subsystem.
 
-Discovery follows CodeImpact's documented rule, **not full pytest collection**:
-the file basename starts with `test_` or ends with `_test.py`; a function or async
+These authored replays keep their original static discovery policy. The file
+basename starts with `test_` or ends with `_test.py`; a function or async
 function's name starts with `test_`. Direct definitions inside functions/classes
 are visited recursively, producing IDs such as `tests/test_x.py::TestGroup.test_x`.
 Definitions nested under `if`, loops or `try` are not collected. Class names
 themselves are not tests. Unparseable test files contribute no discovered tests.
 Duplicate discovered test IDs are rejected as ambiguous. The corpus validator
-implements this rule separately from analyzer recommendation generation.
+implements this rule separately from analyzer recommendation generation. The
+[discovery guide](TEST_DISCOVERY.md) covers the current application policy.
 
 The loader rejects duplicate JSON keys, duplicate case IDs, unknown fields, blank
 descriptions/rationales, overlapping labels, invalid discrepancy membership and
@@ -113,7 +119,28 @@ the existing 300 Python files, 200,000 bytes/file and 2,000,000 total source-byt
 limits and normalized relative Python paths. This is a local bounded corpus
 workflow, not adversarial parsing isolation or a performance benchmark.
 
-## Results and metric definitions
+## Pytest fixture successor
+
+The [`pytest-fixtures-v1` receipt](../benchmarks/pytest-fixtures-v1-preservation.json)
+compares the original authored run to the same configuration with fixture injection
+enabled. The 25 cases, source snapshots, labels, and known-discrepancy annotations
+in the original files are identical. Only `pytest_fixtures` changes.
+
+| Measurement | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original replay | 23 | 2 | 0 | 32 | 2 | 23/23 | 23/25 (92%) |
+| `pytest-fixtures-v1` | 24 | 1 | 0 | 32 | 2 | 24/24 | 24/25 (96%) |
+
+The sole added recommendation follows
+`tests/test_fixture.py::test_quote → tests/conftest.py::quoted → core.py::price`.
+The fixture edge records the parameter on line 1 and the declaration on lines 4–6.
+The following call is at `tests/conftest.py:6`, targeting `core.py:1–2`. Both hops
+exist in both revisions. The control `tests/test_control.py::test_control` stays
+unselected. The known reflective runtime-import miss remains, and neither
+unclassified recommendation changes. The receipt records the resolved discrepancy
+separately from the original case annotation.
+
+## Historical results and metric definitions
 
 Observed November 11, 2026, after scoped aggregate-fallback selection. All 25
 cases match their deliberately updated discrepancy annotations. All source
@@ -229,11 +256,11 @@ totals without skips, xfails or relabeling controls to make results look better.
 
 ## Evaluation report 1.0
 
-This is a separate schema from the unchanged analyzer/API report **2.0**.
+The evaluation schema is separate from the embedded analyzer reports.
 
 | Field | Meaning |
 | --- | --- |
-| `schema_version`, `analysis_schema_version` | `"1.0"` evaluator / `"2.0"` analyzer |
+| `schema_version`, `analysis_schema_version` | `"1.0"` evaluator / highest embedded analyzer version (`"2.0"` or `"2.1"`) |
 | `interpretation` | Explicit authored-label qualification |
 | `corpus_sha256` | SHA-256 of sorted validated cases serialized as canonical JSON; includes snapshots, labels and baseline annotations, not analyzer code |
 | `case_count`, `group_case_counts` | Number of cases overall and per category |
@@ -303,8 +330,9 @@ test actually fails; even the assertion examples here have not been executed.
    its test. The current body-change filter removes that FP while retaining the
    direct affected test and all graph evidence.
 3. **Miss and fix:** open `local_import.json`. Its unchanged affected label moved
-   from FN to TP after adding scoped aliases. Contrast it with the still-missed
-   `pytest_fixtures` case; passing a baseline is not complete dependency coverage.
+   from FN to TP after adding scoped aliases. The fixture successor fixes another
+   miss through an injection edge. The reflective `runtime_import` test is still
+   missed.
 4. **Evidence, then selection:** `module_rebinding` first lost a false resolved
    edge but retained an FP through fallback. This follow-up removes the unrelated
    selection; the unaffected label and source stay fixed. The affected direct

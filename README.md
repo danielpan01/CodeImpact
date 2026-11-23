@@ -49,7 +49,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 - **Analyze source as data.** GitHub ingestion pins the merge base and PR head, verifies downloaded blobs, and bounds network requests and source size. It does not execute, import, or install the analyzed repository.
 - **Keep deleted code in the analysis.** The dependency graph combines both revisions so removed functions can still explain potential impact.
 - **Make uncertainty visible.** Resolved calls are distinguished from conservative module/import estimates. A path assembled across revisions is labeled accordingly.
-- **Make results inspectable.** Recommendations retain exact edge IDs, source locations, and revision-specific evidence. Report schema 2.0 includes complete changed-file source.
+- **Make results inspectable.** Recommendations retain exact edge IDs, source locations, and revision-specific evidence. Report schemas 2.0 and 2.1 include complete changed-file source. Schema 2.1 adds typed fixture injection evidence.
 
 The [architecture guide](docs/ARCHITECTURE.md) documents the graph model, scoring formula, report contract, and ingestion limits.
 
@@ -90,26 +90,23 @@ Run it from the repository root with the pinned environment:
 
 ```sh
 make evaluate
-# Full results, labels, snapshots and typed paths: reports/corpus-evaluation.json
+# Full results, labels, snapshots and typed paths: reports/corpus-pytest-fixtures-v1-evaluation.json
 .venv/bin/python -m codeimpact.evaluate --case local_import \
   --output reports/local-import.json
 ```
 
-Observed agreement with these authored dependency labels: **23 true positives,
-2 false negatives, 0 false positives, 32 true negatives**. Precision is **23/23
-(100%)**; recall is **23/25 (92.0%)**. Two unclassified recommendations are reported
-separately. All 18 supported and 7 known-limitation cases enter the totals.
-Known discrepancies fail evaluation if they change, including improvements needing
-deliberate review. Passing means the recorded baseline matches, not zero mistakes.
+The `pytest-fixtures-v1` replay records **24 true positives, 1 false negative,
+0 false positives and 32 true negatives** against the authored dependency labels.
+Precision is **24/24 (100%)** and recall is **24/25 (96.0%)**. Two unclassified
+recommendations are reported separately. The 15 supported and 10 known-limitation
+cases retain their original categories.
 
-Earlier milestones fixed a function-local import miss and removed a stale resolved
-call after a module import was rebound. The selection refinement now removes all
-six recorded authored false positives: unrelated sibling functions, shadowed or
-rebound names, conditional definitions and inherited-method controls. It preserves
-the affected selections and keeps uncertain method references labeled conservative.
-Fixture injection and runtime imports remain the two measured misses. Sources and
-authored labels are unchanged; discrepancy annotations were deliberately updated.
-The [historical baseline](corpus/selection-baseline-v1.json) retains prior results.
+The fixture case now selects `test_quote` through the same-directory
+`conftest.py::quoted` fixture and its call to `core.py::price`. Its control stays
+unselected. The reflective runtime-import miss remains. The original corpus and
+its [historical baseline](corpus/selection-baseline-v1.json) remain available.
+The [successor receipt](benchmarks/pytest-fixtures-v1-preservation.json) pins
+the original and current measurements.
 These are small authored fixtures, not externally validated ground truth,
 production accuracy or proof that a test fails. Fixture code is never executed.
 Statement coverage measures executed lines, not correctness; passing regression

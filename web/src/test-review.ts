@@ -2,6 +2,7 @@ import type { Recommendation } from "./types";
 
 export const categories = {
   resolved: "Resolved calls",
+  fixture: "Fixture dependencies",
   conservative: "Conservative fallback",
   changed: "Test changed",
   other: "Other explanation",
@@ -22,6 +23,8 @@ export function explanationCategory(reason: string): Category {
   switch (reason) {
     case "Resolved call path":
       return "resolved";
+    case "Resolved fixture dependency":
+      return "fixture";
     case "Conservative module/import dependency":
       return "conservative";
     case "Test itself changed":

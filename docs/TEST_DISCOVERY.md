@@ -31,8 +31,10 @@ static source discovery, **not pytest collection or a count of test executions**
 - Definitions inside conditionals, loops, `try`, `with` or `match` bodies are not
   indexed. The source-only evaluation audit identifies such test-shaped definitions
   where parsing permits; an unparseable file is reported separately.
-- Parametrization, inherited test executions, plugin/configuration-driven collection,
-  fixture injection and runtime imports remain outside scope.
+- Parametrization, inherited test executions and plugin/configuration-driven
+  collection remain outside discovery. Dependency analysis infers limited
+  [same-directory fixture evidence](ARCHITECTURE.md#bounded-pytest-fixture-injection).
+  Runtime imports remain unresolved.
 - Duplicate qualified names retain the analyzer's existing final-definition/one-ID
   behavior. The corpus validator rejects ambiguous duplicate test labels; this
   milestone does not claim complete duplicate-definition semantics.

@@ -28,6 +28,7 @@ test("test review filters literal terms and categories without mutating report o
     item("a.py::test_Z", 10, "Conservative module/import dependency"),
     item("a.py::test_A", 90, "Test itself changed"),
     item("b.py::test_[literal]", 10, "Future explanation"),
+    item("c.py::test_fixture", 80, "Resolved fixture dependency"),
   ];
   const before = structuredClone(data);
   data.forEach(Object.freeze);

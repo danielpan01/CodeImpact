@@ -133,7 +133,7 @@ panel identifies the present but empty file. The explanation says **Mixed revisi
 contains that entire shown path. This is a conservative estimate, not an executable
 call sequence from one revision. **New analysis → Load demo** restores the original example.
 
-**Report schema 2.0 exports contain complete before/after source for files with
+**Report schema 2.0 and 2.1 exports contain complete before/after source for files with
 semantic changes**, including content beyond the displayed preview. Source is stored
 once per file per revision, never once per symbol. Previews show at most 120 lines,
 12,000 characters and 500 characters per line, with visible truncation notices.

@@ -15,7 +15,7 @@ check:
 demo:
 	.venv/bin/codeimpact --demo
 evaluate:
-	.venv/bin/python -m codeimpact.evaluate --corpus corpus/cases --output reports/corpus-evaluation.json
+	.venv/bin/python -m codeimpact.evaluate --fixtures
 evaluate-real:
 	.venv/bin/python -m codeimpact.real_evaluate --corpus corpus/real --output reports/real-evaluation.json
 evaluate-real-v2:
