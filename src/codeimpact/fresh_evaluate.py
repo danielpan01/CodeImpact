@@ -237,8 +237,34 @@ FIXTURE_SOURCE_CHANGES = {
 }
 
 
+RUNTIME_IMPORT_SOURCE_CHANGES = {
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/evaluate.py",
+    "src/codeimpact/explicit_reexports.py",
+}
+
+
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
     actual = file_hash(project / path)
+    if _fixture_source_matches(project, path, expected, actual):
+        return True
+    successor = project / "benchmarks/literal-runtime-imports-v1-preservation.json"
+    if path not in RUNTIME_IMPORT_SOURCE_CHANGES or not successor.is_file():
+        return False
+    predecessor = project / "benchmarks/pytest-fixtures-v1-preservation.json"
+    receipt, _ = read_metadata(successor)
+    if (
+        file_hash(predecessor) != receipt["previous_receipt_sha256"]
+        or actual != receipt["current_sources_sha256"][path]
+    ):
+        return False
+    previous, _ = read_metadata(predecessor)
+    return _fixture_source_matches(
+        project, path, expected, previous["current_sources_sha256"][path]
+    )
+
+
+def _fixture_source_matches(project: Path, path: str, expected: str, actual: str) -> bool:
     if _recorded_source_matches(project, path, expected, actual):
         return True
     fixture_path = project / "benchmarks/pytest-fixtures-v1-preservation.json"

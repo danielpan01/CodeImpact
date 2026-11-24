@@ -45,6 +45,7 @@ from codeimpact.module_data import ModuleDataFallback
 from codeimpact.parameter_rows import ParameterRows
 from codeimpact.partial_bindings import PartialBindings
 from codeimpact.pytest_fixtures import add_fixture_edges
+from codeimpact.runtime_imports import add_runtime_import_edges
 from codeimpact.selection import AggregateFallback, propagation_changes
 from codeimpact.variadic_fallback import VariadicFallback
 
@@ -334,6 +335,7 @@ def build_index(
     policy: DiscoveryPolicy = CURRENT_POLICY,
     reexports: bool = True,
     fixtures: bool = True,
+    runtime_imports: bool = True,
 ) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
@@ -433,6 +435,7 @@ def build_index(
 
     partials = PartialBindings(trees, modules, import_targets)
     index.partials = partials
+    runtime_calls = add_runtime_import_edges(index) if runtime_imports else set()
     for path, tree in trees.items():
         mod = module_name(path)
         module_id = f"{path}::<module>"
@@ -532,6 +535,7 @@ def build_index(
                     for _, other, qualified in definitions[path]
                     if name == qualified or name.startswith(qualified + ".")
                 ],
+                runtime_calls,
             )
     if reexports:
         add_reexport_edges(index)
@@ -554,6 +558,7 @@ def connect_calls(
     ambiguous_imports: set[str],
     partials: PartialBindings,
     partial_scopes: list[ast.AST],
+    runtime_calls: set[ast.Call],
 ) -> None:
     args = getattr(node, "args", None)
     shadowed = {a.arg for a in (args.posonlyargs + args.args + args.kwonlyargs)} if args else set()
@@ -581,7 +586,7 @@ def connect_calls(
                 )
                 | frozenset(child.arg for child in ast.walk(current) if isinstance(child, ast.arg))
             )
-        if isinstance(current, ast.Call):
+        if isinstance(current, ast.Call) and current not in runtime_calls:
             call = dotted(current.func)
             target: str | None = None
             if call:
@@ -702,10 +707,23 @@ def analyze(
     parameter_rows: bool = True,
     reexports: bool = True,
     fixtures: bool = True,
+    runtime_imports: bool = True,
 ) -> Report:
     started = time.perf_counter()
-    before = build_index(request.base, policy=policy, reexports=False, fixtures=False)
-    after = build_index(request.head, policy=policy, reexports=False, fixtures=False)
+    before = build_index(
+        request.base,
+        policy=policy,
+        reexports=False,
+        fixtures=False,
+        runtime_imports=runtime_imports,
+    )
+    after = build_index(
+        request.head,
+        policy=policy,
+        reexports=False,
+        fixtures=False,
+        runtime_imports=runtime_imports,
+    )
     nodes = before.nodes | after.nodes
     edges = merge_edges(before, after)
     changed = sorted(

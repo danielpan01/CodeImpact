@@ -25,6 +25,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Semantic change detection** | Compares Python ASTs, ignoring comments, whitespace, and source-line movement. |
 | **Dependency analysis** | Indexes symbols and supported calls/imports; preserves removed dependencies across revisions. |
 | **Function-local imports** | Resolves direct local import aliases after their binding statement; keeps ambiguous bindings unresolved and import fallback scoped to the function. |
+| **Literal runtime imports** | Resolves an immediate zero-argument call through a local literal import and builtin `getattr` when both bindings are proved from source. |
 | **Module import rebinding** | Suppresses misleading resolved calls when a module import name has competing bindings; preserves conservative import evidence. |
 | **Scoped fallback selection** | Separates body edits from initialization changes; uses bounded possible references to avoid unrelated class/module recommendations without inventing resolved calls. |
 | **Module-level partial calls** | Resolves bounded `functools.partial` bindings to unambiguous functions, with alias, re-export and lexical-scope guards. |
@@ -90,23 +91,22 @@ Run it from the repository root with the pinned environment:
 
 ```sh
 make evaluate
-# Full results, labels, snapshots and typed paths: reports/corpus-pytest-fixtures-v1-evaluation.json
+# Full results, labels, snapshots and typed paths: reports/corpus-literal-runtime-imports-v1-evaluation.json
 .venv/bin/python -m codeimpact.evaluate --case local_import \
   --output reports/local-import.json
 ```
 
-The `pytest-fixtures-v1` replay records **24 true positives, 1 false negative,
-0 false positives and 32 true negatives** against the authored dependency labels.
-Precision is **24/24 (100%)** and recall is **24/25 (96.0%)**. Two unclassified
+The `literal-runtime-imports-v1` replay records **25 true positives,
+0 false negatives, 0 false positives and 32 true negatives** against the authored
+dependency labels. Both precision and recall are **25/25**. Two unclassified
 recommendations are reported separately. The 15 supported and 10 known-limitation
 cases retain their original categories.
 
-The fixture case now selects `test_quote` through the same-directory
-`conftest.py::quoted` fixture and its call to `core.py::price`. Its control stays
-unselected. The reflective runtime-import miss remains. The original corpus and
-its [historical baseline](corpus/selection-baseline-v1.json) remain available.
-The [successor receipt](benchmarks/pytest-fixtures-v1-preservation.json) pins
-the original and current measurements.
+The runtime-import case now selects `test_read → worker.read → core.price`.
+The directly affected test keeps its evidence, and the independent control
+stays unselected. The earlier `test_quote` fixture path also stays intact.
+The [versioned replay](docs/CORPUS.md#literal-runtime-import-successor) preserves
+the original corpus, labels and both predecessor measurements.
 These are small authored fixtures, not externally validated ground truth,
 production accuracy or proof that a test fails. Fixture code is never executed.
 Statement coverage measures executed lines, not correctness; passing regression
@@ -319,7 +319,7 @@ npm run quality:container -- a11y
 
 ## Scope & next steps
 
-CodeImpact is a developer review tool. Static Python analysis is incomplete for dynamic dispatch, runtime imports, inheritance, re-exports, and pytest fixtures. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
+CodeImpact is a developer review tool. Static Python analysis covers bounded patterns for runtime imports and pytest fixtures. Dynamic dispatch, computed imports, inheritance, and re-exports can still hide dependencies. Scores express review priority, not failure probability; a missing path does not establish safety. **Keep the complete test suite as the merge gate.**
 
 [Frontend milestones 1 and 2](docs/FRONTEND_ROADMAP.md) merged in
 [PR #7](https://github.com/danielpan01/CodeImpact/pull/7) and
