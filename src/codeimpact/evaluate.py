@@ -129,6 +129,7 @@ def validate_report(
     policy: DiscoveryPolicy = CURRENT_POLICY,
     reexports: bool = True,
     fixtures: bool = True,
+    runtime_imports: bool = True,
 ) -> None:
     """Check path contracts independently of selection labels.
 
@@ -136,8 +137,20 @@ def validate_report(
     it does not certify that the index resolves Python semantics correctly. The
     authored labels, separate discovery and existing analyzer tests cover that gap.
     """
-    before = build_index(request.base, policy=policy, reexports=reexports, fixtures=fixtures)
-    after = build_index(request.head, policy=policy, reexports=reexports, fixtures=fixtures)
+    before = build_index(
+        request.base,
+        policy=policy,
+        reexports=reexports,
+        fixtures=fixtures,
+        runtime_imports=runtime_imports,
+    )
+    after = build_index(
+        request.head,
+        policy=policy,
+        reexports=reexports,
+        fixtures=fixtures,
+        runtime_imports=runtime_imports,
+    )
     nodes = {node.id: node for node in report.nodes}
     _require(len(nodes) == len(report.nodes), "duplicate nodes")
     _require(set(nodes) == before.nodes.keys() | after.nodes.keys(), "node union")
@@ -249,6 +262,7 @@ def evaluate_case(
     parameter_rows: bool = True,
     reexports: bool = True,
     fixtures: bool = False,
+    runtime_imports: bool = False,
     resolved_false_negatives: tuple[str, ...] = (),
 ) -> CaseResult:
     report = analyze(
@@ -258,13 +272,21 @@ def evaluate_case(
         parameter_rows=parameter_rows,
         reexports=reexports,
         fixtures=fixtures,
+        runtime_imports=runtime_imports,
     )
-    validate_report(case.request, report, policy=policy, reexports=reexports, fixtures=fixtures)
+    validate_report(
+        case.request,
+        report,
+        policy=policy,
+        reexports=reexports,
+        fixtures=fixtures,
+        runtime_imports=runtime_imports,
+    )
     result = classify(case, {rec.symbol for rec in report.recommendations})
     historical_misses = set(case.known_discrepancies.false_negatives)
     _require(
         set(resolved_false_negatives) <= historical_misses,
-        f"{case.id}: resolved fixture misses must come from frozen discrepancies",
+        f"{case.id}: resolved misses must come from frozen discrepancies",
     )
     regressions = []
     for label, actual, expected in (
@@ -311,13 +333,14 @@ def evaluate(
     parameter_rows: bool = True,
     reexports: bool = True,
     fixtures: bool = False,
+    runtime_imports: bool = False,
     resolved_false_negatives: dict[str, tuple[str, ...]] | None = None,
 ) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
         raise ValueError("Evaluation needs nonempty cases with unique IDs")
     cases = sorted(cases, key=lambda case: case.id)
     resolved = resolved_false_negatives or {}
-    _require(set(resolved) <= {case.id for case in cases}, "unknown resolved fixture case")
+    _require(set(resolved) <= {case.id for case in cases}, "unknown resolved case")
     results = [
         evaluate_case(
             case,
@@ -326,6 +349,7 @@ def evaluate(
             parameter_rows=parameter_rows,
             reexports=reexports,
             fixtures=fixtures,
+            runtime_imports=runtime_imports,
             resolved_false_negatives=resolved.get(case.id, ()),
         )
         for case in cases
@@ -404,33 +428,63 @@ class FixtureMeasurement(BaseModel):
     resolved_false_negatives: dict[str, tuple[str, ...]]
 
 
+class RuntimeImportMeasurement(BaseModel):
+    baseline: Literal["literal-runtime-imports-v1"]
+    report_sha256: str
+    resolved_false_negatives: dict[str, tuple[str, ...]]
+
+
 def report_text(report: Evaluation) -> str:
     return json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True) + "\n"
 
 
-def evaluate_fixtures(cases: list[CorpusCase], receipt: FixtureMeasurement) -> Evaluation:
-    previous = evaluate(
-        cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
-    )
-    _require(
-        not previous.regressions
-        and hashlib.sha256(report_text(previous).encode()).hexdigest()
-        == receipt.historical_report_sha256,
-        "Historical authored report drift",
-    )
-    current = evaluate(
+def authored_evaluation(
+    cases: list[CorpusCase],
+    *,
+    fixtures: bool = False,
+    runtime_imports: bool = False,
+    resolved_false_negatives: dict[str, tuple[str, ...]] | None = None,
+) -> Evaluation:
+    return evaluate(
         cases,
         policy=V2_POLICY,
         variadic=False,
         parameter_rows=False,
         reexports=False,
-        fixtures=True,
-        resolved_false_negatives=receipt.resolved_false_negatives,
+        fixtures=fixtures,
+        runtime_imports=runtime_imports,
+        resolved_false_negatives=resolved_false_negatives,
     )
+
+
+def verify_measurement(report: Evaluation, expected: str, name: str) -> None:
     _require(
-        hashlib.sha256(report_text(current).encode()).hexdigest() == receipt.report_sha256,
-        "pytest-fixtures-v1 authored report drift",
+        not report.regressions
+        and hashlib.sha256(report_text(report).encode()).hexdigest() == expected,
+        f"{name} authored report drift",
     )
+
+
+def evaluate_fixtures(cases: list[CorpusCase], receipt: FixtureMeasurement) -> Evaluation:
+    verify_measurement(authored_evaluation(cases), receipt.historical_report_sha256, "Historical")
+    current = authored_evaluation(
+        cases, fixtures=True, resolved_false_negatives=receipt.resolved_false_negatives
+    )
+    verify_measurement(current, receipt.report_sha256, receipt.baseline)
+    return current
+
+
+def evaluate_runtime_imports(
+    cases: list[CorpusCase], fixtures: FixtureMeasurement, receipt: RuntimeImportMeasurement
+) -> Evaluation:
+    evaluate_fixtures(cases, fixtures)
+    past = fixtures.resolved_false_negatives
+    added = receipt.resolved_false_negatives
+    _require(not (past.keys() & added.keys()), "Runtime import successor overlaps fixture cases")
+    current = authored_evaluation(
+        cases, fixtures=True, runtime_imports=True, resolved_false_negatives=past | added
+    )
+    verify_measurement(current, receipt.report_sha256, receipt.baseline)
     return current
 
 
@@ -439,37 +493,52 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--corpus", type=Path, default=Path("corpus/cases"))
     parser.add_argument("--output", type=Path)
     parser.add_argument("--case", dest="case_id", help="Evaluate one stable case ID")
-    parser.add_argument(
+    replay = parser.add_mutually_exclusive_group()
+    replay.add_argument(
         "--fixtures", action="store_true", help="Replay the pytest-fixtures-v1 gate"
+    )
+    replay.add_argument(
+        "--runtime-imports", action="store_true", help="Replay the literal-runtime-imports-v1 gate"
     )
     args = parser.parse_args(argv)
     if args.output is None:
-        args.output = Path(
-            "reports/corpus-pytest-fixtures-v1-evaluation.json"
+        name = (
+            "corpus-literal-runtime-imports-v1-evaluation.json"
+            if args.runtime_imports
+            else "corpus-pytest-fixtures-v1-evaluation.json"
             if args.fixtures
-            else "reports/corpus-evaluation.json"
+            else "corpus-evaluation.json"
         )
+        args.output = Path("reports") / name
     try:
         cases = load_corpus(args.corpus, discovery_policy=V2_POLICY)
-        if args.fixtures and args.case_id:
-            raise ValueError("The fixture replay validates the entire authored corpus")
+        if (args.fixtures or args.runtime_imports) and args.case_id:
+            raise ValueError("A versioned replay validates the entire authored corpus")
         if args.case_id:
             cases = [case for case in cases if case.id == args.case_id]
             if not cases:
                 raise ValueError(f"Unknown case: {args.case_id}")
         if args.output.resolve().is_relative_to(args.corpus.resolve()):
             raise ValueError("Report output must be outside the corpus directory")
-        if args.fixtures:
-            path = (
-                Path(__file__).resolve().parents[2]
-                / "benchmarks/pytest-fixtures-v1-preservation.json"
-            )
-            receipt = FixtureMeasurement.model_validate(json.loads(path.read_text())["measurement"])
-            report = evaluate_fixtures(cases, receipt)
+        if args.fixtures or args.runtime_imports:
+            directory = Path(__file__).resolve().parents[2] / "benchmarks"
+            path = directory / "pytest-fixtures-v1-preservation.json"
+            data = path.read_bytes()
+            fixture_receipt = FixtureMeasurement.model_validate(json.loads(data)["measurement"])
+            if args.runtime_imports:
+                successor = json.loads(
+                    (directory / "literal-runtime-imports-v1-preservation.json").read_text()
+                )
+                _require(
+                    hashlib.sha256(data).hexdigest() == successor["previous_receipt_sha256"],
+                    "Fixture predecessor receipt drift",
+                )
+                receipt = RuntimeImportMeasurement.model_validate(successor["measurement"])
+                report = evaluate_runtime_imports(cases, fixture_receipt, receipt)
+            else:
+                report = evaluate_fixtures(cases, fixture_receipt)
         else:
-            report = evaluate(
-                cases, policy=V2_POLICY, variadic=False, parameter_rows=False, reexports=False
-            )
+            report = authored_evaluation(cases)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(report_text(report), encoding="utf-8")
     except (OSError, ValueError, RecursionError) as exc:

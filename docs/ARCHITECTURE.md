@@ -260,6 +260,31 @@ source and target line ranges. Repeated sites at distinct lines are retained;
 identical text/location entries are deduplicated. Shared edges may have different
 locations or evidence text in each revision. Their identity excludes source locations.
 
+### Literal runtime import calls
+
+A plain top-level synchronous function in a root or `src/` module file can bind
+one local name to `importlib.import_module("module")` and immediately return
+`getattr(local, "member")()`. An optional docstring may precede the two
+statements. The import must be one prior, unaliased `import importlib` and
+`getattr` must resolve to its builtin binding. The literal name must identify
+one captured top-level module file at the snapshot root or under `src/`.
+The member must be a uniquely bound, directly defined synchronous function
+with a passive definition. The proof checks initialization of both files and
+their captured imports. Python's normal import mechanism and the indexed source
+layout are the scope of the inference. [Python import semantics](https://docs.python.org/3.12/reference/import.html#the-module-cache)
+
+Relative or computed names, packages, re-exports, standard-library target
+names, decorated functions, and opaque initialization are outside this rule.
+The namespace audit rejects observed binding mutations, import state changes,
+and unsupported reflection. The audit uses the existing 12,000-node limit
+and leaves unresolved evidence in place when the proof fails.
+
+Each revision resolves independently. The edge is the existing `call` kind
+at the outer invocation, with the import binding line in its explanation and
+the source definition as its target. Ordinary traversal and fan-in scoring
+apply, including before-only evidence for a removed target. The rule emits no
+new edge kind and uses the existing report schemas 2.0 and 2.1.
+
 ## Impact and ranking
 
 Multi-source reverse breadth-first search starts at propagation seeds. A visited set
@@ -588,9 +613,10 @@ check is separate from analyzer recommendation generation; neither executes sour
 `python -m codeimpact.evaluate` invokes the existing analyzer, validates typed paths
 and revision evidence, compares selections to labels, and emits readable results
 plus a separate evaluation schema **1.0**. The historical authored replay embeds
-report **2.0**. The `--fixtures` successor also uses report **2.1** and checks the
-original report digest alongside the current result. Both omit only elapsed timing
-from embedded reports. JSON is deterministic; cases
+report **2.0**. The `--fixtures` and `--runtime-imports` successors also use
+report **2.1** for cases with fixture edges. The latest gate verifies both
+predecessor report digests and the current result. Embedded reports omit only
+elapsed timing. JSON is deterministic; cases
 are sorted and no timestamps are added. Known limitations remain in overall totals
 as well as their own group. Exact FP/FN and unclassified-selection baselines fail
 on any change, including an improvement requiring reviewed annotations.

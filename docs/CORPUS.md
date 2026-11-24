@@ -22,14 +22,15 @@ make evaluate
 
 This prints every case's selected/missed affected tests, selected/unselected
 unaffected tests, unclassified recommendations, ratios and limitation notes. It
-writes `reports/corpus-pytest-fixtures-v1-evaluation.json`. It checks the exact
-original and successor report bytes against the versioned receipt. Both reports
-are ignored by Git and can be regenerated:
+writes `reports/corpus-literal-runtime-imports-v1-evaluation.json`. It checks
+the exact original, fixture and runtime-import report bytes against the
+versioned receipts. Reports are ignored by Git and can be regenerated:
 
 ```sh
-.venv/bin/python -m codeimpact.evaluate --fixtures
+.venv/bin/python -m codeimpact.evaluate --runtime-imports
 
-# The historical replay retains the original fixture miss.
+# Historical replays retain their recorded discrepancies.
+.venv/bin/python -m codeimpact.evaluate --fixtures
 .venv/bin/python -m codeimpact.evaluate \
   --corpus corpus/cases --output reports/corpus-evaluation.json
 
@@ -48,8 +49,8 @@ Exit status **0** means every observed discrepancy matches its explicit baseline
 it does **not** mean the analyzer has no mistakes. Status **1** means a false
 positive, false negative or unclassified selection changed; the report is still
 written for review. Status **2** means invalid input, a broken evidence contract or
-an input/output error; the diagnostic goes to stderr. The fixture successor also
-uses status 2 if the pinned original or current report digest differs. A previous
+an input/output error; the diagnostic goes to stderr. A versioned successor
+also uses status 2 for a pinned report or predecessor receipt mismatch. A previous
 output can remain after a status-2 error, so check the exit status before using it.
 Unknown `--case` IDs fail. Output inside the corpus directory is refused.
 
@@ -136,9 +137,37 @@ The sole added recommendation follows
 The fixture edge records the parameter on line 1 and the declaration on lines 4–6.
 The following call is at `tests/conftest.py:6`, targeting `core.py:1–2`. Both hops
 exist in both revisions. The control `tests/test_control.py::test_control` stays
-unselected. The known reflective runtime-import miss remains, and neither
-unclassified recommendation changes. The receipt records the resolved discrepancy
+unselected. This historical replay retains the reflective runtime-import miss.
+Both unclassified recommendations retain their evidence. The receipt records the resolved discrepancy
 separately from the original case annotation.
+
+## Literal runtime import successor
+
+In both snapshots, `tests/test_worker.py:4` calls `worker.read`. Its module's
+line 1 directly imports `importlib`, line 4 binds the literal import of
+`core` to the local variable `module`, and line 5 immediately invokes builtin
+`getattr(module, "price")()`. In both snapshots `core.py:1–2` contains the
+uniquely bound ordinary function `price`. Its body changes from `return 1` to
+`return 2`. CodeImpact indexes the snapshots as source data.
+
+The added recommendation is
+`tests/test_worker.py::test_read → worker.py::read → core.py::price`.
+Both edges are `call` and present in both revisions. The runtime edge records
+`worker.py:5` and `core.py:1–2`, with the binding line in its explanation.
+`tests/test_price.py::test_price` keeps the same edge ID, source evidence and
+revision. Its score rises from 81 to 82 under the existing fan-in rule.
+`tests/test_control.py::test_control` stays unselected.
+
+| Measurement | TP | FN | FP | TN | Selected unclassified | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `pytest-fixtures-v1` | 24 | 1 | 0 | 32 | 2 | 24/24 | 24/25 |
+| `literal-runtime-imports-v1` | 25 | 0 | 0 | 32 | 2 | 25/25 | 25/25 |
+
+The [successor receipt](../benchmarks/literal-runtime-imports-v1-preservation.json)
+pins the current report and its fixture predecessor without editing source
+snapshots, labels or discrepancy annotations. Only the authored
+`runtime_import` case changes. These measurements reflect agreement with
+authored labels on bounded examples.
 
 ## Historical results and metric definitions
 
@@ -331,8 +360,8 @@ test actually fails; even the assertion examples here have not been executed.
    direct affected test and all graph evidence.
 3. **Miss and fix:** open `local_import.json`. Its unchanged affected label moved
    from FN to TP after adding scoped aliases. The fixture successor fixes another
-   miss through an injection edge. The reflective `runtime_import` test is still
-   missed.
+   miss through an injection edge. The literal runtime import successor adds the
+   final affected test through an ordinary call path.
 4. **Evidence, then selection:** `module_rebinding` first lost a false resolved
    edge but retained an FP through fallback. This follow-up removes the unrelated
    selection; the unaffected label and source stay fixed. The affected direct

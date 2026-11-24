@@ -210,7 +210,12 @@ def direct_use(node: ast.Name, parents: dict[ast.AST, ast.AST], *, module: bool)
     return isinstance(call, ast.Call) and call.func is callee
 
 
-def namespace_mutations(resolver: PartialBindings) -> set[str] | None:
+def namespace_mutations(
+    resolver: PartialBindings,
+    *,
+    proven_operations: frozenset[ast.AST] = frozenset(),
+    guarded_modules: frozenset[str] = frozenset(),
+) -> set[str] | None:
     """Reject observed namespace escapes, field writes and reflective access."""
     unsafe: set[str] = set()
     steps = 0
@@ -222,23 +227,32 @@ def namespace_mutations(resolver: PartialBindings) -> set[str] | None:
             if steps > MAX_NAMESPACE_NODES:
                 return None
             if (
-                isinstance(node, ast.Name)
+                node not in proven_operations
+                and isinstance(node, ast.Name)
                 and isinstance(node.ctx, ast.Load)
-                and node.id in DYNAMIC_NAMES
+                and (node.id in DYNAMIC_NAMES or (guarded_modules and node.id == "__builtins__"))
             ):
                 return None
-            if isinstance(node, ast.Attribute) and node.attr in DYNAMIC_NAMES | NAMESPACE_ATTRS:
+            if (
+                node not in proven_operations
+                and isinstance(node, ast.Attribute)
+                and node.attr in DYNAMIC_NAMES | NAMESPACE_ATTRS
+            ):
                 return None
             parents.update((child, node) for child in ast.iter_child_nodes(node))
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 for name, target in resolver.decode(node, path, resolver.modules)[0]:
                     package = target.split(".")[0]
-                    if package in resolver.modules:
+                    if package in resolver.modules or package in guarded_modules:
                         loaded[name].append((package, isinstance(node, ast.Import)))
         for node in parents:
             if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
                 for package, module in loaded.get(node.id, ()):
-                    if not direct_use(node, parents, module=module):
+                    if package in guarded_modules:
+                        # These ambient bindings are trusted only at matched operations.
+                        if parents.get(node) not in proven_operations:
+                            unsafe.add(package)
+                    elif not direct_use(node, parents, module=module):
                         unsafe.add(package)
     return unsafe
 

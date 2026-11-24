@@ -4122,3 +4122,45 @@ and exports the exact schema 2.1 report. Reports without fixture edges use 2.0.
 | Whitespace and staging | `git diff --check` passed. The staging area is empty. |
 
 Replay logs are under the ignored local `reports/pytest-fixture-proof/` directory.
+
+## Bounded static resolution of literal runtime imports
+
+Started from clean main at `e9e6025` (PR #33). `make evaluate` reproduced
+`pytest-fixtures-v1` with 24 TP, 1 FN, 0 FP, 32 TN and two unclassified
+selections. The sole miss was `tests/test_worker.py::test_read`. The initial
+source-only regressions failed for the root and `src/` module layouts and for
+the before-only path after removing the target.
+
+In both snapshots, `worker.py:1` imports `importlib`. The unchanged `read`
+body binds the result of `importlib.import_module("core")` on line 4 and
+immediately invokes builtin `getattr(module, "price")()` on line 5. The
+uniquely bound `core.py::price` on lines 1–2 is the changed definition.
+The new recommendation is `test_read → worker.read → core.price`, with two
+ordinary call edges in both revisions and score 72. The directly affected
+`test_price` retains its exact edge and gets score 82 instead of 81 because
+the existing formula counts the new incoming edge. The independent control
+remains unselected and the authored fixture path retains its evidence.
+The successor records 25 TP, 0 FN, 0 FP, 32 TN and two unclassified selections.
+[Source trace and measured results](CORPUS.md#literal-runtime-import-successor)
+
+The proof analyzes the two snapshots independently. It accepts a literal
+absolute module name and member, a plain local binding and immediate
+zero-argument invocation, and a directly defined source target with passive
+initialization. Unsupported reflection, rebinding, module registration changes,
+and opaque initialization leave the lookup unresolved. The analyzer reads
+snapshot strings and never performs the captured imports or calls.
+Both report schemas retain their existing contracts.
+[Proof scope](ARCHITECTURE.md#literal-runtime-import-calls)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused runtime-import, fixture, evaluation and preservation regressions | 126 passed. Controls cover the two supported target layouts, a removed target, namespace changes to the caller or target, and unsupported lookups or initialization. The replay rejected altered digests for all three authored measurements. |
+| `make check` | Ruff, strict mypy, TypeScript and the production build passed. Python reported 1,321 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. The eight real-evaluation outputs match their saved bytes. Comparing the current analyzer with the rule enabled and disabled also found identical reports for all 24 distinct real cases. |
+| Snapshot API and browser suite | The authored runtime import returned schema 2.0 with two call edges, and the fixture case returned schema 2.1 with its fixture and call edges. All 255 browser tests passed across five projects. |
+| Determinism | Seeds 7 and 173 each reproduced 11 report files byte for byte and passed 123 reversed-snapshot replays with only `stats.elapsed_ms` excluded. |
+| Local pilot | `make verify-pilot` passed. |
+| Historical artifacts | All 183 existing corpus and benchmark files and 29 previously saved reports matched their starting bytes. |
+| Whitespace and staging | `git diff --check` passed. The staging area is empty. |
+
+Local logs are in the ignored `reports/runtime-import-proof/` directory.

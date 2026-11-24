@@ -34,7 +34,8 @@ static source discovery, **not pytest collection or a count of test executions**
 - Parametrization, inherited test executions and plugin/configuration-driven
   collection remain outside discovery. Dependency analysis infers limited
   [same-directory fixture evidence](ARCHITECTURE.md#bounded-pytest-fixture-injection).
-  Runtime imports remain unresolved.
+  [Literal runtime import resolution](ARCHITECTURE.md#literal-runtime-import-calls)
+  also runs independently of discovery.
 - Duplicate qualified names retain the analyzer's existing final-definition/one-ID
   behavior. The corpus validator rejects ambiguous duplicate test labels; this
   milestone does not claim complete duplicate-definition semantics.
