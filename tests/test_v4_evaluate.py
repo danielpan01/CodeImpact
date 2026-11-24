@@ -253,3 +253,224 @@ def test_bad_review_span(record, review_real_v4):
     decision["evidence"][0]["end_line"] = 100000
     with pytest.raises(ValueError, match="Invalid pinned source range"):
         review_real_v4.validate_review(DATA, review_real_v4.ReviewRecord.model_validate(record))
+
+
+@pytest.fixture
+def pilot_inputs(review_real_v4):
+    return review_real_v4.load_inputs(DATA)
+
+
+@pytest.mark.parametrize(
+    ("case_id", "count", "uncertain"),
+    [("humanize_small_delta", 33, 0), ("oyaml_error_context", 18, 7)],
+)
+def test_pilot_packet_is_source_only_and_locally_citable(
+    case_id, count, uncertain, monkeypatch, review_real_v4
+):
+    def forbidden(*_args, **_kwargs):
+        pytest.fail("review packet ran analysis, network or a subprocess")
+
+    monkeypatch.setattr(evaluate, "analyze", forbidden)
+    monkeypatch.setattr(socket.socket, "connect", forbidden)
+    monkeypatch.setattr(subprocess, "Popen", forbidden)
+    pilot_inputs = review_real_v4.load_inputs(DATA)
+    packet = review_real_v4.pilot_packet(pilot_inputs, case_id)
+    assert packet == review_real_v4.pilot_packet(pilot_inputs, case_id)
+    context = pilot_inputs.provenance[case_id]
+    page = pilot_inputs.cases[case_id]
+    template = review_real_v4.review_template(pilot_inputs, case_id)
+    assert template["case"] == case_id
+    assert template["labels_sha256"] == context.label_review.labels_sha256
+    assert template["frozen_inputs_sha256"] in packet
+    assert template["reviewer"] == template["reviewed_on"] == ""
+    assert packet.count("- [ ]") == len(template["decisions"]) == count
+    assert (
+        sum(row["original"] == "uncertain" for row in template["decisions"].values()) == uncertain
+    )
+    assert all(
+        row["rationale"] == "" and row["evidence"] == [] for row in template["decisions"].values()
+    )
+    for snapshot in (context.base, context.head):
+        assert snapshot.commit.sha in packet
+        assert snapshot.license.text.rstrip("\n") in packet
+        assert all(digest in packet for digest in snapshot.source_sha256.values())
+    for sid, (_, rationale) in review_real_v4.draft_labels(page).items():
+        path, _ = sid.split("::", 1)
+        assert f"`{sid}`" in packet and rationale in packet
+        assert f"[head `{path}:" in packet
+    if case_id == "humanize_small_delta":
+        assert "[base `tests/test_time.py:456–502`](#source-base-11)" in packet
+        assert "[head `tests/test_time.py:456–507`](#source-head-11)" in packet
+    else:
+        assert "base: no pinned definition span · [head `test_oyaml.py:192–194`]" in packet
+    assert "## Complete captured Python diff" in packet
+    for forbidden_field in ("selected_test_ids", "score", "recommendation", "false_positive"):
+        assert forbidden_field not in packet.lower()
+
+
+def pilot_record(review_tool, inputs, case_id, reviewer, proposed):
+    data = review_tool.review_template(inputs, case_id)
+    data.update(
+        reviewer=reviewer,
+        reviewed_on="2026-11-23",
+        review_reference="Fictional test-only reference",
+        discovery_notes="Fictional discovery check.",
+        decisions={
+            sid: data["decisions"][sid]
+            | {
+                "proposed": label,
+                "rationale": "Fictional rationale for a summary regression.",
+                "evidence": [
+                    {"revision": "head", "path": sid.split("::", 1)[0], "line": 1, "end_line": 1}
+                ],
+            }
+            for sid, label in proposed.items()
+        },
+    )
+    return review_tool.ReviewRecord.model_validate(data)
+
+
+def test_empty_pilot_keeps_all_ids_unreviewed(review_real_v4, pilot_inputs):
+    result = review_real_v4.summarize_pilot(pilot_inputs, [])
+    assert result["status"] == "ready_for_review"
+    assert result["totals"] == {
+        "definitions": 51,
+        "draft_uncertain": 7,
+        "records": 0,
+        "unreviewed": 51,
+        "agreements": 0,
+        "proposed_label_changes": 0,
+        "unresolved_disagreements": 0,
+    }
+    assert set(result["cases"]) == {"humanize_small_delta", "oyaml_error_context"}
+
+
+def test_pilot_summary_records_conflicts_and_partial_coverage(review_real_v4, pilot_inputs):
+    cid = "humanize_small_delta"
+    labels = review_real_v4.draft_labels(pilot_inputs.cases[cid])
+    agree, change, dispute = sorted(labels)[:3]
+    author_a = pilot_record(
+        review_real_v4,
+        pilot_inputs,
+        cid,
+        "Fictional reviewer A",
+        {agree: labels[agree][0], change: "uncertain", dispute: labels[dispute][0]},
+    )
+    author_b = pilot_record(
+        review_real_v4, pilot_inputs, cid, "Fictional reviewer B", {dispute: "uncertain"}
+    )
+    result = review_real_v4.summarize_pilot(pilot_inputs, [author_b, author_a])
+    reordered = review_real_v4.summarize_pilot(pilot_inputs, [author_a, author_b])
+    assert v4_evaluate.stable_bytes(result) == v4_evaluate.stable_bytes(reordered)
+    assert result["status"] == "partial"
+    assert result["totals"]["definitions"] == 51
+    assert result["totals"]["unreviewed"] == 48
+    humanize = result["cases"][cid]
+    assert list(humanize["agreements"]) == [agree]
+    assert list(humanize["proposed_label_changes"]) == [change]
+    assert list(humanize["unresolved_disagreements"]) == [dispute]
+    row = humanize["unresolved_disagreements"][dispute]
+    assert row["proposed_labels"] == sorted([labels[dispute][0], "uncertain"])
+    assert [s["reviewer"] for s in row["submissions"]] == [author_a.reviewer, author_b.reviewer]
+    assert all(s["evidence"] and s["rationale"] for s in row["submissions"])
+    assert len(result["cases"]["oyaml_error_context"]["unreviewed_ids"]) == 18
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (lambda d: d.update(frozen_inputs_sha256="0" * 64), "Review freeze differs"),
+        (lambda d: d.update(labels_sha256="0" * 64), "Review labels differ"),
+        (lambda d: d.update(case="icecream_local_time"), "outside the v4 review pilot"),
+        (
+            lambda d: d["decisions"].update(
+                {"unknown.py::test_example": next(iter(d["decisions"].values()))}
+            ),
+            "Unknown review definition",
+        ),
+        (
+            lambda d: next(iter(d["decisions"].values()))["evidence"][0].update(end_line=99999),
+            "Invalid pinned source range",
+        ),
+        (
+            lambda d: next(iter(d["decisions"].values()))["evidence"][0].update(path="missing.py"),
+            "Invalid pinned source range",
+        ),
+    ],
+)
+def test_summary_rejects_invalid_submissions(review_real_v4, pilot_inputs, mutation, message):
+    cid = "oyaml_error_context"
+    sid = next(iter(pilot_inputs.cases[cid].unclassified))
+    original = pilot_record(
+        review_real_v4, pilot_inputs, cid, "Fictional reviewer", {sid: "uncertain"}
+    )
+    data = original.model_dump(mode="json")
+    mutation(data)
+    with pytest.raises(ValueError, match=message):
+        review_real_v4.summarize_pilot(
+            pilot_inputs, [review_real_v4.ReviewRecord.model_validate(data)]
+        )
+
+
+def test_conflicting_records_from_same_reviewer_are_rejected(review_real_v4, pilot_inputs):
+    cid = "oyaml_error_context"
+    sid = next(iter(pilot_inputs.cases[cid].unclassified))
+    first = pilot_record(review_real_v4, pilot_inputs, cid, "Fictional reviewer", {sid: "affected"})
+    second = pilot_record(
+        review_real_v4, pilot_inputs, cid, "fictional REVIEWER", {sid: "unaffected"}
+    )
+    with pytest.raises(ValueError, match="Multiple records from"):
+        review_real_v4.summarize_pilot(pilot_inputs, [first, second])
+
+
+def test_summary_cli_reads_records_without_modifying_them(
+    review_real_v4, pilot_inputs, tmp_path, capsys
+):
+    cid = "oyaml_error_context"
+    sid = next(iter(pilot_inputs.cases[cid].unclassified))
+    record = pilot_record(
+        review_real_v4, pilot_inputs, cid, "Fictional reviewer", {sid: "uncertain"}
+    )
+    path = tmp_path / "test-only-review.json"
+    payload = record.model_dump_json().encode()
+    path.write_bytes(payload)
+    review_real_v4.main(["--corpus", str(DATA), "--summarize", str(path)])
+    assert json.loads(capsys.readouterr().out)["totals"]["unreviewed"] == 50
+    assert path.read_bytes() == payload
+
+
+def test_discovery_notes_alone_do_not_review_any_ids(review_real_v4, pilot_inputs):
+    record = pilot_record(
+        review_real_v4, pilot_inputs, "oyaml_error_context", "Fictional reader", {}
+    )
+    result = review_real_v4.summarize_pilot(pilot_inputs, [record])
+    assert result["status"] == "partial"
+    assert result["totals"]["records"] == 1
+    assert result["totals"]["unreviewed"] == 51
+    assert result["cases"][record.case]["reviews"][0]["discovery_notes"] == record.discovery_notes
+
+
+def test_complete_coverage_keeps_unresolved_disagreements_visible(review_real_v4, pilot_inputs):
+    records = [
+        pilot_record(
+            review_real_v4,
+            pilot_inputs,
+            cid,
+            "Fictional reviewer A",
+            {
+                sid: label
+                for sid, (label, _) in review_real_v4.draft_labels(pilot_inputs.cases[cid]).items()
+            },
+        )
+        for cid in review_real_v4.PILOT_CASES
+    ]
+    cid = "oyaml_error_context"
+    sid = next(iter(pilot_inputs.cases[cid].unclassified))
+    records.append(
+        pilot_record(review_real_v4, pilot_inputs, cid, "Fictional reviewer B", {sid: "affected"})
+    )
+    result = review_real_v4.summarize_pilot(pilot_inputs, records)
+    assert result["status"] == "coverage_complete"
+    assert result["totals"]["unreviewed"] == 0
+    assert result["totals"]["unresolved_disagreements"] == 1
+    assert list(result["cases"][cid]["unresolved_disagreements"]) == [sid]

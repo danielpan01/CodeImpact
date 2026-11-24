@@ -104,6 +104,11 @@ records do not update the frozen draft, baseline or review status.
 [Source-only pack](../corpus/real-v4/REVIEW.md) ·
 [Human review instructions](../corpus/real-v4/REVIEW_WORKFLOW.md)
 
+The two-case independent review pilot is ready. It covers `humanize_small_delta`
+and `oyaml_error_context`, with 51 labels and seven draft uncertainties.
+There are zero submitted records. [Offline packets and commands](V4_REVIEW_PILOT.md)
+
+
 ## Mixed-case unittest successor
 
 `unittest-discovery-v1` replays the same six snapshot pairs under

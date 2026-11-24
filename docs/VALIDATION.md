@@ -4164,3 +4164,34 @@ Both report schemas retain their existing contracts.
 | Whitespace and staging | `git diff --check` passed. The staging area is empty. |
 
 Local logs are in the ignored `reports/runtime-import-proof/` directory.
+
+## Independent source-label review pilot for v4
+
+Started from clean main at `8f74c1d` (PR #34). The pilot covers
+`humanize_small_delta` (33 definitions) and `oyaml_error_context` (18).
+All seven draft uncertain labels are in the oyaml case. Two offline Markdown
+packets and two blank schema 1.0 templates were generated from the frozen data.
+The packets contain the captured Python changes, draft rationales, pinned
+definition ranges, numbered source for both revisions, and license notices.
+
+The local summary is **ready for review** with zero submitted records and all
+51 IDs unreviewed. Conflicting proposals by different reviewers are retained
+with their rationales and evidence. Multiple records for the same reviewer
+and case are rejected. Coverage counts use only decisions actually supplied.
+New fictional submissions exist only in tests. A pre-existing local smoke
+record identifies itself as synthetic and was excluded from the pilot summary.
+The offline gates continue to report independent review as pending.
+[Reviewer and maintainer commands](V4_REVIEW_PILOT.md)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused source-only review regressions | 21 passed. Controls cover stale hashes, unknown IDs, invalid pinned source ranges, duplicate reviewers, differing proposals, and partial or complete coverage. |
+| `make check` | Ruff, strict mypy, TypeScript and the production build passed. Python reported 1,335 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. All 30 previously saved reports matched their starting bytes. |
+| Determinism | Seeds 7 and 173 reproduced both packets, both templates, and the empty summary byte for byte. Reordered submissions produced identical summary bytes in tests. The original v4 source-only review pack regenerated exactly. |
+| Protected files | All 220 existing tracked files under corpus, benchmarks and src matched their starting SHA-256 hashes. |
+| Whitespace and staging | `git diff --check` passed. The staging area is empty. |
+
+Packets and the empty summary are under the ignored local
+`reports/real-v4-review-pilot/` directory. Logs and comparison copies are under
+`reports/review-v4-verification/`.
