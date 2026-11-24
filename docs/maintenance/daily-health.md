@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-22** (America/New_York).
+Checked on **2026-11-23** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -20,6 +20,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/media/mobile.png | PASS | Required file exists and is nonempty |
 | README.md: CONTRIBUTING.md | PASS | Local target exists; fragment not checked |
 | README.md: SECURITY.md | PASS | Local target exists; fragment not checked |
+| README.md: benchmarks/pytest-fixtures-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/cases/ | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/lfu-callback-v1.json | PASS | Local target exists; fragment not checked |
@@ -61,6 +62,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/UNCOUNTABLE_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -96,10 +98,13 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md#mixed-case-unittest-methods | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: UNCOUNTABLE_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/empty-string-guard-v1-preservation.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/finite-string-guards-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/milestone6.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/preservation.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../benchmarks/pytest-fixtures-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../benchmarks/set-cleanup-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real-v3/baselines/test-discovery-v1-labels.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real-v4/PROTOCOL.md | PASS | Local target exists; fragment not checked |
@@ -110,6 +115,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: ../web/tests/quality/baselines/milestone7-zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ARCHITECTURE.md#bounded-pytest-fixture-injection | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: BUILD_PLAN.md#milestone-sequence-and-remaining-work | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
@@ -122,6 +128,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: FRONTEND_MILESTONE8C.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: FRONTEND_ROADMAP.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: HUMANIZE_INITIALIZATION_AUDIT.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: HYPOTHESIS_VALIDATOR_AUDIT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -139,6 +146,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: UNCOUNTABLE_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-desktop.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-mobile.png | PASS | Local target exists; fragment not checked |
@@ -181,7 +189,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | anyio | ==4.16.0 | 4.16.0 | >=3.10 |
 | certifi | ==2026.10.23 | 2026.11.20 | >=3.7 |
 | click | ==8.5.0 | 8.5.1 | >=3.10 |
-| coverage | ==7.17.2 | 7.17.4 | >=3.11 |
+| coverage | ==7.17.2 | 7.17.5 | >=3.11 |
 | fastapi | ==0.162.0 | 0.165.0 | >=3.11 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
@@ -192,7 +200,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | mypy | ==1.20.2 | 2.4.1 | >=3.10 |
 | mypy_extensions | ==1.2.0 | 1.2.0 | >=3.10 |
 | opentelemetry-api | ==1.45.2 | 1.45.2 | >=3.10 |
-| packaging | ==26.3 | 26.3 | >=3.9 |
+| packaging | ==26.3 | 26.4 | >=3.10 |
 | pathspec | ==1.1.1 | 1.1.1 | >=3.9 |
 | pluggy | ==1.7.0 | 1.7.0 | >=3.10 |
 | psutil | ==7.2.2 | 7.2.2 | >=3.6 |
