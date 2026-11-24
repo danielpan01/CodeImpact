@@ -10,6 +10,21 @@ from codeimpact.discovery import LEGACY_POLICY
 from codeimpact.real_evaluate import load_real
 
 
+def python_diff(case):
+    lines = []
+    for path in sorted(case.request.base.files.keys() | case.request.head.files.keys()):
+        lines.extend(
+            line.rstrip("\n")
+            for line in difflib.unified_diff(
+                case.request.base.files.get(path, "").splitlines(True),
+                case.request.head.files.get(path, "").splitlines(True),
+                fromfile="base/" + path,
+                tofile="head/" + path,
+            )
+        )
+    return lines
+
+
 def review_pack(directory, *, discovery_policy=LEGACY_POLICY, outside=None):
     selection, cases, provenance, _ = load_real(directory, discovery_policy=discovery_policy)
     lines = [
@@ -46,16 +61,7 @@ def review_pack(directory, *, discovery_policy=LEGACY_POLICY, outside=None):
             "",
             "````diff",
         ]
-        for path in sorted(case.request.base.files.keys() | case.request.head.files.keys()):
-            lines.extend(
-                line.rstrip("\n")
-                for line in difflib.unified_diff(
-                    case.request.base.files.get(path, "").splitlines(True),
-                    case.request.head.files.get(path, "").splitlines(True),
-                    fromfile="base/" + path,
-                    tofile="head/" + path,
-                )
-            )
+        lines.extend(python_diff(case))
         lines += ["````", "", "### Draft labels and source", ""]
         for label in ["expected_affected", "expected_unaffected", "unclassified"]:
             labels = getattr(case, label)

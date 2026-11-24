@@ -4,7 +4,8 @@
 
 **Milestones 1–6 match their implemented technical scope. The product still has
 explicit coverage, accuracy and release-readiness work.** Live hosting and the human
-pilot remain owner-deferred; independent source-label review remains pending.
+pilot remain owner-deferred. The v4 source-label pilot is ready for independent
+review.
 Do not interpret completion of local deployment preparation as a hosted release.
 
 Reviewed reference: `8d9661f1640619741ed25e570911bea838198666` on `main`, merged in
@@ -50,8 +51,9 @@ The repository-review reference above remains historical.
 | 5. Fresh v3 evaluation | Merged, PR #11 | Frozen six-case evaluation, discovery audit and pilot materials; human pilot deferred |
 | 6. Local deployment preparation | Merged, PR #12 | Disposable bounded workers, access/admission controls, performance receipt and built-server checks; live hosting deferred |
 
-Current measured limits matter more than a milestone count: authored data retains
-two misses; v2 retains 205 false positives; the original v3 result retains 43 false positives and **30 excluded definitions**.
+The current authored replay has no recorded false positives or false negatives.
+V2 retains 205 draft false positives. The original v3 result had 43 draft false
+positives and **30 excluded definitions**.
 Milestone 7 adds those 30 definitions to the expanded measurement. After the
 finite-set refinement, it selects 44/120, with 42 TP / 2 FP / 0 FN / 64 TN.
 All 12 uncertain definitions remain unselected.
@@ -86,7 +88,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Inflection finite uncountability guard — merged, PR #31 | Prove identity returns and rule-table bypass for every collected literal-set member | `inflection_rules` selects 6/22. The six affected paths match their prior evidence | Two-revision source and effects audit with a separate `finite-string-guards-v1` receipt. [Source review](UNCOUNTABLE_GUARD_REVIEW.md) |
 | PyISO8601 Hypothesis wrappers — audited, PR #32 | Compare the pinned decorator, strategies and runner provenance | The validator case stays at 4/8. Nox leaves test dependencies unpinned, and the locked Hypothesis release uses installed entry points and pytest hooks | Retain both package paths and protect their execution boundary with regressions. [Source audit](HYPOTHESIS_VALIDATOR_AUDIT.md) |
 | Bounded pytest fixture dependencies — merged, PR #33 | Connect a plain test's required parameter to its same-directory conftest fixture | The authored `test_quote` now reaches `core.price`, raising authored recall from 23/25 to 24/25 | Typed fixture evidence per revision, a separate authored receipt, and identical real-corpus replays. [Results](CORPUS.md#pytest-fixture-successor) |
-| Literal runtime imports — implemented | Resolve the authored importlib and getattr call through a literal local binding | `test_read` reaches `core.price` in both revisions. Authored recall rises to 25/25 | Existing call evidence and report versions, frozen baselines, and a separately pinned result. [Results](CORPUS.md#literal-runtime-import-successor) |
+| Literal runtime imports — merged, PR #34 | Resolve the authored importlib and getattr call through a literal local binding | `test_read` reaches `core.price` in both revisions. Authored recall rises to 25/25 | Existing call evidence and report versions, frozen baselines, and a separately pinned result. [Results](CORPUS.md#literal-runtime-import-successor) |
+| Independent v4 source-label pilot — ready for review | Review the Humanize small-delta and oyaml contextual-error draft labels from pinned source | 51 definitions, including seven uncertain labels, have offline packets and blank review records | A validated maintainer summary tracks partial coverage and conflicting proposals. Independent submissions are pending. [Review instructions](V4_REVIEW_PILOT.md) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -205,19 +208,19 @@ retain unknown/rebound/side-effect controls, preserve original labels and baseli
 files, and record changes in a new measurement. An improvement must not remove
 valid affected paths merely to reduce selection size. Heuristic scores are not
 probabilities. The literal runtime-import slice closes the last recorded authored
-miss. The next evaluation work is independent review of the pinned real-source
-labels and a bounded follow-up where captured evidence supports it.
+miss. The next evaluation step is to collect independent submissions for the
+two-case v4 source-label pilot and adjudicate any disagreements.
 
 Milestone 10 records discovery coverage and uncertainty separately. Its v4
-examples were frozen before analysis. The source-only review pack supports
-independent review of draft labels and proposed revisions. Human source-label review is pending and
-can proceed whenever an actual reviewer is available; it is distinct from the
-owner-deferred usability pilot.
+examples were frozen before analysis. The pilot provides source-only packets,
+blank review templates, and a validated summary for Humanize small delta and
+oyaml contextual error. All 51 IDs are currently unreviewed.
+[Reviewer and maintainer commands](V4_REVIEW_PILOT.md)
 
 ### Deployment and product decision gates
 
-Live hosting and human participation stay deferred until the owner explicitly
-resumes them. Current work may prepare checklists and local tests without claiming
+Live hosting and the developer usability pilot stay deferred until the owner
+explicitly resumes them. Current work may prepare checklists and local tests without claiming
 those gates are complete. Before a hosted pilot, validate the exact Linux deployment,
 TLS and secrets, host memory limits, source/log retention, readiness, worker cleanup,
 concurrent requests and service-wide rate limits. Measure latency and memory under
