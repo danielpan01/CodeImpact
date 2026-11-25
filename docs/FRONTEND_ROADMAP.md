@@ -26,6 +26,17 @@ new positive `test.py` and authored zero-discovery browser cases. Milestone 9A i
 the real LFU browser assertion now expects 138 recommendations. The 9B analyzer slices preserve the UI and its fixtures.
 The next analyzer slice covers one 9C module-data mechanism. [Slugify results](SLUGIFY_FALLBACK_REVIEW.md)
 
+The Review plan adds a report-specific checklist with a searchable queue,
+pending/reviewed/follow-up statuses, a dependency preview and a direct link to
+full evidence. The desktop dialog pairs the queue with the selected path. On
+phones, the sections stack under a persistent close control and download action.
+The browser stores up to 12 plan fingerprints and decision maps. Evidence review
+status is separate from test execution, and the full suite remains the merge gate.
+
+The next proposed frontend slice is opening an exported CodeImpact JSON report
+locally. Validate the report and its evidence before displaying it in the
+existing workspace. Reopen the saved Review plan when the fingerprints match.
+
 ## Product goal
 
 Make CodeImpact feel like a polished developer review workspace. A user should

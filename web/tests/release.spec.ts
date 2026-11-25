@@ -1,6 +1,11 @@
 import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { loadDemo, showEvidence, openChangedCode } from "./helpers";
+import {
+  loadDemo,
+  showEvidence,
+  openChangedCode,
+  openAnalysis,
+} from "./helpers";
 import type { Report } from "../src/types";
 
 let errors: string[];
@@ -43,6 +48,117 @@ async function noOverflow(page: Page) {
     ),
   ).toBe(true);
 }
+
+test("review plan keeps decisions across reloads and exports a source-free handoff", async ({
+  page,
+}) => {
+  await loadDemo(page);
+  const launch = page.getByRole("button", { name: "Review plan", exact: true });
+  await launch.press("Enter");
+  const plan = page.getByRole("dialog", { name: "Review plan" });
+  const queue = plan.getByRole("region", { name: "Review queue" });
+  const evidence = plan.getByRole("region", { name: "Plan evidence" });
+  await expect(
+    plan.getByRole("button", { name: "Close review plan" }),
+  ).toBeFocused();
+  const first = await evidence.getByRole("heading").textContent();
+  await plan.getByRole("button", { name: "Mark reviewed" }).click();
+  await expect(plan.getByRole("status")).toHaveText("1 of 3 reviewed");
+  await plan.getByRole("button", { name: "Next pending" }).click();
+  const second = await evidence.getByRole("heading").textContent();
+  expect(second).not.toBe(first);
+  await plan.getByRole("button", { name: "Flag follow-up" }).click();
+  await plan.getByLabel("Review status").selectOption("followUp");
+  await expect(queue.locator("li")).toHaveCount(1);
+  await expect(evidence.getByRole("heading")).toHaveText(second!);
+  await plan.getByLabel("Search review plan").fill("no-match");
+  await expect(
+    queue.getByText("No tests match this search and status."),
+  ).toBeVisible();
+  await plan.getByLabel("Search review plan").clear();
+
+  const download = page.waitForEvent("download");
+  await plan.getByRole("button", { name: "Download Markdown" }).click();
+  const file = await download;
+  expect(file.suggestedFilename()).toBe("codeimpact-review-plan.md");
+  const markdown = await readFile((await file.path())!, "utf8");
+  expect(markdown).toContain("# CodeImpact review plan");
+  expect(markdown).toContain("## Follow-up (1)");
+  expect(markdown).toContain("## Pending (1)");
+  expect(markdown).toContain("## Reviewed (1)");
+  expect(markdown).toContain(first!);
+  expect(markdown).toContain(second!);
+  expect(markdown).toContain("Path:");
+  expect(markdown).not.toContain("def ");
+  expect(markdown).not.toContain("source_files");
+  await plan.getByRole("button", { name: "Close review plan" }).press("Escape");
+  await expect(plan).toBeHidden();
+  await expect(launch).toBeFocused();
+
+  await loadDemo(page);
+  await launch.click();
+  await expect(plan.getByRole("status")).toHaveText("1 of 3 reviewed");
+  await plan.getByLabel("Review status").selectOption("followUp");
+  await plan.getByRole("button", { name: "Open full evidence" }).click();
+  await expect(plan).toBeHidden();
+  const inspector = page.getByRole("complementary", {
+    name: "Evidence inspector",
+  });
+  await expect(
+    inspector.getByRole("heading", { name: "Evidence", exact: true }),
+  ).toBeFocused();
+  await expect(
+    inspector.getByRole("heading", { name: second!, exact: true }),
+  ).toBeVisible();
+  const saved = await page.evaluate(() =>
+    localStorage.getItem("codeimpact.review-plans.v1"),
+  );
+  expect(saved).not.toContain(first);
+  expect(saved).not.toContain(second);
+  await noOverflow(page);
+});
+
+test("review plan separates same-label snapshots and handles blocked storage", async ({
+  page,
+}) => {
+  const snapshot = (value: number) => ({
+    label: "Same label",
+    base: { files: { "test_api.py": "def test_result(): assert 1 == 1\n" } },
+    head: {
+      files: { "test_api.py": `def test_result(): assert ${value} == 1\n` },
+    },
+  });
+  await page.goto("/");
+  const plan = page.getByRole("dialog", { name: "Review plan" });
+  const launch = page.getByRole("button", { name: "Review plan", exact: true });
+  await upload(page, snapshot(2));
+  await launch.click();
+  await plan.getByRole("button", { name: "Mark reviewed" }).click();
+  await plan.getByRole("button", { name: "Close review plan" }).click();
+  await openAnalysis(page);
+  await upload(page, snapshot(3));
+  await launch.click();
+  await expect(
+    plan.getByText("Decisions are saved in this browser."),
+  ).toBeVisible();
+  await expect(plan.getByRole("status")).toHaveText("0 of 1 reviewed");
+
+  await page.addInitScript(() => {
+    const native = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      if (key === "codeimpact.review-plans.v1")
+        throw new Error("Storage blocked");
+      native.call(this, key, value);
+    };
+  });
+  await loadDemo(page);
+  await launch.click();
+  await plan.getByRole("button", { name: "Mark reviewed" }).click();
+  await expect(
+    plan.getByText("Decisions are kept while this report is open."),
+  ).toBeVisible();
+  await expect(plan.getByRole("status")).toHaveText("1 of 3 reviewed");
+});
 
 test("phone review shows the first complete recommendation without scrolling", async ({
   page,

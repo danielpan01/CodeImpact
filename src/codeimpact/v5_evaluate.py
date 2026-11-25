@@ -8,7 +8,14 @@ from typing import Any, Literal
 from codeimpact.corpus import MAX_CORPUS_BYTES, StrictModel, load_corpus
 from codeimpact.discovery import CURRENT_POLICY
 from codeimpact.evaluate import evaluate
-from codeimpact.fresh_evaluate import CURRENT_SOURCES, PROJECT, FirstRun, file_hash, measurement
+from codeimpact.fresh_evaluate import (
+    CURRENT_SOURCES,
+    PROJECT,
+    FirstRun,
+    file_hash,
+    measurement,
+    replay_source_matches,
+)
 from codeimpact.holdout_evaluate import safe_file
 from codeimpact.real_evaluate import (
     SHA256,
@@ -123,13 +130,14 @@ def validate_frozen(directory: Path, *, before_measurement: bool = False) -> Fro
 
     require(set(frozen.analyzer_sha256) == ENGINE, "V5 reference source inventory differs")
     for path, digest in sorted(frozen.analyzer_sha256.items()):
+        safe_file(PROJECT, path)
         require(
-            file_hash(safe_file(PROJECT, path)) == digest, f"V5 reference source changed: {path}"
+            replay_source_matches(PROJECT, path, digest), f"V5 reference source changed: {path}"
         )
     return frozen
 
 
-def collect(directory: Path) -> dict[str, Any]:
+def collect(directory: Path, *, equality: bool = False) -> dict[str, Any]:
     """Validate source, receipts and typed evidence before recording a measurement."""
     selection = Selection.model_validate(metadata(directory, "selection.json"))
     selected = {case.id: case for case in selection.cases}
@@ -183,7 +191,7 @@ def collect(directory: Path) -> dict[str, Any]:
                 f"{case.id}: {side} license notice differs",
             )
 
-    evaluation = evaluate(cases, fixtures=True, runtime_imports=True)
+    evaluation = evaluate(cases, fixtures=True, runtime_imports=True, equality=equality)
     results: list[dict[str, Any]] = []
     for result in evaluation.cases:
         case = result.case

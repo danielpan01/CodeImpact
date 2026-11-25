@@ -7,6 +7,7 @@ import { showEvidence } from "../helpers";
 export const states = [
   "entry",
   "tests",
+  "review-plan",
   "evidence",
   "map",
   "changes",
@@ -140,6 +141,17 @@ export async function renderState(page: Page, state: State, theme: Theme) {
   await expect(page.locator(".test-row")).toHaveCount(
     report.recommendations.length,
   );
+  if (state === "review-plan") {
+    await page
+      .getByRole("button", { name: "Review plan", exact: true })
+      .click();
+    const plan = page.getByRole("dialog", { name: "Review plan" });
+    await plan.getByRole("button", { name: "Mark reviewed" }).click();
+    await plan.getByRole("button", { name: "Next pending" }).click();
+    await plan.getByRole("button", { name: "Flag follow-up" }).click();
+    await plan.getByLabel("Review status").selectOption("all");
+    await expect(plan.getByRole("status")).toHaveText("1 of 3 reviewed");
+  }
   if (["tests", "evidence", "map", "changes"].includes(state)) {
     await page
       .getByRole("button", { name: /test_create_order.*Heuristic/ })

@@ -243,9 +243,28 @@ RUNTIME_IMPORT_SOURCE_CHANGES = {
     "src/codeimpact/explicit_reexports.py",
 }
 
+EQUALITY_TRANSITION = Path("benchmarks/exact-equality-v1-preservation.json")
+EQUALITY_SOURCE_CHANGES = {
+    "src/codeimpact/analyzer.py",
+    "src/codeimpact/evaluate.py",
+    "src/codeimpact/fresh_evaluate.py",
+}
+
 
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
     actual = file_hash(project / path)
+    transition = project / EQUALITY_TRANSITION
+    if actual != expected and path in EQUALITY_SOURCE_CHANGES and transition.is_file():
+        receipt, _ = read_metadata(transition)
+        predecessor = project / "benchmarks/literal-runtime-imports-v1-preservation.json"
+        freeze = project / "datasets/real-v5/frozen-inputs.json"
+        if (
+            actual == receipt["current_sources_sha256"][path]
+            and file_hash(predecessor) == receipt["previous_receipt_sha256"]
+            and file_hash(freeze) == receipt["frozen_v5_sha256"]
+        ):
+            original, _ = read_metadata(freeze)
+            actual = original["analyzer_sha256"][path]
     if _fixture_source_matches(project, path, expected, actual):
         return True
     successor = project / "benchmarks/literal-runtime-imports-v1-preservation.json"

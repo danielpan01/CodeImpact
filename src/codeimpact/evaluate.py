@@ -130,6 +130,7 @@ def validate_report(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
+    equality: bool = True,
 ) -> None:
     """Check path contracts independently of selection labels.
 
@@ -143,6 +144,7 @@ def validate_report(
         reexports=reexports,
         fixtures=fixtures,
         runtime_imports=runtime_imports,
+        equality=equality,
     )
     after = build_index(
         request.head,
@@ -150,6 +152,7 @@ def validate_report(
         reexports=reexports,
         fixtures=fixtures,
         runtime_imports=runtime_imports,
+        equality=equality,
     )
     nodes = {node.id: node for node in report.nodes}
     _require(len(nodes) == len(report.nodes), "duplicate nodes")
@@ -263,6 +266,7 @@ def evaluate_case(
     reexports: bool = True,
     fixtures: bool = False,
     runtime_imports: bool = False,
+    equality: bool = False,
     resolved_false_negatives: tuple[str, ...] = (),
 ) -> CaseResult:
     report = analyze(
@@ -273,6 +277,7 @@ def evaluate_case(
         reexports=reexports,
         fixtures=fixtures,
         runtime_imports=runtime_imports,
+        equality=equality,
     )
     validate_report(
         case.request,
@@ -281,6 +286,7 @@ def evaluate_case(
         reexports=reexports,
         fixtures=fixtures,
         runtime_imports=runtime_imports,
+        equality=equality,
     )
     result = classify(case, {rec.symbol for rec in report.recommendations})
     historical_misses = set(case.known_discrepancies.false_negatives)
@@ -334,6 +340,7 @@ def evaluate(
     reexports: bool = True,
     fixtures: bool = False,
     runtime_imports: bool = False,
+    equality: bool = False,
     resolved_false_negatives: dict[str, tuple[str, ...]] | None = None,
 ) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):
@@ -350,6 +357,7 @@ def evaluate(
             reexports=reexports,
             fixtures=fixtures,
             runtime_imports=runtime_imports,
+            equality=equality,
             resolved_false_negatives=resolved.get(case.id, ()),
         )
         for case in cases

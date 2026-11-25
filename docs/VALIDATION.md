@@ -4291,3 +4291,57 @@ The first stable report SHA-256 is
 
 Local verification logs and the first raw report are under
 `reports/real-v5-verification/`. The v5 gate is configured in CI.
+
+## Python SemVer exact-class equality
+
+Started from clean merged `main` at
+`bcb0bc5c1cda631403d7535c145af4cc1c2ea441` (PR #37). The original
+`make evaluate-real-v5` reproduced 102/239 with 33 draft misses before the
+analyzer changed. Three initial regressions reproduced the missing equality
+path. A direct submodule-import control later exposed an initialization-order
+error. A separate control covers an imported source file that becomes
+unparseable. Its evidence is retained only in the valid before revision.
+
+The successor records 104/239 selected with 51 draft true positives, 52 false
+positives, 31 false negatives, 104 true negatives and one selected uncertain
+definition. The two new paths reach the edited SemVer comparison wrapper in
+both revisions. All existing recommendation paths and scores match the original
+v5 report. The prerelease case gains the same two graph edges with its
+recommendations and discrepancies unchanged. Its four misses and the subclass
+case's remaining 27 misses are recorded by exact ID. No upstream code was
+imported or executed. Labels remain drafts.
+[Exact results and proof scope](REAL_EVALUATION_V5.md#exact-class-equality-successor)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused regressions | 33 equality and preservation tests passed on the publication revision, covering exact dispatch, conservative controls, before-only evidence, successor drift and frozen v5 replay. |
+| `make check` | Passed Ruff, mypy, Python and the frontend production build. Python reported 1,374 passed, one expected Linux-only skip on macOS and one existing Starlette TestClient deprecation warning. |
+| Eleven offline evaluations | All ten existing targets and `make evaluate-real-v5-equality` passed. |
+| Determinism | Seeds 7 and 173 each reproduced 13 stable reports byte for byte and passed 131 reversed-snapshot checks with only `stats.elapsed_ms` excluded. |
+| Preservation | 170 saved reports are byte-identical. 241 protected tracked files match their starting SHA-256 hashes. Four expected analyzer and evaluator source edits supply the new behavior and replay profile. The frozen v5 inputs, drafts and receipts match their starting hashes. |
+| Whitespace | `git diff --check` passed. |
+
+Local logs are under `reports/semver-equality/`. The successor gate is
+configured in CI.
+
+## Dashboard Review plan
+
+The report toolbar opens a keyboard-accessible Review plan. Its queue filters
+by test, file and review status. The detail pane shows the selected test's
+heuristic priority, evidence reason and revision, and caller-to-dependency
+path. The workflow supports marking evidence reviewed, flagging follow-up,
+picking the next pending test and reopening the full inspector.
+
+The browser stores up to 12 SHA-256 report fingerprints and maps of
+recommendation positions to decisions. The fingerprint excludes
+`stats.elapsed_ms`. Storage failures leave an in-memory plan for the open
+report. The Markdown handoff includes statuses, test identifiers and evidence
+paths. The existing JSON download retains the complete source and report.
+
+| Verification | Observed result |
+| --- | --- |
+| Focused browser regressions | 15 passed across five Chromium, Firefox and WebKit projects. Covered restoration after reload, isolation of two same-label snapshots, blocked storage, Markdown download, evidence focus and first-result visibility at phone widths. |
+| Canonical visual comparisons | 18 passed. The review dialog has two new captures. Six report-toolbar cases use versioned images alongside the historical captures. |
+| Rendered WCAG A/AA checks | 52 passed in the pinned Linux ARM64 container. |
+
+Run logs are under `reports/review-plan-delivery/`.

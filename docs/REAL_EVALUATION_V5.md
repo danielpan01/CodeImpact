@@ -110,3 +110,92 @@ trace through `__eq__` and its locally defined decorator. Check the
 receiver, operator and wrapper binding before considering broader reflected
 dispatch, builtin `min`/`max`, or the CLI callback. Record any change in a
 successor measurement.
+
+## Exact-class equality successor
+
+Run `make evaluate-real-v5-equality` for the `exact-equality-v1` successor.
+`make evaluate-real-v5` still reproduces the original report with the
+equality proof disabled. Both gates use the original source, discovery and
+draft labels. The successor validates the prior report before measuring the
+new behavior. Its receipt pins the complete stable report, exact
+recommendation differences and remaining discrepancy IDs.
+[Successor receipt](../datasets/real-v5-successors/exact-equality-v1.json) ·
+[Source transition](../benchmarks/exact-equality-v1-preservation.json)
+
+| Measurement | Selected / discovered | TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, original | 3 / 106 | 1 | 2 | 29 | 74 | 0 |
+| Subclass comparison, successor | 5 / 106 | 3 | 2 | 27 | 74 | 0 |
+| V5 overall, original | 102 / 239 | 49 | 52 | 33 | 104 | 1 |
+| V5 overall, successor | 104 / 239 | 51 | 52 | 31 | 104 | 1 |
+
+### Pinned trace and evidence
+
+Both subclass-comparison snapshots expose `parse_version_info` through
+`src/semver/__init__.py`. The named function in `_deprecated.py` applies a
+source-defined decorator factory. Its returned wrapper uses
+`functools.wraps`, performs the warning path, then forwards its arguments and
+return value through `return func(*args, **kwargs)`. The forwarded
+`parse_version_info` calls the explicitly imported `Version.parse`.
+`Version.parse` binds the exact class through `@classmethod`, parses the
+string and returns `cls(**matched_version_parts)` on success.
+
+In `test_should_versioninfo_bump_major_and_minor`, the left operand starts
+at `parse_version_info("3.4.5")` and runs `bump_major().bump_minor()`. Both
+methods construct through `cls = type(self)`. The right operand directly
+parses `"4.1.0"`. The other newly selected test takes the same route through
+`bump_minor().bump_patch()`. On both paths the operands have the same
+source-owned class. `Version.__eq__` holds the function returned by
+`_comparator`. Before, its tuple includes `Version`. After, the tuple
+uses `type(self)`. The evidence targets the returned wrapper whose body
+changed. It uses the existing call edge type and cites the comparison
+expression and the wrapper definition in each revision.
+[Before tree](https://github.com/python-semver/python-semver/tree/bd97cfcd595c882d92b73430d4bf5c880d6062dc) ·
+[After change](https://github.com/python-semver/python-semver/commit/bc41390f388d88114e8529b17fe145c5af390cbb) ·
+[Python comparison dispatch](https://docs.python.org/3/reference/datamodel.html#object.__eq__) ·
+[`functools.wraps`](https://docs.python.org/3/library/functools.html#functools.wraps)
+
+| Newly selected ID | Comparison line | Target range in both revisions |
+| --- | ---: | --- |
+| `tests/test_bump.py::test_should_versioninfo_bump_major_and_minor` | 28 | `src/semver/version.py` 41–52 |
+| `tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch` | 34 | `src/semver/version.py` 41–52 |
+
+Both recommendations have distance 1, score 82 and `both` revision evidence.
+All existing recommendations keep their evidence and scores. The prerelease
+case receives the same two graph edges, where the wrapper is unchanged. Its
+71 recommendations, evidence paths and classifications are identical.
+Both Cached Property analyses remain byte-identical with timing excluded.
+There are no added or removed false positives.
+
+### Remaining draft misses
+
+The subclass case retains these 27 misses. Reasons include unsupported
+prerelease/build factories, parameterized operands, earlier assertions or
+other effects before the target comparison, reflected/mixed-type
+operations, and comparison performed inside builtins or callbacks.
+
+| File | Remaining test definitions |
+| --- | --- |
+| `tests/test_bump.py` | `test_should_versioninfo_bump_build_with_empty_str`, `test_should_versioninfo_bump_build_with_none`, `test_should_versioninfo_bump_multiple`, `test_should_versioninfo_bump_patch_and_prerelease`, `test_should_versioninfo_bump_patch_and_prerelease_with_token`, `test_should_versioninfo_bump_prerelease_and_build`, `test_should_versioninfo_bump_prerelease_and_build_with_token`, `test_should_versioninfo_bump_prerelease_with_empty_str`, `test_should_versioninfo_bump_prerelease_with_none` |
+| `tests/test_compare.py` | `test_should_compare_prerelease_and_build_with_numbers`, `test_should_compare_prerelease_with_numbers_and_letters`, `test_should_compare_version_dictionaries`, `test_should_compare_version_info_objects`, `test_should_compare_version_list`, `test_should_compare_version_string`, `test_should_compare_version_tuples`, `test_should_not_allow_to_compare_invalid_versionstring`, `test_should_not_allow_to_compare_version_with_int` |
+| `tests/test_deprecated_functions.py` | `test_should_raise_deprecation_warnings` |
+| `tests/test_max-min.py` | `test_prerelease_order`, `test_should_get_max`, `test_should_get_max_same`, `test_should_get_min`, `test_should_get_min_same` |
+| `tests/test_parsing.py` | `test_equal_versions_have_equal_hashes`, `test_should_parse_version_with_optional_minor_and_patch` |
+| `tests/test_replace.py` | `test_should_return_versioninfo_with_replaced_parts` |
+
+The prerelease case retains four misses.
+`tests/test_compare.py` contains
+`test_should_compare_prerelease_and_build_with_numbers`,
+`test_should_compare_version_dictionaries` and
+`test_should_compare_version_info_objects`.
+`tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments` uses
+a parameterized command callback. Their unchanged outcomes remain in the
+successor receipt.
+
+The proof covers a terminal single `==` assertion in a plain top-level
+test. It audits captured imports, eager bindings, ordinary construction,
+and class-preserving returns. The static analysis describes the binding
+when the source operation runs under ordinary Python and supported
+standard-library behavior. It does not reproduce pytest collection,
+runner hooks, warning handlers, or arbitrary outside code. The labels
+remain drafts and no upstream tests were run.

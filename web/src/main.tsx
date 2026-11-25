@@ -18,6 +18,8 @@ import { DependencyMap } from "./DependencyMap";
 import { ChangesView } from "./ChangesView";
 import { EvidenceInspector } from "./EvidenceInspector";
 import { AnalysisDiagnostics } from "./AnalysisDiagnostics";
+import { ReviewPlan } from "./ReviewPlan";
+import { downloadFile } from "./review-plan";
 import { defaultTestControls } from "./test-review";
 import type { Viewport } from "@xyflow/react";
 import { useTheme } from "./theme";
@@ -75,6 +77,7 @@ function App() {
       | "explorer"
       | "back"
       | "error";
+    force?: boolean;
   } | null>(null);
   useLayoutEffect(() => {
     const compact = window.matchMedia("(max-width: 1100px)").matches;
@@ -93,8 +96,10 @@ function App() {
         errorMessage.current?.focus();
         break;
       case "evidence":
-        if (compact) {
+        if (compact || focusRequest.force) {
           evidenceHeading.current?.focus({ preventScroll: true });
+        }
+        if (compact) {
           document
             .getElementById("review-workspace")
             ?.scrollIntoView({ block: "start" });
@@ -236,11 +241,11 @@ function App() {
       if (version === requestVersion.current) setBusy(false);
     }
   }
-  function showEvidence(id?: string) {
+  function showEvidence(id?: string, force = false) {
     evidenceTrigger.current = document.activeElement as HTMLElement;
     if (id) setSelected(id);
     setEvidenceOpen(true);
-    setFocusRequest({ target: "evidence" });
+    setFocusRequest({ target: "evidence", force });
   }
   function closeEvidence() {
     setEvidenceOpen(false);
@@ -259,14 +264,11 @@ function App() {
 
   function download() {
     if (!report) return;
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(report, null, 2)], { type: "application/json" }),
+    downloadFile(
+      "codeimpact-report.json",
+      JSON.stringify(report, null, 2),
+      "application/json",
     );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "codeimpact-report.json";
-    a.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   return (
     <div className="app-shell">
@@ -327,6 +329,15 @@ function App() {
             >
               <Icon name="plus" /> New analysis
             </button>
+            {report && (
+              <ReviewPlan
+                report={report}
+                onInspect={(id) => {
+                  changeView("tests");
+                  showEvidence(id, true);
+                }}
+              />
+            )}
             <div className="export-action">
               <button
                 className="secondary"

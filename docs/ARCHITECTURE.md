@@ -1077,3 +1077,24 @@ uses the same typed path validation under `test-files-v3` and checks a separate
 full report digest and classification receipt. Older gates pin the v2 analysis
 policy and verify the recorded source transition for the policy-aware files.
 [Replay commands and measurements](REAL_EVALUATION_V4.md)
+
+## Exact-class equality evidence
+
+The equality proof follows a terminal single `==` assertion in a plain
+top-level test. An AST-only audit checks captured imports and class creation,
+assignments, ordinary constructor and factory returns, and the direct
+method binding. It requires the two proved operands to have the same exact
+source class. A supported source decorator factory returns a nested
+callable with an unshadowed `functools.wraps` binding. The edge points to
+the callable bound to `__eq__` and uses the existing call edge kind.
+Subclass dispatch, reflected or unknown operands, mutation, and unsupported
+initialization or decorators leave the prior analysis in place.
+
+The analyzer audits each revision independently and adds equality edges
+after its existing propagation walks. A direct path to a changed active
+callable can select a test or explain an existing fallback. Direct test,
+resolved call and fixture paths keep their precedence. Report schemas 2.0
+and 2.1, caller-to-dependency direction, and revision evidence are unchanged.
+Historical evaluation profiles disable the new proof and check their
+original stable reports. The v5 successor enables it explicitly.
+[Source trace and exact results](REAL_EVALUATION_V5.md#exact-class-equality-successor)

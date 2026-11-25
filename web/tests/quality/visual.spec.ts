@@ -8,6 +8,8 @@ const cases: [State, keyof typeof layouts, Theme, string?][] = [
   ["tests", "desktop", "light"],
   ["tests", "desktop", "dark"],
   ["tests", "phone", "light"],
+  ["review-plan", "desktop", "light", ".review-plan-dialog"],
+  ["review-plan", "phone", "dark", ".review-plan-dialog"],
   ["evidence", "phone", "dark", ".detail-panel"],
   ["map", "desktop", "dark", ".explorer-layout"],
   ["changes", "desktop", "light", ".explorer-layout"],
@@ -61,9 +63,11 @@ for (const [state, layout, theme, selector] of cases) {
         });
       }
       const target = selector ? page.locator(selector) : page;
-      // Preserve 8C's original images; these two states intentionally changed in 7.
-      const prefix = ["empty", "zero-discovery"].includes(state)
-        ? "milestone7-"
+      // Preserve the earlier screenshots for report screens with a new toolbar.
+      const prefix = ["tests", "mixed", "empty", "zero-discovery"].includes(
+        state,
+      )
+        ? "review-workspace-"
         : "";
       const name = `${prefix}${state}-${layout}-${theme}.png`;
       try {

@@ -344,6 +344,16 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(runtime_imports["current_sources_sha256"]) == set(
         fixtures["current_sources_sha256"]
     ) | {"src/codeimpact/runtime_imports.py"}
+    previous = ROOT / "benchmarks/literal-runtime-imports-v1-preservation.json"
+    equality = json.loads((ROOT / "benchmarks/exact-equality-v1-preservation.json").read_text())
+    assert hashlib.sha256(previous.read_bytes()).hexdigest() == equality["previous_receipt_sha256"]
+    assert equality["added_corpus_sha256"] == {}
+    assert set(equality["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py" for name in ("analyzer", "evaluate", "fresh_evaluate")
+    }
+    assert set(equality["current_sources_sha256"]) == set(
+        runtime_imports["current_sources_sha256"]
+    ) | {"src/codeimpact/equality.py"}
     extensions = (
         current,
         latest,
@@ -362,6 +372,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         finite,
         fixtures,
         runtime_imports,
+        equality,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
