@@ -36,7 +36,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Revision-aware code review** | Shows before/after source and labels dependencies as before-only, after-only, or shared; mixed-revision paths are explicit. |
 | **Three input workflows** | Public GitHub PR URLs, JSON snapshot pairs, and a CLI for committed local Git history. |
 | **Review workspace** | Light/dark themes, compact report context, searchable/filterable Tests with deterministic sorting, focused evidence paths in Map, syntax-colored before/after Changes, and a coordinated evidence inspector; dedicated evidence navigation on phones and tablets. |
-| **Inspectable reports** | Exportable JSON, source-export disclosure, exact analyzed GitHub revisions, and expandable before/after/mixed evidence. |
+| **Inspectable reports** | Export complete JSON and reopen it offline with its captured source, recorded GitHub revisions and typed evidence. |
 | **Readable analysis notes** | Lossless category/file grouping, literal full-text search, filters and explicit paging; every original warning occurrence remains in exports. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
@@ -72,7 +72,7 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 1. Choose **Load demo** on the input screen; it analyzes a discount change from 10% to 15% and opens **Tests**.
 2. Select `test_create_order` and follow its dependency path. On phones/tablets, use **Back to results** to return from evidence.
 3. Choose **Focus path in Map**, jump to a dependency, or use **Fit view** to see the entire path.
-4. Choose **Open changed code** to inspect the before/after implementation. Search or filter **Tests**, then export the complete report. **New analysis** reopens PR input, snapshot upload, and the demo.
+4. Choose **Open changed code** to inspect the before/after implementation. Search or filter **Tests**, then export the complete report. **New analysis** also offers snapshot analysis, the demo and saved reports.
 5. Open **Review plan** to inspect the queue, mark evidence reviewed, flag a follow-up, or download a Markdown handoff with test IDs and evidence paths.
 6. Use the sun/moon control in the header to switch themes. The initial theme follows your device. A chosen preference is saved locally when browser storage is available. Theme changes preserve your selection and report.
 
@@ -88,6 +88,25 @@ set a pilot access key and run `make serve`. It serves one origin on port 8080 a
 keeps the fixture demo public. Live hosting remains deferred. The
 [performance receipt](docs/PERFORMANCE.md) records ten fresh-worker measurements
 per fixed case; it does not claim production capacity.
+
+### Resume a saved report
+
+Choose **New analysis → Open saved report** and select the JSON from **Export report**.
+Once the dashboard has loaded, Tests, Map, Changes and Review plan work with the file
+entirely on your device. You can disconnect or use an installation that requires a
+pilot key for new analyses. The header shows the filename, schema and any recorded
+PR provenance. An invalid file leaves your current report open and focuses the picker
+so you can try again.
+
+The file limit is **96 MiB** for schema **2.0** and **2.1** exports, allowing for
+pretty-printed graph evidence as well as both revisions of changed source. Review
+decisions return on the same site in the same browser profile when the report
+fingerprint matches. Moving the
+JSON to another browser carries the evidence. Use the Review plan’s Markdown download
+to share decisions.
+
+[Desktop screenshot](web/tests/quality/baselines/saved-report-desktop-light.png) ·
+[Phone screenshot](web/tests/quality/baselines/saved-report-phone-dark.png)
 
 ## Evaluate the analyzer
 
@@ -344,7 +363,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all eleven offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all eleven offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with a bounded matrix of reviewed screenshot comparisons and rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

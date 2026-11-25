@@ -12,7 +12,8 @@ import type { Report } from "./types";
 import { AnalysisError, getReport } from "./api";
 import { Icon } from "./Icon";
 import { AnalysisInput } from "./AnalysisInput";
-import { ReportContext } from "./ReportContext";
+import { readSavedReport } from "./saved-report";
+import { ReportContext, type ReportOrigin } from "./ReportContext";
 import { TestsView } from "./TestsView";
 import { DependencyMap } from "./DependencyMap";
 import { ChangesView } from "./ChangesView";
@@ -40,7 +41,10 @@ function App() {
       .catch(() => {}); // A failed config request must not prevent the public demo.
     return () => controller.abort();
   }, []);
-  const [kind, setKind] = useState<"demo" | "snapshots" | "github">("demo");
+  const [origin, setOrigin] = useState<ReportOrigin>({ kind: "demo" });
+  const [reportSession, setReportSession] = useState(0);
+  const [fileError, setFileError] = useState("");
+  const [openingFile, setOpeningFile] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [selectedChange, setSelectedChange] = useState<string | null>(null);
   const [showModules, setShowModules] = useState(false);
@@ -156,10 +160,56 @@ function App() {
     };
   }, []);
 
+  function activateReport(next: Report, origin: ReportOrigin) {
+    setReport(next);
+    setOrigin(origin);
+    setReportSession((session) => session + 1);
+    setEvidenceOpen(false);
+    setSelected(next.recommendations[0]?.symbol ?? null);
+    setSelectedChange(
+      next.recommendations[0]?.evidence_path.at(-1) ?? next.changed[0] ?? null,
+    );
+    setQuery("");
+    setShowModules(false);
+    setTestControls(defaultTestControls);
+    setFocusedPath(null);
+    mapViewport.current = null;
+    setView("tests");
+    setInputOpen(false);
+    setRetrySnapshot(undefined);
+    setFocusRequest({ target: "loaded" });
+  }
+
+  async function openSaved(file: File) {
+    const version = ++requestVersion.current;
+    setBusy(true);
+    setOpeningFile(true);
+    setFileError("");
+    setError("");
+    try {
+      const next = await readSavedReport(file);
+      if (version === requestVersion.current)
+        activateReport(next, { kind: "file", name: file.name });
+    } catch (error) {
+      if (version === requestVersion.current)
+        setFileError(
+          error instanceof Error
+            ? error.message
+            : "The saved report could not be opened.",
+        );
+    } finally {
+      if (version === requestVersion.current) {
+        setOpeningFile(false);
+        setBusy(false);
+      }
+    }
+  }
+
   async function load(body?: unknown, githubUrl?: string) {
     const version = ++requestVersion.current;
     setBusy(true);
     setError("");
+    setFileError("");
     setErrorKind("response");
     setSnapshotError(body !== undefined);
     setRetrySnapshot(body);
@@ -180,23 +230,9 @@ function App() {
         accessKey,
       );
       if (version !== requestVersion.current) return;
-      setReport(next);
-      setKind(githubUrl ? "github" : body !== undefined ? "snapshots" : "demo");
-      setSelected(next.recommendations[0]?.symbol ?? null);
-      setSelectedChange(
-        next.recommendations[0]?.evidence_path.at(-1) ??
-          next.changed[0] ??
-          null,
-      );
-      setQuery("");
-      setShowModules(false);
-      setTestControls(defaultTestControls);
-      setFocusedPath(null);
-      mapViewport.current = null;
-      setView("tests");
-      setInputOpen(false);
-      setRetrySnapshot(undefined);
-      setFocusRequest({ target: "loaded" });
+      activateReport(next, {
+        kind: githubUrl ? "github" : body !== undefined ? "snapshots" : "demo",
+      });
     } catch (e) {
       if (version !== requestVersion.current) return;
       setError(e instanceof Error ? e.message : "Could not load analysis");
@@ -213,6 +249,7 @@ function App() {
     const version = ++requestVersion.current;
     setBusy(true);
     setError("");
+    setFileError("");
     setInputOpen(true);
     setRetrySnapshot(undefined);
     setSnapshotError(true);
@@ -331,6 +368,7 @@ function App() {
             </button>
             {report && (
               <ReviewPlan
+                key={reportSession}
                 report={report}
                 onInspect={(id) => {
                   changeView("tests");
@@ -351,7 +389,7 @@ function App() {
             </div>
           </div>
         </div>
-        {busy && (
+        {busy && !openingFile && (
           <div
             role="status"
             aria-live="polite"
@@ -421,6 +459,7 @@ function App() {
           onKeyDown={(event) => {
             if (event.key === "Escape" && report && !busy) {
               setInputOpen(false);
+              setFileError("");
               newAnalysis.current?.focus();
             }
           }}
@@ -432,6 +471,9 @@ function App() {
             onPR={() => void load(undefined, prUrl.trim())}
             onDemo={() => void load()}
             onUpload={(file) => void upload(file)}
+            onOpenSaved={(file) => void openSaved(file)}
+            fileError={fileError}
+            openingFile={openingFile}
             inputRef={prInput}
             snapshotButtonRef={snapshotButton}
             invalidPR={!!error && !snapshotError && errorKind === "input"}
@@ -442,6 +484,7 @@ function App() {
               report
                 ? () => {
                     setInputOpen(false);
+                    setFileError("");
                     newAnalysis.current?.focus();
                   }
                 : undefined
@@ -450,7 +493,7 @@ function App() {
         </div>
         {report ? (
           <>
-            <ReportContext report={report} kind={kind} />
+            <ReportContext report={report} origin={origin} />
             <div className="workspace-nav" id="review-workspace">
               <nav className="view-toggle" aria-label="Explorer view">
                 {(
@@ -501,6 +544,7 @@ function App() {
               }}
             >
               <section
+                key={reportSession}
                 className="graph-panel"
                 ref={explorer}
                 tabIndex={-1}
@@ -561,6 +605,7 @@ function App() {
                 )}
               </section>
               <EvidenceInspector
+                key={"inspector-" + reportSession}
                 focusPath={(id) => {
                   setFocusedPath(id);
                   mapViewport.current = null;
@@ -574,7 +619,7 @@ function App() {
                 headingRef={evidenceHeading}
               />
             </div>
-            <AnalysisDiagnostics key={requestVersion.current} report={report} />
+            <AnalysisDiagnostics key={reportSession} report={report} />
           </>
         ) : (
           <div id="review-workspace" />

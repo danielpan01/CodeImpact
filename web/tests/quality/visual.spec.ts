@@ -5,6 +5,8 @@ import { layouts, renderState, settle, type State, type Theme } from "./states";
 const cases: [State, keyof typeof layouts, Theme, string?][] = [
   ["entry", "desktop", "light"],
   ["entry", "phone", "dark"],
+  ["saved-report", "desktop", "light"],
+  ["saved-report", "phone", "dark"],
   ["tests", "desktop", "light"],
   ["tests", "desktop", "dark"],
   ["tests", "phone", "light"],
@@ -69,7 +71,11 @@ for (const [state, layout, theme, selector] of cases) {
       )
         ? "review-workspace-"
         : "";
-      const name = `${prefix}${state}-${layout}-${theme}.png`;
+      // Entry, loading and server-error screens now include the offline picker.
+      const entryPrefix = ["entry", "loading", "error"].includes(state)
+        ? "offline-"
+        : "";
+      const name = `${entryPrefix}${prefix}${state}-${layout}-${theme}.png`;
       try {
         if (process.env.QUALITY_MODE === "preview") {
           await target.screenshot({

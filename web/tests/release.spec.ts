@@ -244,6 +244,10 @@ for (const [width, height] of [
       ).toBeFocused();
       await page.keyboard.press(tabKey);
       await expect(
+        page.getByRole("button", { name: "Open saved report", exact: true }),
+      ).toBeFocused();
+      await page.keyboard.press(tabKey);
+      await expect(
         page.getByRole("button", { name: "Analyze snapshots", exact: true }),
       ).toBeFocused();
       await page.keyboard.press(tabKey);
@@ -549,6 +553,9 @@ test("snapshot network failure retries the same source and loading avoids invent
   await expect(page.getByRole("progressbar")).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "Analyze snapshots", exact: true }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Open saved report", exact: true }),
   ).toBeDisabled();
   release();
   await expect(page.getByRole("alert")).toContainText("Connection unavailable");

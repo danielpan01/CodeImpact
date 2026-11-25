@@ -2656,6 +2656,13 @@ input[aria-invalid="true"] {
   }
 }
 
+/* Give the first result room below the filters on narrow phones. */
+@media (max-width: 380px) {
+  .test-row {
+    padding-block: 8px;
+  }
+}
+
 .diagnostic-toolbar .note-search:only-child {
   grid-column: 1 / -1;
   max-width: 640px;
@@ -2683,4 +2690,43 @@ input[aria-invalid="true"] {
 .discovery-scope p {
   margin: 8px 0;
   max-width: 70ch;
+}
+
+.saved-file-context {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.input-alternatives .saved-report-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+.saved-report-entry > .icon {
+  color: var(--accent);
+}
+.saved-report-entry > button {
+  grid-column: 3;
+  grid-row: 1;
+}
+.saved-report-entry .saved-file-error,
+.saved-report-entry > [role="status"] {
+  grid-column: 2 / -1;
+}
+.saved-file-error {
+  border-inline-start: 3px solid var(--changed);
+  padding: 4px 10px;
+  overflow-wrap: anywhere;
+}
+.saved-file-error strong {
+  color: var(--changed);
+}
+@media (max-width: 700px) {
+  .input-alternatives .saved-report-entry {
+    grid-template-columns: 20px minmax(0, 1fr);
+  }
+  .saved-report-entry > button {
+    grid-column: 2;
+    grid-row: auto;
+  }
 }
