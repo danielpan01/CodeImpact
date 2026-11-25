@@ -1,11 +1,11 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — updated November 23, 2026
+## Active roadmap — updated November 24, 2026
 
 **Milestones 1–6 match their implemented technical scope. The product still has
 explicit coverage, accuracy and release-readiness work.** Live hosting and the human
-pilot remain owner-deferred. The v4 source-label pilot is ready for independent
-review.
+pilot remain owner-deferred. The v4 source-label pilot self-review is complete.
+The owner chose to skip the independent human-review pilot.
 Do not interpret completion of local deployment preparation as a hosted release.
 
 Reviewed reference: `8d9661f1640619741ed25e570911bea838198666` on `main`, merged in
@@ -89,7 +89,8 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | PyISO8601 Hypothesis wrappers — audited, PR #32 | Compare the pinned decorator, strategies and runner provenance | The validator case stays at 4/8. Nox leaves test dependencies unpinned, and the locked Hypothesis release uses installed entry points and pytest hooks | Retain both package paths and protect their execution boundary with regressions. [Source audit](HYPOTHESIS_VALIDATOR_AUDIT.md) |
 | Bounded pytest fixture dependencies — merged, PR #33 | Connect a plain test's required parameter to its same-directory conftest fixture | The authored `test_quote` now reaches `core.price`, raising authored recall from 23/25 to 24/25 | Typed fixture evidence per revision, a separate authored receipt, and identical real-corpus replays. [Results](CORPUS.md#pytest-fixture-successor) |
 | Literal runtime imports — merged, PR #34 | Resolve the authored importlib and getattr call through a literal local binding | `test_read` reaches `core.price` in both revisions. Authored recall rises to 25/25 | Existing call evidence and report versions, frozen baselines, and a separately pinned result. [Results](CORPUS.md#literal-runtime-import-successor) |
-| Independent v4 source-label pilot — ready for review | Review the Humanize small-delta and oyaml contextual-error draft labels from pinned source | 51 definitions, including seven uncertain labels, have offline packets and blank review records | A validated maintainer summary tracks partial coverage and conflicting proposals. Independent submissions are pending. [Review instructions](V4_REVIEW_PILOT.md) |
+| V4 source-label pilot — self-review complete | Review the Humanize small-delta and oyaml contextual-error draft labels from pinned source | The self-review retained all 51 draft labels, including seven uncertain labels | Independent human review was skipped at the owner's direction. The review artifacts and frozen measurements are preserved. [Review record](V4_REVIEW_PILOT.md) |
+| oyaml dump-versus-load boundary — audited | Trace six dump recommendations and the constructor edit in both pinned revisions | All six retain test-module fallback. The added external constructor import independently produces the same paths | Pin the runtime and dependency provenance before proving the registration, export, and test initialization effects. [Source audit](OYAML_DUMP_LOAD_AUDIT.md) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -208,14 +209,16 @@ retain unknown/rebound/side-effect controls, preserve original labels and baseli
 files, and record changes in a new measurement. An improvement must not remove
 valid affected paths merely to reduce selection size. Heuristic scores are not
 probabilities. The literal runtime-import slice closes the last recorded authored
-miss. The next evaluation step is to collect independent submissions for the
-two-case v4 source-label pilot and adjudicate any disagreements.
+miss. The oyaml audit found no source-supported exclusion for the six dumping
+tests. Their test-module fallback remains in the measured results.
 
 Milestone 10 records discovery coverage and uncertainty separately. Its v4
 examples were frozen before analysis. The pilot provides source-only packets,
 blank review templates, and a validated summary for Humanize small delta and
-oyaml contextual error. All 51 IDs are currently unreviewed.
-[Reviewer and maintainer commands](V4_REVIEW_PILOT.md)
+oyaml contextual error. The original draft author completed the self-review of
+all 51 classifications. The owner chose to skip the independent human-review
+pilot. The v4 labels remain drafts, and frozen reports retain the review status
+recorded when measured. [Review record](V4_REVIEW_PILOT.md)
 
 ### Deployment and product decision gates
 

@@ -270,8 +270,9 @@ outside that policy.
 with **27 TP, 105 FP, 0 FN and 13 TN** and all 24 uncertain definitions selected.
 All 64 newly discovered IceCream definitions receive conservative module/import
 evidence. The additional draft labels were frozen before expanded analysis.
-No upstream tests ran, and independent review is pending.
-[Results](docs/REAL_EVALUATION_V4.md) · [Source label review](corpus/real-v4/REVIEW_WORKFLOW.md)
+No upstream tests ran. The owner chose to skip the independent human-review
+pilot, so the labels remain drafts.
+[Results](docs/REAL_EVALUATION_V4.md) · [Source label review](docs/V4_REVIEW_PILOT.md)
 
 `make evaluate-real-v4-variadic` checks the guarded variadic fallback proof.
 The proof removes a module contribution in the closed-source synthetic controls.
@@ -291,6 +292,11 @@ call evidence with the same selected IDs. The pinned Humanize case retains
 its original evidence because the initializer uses uncaptured
 `pkg_resources` behavior.
 [Humanize re-export trace](docs/REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor)
+
+The oyaml contextual-error audit retains all **18/18** recommendations. The
+six dump paths end at the changed test module, and the pinned sources leave
+PyYAML import and registration effects unproved.
+[oyaml dump-versus-load audit](docs/OYAML_DUMP_LOAD_AUDIT.md)
 
 ## Quality checks
 
