@@ -73,9 +73,15 @@ Open **http://127.0.0.1:5173**. API documentation is at **http://127.0.0.1:8000/
 2. Select `test_create_order` and follow its dependency path. On phones/tablets, use **Back to results** to return from evidence.
 3. Choose **Focus path in Map**, jump to a dependency, or use **Fit view** to see the entire path.
 4. Choose **Open changed code** to inspect the before/after implementation. Search or filter **Tests**, then export the complete report. **New analysis** reopens PR input, snapshot upload, and the demo.
-5. Use the sun/moon control in the header to switch themes. The initial theme follows your device; a chosen preference is saved locally when browser storage is available. Theme changes preserve your selection and report.
+5. Open **Review plan** to inspect the queue, mark evidence reviewed, flag a follow-up, or download a Markdown handoff with test IDs and evidence paths.
+6. Use the sun/moon control in the header to switch themes. The initial theme follows your device. A chosen preference is saved locally when browser storage is available. Theme changes preserve your selection and report.
 
 You can also paste a public GitHub PR URL or upload snapshot pairs. See the [usage guide](docs/USAGE.md) for CLI examples, a deleted-function fixture, API requests, configuration, and troubleshooting.
+
+Review plans hold decisions for up to 12 distinct analysis results in the
+current browser. A repeated result restores its plan when browser storage is
+available. The Markdown handoff contains test IDs, priorities, and evidence
+paths. Use **Export report** for the complete JSON report with captured source.
 
 For the built application, follow the [local deployment guide](docs/DEPLOYMENT.md):
 set a pilot access key and run `make serve`. It serves one origin on port 8080 and
@@ -307,6 +313,12 @@ selects **52** unaffected ones. One uncertain definition is selected. Exact
 selections, typed evidence and discrepancies are checked offline. Human label
 review was skipped. [V5 results and source traces](docs/REAL_EVALUATION_V5.md)
 
+`make evaluate-real-v5-equality` replays the same drafts with bounded
+exact-class equality resolution. It adds two resolved recommendations for
+Python SemVer, bringing the v5 successor to **104/239** selected with **31
+draft misses** and **52 draft false positives**. The original replay is
+still available. [Equality evidence and remaining misses](docs/REAL_EVALUATION_V5.md#exact-class-equality-successor)
+
 ## Quality checks
 
 ```sh
@@ -321,6 +333,7 @@ make evaluate-real-v4-variadic
 make evaluate-real-v4-parameter-rows
 make evaluate-real-v4-reexports
 make evaluate-real-v5
+make evaluate-real-v5-equality
 make verify-pilot
 cd web
 npm run install:browsers
@@ -331,7 +344,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all ten offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all eleven offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

@@ -25,6 +25,7 @@ from codeimpact.discovery import (
     shadows_unittest,
 )
 from codeimpact.dispatch_fallback import DispatchFallback
+from codeimpact.equality import add_equality_edges
 from codeimpact.explicit_reexports import add_reexport_edges
 from codeimpact.models import (
     AnalysisRequest,
@@ -336,6 +337,7 @@ def build_index(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
+    equality: bool = True,
 ) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
@@ -541,6 +543,8 @@ def build_index(
         add_reexport_edges(index)
     if fixtures:
         add_fixture_edges(index)
+    if equality:
+        add_equality_edges(index)
     return index
 
 
@@ -708,6 +712,7 @@ def analyze(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
+    equality: bool = True,
 ) -> Report:
     started = time.perf_counter()
     before = build_index(
@@ -716,6 +721,7 @@ def analyze(
         reexports=False,
         fixtures=False,
         runtime_imports=runtime_imports,
+        equality=False,
     )
     after = build_index(
         request.head,
@@ -723,6 +729,7 @@ def analyze(
         reexports=False,
         fixtures=False,
         runtime_imports=runtime_imports,
+        equality=False,
     )
     nodes = before.nodes | after.nodes
     edges = merge_edges(before, after)
@@ -940,6 +947,22 @@ def analyze(
                     and call_arguments.allows(source, target, nodes[target].path)
                 ):
                     added_calls.setdefault(source, target)
+    if equality:
+        # An equality site directly calls the proved binding. Keep the original
+        # walks and scores for all other paths, including direct test edits.
+        comparisons = add_equality_edges(before) | add_equality_edges(after)
+        active_targets = set(active)
+        for source, target in sorted(comparisons):
+            if (
+                target in active_targets
+                and source not in call_paths
+                and source not in fixture_paths
+            ):
+                added_calls.setdefault(source, target)
+                added_incoming[target].add(source)
+                paths.setdefault(source, [source, target])
+        if comparisons:
+            edges = merge_edges(before, after)
     for source, path in fixture_paths.items():
         paths.setdefault(source, path)
     if old_fixtures or new_fixtures or added_incoming:
