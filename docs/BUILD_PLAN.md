@@ -1,6 +1,6 @@
 # Build plan and portfolio strategy
 
-## Active roadmap — updated November 24, 2026
+## Active roadmap — updated November 25, 2026
 
 **Milestones 1–6 match their implemented technical scope. The product still has
 explicit coverage, accuracy and release-readiness work.** Live hosting and the human
@@ -94,10 +94,11 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Fresh v5 evaluation — implemented | Freeze four changes with traceable source paths across Cached Property and Python SemVer | 102/239 selected, with 33 draft misses, 52 draft false positives and one selected uncertain definition | A separate offline replay pins all four cases, exact paths and discrepancies. Human label review was skipped. [V5 results](REAL_EVALUATION_V5.md) |
 | Bounded Python SemVer equality — implemented | Trace single `==` assertions between instances of the same exact source class to the bound wrapper | The subclass case selects 5/106, adding two resolved recommendations with no new draft false positives. It retains 27 draft misses | The original v5 replay and separate `exact-equality-v1` gate preserve exact selection, evidence and discrepancy records. [Source proof and remaining misses](REAL_EVALUATION_V5.md#exact-class-equality-successor) |
 | Dashboard Review plan — implemented | Track which recommendations have been inspected and which need follow-up | A searchable queue, revision-aware dependency preview and Markdown handoff work on desktop and phones | Browser-local decisions are scoped to the exact stable analysis result. The original JSON remains the complete source and evidence export. [Frontend roadmap](FRONTEND_ROADMAP.md) |
+| Offline report reopening — implemented | Resume a previously exported report on desktop or phone | Schema 2.0 and 2.1 files open in the existing workspace with their recorded provenance and matching browser-local plan | Local validation gates report replacement. [Workflow and screenshots](FRONTEND_ROADMAP.md) |
 | Python SemVer class-preserving prerelease factory — next analyzer candidate | Audit one missed test whose terminal equality follows `bump_prerelease` | Nine bump-case misses enter prerelease or build factories outside the current proof | Trace one factory and its helper in both revisions. Preserve the equality boundary, including mixed, reflected and unknown operands. [V5 remaining misses](REAL_EVALUATION_V5.md#remaining-draft-misses) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
-| 13 | Integrations and persistence — conditional | Accounts, saved reports, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
+| 13 | Integrations and persistence — conditional | Accounts, server-side report storage, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
 
 Milestones 8A–8C are merged; their visual, diagnostics and accessibility gates
 remain active. **Milestone 7 is merged** with one filename extension,

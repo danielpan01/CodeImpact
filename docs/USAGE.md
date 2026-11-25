@@ -58,7 +58,7 @@ create a phone-accessible website.
 
 1. Choose **Load demo** on the initial input screen. The checkout demo changes
    `discount(total)` from 10% to 15%. Successful analyses open **Tests** and collapse
-   the input form; **New analysis** reopens PR input, snapshot upload and the demo.
+   the input form; **New analysis** offers PR analysis, snapshot upload, saved reports and the demo.
 2. Select `test_create_order`. Its reason and dependency trail appear in the evidence
    inspector: `test_create_order → create_order → checkout → discount`.
    Priorities (82, 72 and 62 for this demo) are heuristics, not failure probabilities.
@@ -110,7 +110,11 @@ browser. Both themes use local system fonts, labeled revision colors and visible
 keyboard focus. Reduced-motion preferences disable transitions. On phones/tablets,
 primary review controls have at least 44-pixel touch targets. Escape dismisses a
 reopened analysis form or evidence pane and restores focus to the relevant control.
-Only appearance is saved; there is no saved report history.
+The browser can retain appearance and report-specific Review plan decisions.
+Keep the exported JSON to reopen the report later. Choose **New analysis → Open
+saved report** for a local schema 2.0 or 2.1 file up to 96 MiB. Matching saved
+decisions resume in the same browser. An unsupported or damaged file leaves
+the current report available. The JSON includes captured source.
 
 Loading announces the active operation without estimating completion. A failure
 clears stale results and focuses a message with recovery actions. **Edit PR URL** or

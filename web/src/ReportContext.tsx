@@ -1,30 +1,40 @@
 import type { Report } from "./types";
 import { Icon } from "./Icon";
+export type ReportOrigin =
+  { kind: "file"; name: string } | { kind: "demo" | "snapshots" | "github" };
 export function ReportContext({
   report,
-  kind,
+  origin,
 }: {
   report: Report;
-  kind: "demo" | "snapshots" | "github";
+  origin: ReportOrigin;
 }) {
   return (
     <>
       <section className="report-context" aria-label="Report context">
         <div className="context-icon">
-          <Icon name="impact" />
+          <Icon name={origin.kind === "file" ? "file" : "impact"} />
         </div>
         <div>
           <div className="context-meta">
             <span className="eyebrow">Change review</span>
             <span className="badge">
-              {kind === "demo"
-                ? "Checkout demo"
-                : kind === "github"
-                  ? "Public GitHub PR"
-                  : "Snapshot upload"}
+              {origin.kind === "file"
+                ? "Opened from file"
+                : origin.kind === "demo"
+                  ? "Checkout demo"
+                  : origin.kind === "github"
+                    ? "Public GitHub PR"
+                    : "Snapshot upload"}
             </span>
           </div>
           <h1 className="analysis-label">{report.label}</h1>
+          {origin.kind === "file" && (
+            <p className="saved-file-context">
+              <bdi>{origin.name}</bdi> · Schema {report.schema_version}
+              {!report.source && " · No PR provenance recorded"}
+            </p>
+          )}
         </div>
       </section>
       {report.source && (
@@ -92,7 +102,12 @@ export function ReportContext({
             <small>ms</small>
           </strong>
           <span>
-            Analysis time<small>measured this request</small>
+            Analysis time
+            <small>
+              {origin.kind === "file"
+                ? "recorded in report"
+                : "measured this request"}
+            </small>
           </span>
         </div>
       </section>

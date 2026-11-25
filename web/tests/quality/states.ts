@@ -6,6 +6,8 @@ import { showEvidence } from "../helpers";
 
 export const states = [
   "entry",
+  "saved-report",
+  "saved-file-error",
   "tests",
   "review-plan",
   "evidence",
@@ -107,7 +109,27 @@ export async function renderState(page: Page, state: State, theme: Theme) {
   if (state === "pilot")
     await expect(page.getByLabel("Pilot access key")).toBeVisible();
   if (["entry", "pilot"].includes(state)) return { release };
-  if (fixture === "demo") {
+  if (state === "saved-file-error" || state === "saved-report") {
+    await page.getByLabel("Saved report JSON").setInputFiles({
+      name: "checkout-review.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(
+        state === "saved-report" ? JSON.stringify(report) : "{}",
+      ),
+    });
+    if (state === "saved-file-error") {
+      await expect(page.getByRole("alert")).toContainText(
+        "Choose an exported CodeImpact report",
+      );
+      await expect(
+        page.getByRole("button", { name: "Open saved report" }),
+      ).toBeFocused();
+      return { release };
+    }
+    await expect(
+      page.getByText("Opened from file", { exact: true }),
+    ).toBeVisible();
+  } else if (fixture === "demo") {
     await page.getByRole("button", { name: "Load demo", exact: true }).click();
   } else {
     const input = JSON.parse(
@@ -237,7 +259,7 @@ export async function settle(page: Page) {
       const current = JSON.stringify(
         [
           ...document.querySelectorAll(
-            "main, .explorer-layout, .react-flow__viewport, .react-flow__node, .diagnostics",
+            "main, .explorer-layout, .react-flow__viewport, .react-flow__node, .diagnostics, dialog[open], .review-plan-summary > *, .review-plan-progress p",
           ),
         ].map((el) => {
           const r = el.getBoundingClientRect();

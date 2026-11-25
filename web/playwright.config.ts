@@ -61,6 +61,7 @@ export default defineConfig({
       name: "firefox",
       testMatch: [
         "**/release.spec.ts",
+        "**/saved-report.spec.ts",
         "**/pilot.spec.ts",
         "**/diagnostics.spec.ts",
       ],
@@ -70,6 +71,7 @@ export default defineConfig({
       name: "webkit",
       testMatch: [
         "**/release.spec.ts",
+        "**/saved-report.spec.ts",
         "**/pilot.spec.ts",
         "**/diagnostics.spec.ts",
       ],
@@ -79,6 +81,7 @@ export default defineConfig({
       name: "webkit-phone",
       testMatch: [
         "**/release.spec.ts",
+        "**/saved-report.spec.ts",
         "**/pilot.spec.ts",
         "**/diagnostics.spec.ts",
       ],

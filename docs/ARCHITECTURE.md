@@ -486,8 +486,7 @@ separate React components. API request schemas are shared by both report version
 after React commits a destination. Selection and expanded evidence persist when
 switching review views; mobile/tablet evidence replaces the primary pane.
 Metrics include module nodes where labeled. Search filters the visible graph only;
-it does not recompute recommendations. The UI exports a report; its upload expects
-the separate snapshot-pair input schema.
+it does not recompute recommendations. The snapshot picker sends an analysis request. A separate saved-report picker reads exported report JSON in the browser.
 
 `theme.ts` follows the OS color scheme until an explicit preference is chosen. The
 `codeimpact.theme` local-storage value contains only `light` or `dark`; storage errors
@@ -571,9 +570,7 @@ the `fixture` edge kind and the `Resolved fixture dependency` recommendation
 reason. Both versions use the same fields and input contracts. The API response
 models/OpenAPI, CLI JSON, TypeScript types and browser exports support both
 versions. The dashboard rejects other response versions with a restart message.
-There is no old-report importer or automatic conversion; re-analyze the original
-snapshots. Old reports alone lack enough source/revision information to reconstruct
-2.0 faithfully. The package/API release number is independent of the report schema.
+The saved-report picker accepts schema 2.0 and 2.1. For earlier versions, re-analyze the original snapshots to obtain revision-specific evidence. The package/API release number is independent of the report schema.
 
 | Field | Contract |
 | --- | --- |
@@ -602,6 +599,34 @@ in aggregate, before JSON escaping/metadata. No source fetches occur while selec
 code, and no current branch content is substituted. PR before means merge base;
 after means pinned head. Upload/demo/local-Git source comes from the exact request
 already analyzed. Network and snapshot ingestion limits below are unchanged.
+
+### Opening an exported report
+
+The browser checks the file size before reading or parsing JSON. The 96 MiB ceiling
+allows room above the worker’s 32 MiB compact-output budget for JSON indentation,
+graph edges and both revisions of evidence. Captured source is limited to 200,000
+UTF-8 bytes per file and 2,000,000 per revision. These bounds apply locally and do
+not change the API’s snapshot-upload limit.
+
+`web/src/saved-report.ts` validates the JSON fields and indexes symbols, changes,
+source files and typed edges. It checks identities and endpoints, changed/removed
+membership, counts, the direction and length of each recommended path, its reason
+and the intersection of its edges’ revisions. A changed-test path derives its
+revision from the change record. Source ranges must be inclusive, one-based and
+within the captured revision when present. For uncaptured files, module-target evidence supplies revision-specific bounds
+where available. After-side node metadata also records the module extent. If
+before-side bounds are absent, only the snapshot size limit bounds those lines.
+Validation establishes internal consistency. The file cannot authenticate the author
+or reconstruct omitted source. A GitHub link must match the recorded public repository
+and PR number exactly. Displayed source, evidence and filenames are text.
+
+Successful validation starts a new workspace session. The file origin and filename
+are display state, separate from the report. The existing SHA-256 Review plan key
+uses the serialized report with only `stats.elapsed_ms` omitted. Restoration requires
+the same browser storage origin and an available fingerprint and saved plan. Re-export preserves
+the captured fields and their order. A rejected file leaves the active session,
+selection and plan mounted. Opening a file uses browser file APIs and has no
+dependency on the service configuration request at page startup.
 
 ## Authored correctness corpus
 

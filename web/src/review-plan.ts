@@ -77,10 +77,9 @@ export const reviewRevisions: Record<Recommendation["path_revision"], string> =
 
 function inlineCode(value: string) {
   const singleLine = value.replace(/[\r\n]/g, " ");
-  const length = Math.max(
-    0,
-    ...[...singleLine.matchAll(/`+/g)].map(([run]) => run.length),
-  );
+  let length = 0;
+  for (const [run] of singleLine.matchAll(/`+/g))
+    length = Math.max(length, run.length);
   const fence = "`".repeat(length + 1);
   return `${fence} ${singleLine} ${fence}`;
 }

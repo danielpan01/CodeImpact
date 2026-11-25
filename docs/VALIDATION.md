@@ -4345,3 +4345,48 @@ paths. The existing JSON download retains the complete source and report.
 | Rendered WCAG A/AA checks | 52 passed in the pinned Linux ARM64 container. |
 
 Run logs are under `reports/review-plan-delivery/`.
+
+## Offline report reopening
+
+Verified on clean starting revision `9d6b70d6cf31dcf87f4b25fd52fc42a8246d737e`
+(PR #38). The browser opened exports from the real demo, the authored schema 2.1
+fixture case and the local API’s deterministic GitHub PR fixture. After exporting
+the demo from the protected pilot, the test reloaded the dashboard, disconnected
+the browser, reopened the file by keyboard, inspected the map and before/after
+source, and exported byte-identical JSON. No HTTP request occurred during the
+disconnected workflow. A separate run aborted the startup configuration request
+and successfully opened both the fixture and PR reports.
+
+The plan restored its reviewed decision when only elapsed time changed. Adding a
+different warning under the same report label started a separate plan. Its
+HTML-shaped text rendered literally. Malformed JSON, an unsupported schema,
+damaged evidence and a file one byte over 96 MiB each produced a local error.
+A failed replacement retained the active Map and returned focus to the file picker.
+The focused suite also exercised the large LFU export, empty results, mixed revisions,
+deleted symbols, duplicate IDs, direction, ranges and unsafe or mismatched PR links.
+
+| Check | Observed result |
+| --- | --- |
+| Focused saved-report regressions | 25 passed across desktop/mobile Chromium, Firefox and desktop/mobile WebKit. Earlier WebKit checks exposed a retry-focus issue. The final implementation focuses the picker directly and associates it with the error. |
+| Offline evaluation | All eleven targets passed. The 171 pre-existing evaluation JSON files checked before and after replay matched byte for byte. An additional validator check accepted 81 embedded analyses from the eleven outputs after supplying a placeholder for their intentionally omitted elapsed time. |
+| `make check` | Ruff, format, mypy and the production TypeScript/Vite build passed. Python reported 1,375 passed, one Linux-only resource-limit skip on macOS and one existing Starlette TestClient deprecation warning. Coverage was 93%. |
+| Pilot and formatting | `make verify-pilot` passed readiness, static UI, demo, protected analyses and the frozen-input report check. `npm run format:check` passed. |
+| Full browser suite | All 290 tests passed across five Playwright projects. An earlier run exposed an entry test that expected focus to jump straight to snapshot analysis. It now verifies the complete keyboard sequence including the saved-report action at all five viewport sizes. |
+| Canonical visual comparison | All 20 screenshot cases passed twice (40 comparisons) in the pinned Linux ARM64 container. Six new images cover the file action in entry, loading and error states and the reopened desktop and phone workspace. Earlier images remain available. An initial one-pixel discrepancy in the phone Review plan summary prompted including the open dialog and its contents in the layout-stability check. |
+| Canonical accessibility | 60 scans passed across desktop/phone and light/dark with zero reported WCAG A/AA rule violations. Axe left contrast incomplete in eight existing views: four Map views, two desktop deleted-source views and both phone Review plan views. The new file and file-error states had no incomplete findings. |
+
+[Desktop file picker](../web/tests/quality/baselines/offline-entry-desktop-light.png) ·
+[Phone file picker](../web/tests/quality/baselines/offline-entry-phone-dark.png) ·
+[Reopened desktop workspace](../web/tests/quality/baselines/saved-report-desktop-light.png) ·
+[Reopened phone workspace](../web/tests/quality/baselines/saved-report-phone-dark.png)
+
+The offline check starts with the dashboard already loaded. Source, revisions and
+analysis timing come from the file. Local validation checks relationships that the
+export contains. Independent verification of authorship or omitted source requires
+additional evidence. Logs are under `reports/offline-reopening/`.
+
+The preceding main-branch CI run measured 97.8% of the first recommendation
+in view on Linux Firefox at 360 × 844. Narrow-phone result rows now use 8 px
+of vertical padding. The full-row visibility test still requires a ratio of 1
+at zero scroll. The Linux ARM64 Firefox publication check showed the whole
+row at both 360 and 390 px. [Original CI run](https://github.com/danielpan01/CodeImpact/actions/runs/45705691960)

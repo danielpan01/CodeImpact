@@ -1,4 +1,5 @@
-import { useRef, type RefObject } from "react";
+import { useLayoutEffect, useRef, type RefObject } from "react";
+import { maxReportMiB } from "./saved-report";
 import { Icon } from "./Icon";
 
 export function AnalysisInput({
@@ -8,6 +9,9 @@ export function AnalysisInput({
   onPR,
   onDemo,
   onUpload,
+  onOpenSaved,
+  fileError,
+  openingFile,
   onClose,
   inputRef,
   snapshotButtonRef,
@@ -22,6 +26,9 @@ export function AnalysisInput({
   onPR: () => void;
   onDemo: () => void;
   onUpload: (file: File) => void;
+  onOpenSaved: (file: File) => void;
+  fileError: string;
+  openingFile: boolean;
   onClose?: () => void;
   inputRef: RefObject<HTMLInputElement | null>;
   snapshotButtonRef: RefObject<HTMLButtonElement | null>;
@@ -31,6 +38,11 @@ export function AnalysisInput({
   setAccessKey: (key: string) => void;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const savedInput = useRef<HTMLInputElement>(null);
+  const savedButton = useRef<HTMLButtonElement>(null);
+  useLayoutEffect(() => {
+    if (fileError) savedButton.current?.focus();
+  }, [fileError]);
   const keyInput = useRef<HTMLInputElement>(null);
   return (
     <section className="analysis-input" aria-label="New analysis">
@@ -148,6 +160,54 @@ export function AnalysisInput({
           </div>
         </form>
         <div className="input-alternatives">
+          <div className="saved-report-entry">
+            <Icon name="file" />
+            <div>
+              <strong>Resume a review</strong>
+              <p id="saved-file-help">
+                Open an exported JSON file on this device. Up to {maxReportMiB}{" "}
+                MiB.
+              </p>
+            </div>
+            {fileError && (
+              <div
+                className="saved-file-error"
+                id="saved-file-error"
+                role="alert"
+              >
+                <strong>Couldn’t open this report</strong>
+                <p>{fileError}</p>
+              </div>
+            )}
+            <button
+              className="secondary"
+              ref={savedButton}
+              aria-describedby={
+                fileError
+                  ? "saved-file-error saved-file-help"
+                  : "saved-file-help"
+              }
+              disabled={busy}
+              onClick={() => savedInput.current?.click()}
+            >
+              Open saved report
+            </button>
+            <input
+              className="visually-hidden"
+              type="file"
+              accept=".json,application/json"
+              ref={savedInput}
+              aria-label="Saved report JSON"
+              tabIndex={-1}
+              disabled={busy}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) onOpenSaved(file);
+                event.target.value = "";
+              }}
+            />
+            {openingFile && <span role="status">Checking saved report…</span>}
+          </div>
           <div>
             <Icon name="upload" />
             <div>

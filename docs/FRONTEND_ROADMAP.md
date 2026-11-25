@@ -33,9 +33,17 @@ phones, the sections stack under a persistent close control and download action.
 The browser stores up to 12 plan fingerprints and decision maps. Evidence review
 status is separate from test execution, and the full suite remains the merge gate.
 
-The next proposed frontend slice is opening an exported CodeImpact JSON report
-locally. Validate the report and its evidence before displaying it in the
-existing workspace. Reopen the saved Review plan when the fingerprints match.
+**Offline report reopening is implemented.** New analysis accepts a local schema 2.0
+or 2.1 export up to 96 MiB. The existing workspace shows the recorded result and
+its provenance. Review plan decisions resume on a matching fingerprint. Keyboard
+users can retry a rejected file from the focused picker while their active review
+stays open. Verification covers a disconnected browser, a protected pilot and a
+failed API configuration request.
+
+[Entry screen](../web/tests/quality/baselines/offline-entry-desktop-light.png) ·
+[Reopened desktop report](../web/tests/quality/baselines/saved-report-desktop-light.png) ·
+[Reopened phone report](../web/tests/quality/baselines/saved-report-phone-dark.png) ·
+[Validation record](VALIDATION.md#offline-report-reopening)
 
 ## Product goal
 
