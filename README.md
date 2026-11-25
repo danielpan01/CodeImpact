@@ -40,7 +40,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Readable analysis notes** | Lossless category/file grouping, literal full-text search, filters and explicit paging; every original warning occurrence remains in exports. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
-| **Fresh-source regression gates** | Replays v2, v3 and v4 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
+| **Fresh-source regression gates** | Replays v2–v5 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
 | **Local pilot service** | Serves the built dashboard and API together, protects user-submitted analyses with an in-memory access-key flow, and bounds disposable workers, request sizes, deadlines and admission. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
@@ -298,6 +298,15 @@ six dump paths end at the changed test module, and the pinned sources leave
 PyYAML import and registration effects unproved.
 [oyaml dump-versus-load audit](docs/OYAML_DUMP_LOAD_AUDIT.md)
 
+### Fresh-repository evaluation v5
+
+`make evaluate-real-v5` replays four source-traceable changes from Cached
+Property and Python SemVer. It selects **102 of 239** discovered definitions.
+Against the frozen draft labels, it misses **33** affected definitions and
+selects **52** unaffected ones. One uncertain definition is selected. Exact
+selections, typed evidence and discrepancies are checked offline. Human label
+review was skipped. [V5 results and source traces](docs/REAL_EVALUATION_V5.md)
+
 ## Quality checks
 
 ```sh
@@ -311,6 +320,7 @@ make evaluate-real-v4-unittest
 make evaluate-real-v4-variadic
 make evaluate-real-v4-parameter-rows
 make evaluate-real-v4-reexports
+make evaluate-real-v5
 make verify-pilot
 cd web
 npm run install:browsers
@@ -321,7 +331,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) runs Python linting and formatting, strict type checks, application tests, the frontend production build, all nine offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs; check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all ten offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with 16 reviewed screenshot comparisons and 48 rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

@@ -4257,3 +4257,37 @@ affected paths with source missing on either side.
 
 Logs and the metadata checked against the capture receipts are under the ignored
 `reports/oyaml-boundary-audit/` directory.
+
+## Fresh-repository evaluation v5 — November 24, 2026
+
+Started from clean `main` at `06f8a31` (merged PR #36). The selection protocol
+preceded candidate inspection. Four pinned changes from Cached Property and
+Python SemVer were retained. The freeze records 21 dataset inputs and 27
+reference files. The first measurement was made after source, labels, discovery
+and analyzer bytes were frozen. Human review was skipped. The draft labels and
+analyzer behavior were preserved after measurement.
+[Candidate decisions](../datasets/real-v5/CANDIDATES.md) ·
+[Freeze](../datasets/real-v5/frozen-inputs.json)
+
+The replay selected 102 of 239 discovered head definitions, with 49 draft
+true positives, 52 false positives, 33 false negatives, 104 true negatives
+and one selected uncertain definition. Both SemVer cases record two unsupported
+symlinks per revision. No supported Python blobs were omitted. The replay
+validates all 102 recommendation paths and their typed revision evidence.
+The first stable report SHA-256 is
+`ef71b5624841d70322a3a659e1d45d6100c99650f0cad13d3d02043856e35ee7`.
+[Counts and source traces](REAL_EVALUATION_V5.md) ·
+[First-run receipt](../datasets/real-v5/first-run.json) ·
+[Separate discrepancy baseline](../datasets/real-v5/baseline.json)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused v5 regressions | Five passed. They cover offline replay, changed source, incomplete snapshots, invalid typed evidence, and drift from the frozen result. |
+| `make check` | The first run exposed an incorrect error-message assertion in the new evidence test. The corrected run passed Ruff, mypy, TypeScript and the production build. Python reported 1,345 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning, and 93% statement coverage. |
+| Ten offline evaluations | All existing targets and `make evaluate-real-v5` passed. All 30 saved historical reports matched their starting bytes. |
+| Determinism | Seeds 7 and 173 each reproduced 12 stable reports byte for byte and passed 127 reversed-snapshot checks with only `stats.elapsed_ms` excluded. |
+| Protected files | All 220 tracked corpus, benchmark and source files matched their starting SHA-256 hashes. |
+| Whitespace and staging | `git diff --check` passed. The staging area is empty. |
+
+Local verification logs and the first raw report are under
+`reports/real-v5-verification/`. The v5 gate is configured in CI.

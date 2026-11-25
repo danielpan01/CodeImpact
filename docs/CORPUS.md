@@ -485,3 +485,17 @@ methods outside discovery without including them in metric labels.
 Run `make evaluate-real-v4` offline. See the [v4 results](REAL_EVALUATION_V4.md),
 [dataset](../corpus/real-v4/README.md), and
 [human label review workflow](../corpus/real-v4/REVIEW_WORKFLOW.md).
+
+## Fresh evaluation v5
+
+V5 adds four complete supported source changes from Cached Property and Python
+SemVer. The dataset lives in `datasets/real-v5` so the existing corpus
+inventories and historical gates retain their original scope. It uses the
+current static discovery policy and freezes the complete coverage inventory and
+source-based draft labels before analysis. Human label review was skipped.
+
+Run `make evaluate-real-v5` offline. The receipt records exact recommendations
+and evidence under the pinned analyzer, and the separate baseline records the
+observed discrepancy IDs. Later analyzer changes require an explicit successor
+or a replay using the frozen reference. [Protocol](../datasets/real-v5/PROTOCOL.md) ·
+[Dataset](../datasets/real-v5/README.md) · [Results](REAL_EVALUATION_V5.md)

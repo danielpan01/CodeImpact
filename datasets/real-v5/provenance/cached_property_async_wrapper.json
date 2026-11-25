@@ -1,0 +1,400 @@
+{
+  "base": {
+    "commit": {
+      "message": "Update README.md",
+      "parents": [
+        {
+          "sha": "4adb33246294a6e7370c62212028b9fb152f6157"
+        }
+      ],
+      "sha": "409f24286e16ea3086af463edea6b80cdd62deed",
+      "tree": {
+        "sha": "211ec306298b4eea60440677c1662b921a51c35f"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "cached_property.py": "904479dca72eb7b6a0583e6452ae893df4dab7a506ff2141d0f270d8a511ff66",
+      "conftest.py": "e9e1ab837727d052644b7ac70ac2dd1cef94b7a6b712422a47e27f4176d1ac21",
+      "setup.py": "b0430d0e9fd8ba6ba184b246a013b66cd7d926124265a355db2570294543f168",
+      "tests/__init__.py": "8b084a9f378124b2b1a51563bf3c22444eb7ff33692017da28b2136ae56987ed",
+      "tests/test_async_cached_property.py": "c03e310b6a205fafc1c2642b8ce8092db4b6eca7d6096a8511f6323cbc4a81ac",
+      "tests/test_cached_property.py": "cdd6e4b199827a67a7848c752290a60e447ee455cedb1df2a0de20b8c3b6aef2",
+      "tests/test_coroutine_cached_property.py": "1274ee36b351aa2c64875c5beb09da023373b7336472b447c8cbf27d72bbe6fa"
+    },
+    "tree": {
+      "sha": "211ec306298b4eea60440677c1662b921a51c35f",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "7f5319e534ccb0acf4390562fed407227da8d30e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.yml",
+          "sha": "e8faca3c0397ac9fcd3eae8671dce3ddf7a56f18",
+          "size": 608,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "a7082001bab7eedd85093f31ced1b3d1cdcb1b5b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-package.yml",
+          "sha": "f6f30601383adb12dd68d2872b5b08932746b5ab",
+          "size": 1503,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "b0df7f7c2e9b412a5d54b9f55af83ca7e38e2d9e",
+          "size": 478,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AUTHORS.md",
+          "sha": "9aecff9a27188ff9df8e9949e096b5cc437ecf01",
+          "size": 412,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "cd945af602137ed5f4a8020a7e2942466e2b5687",
+          "size": 3280,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "HISTORY.md",
+          "sha": "2d6a4f470d208ff3ace6bf62561990fed01e3d70",
+          "size": 2777,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "a181761ca55c8ca4601cf3143c220c12f547d9b0",
+          "size": 1479,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "ae5ca21f8d8f225c242f47240c68279d5b4377c4",
+          "size": 268,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "2446d517f1e14f18cd72abcf9380460c76dd5e82",
+          "size": 1269,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "51b887f1f87b5eefec1ffd7c70f4506f1d5a1849",
+          "size": 6050,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "cached_property.py",
+          "sha": "3135871bfb0d9cda0a4c4eac6cdf8c47d890a289",
+          "size": 4324,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "conftest.py",
+          "sha": "0563f64d2f48c7f8e920e80def0af8d16b59f4e6",
+          "size": 486,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "2be31922e28344b5709304b71616cd07033a70e0",
+          "size": 100,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "0a8df87af1cba513e357c847bdd62decd5e35800",
+          "size": 21,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "setup.py",
+          "sha": "8fc7658d245284e820692affe15e06a806ea3b95",
+          "size": 1838,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "a1502065b53183cfcdbd8b6e58aedd0a16c2bbb4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "40a96afc6ff09d58a702b76e3f7dd412fe975e26",
+          "size": 24,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_async_cached_property.py",
+          "sha": "4ba84f31be0ba609a179c52e1f546069b4984527",
+          "size": 4093,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cached_property.py",
+          "sha": "5082416e535081250bf897a486fece44cfaafae6",
+          "size": 7727,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_coroutine_cached_property.py",
+          "sha": "3a1ea57dca1b372e9ced1daea68eae2efa4922c4",
+          "size": 3758,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "a1b4751da3890422398ec05595a2e65c686dc4cf",
+          "size": 173,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/pydanny/cached-property/commit/6e0394999fe7d114b89c3b54c8db0cb0eab8c67e",
+  "head": {
+    "commit": {
+      "message": "Add official support for current Python versions\n\n- remove support for Python 2.7\n- adapt tests and CI accordingly\n- minor documentation updates",
+      "parents": [
+        {
+          "sha": "409f24286e16ea3086af463edea6b80cdd62deed"
+        }
+      ],
+      "sha": "6e0394999fe7d114b89c3b54c8db0cb0eab8c67e",
+      "tree": {
+        "sha": "08c84c4ed8395a0b09346b0539cc6f6815adef45"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "cached_property.py": "3e31ea89f1ec96ed3893787a3792ceab7f6a4c0941bb7570397ebc9411ea1e0b",
+      "setup.py": "3debe8802b6576551aead0f9f00abb146eacfc09b7a86a1c46a4a868d281897b",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_async_cached_property.py": "45fb50c66f58934dd3a46e2e684cf95e3ae2166cb8db0b5aa8b82e41cd25d5c8",
+      "tests/test_cached_property.py": "d386b86e7e3537ed9e70d040ac85214bfa9fed26c550a0e0364a203d80d22c96",
+      "tests/test_coroutine_cached_property.py": "abf1e4551b31c6381a99c3b1f8c65c132cd5f5f2b55124782d3966446e612aa6"
+    },
+    "tree": {
+      "sha": "08c84c4ed8395a0b09346b0539cc6f6815adef45",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "e304278d1f72ebe78cedde5eae7997595f05b4a4",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/FUNDING.yml",
+          "sha": "e8faca3c0397ac9fcd3eae8671dce3ddf7a56f18",
+          "size": 608,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "474b495599d34f984c89ef335dcf41463bd31695",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-package.yml",
+          "sha": "75454c8052e14ec47bd62ca8e7c863408b28ffe8",
+          "size": 1582,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "b0df7f7c2e9b412a5d54b9f55af83ca7e38e2d9e",
+          "size": 478,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AUTHORS.md",
+          "sha": "9aecff9a27188ff9df8e9949e096b5cc437ecf01",
+          "size": 412,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "2a68ff6551d24b43a71ef6397e42d9b9fce6b00c",
+          "size": 3343,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "HISTORY.md",
+          "sha": "3c9d034ca9e9abf7f39e6831f398d3ee4491f44d",
+          "size": 2815,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "a181761ca55c8ca4601cf3143c220c12f547d9b0",
+          "size": 1479,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "152dfc28781d49c6081786839ac4ebaba2b85494",
+          "size": 155,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "2446d517f1e14f18cd72abcf9380460c76dd5e82",
+          "size": 1269,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "b47bc6a4aaae530116814db87e0c9cd0ed630fd0",
+          "size": 6012,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "cached_property.py",
+          "sha": "e4cdbae133b48a840d771621b44e452bc6cc28fc",
+          "size": 4172,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "837806a52243c6eecc7f2a2639c8ea6dbfcf1186",
+          "size": 99,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "0bcaa1aaa90a93c494ad3237e6a96cbbf17c4a8c",
+          "size": 21,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "setup.py",
+          "sha": "4d08b9beccceb23478127f1ca46534f9134fd83e",
+          "size": 1954,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "953933716da3c559be200fedaab7e395c7e595ca",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_async_cached_property.py",
+          "sha": "e03ac829aa782d44db74f6ea68030ffa2d898032",
+          "size": 3762,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cached_property.py",
+          "sha": "75d8df9759b2fb0ea3a23862711c63e30de9901f",
+          "size": 5957,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_coroutine_cached_property.py",
+          "sha": "29758fdc058850cfe465f6eb39aad42a23fd1bdb",
+          "size": 3192,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "e83ad16b2204acc965c696f2bb66b2f9780df199",
+          "size": 196,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "cached_property_async_wrapper",
+  "label_review": {
+    "author": "Codex (source inspection)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "ccd54838465216eae4cf83c925f9b89be232002e856bf95451c8c4200f7753d8",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "pydanny/cached-property",
+  "schema_version": "1.0",
+  "selection_reason": "Modernize the cached descriptor's standard-library coroutine wrapper.",
+  "warnings": []
+}
