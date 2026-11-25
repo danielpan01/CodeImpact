@@ -209,3 +209,144 @@ def test_successor_preserves_frozen_results_and_checks_evidence_drift(monkeypatc
     assert evaluate_equality(DIRECTORY)["evaluation"]["regressions"] == [
         "Exact equality report differs from the successor receipt"
     ]
+
+
+# Synthetic source only. Different identifiers keep the proof independent of the corpus.
+FACTORY = "import re\n" + CORE.replace(
+    "    def bump(self):",
+    """    digits = re.compile(r"(\\d+)")
+
+    @staticmethod
+    def advance(text):
+        match = Item.digits.search(text)
+        if match:
+            digit = str(int(match.group(1)) + 1)
+            start, end = match.span(1)
+            text = text[:max(start, end - len(digit))] + digit + text[end:]
+        return text
+
+    def bump(self):""",
+).replace("return cls(self._value + 1)", 'return cls(cls.advance("tag.1"))')
+
+
+def test_static_scalar_helper_preserves_exact_factory_class():
+    req = request_for(base_core=FACTORY)
+    report = analyze(req)
+    validate_report(req, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, "both")
+    assert edge.before == edge.after
+    assert edge.before[0].location.line == 6
+    assert edge.before[0].target_location.line == 5
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_path, rec.path_revision) == ([TEST, WRAPPER], "both")
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        FACTORY.replace("return cls(cls.advance", "return Other(cls.advance")
+        + "\nclass Other: pass\n",
+        FACTORY + "\nItem.advance = replacement\n",
+        FACTORY.replace("@staticmethod", "@classmethod"),
+        FACTORY.replace('cls.advance("tag.1")', 'lookup().advance("tag.1")'),
+        FACTORY.replace("return text", "return opaque(text)"),
+        FACTORY.replace("return text", "return Item(text)"),
+        FACTORY.replace("match.span(1)", "external.span(1)"),
+        FACTORY.replace(
+            "        match = Item", "        len = user_callback\n        match = Item"
+        ),
+        FACTORY.replace("import re\n", "import re\nfrom functools import partial as max\n"),
+        FACTORY.replace("    digits =", "    def advance(self): pass\n    digits ="),
+    ],
+)
+def test_ambiguous_factory_or_helper_has_no_operator_evidence(source):
+    report = analyze(request_for(base_core=source))
+    assert not equality_edges(report)
+
+
+def test_subclass_overriding_scalar_helper_has_no_operator_evidence():
+    req = request_for(TESTS.replace('parse("1")', 'Child("1")'), base_core=FACTORY)
+    for snap in (req.base, req.head):
+        snap.files["tests/test_item.py"] += (
+            "\nclass Child(Item):\n    def advance(self, text): return unknown(text)\n"
+        )
+    assert not equality_edges(analyze(req))
+
+
+@pytest.mark.parametrize("supported", ["before", "after"])
+def test_factory_helper_proof_uses_only_the_supported_revision(supported):
+    opaque = FACTORY.replace("return text", "return unknown(text)")
+    base, head = (FACTORY, opaque) if supported == "before" else (opaque, FACTORY)
+    req = request_for(base_core=base, head_core=head.replace("and True", "and False"))
+    report = analyze(req)
+    validate_report(req, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, supported)
+    assert bool(edge.before) == (supported == "before")
+    assert bool(edge.after) == (supported == "after")
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_path, rec.path_revision) == ([TEST, WRAPPER], supported)
+
+
+def test_pinned_factory_successor_keeps_evidence_and_rejects_drift(monkeypatch):
+    from codeimpact import equality_evaluate, factory_evaluate
+
+    baseline = evaluate_equality(DIRECTORY)
+    monkeypatch.setattr(factory_evaluate, "evaluate_equality", lambda _: baseline)
+    report = factory_evaluate.evaluate_factories(DIRECTORY)
+    assert report["evaluation"]["regressions"] == []
+    added = report["delta"]["semver_subclass_comparison"]["added"]
+    assert len(added) == 8
+    sid = "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none"
+    rec = added[sid]
+    assert rec["evidence_path"] == [sid, "src/semver/version.py::_comparator.wrapper"]
+    assert rec["path_revision"] == "both"
+    case = next(
+        c for c in report["evaluation"]["cases"] if c["case"]["id"] == "semver_subclass_comparison"
+    )
+    edge = next(e for e in case["analysis"]["edges"] if e["id"] == rec["evidence_edges"][0])
+    assert edge["before"] == edge["after"]
+    assert edge["before"][0]["location"]["line"] == 78
+
+    original = equality_evaluate.collect
+
+    def drift(directory, *, equality):
+        altered = original(directory, equality=equality)
+        item = next(
+            c
+            for c in altered["evaluation"]["cases"]
+            if c["case"]["id"] == "semver_subclass_comparison"
+        )
+        next(e for e in item["analysis"]["edges"] if e["id"] == edge["id"])["before"].clear()
+        return altered
+
+    monkeypatch.setattr(equality_evaluate, "collect", drift)
+    assert factory_evaluate.evaluate_factories(DIRECTORY)["evaluation"]["regressions"] == [
+        "Class-preserving factory report differs from the successor receipt"
+    ]
+
+
+def test_helper_budget_cannot_displace_a_later_existing_equality(monkeypatch):
+    from codeimpact import equality
+    from codeimpact.analyzer import build_index
+
+    source = TESTS + "\ndef test_z():\n    assert Item(1) == Item(2)\n"
+    req = request_for(source, base_core=FACTORY)
+    # Give the extended pass exactly the budget used by the original pass.
+    original_tick = equality.Proof.tick
+    steps = []
+
+    def count(proof):
+        original_tick(proof)
+        steps.append(proof.steps)
+
+    with monkeypatch.context() as measure:
+        measure.setattr(equality.Proof, "tick", count)
+        build_index(req.base, equality="exact-class")
+    monkeypatch.setattr(equality, "MAX_PROOF_STEPS", max(steps))
+    report = analyze(req)
+    validate_report(req, report)
+    assert ("tests/test_item.py::test_z", WRAPPER, "both") in {
+        (edge.source, edge.target, edge.revision) for edge in equality_edges(report)
+    }

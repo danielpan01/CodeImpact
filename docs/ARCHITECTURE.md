@@ -1123,3 +1123,13 @@ and 2.1, caller-to-dependency direction, and revision evidence are unchanged.
 Historical evaluation profiles disable the new proof and check their
 original stable reports. The v5 successor enables it explicitly.
 [Source trace and exact results](REAL_EVALUATION_V5.md#exact-class-equality-successor)
+
+The factory extension follows an exact class through a one-argument static
+helper that rewrites scalar data using a class-owned regular expression.
+It checks the search, guarded capture and span operations, builtin bindings,
+and returned value in the captured AST. On normal return the constructor
+still supplies the operand's class. If the extension exhausts its proof
+budget, a bounded replay recovers comparisons supported by the earlier rule.
+The offline `exact-equality-v1` replay uses the earlier rule, and
+`prerelease-factories-v1` measures the extension on the same pinned cases.
+[Factory scope and measurements](REAL_EVALUATION_V5.md#class-preserving-prerelease-factories)

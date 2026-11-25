@@ -41,6 +41,8 @@ jobs:
         run: make evaluate-real-v5
       - name: Offline v5 exact-class equality evaluation
         run: make evaluate-real-v5-equality
+      - name: Offline v5 class-preserving factory evaluation
+        run: make evaluate-real-v5-factories
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

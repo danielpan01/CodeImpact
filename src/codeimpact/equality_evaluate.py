@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import Any, Literal
 
 from codeimpact.corpus import StrictModel
-from codeimpact.fresh_evaluate import EQUALITY_TRANSITION, PROJECT, file_hash
+from codeimpact.equality import EqualityMode
+from codeimpact.fresh_evaluate import EQUALITY_TRANSITION, PROJECT, equality_source_hash, file_hash
 from codeimpact.holdout_evaluate import safe_file
 from codeimpact.models import Recommendation
 from codeimpact.real_evaluate import SHA256, require
@@ -32,7 +33,7 @@ class Delta(StrictModel):
 
 class Receipt(StrictModel):
     schema_version: Literal["1.0"]
-    name: Literal["exact-equality-v1"]
+    name: Literal["exact-equality-v1", "prerelease-factories-v1"]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256
     report_sha256: SHA256
@@ -65,6 +66,7 @@ def changes(before: dict[str, Any], after: dict[str, Any]) -> dict[str, Delta]:
 
 def evaluate_equality(directory: Path) -> dict[str, Any]:
     receipt = Receipt.model_validate(metadata(PROJECT, RECEIPT.as_posix()))
+    require(receipt.name == "exact-equality-v1", "Wrong equality successor")
     transition = safe_file(PROJECT, EQUALITY_TRANSITION.as_posix())
     require(
         file_hash(transition) == receipt.preservation_sha256,
@@ -72,18 +74,30 @@ def evaluate_equality(directory: Path) -> dict[str, Any]:
     )
     recorded = metadata(PROJECT, EQUALITY_TRANSITION.as_posix())
     for path, digest in sorted(recorded["current_sources_sha256"].items()):
-        require(file_hash(safe_file(PROJECT, path)) == digest, f"Equality source changed: {path}")
+        require(
+            equality_source_hash(PROJECT, path, file_hash(safe_file(PROJECT, path))) == digest,
+            f"Equality source changed: {path}",
+        )
 
-    before = evaluate_v5(directory)
+    return measure(directory, evaluate_v5(directory), receipt, "exact-class", "Exact equality")
+
+
+def measure(
+    directory: Path,
+    before: dict[str, Any],
+    receipt: Receipt,
+    mode: EqualityMode,
+    title: str,
+) -> dict[str, Any]:
     require(
         not before["evaluation"]["regressions"]
         and file_digest(before) == receipt.predecessor_report_sha256,
-        "Frozen v5 replay differs",
+        f"{title} predecessor replay differs",
     )
-    after = collect(directory, equality=True)
+    after = collect(directory, equality=mode)
     delta = changes(before, after)
     after["evaluation"]["regressions"] = (
-        ["Exact equality report differs from the successor receipt"]
+        [f"{title} report differs from the successor receipt"]
         if file_digest(after) != receipt.report_sha256 or delta != receipt.cases
         else []
     )

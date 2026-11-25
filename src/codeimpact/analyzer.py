@@ -25,7 +25,7 @@ from codeimpact.discovery import (
     shadows_unittest,
 )
 from codeimpact.dispatch_fallback import DispatchFallback
-from codeimpact.equality import add_equality_edges
+from codeimpact.equality import EqualityMode, add_equality_edges
 from codeimpact.explicit_reexports import add_reexport_edges
 from codeimpact.models import (
     AnalysisRequest,
@@ -337,7 +337,7 @@ def build_index(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
-    equality: bool = True,
+    equality: EqualityMode = True,
 ) -> Index:
     index = Index()
     trees: dict[str, ast.Module] = {}
@@ -544,7 +544,7 @@ def build_index(
     if fixtures:
         add_fixture_edges(index)
     if equality:
-        add_equality_edges(index)
+        add_equality_edges(index, scalar_factories=equality is True)
     return index
 
 
@@ -712,7 +712,7 @@ def analyze(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
-    equality: bool = True,
+    equality: EqualityMode = True,
 ) -> Report:
     started = time.perf_counter()
     before = build_index(
@@ -950,7 +950,9 @@ def analyze(
     if equality:
         # An equality site directly calls the proved binding. Keep the original
         # walks and scores for all other paths, including direct test edits.
-        comparisons = add_equality_edges(before) | add_equality_edges(after)
+        comparisons = add_equality_edges(
+            before, scalar_factories=equality is True
+        ) | add_equality_edges(after, scalar_factories=equality is True)
         active_targets = set(active)
         for source, target in sorted(comparisons):
             if (
