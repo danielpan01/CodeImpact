@@ -4390,3 +4390,9 @@ in view on Linux Firefox at 360 × 844. Narrow-phone result rows now use 8 px
 of vertical padding. The full-row visibility test still requires a ratio of 1
 at zero scroll. The Linux ARM64 Firefox publication check showed the whole
 row at both 360 and 390 px. [Original CI run](https://github.com/danielpan01/CodeImpact/actions/runs/45705691960)
+
+The first publication run passed the narrow-phone assertion. Linux Firefox
+then timed out waiting for a third native file chooser in the same offline
+review. The workflow test opens the initial report by keyboard and selects
+the two comparison files on the same input. All three loads check focus,
+and the test verifies plan isolation and restoration while disconnected.

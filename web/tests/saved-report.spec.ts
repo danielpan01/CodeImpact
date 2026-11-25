@@ -82,7 +82,14 @@ test("a pilot export reopens offline and resumes only its own review decisions",
   const markup = '<img src="https://invalid.example/image" onerror="alert(1)">';
   other.warnings.push(markup);
   await openAnalysis(page);
-  await chooseByKeyboard(page, JSON.stringify(other));
+  // The first reopen exercises the native keyboard chooser. For the following
+  // replacements, select files on the same input to test report identity
+  // independently of the browser's handling of rapid successive dialogs.
+  const input = page.getByLabel("Saved report JSON");
+  await input.setInputFiles(file(JSON.stringify(other)));
+  await expect(
+    page.getByRole("region", { name: "Change explorer" }),
+  ).toBeFocused();
   await page.locator(".diagnostics > summary").click();
   await page.getByRole("button", { name: /^General \/ unclassified/ }).click();
   await expect(page.locator(".diagnostic-text")).toContainText(markup);
@@ -96,7 +103,10 @@ test("a pilot export reopens offline and resumes only its own review decisions",
   await openAnalysis(page);
   const later: Report = JSON.parse(saved);
   later.stats.elapsed_ms += 1;
-  await chooseByKeyboard(page, JSON.stringify(later));
+  await input.setInputFiles(file(JSON.stringify(later)));
+  await expect(
+    page.getByRole("region", { name: "Change explorer" }),
+  ).toBeFocused();
   await launch.click();
   await expect(plan.getByRole("status")).toHaveText("1 of 3 reviewed");
   await expect(plan.getByText("2 pending · 0 follow-up")).toBeVisible();
