@@ -1,8 +1,10 @@
 # Independent source-label review pilot for real evaluation v4
 
-**Ready for review.** The maintainer summary was generated with zero submitted
-records. All 51 definitions remain unreviewed, including seven draft uncertain
-labels. The pilot uses the frozen v4 discovery policy and only these cases.
+**Self-review complete.** The original draft author reviewed both cases and
+retained all 51 labels. The owner chose to skip the independent human-review
+pilot. The two cases retain their draft classifications, including seven
+uncertain labels. The review packets, submitted self-review records and frozen
+measurements remain available.
 
 | Case | Affected | Unaffected | Uncertain | Total |
 | --- | ---: | ---: | ---: | ---: |

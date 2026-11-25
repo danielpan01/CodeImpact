@@ -4195,3 +4195,65 @@ The offline gates continue to report independent review as pending.
 Packets and the empty summary are under the ignored local
 `reports/real-v4-review-pilot/` directory. Logs and comparison copies are under
 `reports/review-v4-verification/`.
+
+### v4 pilot record intake
+
+Started from clean main at `db88af7` (PR #35). The two submitted JSON files
+identify their reviewer as the original Codex draft author. The independent
+review validator and maintainer summary rejected both for matching the author.
+The files were preserved byte for byte.
+
+The owner designated the two files as the completed self-review. The intake
+audit matched both pinned input and label hashes, all 51 original labels and
+IDs, and checked the bounds of all 228 cited source spans.
+Both assessments retain every original classification. There are no proposed
+label changes or disputes to adjudicate. The independent summary still lists
+all 51 IDs as unreviewed, including the seven draft uncertainties.
+
+The pinned Humanize diff and the frozen recommendation report confirm that
+the added parameter row belongs to `test_precisedelta_multiple_units`. The v4
+results narrative now names that definition. The frozen reports and evaluation
+data retain their original contents.
+
+The offline v4 replay matched its saved report and the independent maintainer
+summary matched its empty baseline. All 30 saved historical reports and all
+220 protected files matched their saved bytes or hashes. Evaluation metrics
+and uncertainty counts stayed the same.
+
+## oyaml dump-versus-load dependency audit
+
+Started from `db88af7` with the existing self-review documentation edits.
+The owner chose to skip the independent human-review pilot. The self-review
+records, all draft classifications, and the frozen review status in existing
+reports were preserved.
+
+`make evaluate-real-v4-reexports` reproduced `oyaml_error_context` at 18/18
+selected, with 3 draft true positives, 8 false positives, 0 false negatives,
+0 true negatives, and all 7 uncertain definitions selected. Each of the six
+dump tests has a score-50, both-revisions module edge to
+`test_oyaml.py::<module>`. Adding only the new `ConstructorError` import to
+the base test module reproduces those six paths. The registration audit
+covers the unchanged dumper registrations, the conditional external loader
+registration, and the wildcard namespace re-export. Both revisions leave
+PyYAML unpinned, and the pinned CI configuration supplies compatible release
+ranges. This leaves the initialized bindings and effects unproved in both
+revisions.
+
+Zero recommendations or evidence paths changed. The source-label drafts and
+analyzer behavior are preserved, and the original replay remains the
+measurement. The new tests cover both revisions of the pinned edges,
+independent test-module initialization, and synthetic mixed and independently
+affected paths with source missing on either side.
+[Exact evidence and dependency audit](OYAML_DUMP_LOAD_AUDIT.md)
+
+| Verification | Observed result |
+| --- | --- |
+| Focused regressions | 7 passed, including five new oyaml boundary checks. |
+| `make check` | Ruff, mypy, TypeScript and the production build passed. Python reported 1,340 passed, one expected Linux-only skip on macOS, one existing Starlette TestClient deprecation warning and 93% statement coverage. |
+| All nine offline evaluations | Passed. All 30 saved reports matched their starting bytes. |
+| Determinism | Seeds 7 and 173 each reproduced 11 report files byte for byte and passed 123 reversed-snapshot checks with only `stats.elapsed_ms` excluded. |
+| Protected files | All 220 tracked corpus, benchmark and analyzer source files matched their starting hashes. The original review artifacts and the two submitted self-review records were preserved. |
+| Whitespace and staging | `git diff --check` passed. The staging area is empty. |
+
+Logs and the metadata checked against the capture receipts are under the ignored
+`reports/oyaml-boundary-audit/` directory.

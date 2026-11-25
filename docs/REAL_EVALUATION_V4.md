@@ -4,7 +4,8 @@ The first frozen run selected **92 of 105 discovered definitions**, with
 **19 true positives, 57 false positives, zero false negatives and 13 true
 negatives** against the source draft. All 16 uncertain definitions were selected.
 The source inventory contains another **64 definitions outside discovery**.
-Independent human label review is pending.
+The owner chose to skip the independent human-review pilot. The source labels
+remain drafts.
 
 The engine is the clean PR #22 merge, `ed728a0851e87308c0ed454071ded12adb37eda8`.
 The dataset is a purposive six-change sample across previously unused
@@ -53,9 +54,9 @@ observed runtime outcomes.
   The new locale-specific test has its own changed-test path.
 - **Humanize small delta.** The 15 draft false positives end at
   `tests/test_time.py::<module>`. A new parameter row gives
-  `test_precisedelta_one_unit_enough` a changed-test path, while unrelated
-  `test_naturaldelta` variants share the test module. Its parameter data is a
-  decorator literal, distinct from the existing module-table proof.
+  `test_precisedelta_multiple_units` a changed-test path. The added decorator
+  row constructs a `datetime.timedelta`. Unrelated `test_naturaldelta`
+  variants share the test module.
   `test_precisedelta_bogus_call` has calls that return or raise before the
   edited loop and a separate `naturaldelta` error check.
 - **oyaml contextual error.** The eight draft false positives use
@@ -63,6 +64,9 @@ observed runtime outcomes.
   while the edited code is the mapping constructor. The two std-dict tests
   run only under a guard that skips the custom loader registration. The new
   unhashable-key test has changed-test evidence.
+  The later dump-versus-load audit keeps all six dump fallbacks and isolates
+  the added external constructor import as the test-module seed.
+  [Source audit](OYAML_DUMP_LOAD_AUDIT.md)
 - **oyaml registration.** Both draft false positives also end at the test
   module. The std-dict tests remain behind the guard that skips custom
   loader registration. Nine selected uncertainties involve external
@@ -104,9 +108,10 @@ records do not update the frozen draft, baseline or review status.
 [Source-only pack](../corpus/real-v4/REVIEW.md) ·
 [Human review instructions](../corpus/real-v4/REVIEW_WORKFLOW.md)
 
-The two-case independent review pilot is ready. It covers `humanize_small_delta`
-and `oyaml_error_context`, with 51 labels and seven draft uncertainties.
-There are zero submitted records. [Offline packets and commands](V4_REVIEW_PILOT.md)
+The completed self-review of `humanize_small_delta` and `oyaml_error_context`
+retained all 51 draft labels, including seven uncertainties. The independent
+human-review pilot was skipped at the owner's direction.
+[Review record and packets](V4_REVIEW_PILOT.md)
 
 
 ## Mixed-case unittest successor
@@ -209,7 +214,7 @@ Every retained ID appears in the receipt. Each path remains conservative with
 evidence in both revisions. The full report retains the original 31
 test-module paths and the direct package path from the local import in
 `testDifferentName`. The source-error, Humanize and oyaml reports are identical.
-All labels remain draft pending independent review.
+All labels retain draft status in the frozen measurements.
 [Successor receipt and exact retained IDs](../corpus/real-v4-successors/variadic-dispatch-v1/baseline.json)
 
 ```sh
