@@ -1,0 +1,3497 @@
+{
+  "first_report_sha256": "ef71b5624841d70322a3a659e1d45d6100c99650f0cad13d3d02043856e35ee7",
+  "frozen_inputs_sha256": "48cfd5d5d191ec7aee2205a9f2a8bf4a04924981c6c350cee90a546896ecef4d",
+  "initial_regressions": [
+    "cached_property_async_wrapper: false positives: expected [], observed ['tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry']",
+    "cached_property_async_wrapper: unclassified recommendations: expected [], observed ['tests/test_cached_property.py::TestCachedProperty.test_cached_property']",
+    "cached_property_coroutine_metadata: false positives: expected [], observed ['tests/test_cached_property.py::TestCachedProperty.test_cached_property', 'tests/test_cached_property.py::TestCachedProperty.test_none_cached_property', 'tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property', 'tests/test_cached_property.py::TestCachedProperty.test_set_cached_property', 'tests/test_cached_property.py::TestCachedProperty.test_threads', 'tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry', 'tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry', 'tests/test_cached_property.py::TestThreadedCachedProperty.test_threads', 'tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry']",
+    "semver_prerelease_comparison: false positives: expected [], observed ['tests/test_bump.py::test_should_bump_build', 'tests/test_bump.py::test_should_bump_major', 'tests/test_bump.py::test_should_bump_minor', 'tests/test_bump.py::test_should_bump_patch', 'tests/test_bump.py::test_should_bump_prerelease', 'tests/test_bump.py::test_should_ignore_build_on_prerelease_bump', 'tests/test_bump.py::test_should_ignore_extensions_for_bump', 'tests/test_compare.py::test_should_not_allow_to_compare_version_with_int', 'tests/test_compare.py::test_should_raise_value_error_for_invalid_value', 'tests/test_deprecated_functions.py::test_deprecated_deco_without_argument', 'tests/test_format.py::test_parse_method_for_version_info', 'tests/test_format.py::test_should_correctly_format_version', 'tests/test_format.py::test_should_finalize_version', 'tests/test_index.py::test_version_info_should_be_accessed_with_index', 'tests/test_index.py::test_version_info_should_be_accessed_with_slice_object', 'tests/test_index.py::test_version_info_should_throw_index_error', 'tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index', 'tests/test_match.py::test_should_match_simple', 'tests/test_match.py::test_should_no_match_simple', 'tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression', 'tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression', 'tests/test_max-min.py::test_should_get_max', 'tests/test_max-min.py::test_should_get_min', 'tests/test_parsing.py::test_next_version_with_invalid_parts', 'tests/test_parsing.py::test_next_version_with_versioninfo', 'tests/test_parsing.py::test_parse_method_for_version_info', 'tests/test_parsing.py::test_parse_version_info_str_hash', 'tests/test_parsing.py::test_should_parse_version', 'tests/test_parsing.py::test_should_parse_zero_prerelease', 'tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions', 'tests/test_pysemver-cli.py::test_main_file_should_call_cli_main', 'tests/test_replace.py::test_replace_method_replaces_requested_parts', 'tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg', 'tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values', 'tests/test_semver.py::test_should_versioninfo_isvalid', 'tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value', 'tests/test_subclass.py::test_replace_from_subclass', 'tests/test_subclass.py::test_subclass_from_versioninfo', 'tests/test_typeerror-274.py::test_should_not_work_with_invalid_args', 'tests/test_typeerror-274.py::test_should_work_with_string_and_bytes']",
+    "semver_prerelease_comparison: false negatives: expected [], observed ['tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers', 'tests/test_compare.py::test_should_compare_version_dictionaries', 'tests/test_compare.py::test_should_compare_version_info_objects', 'tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments']",
+    "semver_subclass_comparison: false positives: expected [], observed ['tests/test_subclass.py::test_replace_from_subclass', 'tests/test_subclass.py::test_subclass_from_versioninfo']",
+    "semver_subclass_comparison: false negatives: expected [], observed ['tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str', 'tests/test_bump.py::test_should_versioninfo_bump_build_with_none', 'tests/test_bump.py::test_should_versioninfo_bump_major_and_minor', 'tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch', 'tests/test_bump.py::test_should_versioninfo_bump_multiple', 'tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease', 'tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token', 'tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build', 'tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token', 'tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str', 'tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none', 'tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers', 'tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters', 'tests/test_compare.py::test_should_compare_version_dictionaries', 'tests/test_compare.py::test_should_compare_version_info_objects', 'tests/test_compare.py::test_should_compare_version_list', 'tests/test_compare.py::test_should_compare_version_string', 'tests/test_compare.py::test_should_compare_version_tuples', 'tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring', 'tests/test_compare.py::test_should_not_allow_to_compare_version_with_int', 'tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings', 'tests/test_max-min.py::test_prerelease_order', 'tests/test_max-min.py::test_should_get_max', 'tests/test_max-min.py::test_should_get_max_same', 'tests/test_max-min.py::test_should_get_min', 'tests/test_max-min.py::test_should_get_min_same', 'tests/test_parsing.py::test_equal_versions_have_equal_hashes', 'tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch', 'tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts']"
+  ],
+  "measurement": {
+    "analysis_sha256": {
+      "cached_property_async_wrapper": "84a7a9b63437efc7fa421c617dea96f934a4e655250fb29167ebd7f2d22cd780",
+      "cached_property_coroutine_metadata": "8324ae20f66a18d422151b9aa66c3c47afa43e706395633908f3453b725d1559",
+      "semver_prerelease_comparison": "c1fa7de14d523f7881306b4035f4464720f44ebda7b6f2265f8ee04447e60b44",
+      "semver_subclass_comparison": "5d0b79fa5cdc25af64a39a7b6f9753165cec75b834a5b156a16dc35be275932c"
+    },
+    "cases": [
+      {
+        "change_url": "https://github.com/pydanny/cached-property/commit/6e0394999fe7d114b89c3b54c8db0cb0eab8c67e",
+        "coverage": {
+          "base": {
+            "commit": "409f24286e16ea3086af463edea6b80cdd62deed",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 13,
+            "python_bytes": 22250,
+            "python_files": 7,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "211ec306298b4eea60440677c1662b921a51c35f"
+          },
+          "head": {
+            "commit": "6e0394999fe7d114b89c3b54c8db0cb0eab8c67e",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 13,
+            "python_bytes": 19037,
+            "python_files": 6,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "08c84c4ed8395a0b09346b0539cc6f6815adef45"
+          }
+        },
+        "id": "cached_property_async_wrapper",
+        "label_review": {
+          "author": "Codex (source inspection)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "ccd54838465216eae4cf83c925f9b89be232002e856bf95451c8c4200f7753d8",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 1,
+            "tn": 0,
+            "tp": 11,
+            "unclassified_recommendations": 1
+          },
+          "precision": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9166666666666666
+          },
+          "recall": {
+            "denominator": 11,
+            "numerator": 11,
+            "value": 1.0
+          }
+        },
+        "outside_discovery": {},
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Resolved call path": 5,
+          "Test itself changed": 8
+        },
+        "repository": "pydanny/cached-property",
+        "selected_count": 13,
+        "selected_test_ids": [
+          "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+          "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        ],
+        "test_count": 13,
+        "test_shaped_definition_count": 13,
+        "unclassified_recommendation_count": 1,
+        "unclassified_test_count": 1,
+        "unclassified_test_ids": [
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        ],
+        "unclassified_unselected_count": 0,
+        "unclassified_unselected_ids": []
+      },
+      {
+        "change_url": "https://github.com/pydanny/cached-property/commit/c97cf414254e2aed83417785b3890a4f2602ba81",
+        "coverage": {
+          "base": {
+            "commit": "b4cc28f4f08e9c4bd06b35f92ab0f5a1aa2ae9b7",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 21997,
+            "python_files": 7,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "879d3e8b5a50612b515080b762c45490931722a3"
+          },
+          "head": {
+            "commit": "c97cf414254e2aed83417785b3890a4f2602ba81",
+            "excluded_python_paths": [],
+            "license": {
+              "path": "LICENSE",
+              "sha256": "ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2015, Daniel Greenfeld\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of cached-property nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 12,
+            "python_bytes": 22045,
+            "python_files": 7,
+            "submodule_paths": [],
+            "symlink_paths": [],
+            "tree_sha": "2e190113fbf55ce969ec5ef52f22e37c0d247af9"
+          }
+        },
+        "id": "cached_property_coroutine_metadata",
+        "label_review": {
+          "author": "Codex (source inspection)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "c160c6237b81f04b086f45ae8e053c244eec136f1f5b17575faf403fca83d871",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 9,
+            "tn": 0,
+            "tp": 6,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 15,
+            "numerator": 6,
+            "value": 0.4
+          },
+          "recall": {
+            "denominator": 6,
+            "numerator": 6,
+            "value": 1.0
+          }
+        },
+        "outside_discovery": {},
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Conservative module/import dependency": 15
+        },
+        "repository": "pydanny/cached-property",
+        "selected_count": 15,
+        "selected_test_ids": [
+          "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+          "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        ],
+        "test_count": 15,
+        "test_shaped_definition_count": 15,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": [],
+        "unclassified_unselected_count": 0,
+        "unclassified_unselected_ids": []
+      },
+      {
+        "change_url": "https://github.com/python-semver/python-semver/commit/0f30183605ebb1cb43de1a6b8baad5dcd754f685",
+        "coverage": {
+          "base": {
+            "commit": "5dae7b67131299c8f955579bb239f2e580baa582",
+            "excluded_python_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 81,
+            "python_bytes": 96901,
+            "python_files": 26,
+            "submodule_paths": [],
+            "symlink_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "tree_sha": "a482670e2002d5ce9e82840fbe056c508b266ded"
+          },
+          "head": {
+            "commit": "0f30183605ebb1cb43de1a6b8baad5dcd754f685",
+            "excluded_python_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 81,
+            "python_bytes": 96760,
+            "python_files": 26,
+            "submodule_paths": [],
+            "symlink_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "tree_sha": "5442325a72daf371caa42a510b923541f937cf86"
+          }
+        },
+        "id": "semver_prerelease_comparison",
+        "label_review": {
+          "author": "Codex (source inspection)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "9db7d473806d2fe19bbf15f91bbcaee432c324f10ed4262fc1e7b4fe6b69bd5d",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 4,
+            "fp": 40,
+            "tn": 30,
+            "tp": 31,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 71,
+            "numerator": 31,
+            "value": 0.43661971830985913
+          },
+          "recall": {
+            "denominator": 35,
+            "numerator": 31,
+            "value": 0.8857142857142857
+          }
+        },
+        "outside_discovery": {},
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Conservative module/import dependency": 71
+        },
+        "repository": "python-semver/python-semver",
+        "selected_count": 71,
+        "selected_test_ids": [
+          "tests/test_bump.py::test_should_bump_build",
+          "tests/test_bump.py::test_should_bump_major",
+          "tests/test_bump.py::test_should_bump_minor",
+          "tests/test_bump.py::test_should_bump_patch",
+          "tests/test_bump.py::test_should_bump_prerelease",
+          "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump",
+          "tests/test_bump.py::test_should_ignore_extensions_for_bump",
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_none",
+          "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor",
+          "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+          "tests/test_bump.py::test_should_versioninfo_bump_multiple",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none",
+          "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+          "tests/test_compare.py::test_should_compare_rc_builds",
+          "tests/test_compare.py::test_should_compare_release_candidate_with_release",
+          "tests/test_compare.py::test_should_compare_versions_with_build_and_release",
+          "tests/test_compare.py::test_should_follow_specification_comparison",
+          "tests/test_compare.py::test_should_get_greater",
+          "tests/test_compare.py::test_should_get_less",
+          "tests/test_compare.py::test_should_get_more_rc1",
+          "tests/test_compare.py::test_should_ignore_builds_on_compare",
+          "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+          "tests/test_compare.py::test_should_raise_value_error_for_invalid_value",
+          "tests/test_compare.py::test_should_say_equal_versions_are_equal",
+          "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument",
+          "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings",
+          "tests/test_format.py::test_parse_method_for_version_info",
+          "tests/test_format.py::test_should_correctly_format_version",
+          "tests/test_format.py::test_should_finalize_version",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_index",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object",
+          "tests/test_index.py::test_version_info_should_throw_index_error",
+          "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index",
+          "tests/test_match.py::test_should_match_equal_by_default",
+          "tests/test_match.py::test_should_match_not_equal",
+          "tests/test_match.py::test_should_match_simple",
+          "tests/test_match.py::test_should_no_match_simple",
+          "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression",
+          "tests/test_max-min.py::test_prerelease_order",
+          "tests/test_max-min.py::test_should_get_max",
+          "tests/test_max-min.py::test_should_get_max_same",
+          "tests/test_max-min.py::test_should_get_min",
+          "tests/test_max-min.py::test_should_get_min_same",
+          "tests/test_parsing.py::test_equal_versions_have_equal_hashes",
+          "tests/test_parsing.py::test_next_version_with_invalid_parts",
+          "tests/test_parsing.py::test_next_version_with_versioninfo",
+          "tests/test_parsing.py::test_parse_method_for_version_info",
+          "tests/test_parsing.py::test_parse_version_info_str_hash",
+          "tests/test_parsing.py::test_should_parse_version",
+          "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch",
+          "tests/test_parsing.py::test_should_parse_zero_prerelease",
+          "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions",
+          "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main",
+          "tests/test_replace.py::test_replace_method_replaces_requested_parts",
+          "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg",
+          "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values",
+          "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts",
+          "tests/test_semver.py::test_should_versioninfo_isvalid",
+          "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value",
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo",
+          "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args",
+          "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        ],
+        "test_count": 105,
+        "test_shaped_definition_count": 105,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": [],
+        "unclassified_unselected_count": 0,
+        "unclassified_unselected_ids": []
+      },
+      {
+        "change_url": "https://github.com/python-semver/python-semver/commit/bc41390f388d88114e8529b17fe145c5af390cbb",
+        "coverage": {
+          "base": {
+            "commit": "bd97cfcd595c882d92b73430d4bf5c880d6062dc",
+            "excluded_python_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 85,
+            "python_bytes": 96481,
+            "python_files": 26,
+            "submodule_paths": [],
+            "symlink_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "tree_sha": "65b51b71bcf8bb0b97097dc525a04847aa6f9adb"
+          },
+          "head": {
+            "commit": "bc41390f388d88114e8529b17fe145c5af390cbb",
+            "excluded_python_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "license": {
+              "path": "LICENSE.txt",
+              "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+              "spdx": "BSD-3-Clause",
+              "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+            },
+            "non_python_blob_count": 85,
+            "python_bytes": 97088,
+            "python_files": 26,
+            "submodule_paths": [],
+            "symlink_paths": [
+              "tests/coerce.py",
+              "tests/semverwithvprefix.py"
+            ],
+            "tree_sha": "28a2d73844ca339a107541cce3a1871971d5b4e1"
+          }
+        },
+        "id": "semver_subclass_comparison",
+        "label_review": {
+          "author": "Codex (source inspection)",
+          "drafted_before_analysis": true,
+          "labels_sha256": "69da12271f3d2f0567fd4a0dd1d35ec2ee0edf21ef0e993a6b9f2324c4f6e3fb",
+          "review_reference": null,
+          "reviewer": null,
+          "status": "draft"
+        },
+        "metrics": {
+          "counts": {
+            "fn": 29,
+            "fp": 2,
+            "tn": 74,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 3,
+            "numerator": 1,
+            "value": 0.3333333333333333
+          },
+          "recall": {
+            "denominator": 30,
+            "numerator": 1,
+            "value": 0.03333333333333333
+          }
+        },
+        "outside_discovery": {},
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Conservative module/import dependency": 2,
+          "Test itself changed": 1
+        },
+        "repository": "python-semver/python-semver",
+        "selected_count": 3,
+        "selected_test_ids": [
+          "tests/test_subclass.py::test_compare_with_subclass",
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo"
+        ],
+        "test_count": 106,
+        "test_shaped_definition_count": 106,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_test_ids": [],
+        "unclassified_unselected_count": 0,
+        "unclassified_unselected_ids": []
+      }
+    ],
+    "classifications": {
+      "cached_property_async_wrapper": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 1,
+            "tn": 0,
+            "tp": 11,
+            "unclassified_recommendations": 1
+          },
+          "precision": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9166666666666666
+          },
+          "recall": {
+            "denominator": 11,
+            "numerator": 11,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+          "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        ],
+        "unclassified_recommendations": [
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        ]
+      },
+      "cached_property_coroutine_metadata": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+          "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 9,
+            "tn": 0,
+            "tp": 6,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 15,
+            "numerator": 6,
+            "value": 0.4
+          },
+          "recall": {
+            "denominator": 6,
+            "numerator": 6,
+            "value": 1.0
+          }
+        },
+        "true_negatives": [],
+        "true_positives": [
+          "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        ],
+        "unclassified_recommendations": []
+      },
+      "semver_prerelease_comparison": {
+        "false_negatives": [
+          "tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+          "tests/test_compare.py::test_should_compare_version_dictionaries",
+          "tests/test_compare.py::test_should_compare_version_info_objects",
+          "tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments"
+        ],
+        "false_positives": [
+          "tests/test_bump.py::test_should_bump_build",
+          "tests/test_bump.py::test_should_bump_major",
+          "tests/test_bump.py::test_should_bump_minor",
+          "tests/test_bump.py::test_should_bump_patch",
+          "tests/test_bump.py::test_should_bump_prerelease",
+          "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump",
+          "tests/test_bump.py::test_should_ignore_extensions_for_bump",
+          "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+          "tests/test_compare.py::test_should_raise_value_error_for_invalid_value",
+          "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument",
+          "tests/test_format.py::test_parse_method_for_version_info",
+          "tests/test_format.py::test_should_correctly_format_version",
+          "tests/test_format.py::test_should_finalize_version",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_index",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object",
+          "tests/test_index.py::test_version_info_should_throw_index_error",
+          "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index",
+          "tests/test_match.py::test_should_match_simple",
+          "tests/test_match.py::test_should_no_match_simple",
+          "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression",
+          "tests/test_max-min.py::test_should_get_max",
+          "tests/test_max-min.py::test_should_get_min",
+          "tests/test_parsing.py::test_next_version_with_invalid_parts",
+          "tests/test_parsing.py::test_next_version_with_versioninfo",
+          "tests/test_parsing.py::test_parse_method_for_version_info",
+          "tests/test_parsing.py::test_parse_version_info_str_hash",
+          "tests/test_parsing.py::test_should_parse_version",
+          "tests/test_parsing.py::test_should_parse_zero_prerelease",
+          "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions",
+          "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main",
+          "tests/test_replace.py::test_replace_method_replaces_requested_parts",
+          "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg",
+          "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values",
+          "tests/test_semver.py::test_should_versioninfo_isvalid",
+          "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value",
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo",
+          "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args",
+          "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 4,
+            "fp": 40,
+            "tn": 30,
+            "tp": 31,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 71,
+            "numerator": 31,
+            "value": 0.43661971830985913
+          },
+          "recall": {
+            "denominator": 35,
+            "numerator": 31,
+            "value": 0.8857142857142857
+          }
+        },
+        "true_negatives": [
+          "tests/test_compare.py::test_should_compare_version_list",
+          "tests/test_compare.py::test_should_compare_version_string",
+          "tests/test_compare.py::test_should_compare_version_tuples",
+          "tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring",
+          "tests/test_docstrings.py::test_fordocstrings",
+          "tests/test_format.py::test_repr",
+          "tests/test_immutable.py::test_immutable_build",
+          "tests/test_immutable.py::test_immutable_major",
+          "tests/test_immutable.py::test_immutable_minor",
+          "tests/test_immutable.py::test_immutable_patch",
+          "tests/test_immutable.py::test_immutable_prerelease",
+          "tests/test_immutable.py::test_immutable_unknown_attribute",
+          "tests/test_pysemver-cli.py::test_should_parse_cli_arguments",
+          "tests/test_pysemver-cli.py::test_should_process_check_iscalled_with_valid_version",
+          "tests/test_pysemver-cli.py::test_should_process_print",
+          "tests/test_pysemver-cli.py::test_should_process_raise_error",
+          "tests/test_pysemver-cli.py::test_should_raise_systemexit_when_bump_iscalled_with_empty_arguments",
+          "tests/test_pysemver-cli.py::test_should_raise_systemexit_when_called_with_empty_arguments",
+          "tests/test_semver.py::test_should_be_able_to_use_integers_as_prerelease_build",
+          "tests/test_semver.py::test_should_be_able_to_use_strings_as_major_minor_patch",
+          "tests/test_semver.py::test_should_fail_compatible_match",
+          "tests/test_semver.py::test_should_fail_with_incompatible_type_for_compatible_match",
+          "tests/test_semver.py::test_should_not_allow_negative_numbers",
+          "tests/test_semver.py::test_should_private_increment_string",
+          "tests/test_semver.py::test_should_succeed_compatible_match",
+          "tests/test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible",
+          "tests/test_semver.py::test_should_versioninfo_to_dict",
+          "tests/test_semver.py::test_should_versioninfo_to_tuple",
+          "tests/test_semver.py::test_using_non_numeric_string_as_major_minor_patch_throws",
+          "tests/test_semver.py::test_version_info_should_be_iterable"
+        ],
+        "true_positives": [
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_none",
+          "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor",
+          "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+          "tests/test_bump.py::test_should_versioninfo_bump_multiple",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none",
+          "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+          "tests/test_compare.py::test_should_compare_rc_builds",
+          "tests/test_compare.py::test_should_compare_release_candidate_with_release",
+          "tests/test_compare.py::test_should_compare_versions_with_build_and_release",
+          "tests/test_compare.py::test_should_follow_specification_comparison",
+          "tests/test_compare.py::test_should_get_greater",
+          "tests/test_compare.py::test_should_get_less",
+          "tests/test_compare.py::test_should_get_more_rc1",
+          "tests/test_compare.py::test_should_ignore_builds_on_compare",
+          "tests/test_compare.py::test_should_say_equal_versions_are_equal",
+          "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings",
+          "tests/test_match.py::test_should_match_equal_by_default",
+          "tests/test_match.py::test_should_match_not_equal",
+          "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression",
+          "tests/test_max-min.py::test_prerelease_order",
+          "tests/test_max-min.py::test_should_get_max_same",
+          "tests/test_max-min.py::test_should_get_min_same",
+          "tests/test_parsing.py::test_equal_versions_have_equal_hashes",
+          "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch",
+          "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+        ],
+        "unclassified_recommendations": []
+      },
+      "semver_subclass_comparison": {
+        "false_negatives": [
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_build_with_none",
+          "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor",
+          "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+          "tests/test_bump.py::test_should_versioninfo_bump_multiple",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+          "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str",
+          "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none",
+          "tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+          "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+          "tests/test_compare.py::test_should_compare_version_dictionaries",
+          "tests/test_compare.py::test_should_compare_version_info_objects",
+          "tests/test_compare.py::test_should_compare_version_list",
+          "tests/test_compare.py::test_should_compare_version_string",
+          "tests/test_compare.py::test_should_compare_version_tuples",
+          "tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring",
+          "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+          "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings",
+          "tests/test_max-min.py::test_prerelease_order",
+          "tests/test_max-min.py::test_should_get_max",
+          "tests/test_max-min.py::test_should_get_max_same",
+          "tests/test_max-min.py::test_should_get_min",
+          "tests/test_max-min.py::test_should_get_min_same",
+          "tests/test_parsing.py::test_equal_versions_have_equal_hashes",
+          "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch",
+          "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+        ],
+        "false_positives": [
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo"
+        ],
+        "metrics": {
+          "counts": {
+            "fn": 29,
+            "fp": 2,
+            "tn": 74,
+            "tp": 1,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 3,
+            "numerator": 1,
+            "value": 0.3333333333333333
+          },
+          "recall": {
+            "denominator": 30,
+            "numerator": 1,
+            "value": 0.03333333333333333
+          }
+        },
+        "true_negatives": [
+          "tests/test_bump.py::test_should_bump_build",
+          "tests/test_bump.py::test_should_bump_major",
+          "tests/test_bump.py::test_should_bump_minor",
+          "tests/test_bump.py::test_should_bump_patch",
+          "tests/test_bump.py::test_should_bump_prerelease",
+          "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump",
+          "tests/test_bump.py::test_should_ignore_extensions_for_bump",
+          "tests/test_compare.py::test_should_compare_rc_builds",
+          "tests/test_compare.py::test_should_compare_release_candidate_with_release",
+          "tests/test_compare.py::test_should_compare_versions_with_build_and_release",
+          "tests/test_compare.py::test_should_follow_specification_comparison",
+          "tests/test_compare.py::test_should_get_greater",
+          "tests/test_compare.py::test_should_get_less",
+          "tests/test_compare.py::test_should_get_more_rc1",
+          "tests/test_compare.py::test_should_ignore_builds_on_compare",
+          "tests/test_compare.py::test_should_raise_value_error_for_invalid_value",
+          "tests/test_compare.py::test_should_say_equal_versions_are_equal",
+          "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument",
+          "tests/test_docstrings.py::test_fordocstrings",
+          "tests/test_format.py::test_parse_method_for_version_info",
+          "tests/test_format.py::test_repr",
+          "tests/test_format.py::test_should_correctly_format_version",
+          "tests/test_format.py::test_should_finalize_version",
+          "tests/test_immutable.py::test_immutable_build",
+          "tests/test_immutable.py::test_immutable_major",
+          "tests/test_immutable.py::test_immutable_minor",
+          "tests/test_immutable.py::test_immutable_patch",
+          "tests/test_immutable.py::test_immutable_prerelease",
+          "tests/test_immutable.py::test_immutable_unknown_attribute",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_index",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object",
+          "tests/test_index.py::test_version_info_should_throw_index_error",
+          "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index",
+          "tests/test_match.py::test_should_match_equal_by_default",
+          "tests/test_match.py::test_should_match_not_equal",
+          "tests/test_match.py::test_should_match_simple",
+          "tests/test_match.py::test_should_no_match_simple",
+          "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression",
+          "tests/test_parsing.py::test_next_version_with_invalid_parts",
+          "tests/test_parsing.py::test_next_version_with_versioninfo",
+          "tests/test_parsing.py::test_parse_method_for_version_info",
+          "tests/test_parsing.py::test_parse_version_info_str_hash",
+          "tests/test_parsing.py::test_should_parse_version",
+          "tests/test_parsing.py::test_should_parse_zero_prerelease",
+          "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions",
+          "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main",
+          "tests/test_pysemver-cli.py::test_should_parse_cli_arguments",
+          "tests/test_pysemver-cli.py::test_should_process_check_iscalled_with_valid_version",
+          "tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments",
+          "tests/test_pysemver-cli.py::test_should_process_print",
+          "tests/test_pysemver-cli.py::test_should_process_raise_error",
+          "tests/test_pysemver-cli.py::test_should_raise_systemexit_when_bump_iscalled_with_empty_arguments",
+          "tests/test_pysemver-cli.py::test_should_raise_systemexit_when_called_with_empty_arguments",
+          "tests/test_replace.py::test_replace_method_replaces_requested_parts",
+          "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg",
+          "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values",
+          "tests/test_semver.py::test_should_be_able_to_use_integers_as_prerelease_build",
+          "tests/test_semver.py::test_should_be_able_to_use_strings_as_major_minor_patch",
+          "tests/test_semver.py::test_should_fail_compatible_match",
+          "tests/test_semver.py::test_should_fail_with_incompatible_type_for_compatible_match",
+          "tests/test_semver.py::test_should_not_allow_negative_numbers",
+          "tests/test_semver.py::test_should_private_increment_string",
+          "tests/test_semver.py::test_should_succeed_compatible_match",
+          "tests/test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible",
+          "tests/test_semver.py::test_should_versioninfo_isvalid",
+          "tests/test_semver.py::test_should_versioninfo_to_dict",
+          "tests/test_semver.py::test_should_versioninfo_to_tuple",
+          "tests/test_semver.py::test_using_non_numeric_string_as_major_minor_patch_throws",
+          "tests/test_semver.py::test_version_info_should_be_iterable",
+          "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value",
+          "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args",
+          "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        ],
+        "true_positives": [
+          "tests/test_subclass.py::test_compare_with_subclass"
+        ],
+        "unclassified_recommendations": []
+      }
+    },
+    "recommendations": {
+      "cached_property_async_wrapper": [
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          ],
+          "path_revision": "both",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "2d024bdebfa6f1c3e3a02016f7040f6240b20f626198f7343228c8c0f353eb3f"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+            "tests/test_cached_property.py::CheckFactory"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 88,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "bb39ed2409b6780a6a9aa9274b43a17729b88ef2f86aef37e10c1c5555a3fdf4"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+            "tests/test_cached_property.py::CheckFactory"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 88,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "bc0a1b48975e5d34a1dadb9ff5946513921bba462ea7029db029f01cc075071b"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+            "tests/test_cached_property.py::CheckFactory"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 88,
+          "symbol": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "63ac1fe83cb05954a11e2a3412db0703e87992dd6a71c3b210edfb7e18c27eb4"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+            "tests/test_cached_property.py::CheckFactory"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 88,
+          "symbol": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "e9c47e4257d8d718457ec8ddc6fdd5af30bfeec4beed9e79f49aed564df6b7e2"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry",
+            "tests/test_cached_property.py::CheckFactory"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 88,
+          "symbol": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        }
+      ],
+      "cached_property_coroutine_metadata": [
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "031469bc131ae7020221f7732a0131d709a228bfdd797f70b4258f3e9f102a34",
+            "f09c85f0a433552bce8a0fe0019a99845cb8cbf05cb12adbd35933bd32520a51"
+          ],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property",
+            "tests/test_async_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "4091c293d4dcdcd74616980a959ada7a32113978312ff6bc3aa57a241edafea6",
+            "f09c85f0a433552bce8a0fe0019a99845cb8cbf05cb12adbd35933bd32520a51"
+          ],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property",
+            "tests/test_async_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "ca6c688d6251159c7382fd8b893166992b63c57275351c59454456062b3c94cb",
+            "f09c85f0a433552bce8a0fe0019a99845cb8cbf05cb12adbd35933bd32520a51"
+          ],
+          "evidence_path": [
+            "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property",
+            "tests/test_async_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "3244a5545c5c9facf8b817b29cdf1331942fbb62f939deb85b6c0bb5ab97ec7c",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "5d3ed4a278c098750dce820f6f3945cb52fbee892011ae70f25124effc3c492c",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "97fc74a07b6b634890d15a94efaf56f802a47c1a820ba8522b10e8ed93008c96",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "33318ccafa9b7b7e21cc5c747179ce2d1bdbab783902c61b4e4a7cf0a4861e64",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "16b47e7cc50465f7f970475fa329b6047bcf591dfe3edf420b5676c863ba0382",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedProperty.test_threads",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedProperty.test_threads"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "eafeca64dd3e79b79354239a6b6afe5f2212b7879abc6c9ea6ca996514bfd036",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "d9114f25e4f0b799a14ce81b2d04a9e4c04650047a8d1c67fb8506fede8f27d3",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "b4f37ca41f192af6b3f3d60b3d5eeb5fa69fda8590cf6c4112caf49397e1ab9e",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "ccafd100d56358aed57f465315193cced6641c1e775bf6fc38e90a01e339d08f",
+            "b39793adebf1e24f553e0073de59ba89d996622329e5efcb46a6b1d7743aed7c"
+          ],
+          "evidence_path": [
+            "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry",
+            "tests/test_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "e6e6a586b39486fe8fb7e04d939b479b63cb1e97d853a941bf9b9c64629a0f94",
+            "2bd141456b2704b1a0cdc8e51e6bd472e1fb4925290c43e80d8e3dac0c21c22b"
+          ],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property",
+            "tests/test_coroutine_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "855814f0d6b98844cd808d8c625956c846d968039dbd620ea1057d32b15199ba",
+            "2bd141456b2704b1a0cdc8e51e6bd472e1fb4925290c43e80d8e3dac0c21c22b"
+          ],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property",
+            "tests/test_coroutine_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "a9139cf70a3f179e052468753904cfdb25d52cfc982deaf2d575532906ecb3d6",
+            "2bd141456b2704b1a0cdc8e51e6bd472e1fb4925290c43e80d8e3dac0c21c22b"
+          ],
+          "evidence_path": [
+            "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property",
+            "tests/test_coroutine_cached_property.py::<module>",
+            "cached_property.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        }
+      ],
+      "semver_prerelease_comparison": [
+        {
+          "distance": 2,
+          "evidence_edges": [
+            "6379b57a36c8ac1f6d8d514ffd293733092e18c51ff8949b45fd2d6819a391cd",
+            "08f2999fc86c9d961f4c96dacc2d4b07920b26b56b0045ebdabb2b55d4b9e200"
+          ],
+          "evidence_path": [
+            "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args",
+            "src/semver/version.py::Version.parse",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 40,
+          "symbol": "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "43dd8c7d6462be98af59af8eb266c066ab2d3bd68b60ff81633332b7785d5068",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_bump_build",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_bump_build"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "153d64e05f4dc640a3e58b81d36a99a8b980e280faef6261a2d7c1f8c924174f",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_bump_major",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_bump_major"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "67f549439d40c6f206f2dd2e347cffe5cf899c0c8a252e3763c6070875ee5ebc",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_bump_minor",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_bump_minor"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "66dd11321e0d4d5e923fcbf4c67b8e6c323634126cb9d3ec655eea86aed4b971",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_bump_patch",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_bump_patch"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "b608affadd450f6d43925e196d14157e1fe3a6961c8bdae4fb02c2a11c4fab59",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_bump_prerelease",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_bump_prerelease"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "bb38e02902dac0727205b65dad98ea04b68304d93eafa097c04031898fa2f217",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "8ac589be671bd050e7820db21daedc8185a7eb0bd6133e146a41d617ac2404c5",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_ignore_extensions_for_bump",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_ignore_extensions_for_bump"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "86afec59dc3da9ad8207096c73836c41ac1e3f6d1c8af08920e6321ae50fdd22",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "bd9718abb7338cc7067992ffe2b8f26b2ba2cb9b1c3bdd06a62c3bd77011e891",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_build_with_none",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_build_with_none"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "169c3123ceb676c8e2789212a333b69dcd9bef18cb88c1c90428cdf9a0486d7b",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "9f2ff616a5d2c72597548094e2b3685d61e2679cdc41541331492ba90a666583",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "5de02f39a25cc9d867cf781de02a15fbcc5b838a76ae069071b9781c7df4cef1",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_multiple",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_multiple"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "6f7c02dcc86bb763c9086323b52416de99438ac134890aee75e413420c092b96",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "aeaeb3a6d0a7fe8810e34013e281d1e37506344eb579fbbbbdbdbd8c6bde82fb",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "7e4831a18a13120cbadb6d1908bdcab2932d1a280d5b71e7d5103908f6d5e4d0",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "2f07c245af48b52723593f0c02e25644af131955e80d02d92d1dc4e91d1de084",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "7aedb2372534e02f984d144d690e9f48e82aabdf75cdeb4678607e9295697037",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "a6885adefd126c1999e204ffb96933c4b542bca58e5bedbf8ccebda2bd5edb8d",
+            "e99dd83904c2f8917ec1b3ef4cac203a5c1e065bf9ba6224c0b9b4e3fb316acf",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none",
+            "tests/test_bump.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "9e55a9dc8e7bbc2a5154473823188f85cdeb62788afd5abe8508002947d1ceaa",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "86305795f68ff980b063c1b4ab49b23a46cc978ec98767fc03bd2e979243ba93",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_compare_rc_builds",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_compare_rc_builds"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "9cca11848fa58f855fe01105cf192ef3200484a3ffe9a6d846ed2bba6986d75c",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_compare_release_candidate_with_release",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_compare_release_candidate_with_release"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "af8f2a4872ee16a0efbd2f3e3c30f496a89f9134acf6a145352ba0e9b6cafed7",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_compare_versions_with_build_and_release",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_compare_versions_with_build_and_release"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "a4c976f3aa0bfbbaf76eb06db1416335559601d4c71850d9b77b6dc7659be0fc",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_follow_specification_comparison",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_follow_specification_comparison"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "d4d7a5a9956e74764e73b3419ced7a6191c655d98e2deed02a389be7dad21e9b",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_get_greater",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_get_greater"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "067e1295bb300b765899f888c6da160c0bbc358691d5fc067ef2c8606406bc18",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_get_less",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_get_less"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "949c1a66a63d7226040f1246b20635403763916e743d565916660fdcec759c1c",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_get_more_rc1",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_get_more_rc1"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "f5fa2debad15c2dc01f72d24337502980f647dd579a04308d7888350495e9205",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_ignore_builds_on_compare",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_ignore_builds_on_compare"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "66d8e201685738962f71e8003caafdea6280bc6cba0e71e7421fe3aa81fc25c0",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "f43b1191f1d52bc9d7af4665e42a753e37c374653b5752db007496cf231422ff",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_raise_value_error_for_invalid_value",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_raise_value_error_for_invalid_value"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "80e6158b0dde80c4bab453269fc0ea0f6b98d71f81d51f6293e3dad5687951e6",
+            "004b00ea0420edff809bc894f6af87e3febe53ba30faf8362f617c349f5487c3",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_say_equal_versions_are_equal",
+            "tests/test_compare.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_compare.py::test_should_say_equal_versions_are_equal"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "b75fa8f773dd89c14aac2055bab7097090724772b8e76a9ece5d03b25910c35d",
+            "714d90fcb5139c86e057a181d83f12086a324e46c6af965eb9d3844e232948d9",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument",
+            "tests/test_deprecated_functions.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "0f60f683c881724354e8ce7afbc3193c3a0429c708e3767a589fddbea27b0b05",
+            "714d90fcb5139c86e057a181d83f12086a324e46c6af965eb9d3844e232948d9",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings",
+            "tests/test_deprecated_functions.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "4f3e754ee810233e1e37cb8ec8976a25157738f0851c0e32e39579c35a816b99",
+            "90adbc31f8c00a7040fecb890466cb0742e91d89899d1aa36f151d832ca6400a",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_format.py::test_parse_method_for_version_info",
+            "tests/test_format.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_format.py::test_parse_method_for_version_info"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "6f12e027a13a87e89f736369911b1d76fd54ca9ef726d4c8827d3bfea3496d27",
+            "90adbc31f8c00a7040fecb890466cb0742e91d89899d1aa36f151d832ca6400a",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_format.py::test_should_correctly_format_version",
+            "tests/test_format.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_format.py::test_should_correctly_format_version"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "a083eb950ceb879c6610f2261ba12d30c4a9c81b3dcd2408c159401689fa1c38",
+            "90adbc31f8c00a7040fecb890466cb0742e91d89899d1aa36f151d832ca6400a",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_format.py::test_should_finalize_version",
+            "tests/test_format.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_format.py::test_should_finalize_version"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "6ae94ae4a23328fdd2b768b82d45698144b5ba9965004896b675b9220998410c",
+            "4f0a5fedfa0a702b148a1fb7367809c2737ec8b2be5673e52d94164cce0c334e",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_index.py::test_version_info_should_be_accessed_with_index",
+            "tests/test_index.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_index.py::test_version_info_should_be_accessed_with_index"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "08efbe48ba88ad12ea95782916d7bc95947b6ce7e2bce1637e22915f6ba20cea",
+            "4f0a5fedfa0a702b148a1fb7367809c2737ec8b2be5673e52d94164cce0c334e",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object",
+            "tests/test_index.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "bd8a8ab41e23fe10138cfc641be19ff6d5c93cba4ae6c16600f883879fbbe6e8",
+            "4f0a5fedfa0a702b148a1fb7367809c2737ec8b2be5673e52d94164cce0c334e",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_index.py::test_version_info_should_throw_index_error",
+            "tests/test_index.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_index.py::test_version_info_should_throw_index_error"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "bcc72324ca7800b52dec9e6424ebbb65a2b8e6c1416f93de4796271f188c2ea6",
+            "4f0a5fedfa0a702b148a1fb7367809c2737ec8b2be5673e52d94164cce0c334e",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index",
+            "tests/test_index.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ba06b7203bb25b0da01101046d83bed69352b027845d116c17cca127ac05c3ca",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_match_equal_by_default",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_match_equal_by_default"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ba9d7495bd7d67d8d8716a69a31bc0fbae42443dca30da74e68bb8fa4afc3c59",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_match_not_equal",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_match_not_equal"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "21387a4e34560b703eb0f09e04c95194c1d3725b6ccb935d11b6b4f52298d6c9",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_match_simple",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_match_simple"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "d636cca79e006f807b5bb2ea255b14e05657c8904e74e54e3c861a2846c97fbf",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_no_match_simple",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_no_match_simple"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "816ae8700dd86e1e0b31c50e6fb62c4c3ea52d637892e175fb5e680dcb5cb472",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "57b9a43653c5db401d9549cee1ad4c7e1ac8e63f6924f1f25afed2b4cb990484",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ab73d7d15ea61e0e076d87d9054728f16ed075f0d0a8552fc1b069a8d9380011",
+            "bc14c4e3d257655981acb16a7faf8366b6a951323b6774e693840dfc41415e25",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression",
+            "tests/test_match.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "5de472639fadf4030b9e38c1db4420ea7c1b048329c8c63821903a04f3fd9698",
+            "2dc282d5b4cfaa2a45740bbe790ccb6de5d99aa332923b3918c8de18112ce4b1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_max-min.py::test_prerelease_order",
+            "tests/test_max-min.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_max-min.py::test_prerelease_order"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "8637e7ca5dfc5dd8a3c928801e755f7f508cda04e192f4a58b4171dabc4f5803",
+            "2dc282d5b4cfaa2a45740bbe790ccb6de5d99aa332923b3918c8de18112ce4b1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_max-min.py::test_should_get_max",
+            "tests/test_max-min.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_max-min.py::test_should_get_max"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ac1e9ba4321b6e75353768ea36b61a54ad14d26e6e0d875f0d02d38aca0f3f31",
+            "2dc282d5b4cfaa2a45740bbe790ccb6de5d99aa332923b3918c8de18112ce4b1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_max-min.py::test_should_get_max_same",
+            "tests/test_max-min.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_max-min.py::test_should_get_max_same"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "520fead84c936a75c693aa9f6ddcd95a14920ea1183fc59a0490cf6ddcbdd6e1",
+            "2dc282d5b4cfaa2a45740bbe790ccb6de5d99aa332923b3918c8de18112ce4b1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_max-min.py::test_should_get_min",
+            "tests/test_max-min.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_max-min.py::test_should_get_min"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "5e65ad60e6d1456fd9fe3879257760bf530a2f962e6f8e4f5dddf87740e2b8c0",
+            "2dc282d5b4cfaa2a45740bbe790ccb6de5d99aa332923b3918c8de18112ce4b1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_max-min.py::test_should_get_min_same",
+            "tests/test_max-min.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_max-min.py::test_should_get_min_same"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ab222ec1a327dcc019c90780756d4699782dda16e5a85aaaf67fa2e8116d7172",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_equal_versions_have_equal_hashes",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_equal_versions_have_equal_hashes"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "11308c724b811983947c11ccca86ff68834f252d519abefa62b6620af2bae084",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_next_version_with_invalid_parts",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_next_version_with_invalid_parts"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "763d5c1921fbc6d3a391ae96cfea195bbdb7cafc49877c3a480e9c5f8ff05e3d",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_next_version_with_versioninfo",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_next_version_with_versioninfo"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "dceeb5498cf276c38c36c901b47e14e827672e8bd6c3410022ca2b3d40162e6b",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_parse_method_for_version_info",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_parse_method_for_version_info"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "f5323e0e3945b08f5fbab00f79b581aeb635866dca42fab2bc110ffe9bbe5a70",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_parse_version_info_str_hash",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_parse_version_info_str_hash"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "c614beaca69f0fe9decd64e0cd42eefefdc1b6a258371e713a5700a0c5c64576",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_should_parse_version",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_should_parse_version"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "1ddb8110ba1d0391ef80844f7b9d601247f833b48523970e5557179d48754f9c",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "e185bb68383b829df4fe26f79539ae16f13b9cf686fa07f2c00a54ffcadc0093",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_should_parse_zero_prerelease",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_should_parse_zero_prerelease"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "96c9d7444a3dfc4cdd26f18ce72d3726fe302507d6a1a7891e5508c3101b9fbe",
+            "2e6929f2d1eb23d10097baf39f8d5eb2b3e5d6f981a4e10f42049faa00dc92d1",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions",
+            "tests/test_parsing.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "182c29887c2f61a95144b57117a05fa5ab29d00d9080390eba984b109049b426",
+            "36614a520cbda6e04da40d100bb57e102e1f56b5789b221bd84fc23a1b58cc4a",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main",
+            "tests/test_pysemver-cli.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "e10a0ffae7b09d5bcd07d42af00f9970a92660fabd42f0c245937d428474ba5d",
+            "32d4b4b8bd2c15e83f3afbfa4d22e1b1a5792019b3f74c52ce10fcdb66815a69",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_replace.py::test_replace_method_replaces_requested_parts",
+            "tests/test_replace.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_replace.py::test_replace_method_replaces_requested_parts"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "9a9e4c9e2ef6b486a586a786db90b9562e22dd2b200b54c9aa101831fbb745f0",
+            "32d4b4b8bd2c15e83f3afbfa4d22e1b1a5792019b3f74c52ce10fcdb66815a69",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg",
+            "tests/test_replace.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "158869e5a21542de405ed85271c56f5a284e4eb1ef78d1ce526ab207f23931cb",
+            "32d4b4b8bd2c15e83f3afbfa4d22e1b1a5792019b3f74c52ce10fcdb66815a69",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values",
+            "tests/test_replace.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "5f9167325646a75b539471ade747461f18b855aa108a3bc84d63fe6aebf95df8",
+            "32d4b4b8bd2c15e83f3afbfa4d22e1b1a5792019b3f74c52ce10fcdb66815a69",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts",
+            "tests/test_replace.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "469908f3aab3535af4fb37aeef84e48371156319b7def72870a2c539f3a8ac62",
+            "fb760ab5a5a2c88a362d6074ffdcb6a63a61e80bd061095913db863a9c152782",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_semver.py::test_should_versioninfo_isvalid",
+            "tests/test_semver.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_semver.py::test_should_versioninfo_isvalid"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "ce745698899a306ff832237c5ea444ab616fd2dd292424a5d5144eb7bc76ffa8",
+            "fb760ab5a5a2c88a362d6074ffdcb6a63a61e80bd061095913db863a9c152782",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value",
+            "tests/test_semver.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "fcbfb8c407dcab2002eb79c42b00473604a7be6efafee09875a5428971c3ed63",
+            "83a4315d54f75302cb87610801eff2212478b75314404b95a12e116795d11db4",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_subclass.py::test_replace_from_subclass",
+            "tests/test_subclass.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_subclass.py::test_replace_from_subclass"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "a69100cc1e16e70eab421f67a5df9d2cf15b16c9c6b280712edf0e0dec259ec9",
+            "83a4315d54f75302cb87610801eff2212478b75314404b95a12e116795d11db4",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_subclass.py::test_subclass_from_versioninfo",
+            "tests/test_subclass.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_subclass.py::test_subclass_from_versioninfo"
+        },
+        {
+          "distance": 3,
+          "evidence_edges": [
+            "26dd9ddea54e6a086d0a6bfae295dd354a4a8fcfe0960907cd291e72e9f82f1a",
+            "1cb8ff731bded8fa09248c2caf733dbd24a20e24b28f8120b791b7b94883527f",
+            "683265ec3b1e8b802ef2ddff0c870252a4e489f12ddb696ebe46d88f87859f94"
+          ],
+          "evidence_path": [
+            "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes",
+            "tests/test_typeerror-274.py::<module>",
+            "src/semver/__init__.py::<module>",
+            "src/semver/version.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 30,
+          "symbol": "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        }
+      ],
+      "semver_subclass_comparison": [
+        {
+          "distance": 0,
+          "evidence_edges": [],
+          "evidence_path": [
+            "tests/test_subclass.py::test_compare_with_subclass"
+          ],
+          "path_revision": "after",
+          "reason": "Test itself changed",
+          "score": 90,
+          "symbol": "tests/test_subclass.py::test_compare_with_subclass"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "fcbfb8c407dcab2002eb79c42b00473604a7be6efafee09875a5428971c3ed63"
+          ],
+          "evidence_path": [
+            "tests/test_subclass.py::test_replace_from_subclass",
+            "tests/test_subclass.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 50,
+          "symbol": "tests/test_subclass.py::test_replace_from_subclass"
+        },
+        {
+          "distance": 1,
+          "evidence_edges": [
+            "a69100cc1e16e70eab421f67a5df9d2cf15b16c9c6b280712edf0e0dec259ec9"
+          ],
+          "evidence_path": [
+            "tests/test_subclass.py::test_subclass_from_versioninfo",
+            "tests/test_subclass.py::<module>"
+          ],
+          "path_revision": "both",
+          "reason": "Conservative module/import dependency",
+          "score": 50,
+          "symbol": "tests/test_subclass.py::test_subclass_from_versioninfo"
+        }
+      ]
+    },
+    "repositories": {
+      "pydanny/cached-property": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 0,
+            "fp": 10,
+            "tn": 0,
+            "tp": 17,
+            "unclassified_recommendations": 1
+          },
+          "precision": {
+            "denominator": 27,
+            "numerator": 17,
+            "value": 0.6296296296296297
+          },
+          "recall": {
+            "denominator": 17,
+            "numerator": 17,
+            "value": 1.0
+          }
+        },
+        "outside_discovery": [],
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Conservative module/import dependency": 15,
+          "Resolved call path": 5,
+          "Test itself changed": 8
+        },
+        "selected_count": 28,
+        "selected_tests": [
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_async_wrapper",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedProperty.test_threads"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+          },
+          {
+            "case": "cached_property_coroutine_metadata",
+            "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+          }
+        ],
+        "test_count": 28,
+        "test_shaped_definition_count": 28,
+        "unclassified_recommendation_count": 1,
+        "unclassified_test_count": 1,
+        "unclassified_unselected_count": 0
+      },
+      "python-semver/python-semver": {
+        "case_count": 2,
+        "label_status_counts": {
+          "draft": 2
+        },
+        "metrics": {
+          "counts": {
+            "fn": 33,
+            "fp": 42,
+            "tn": 104,
+            "tp": 32,
+            "unclassified_recommendations": 0
+          },
+          "precision": {
+            "denominator": 74,
+            "numerator": 32,
+            "value": 0.43243243243243246
+          },
+          "recall": {
+            "denominator": 65,
+            "numerator": 32,
+            "value": 0.49230769230769234
+          }
+        },
+        "outside_discovery": [],
+        "outside_discovery_count": 0,
+        "reason_counts": {
+          "Conservative module/import dependency": 73,
+          "Test itself changed": 1
+        },
+        "selected_count": 74,
+        "selected_tests": [
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_bump_build"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_bump_major"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_bump_minor"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_bump_patch"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_bump_prerelease"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_ignore_extensions_for_bump"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_build_with_none"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_multiple"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_compare_rc_builds"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_compare_release_candidate_with_release"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_compare_versions_with_build_and_release"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_follow_specification_comparison"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_get_greater"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_get_less"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_get_more_rc1"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_ignore_builds_on_compare"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_raise_value_error_for_invalid_value"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_compare.py::test_should_say_equal_versions_are_equal"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_format.py::test_parse_method_for_version_info"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_format.py::test_should_correctly_format_version"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_format.py::test_should_finalize_version"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_index.py::test_version_info_should_be_accessed_with_index"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_index.py::test_version_info_should_throw_index_error"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_match_equal_by_default"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_match_not_equal"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_match_simple"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_no_match_simple"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_max-min.py::test_prerelease_order"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_max-min.py::test_should_get_max"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_max-min.py::test_should_get_max_same"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_max-min.py::test_should_get_min"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_max-min.py::test_should_get_min_same"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_equal_versions_have_equal_hashes"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_next_version_with_invalid_parts"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_next_version_with_versioninfo"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_parse_method_for_version_info"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_parse_version_info_str_hash"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_should_parse_version"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_should_parse_zero_prerelease"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_replace.py::test_replace_method_replaces_requested_parts"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_semver.py::test_should_versioninfo_isvalid"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_subclass.py::test_replace_from_subclass"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_subclass.py::test_subclass_from_versioninfo"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args"
+          },
+          {
+            "case": "semver_prerelease_comparison",
+            "test_id": "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+          },
+          {
+            "case": "semver_subclass_comparison",
+            "test_id": "tests/test_subclass.py::test_compare_with_subclass"
+          },
+          {
+            "case": "semver_subclass_comparison",
+            "test_id": "tests/test_subclass.py::test_replace_from_subclass"
+          },
+          {
+            "case": "semver_subclass_comparison",
+            "test_id": "tests/test_subclass.py::test_subclass_from_versioninfo"
+          }
+        ],
+        "test_count": 211,
+        "test_shaped_definition_count": 211,
+        "unclassified_recommendation_count": 0,
+        "unclassified_test_count": 0,
+        "unclassified_unselected_count": 0
+      }
+    },
+    "summary": {
+      "case_count": 4,
+      "label_status_counts": {
+        "draft": 4
+      },
+      "metrics": {
+        "counts": {
+          "fn": 33,
+          "fp": 52,
+          "tn": 104,
+          "tp": 49,
+          "unclassified_recommendations": 1
+        },
+        "precision": {
+          "denominator": 101,
+          "numerator": 49,
+          "value": 0.48514851485148514
+        },
+        "recall": {
+          "denominator": 82,
+          "numerator": 49,
+          "value": 0.5975609756097561
+        }
+      },
+      "outside_discovery": [],
+      "outside_discovery_count": 0,
+      "reason_counts": {
+        "Conservative module/import dependency": 88,
+        "Resolved call path": 5,
+        "Test itself changed": 9
+      },
+      "selected_count": 102,
+      "selected_tests": [
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_async_wrapper",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_async_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedProperty.test_threads"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_none_cached_property"
+        },
+        {
+          "case": "cached_property_coroutine_metadata",
+          "test_id": "tests/test_coroutine_cached_property.py::TestCachedProperty.test_reset_cached_property"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_bump_build"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_bump_major"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_bump_minor"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_bump_patch"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_bump_prerelease"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_ignore_extensions_for_bump"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_build_with_none"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_major_and_minor"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_minor_and_patch"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_multiple"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_bump.py::test_should_versioninfo_bump_prerelease_with_none"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_compare_rc_builds"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_compare_release_candidate_with_release"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_compare_versions_with_build_and_release"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_follow_specification_comparison"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_get_greater"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_get_less"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_get_more_rc1"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_ignore_builds_on_compare"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_raise_value_error_for_invalid_value"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_compare.py::test_should_say_equal_versions_are_equal"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_format.py::test_parse_method_for_version_info"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_format.py::test_should_correctly_format_version"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_format.py::test_should_finalize_version"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_index.py::test_version_info_should_be_accessed_with_index"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_index.py::test_version_info_should_throw_index_error"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_match_equal_by_default"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_match_not_equal"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_match_simple"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_no_match_simple"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_not_raise_value_error_for_expected_match_expression"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_max-min.py::test_prerelease_order"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_max-min.py::test_should_get_max"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_max-min.py::test_should_get_max_same"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_max-min.py::test_should_get_min"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_max-min.py::test_should_get_min_same"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_equal_versions_have_equal_hashes"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_next_version_with_invalid_parts"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_next_version_with_versioninfo"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_parse_method_for_version_info"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_parse_version_info_str_hash"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_should_parse_version"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_should_parse_zero_prerelease"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_replace.py::test_replace_method_replaces_requested_parts"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_semver.py::test_should_versioninfo_isvalid"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_subclass.py::test_replace_from_subclass"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_subclass.py::test_subclass_from_versioninfo"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args"
+        },
+        {
+          "case": "semver_prerelease_comparison",
+          "test_id": "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        },
+        {
+          "case": "semver_subclass_comparison",
+          "test_id": "tests/test_subclass.py::test_compare_with_subclass"
+        },
+        {
+          "case": "semver_subclass_comparison",
+          "test_id": "tests/test_subclass.py::test_replace_from_subclass"
+        },
+        {
+          "case": "semver_subclass_comparison",
+          "test_id": "tests/test_subclass.py::test_subclass_from_versioninfo"
+        }
+      ],
+      "test_count": 239,
+      "test_shaped_definition_count": 239,
+      "unclassified_recommendation_count": 1,
+      "unclassified_test_count": 1,
+      "unclassified_unselected_count": 0
+    }
+  },
+  "reference_commit": "06f8a31b2435f95d5f3b0bbc6b4b70efd1c108b7",
+  "schema_version": "1.0"
+}

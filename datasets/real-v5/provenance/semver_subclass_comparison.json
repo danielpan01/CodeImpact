@@ -1,0 +1,1933 @@
+{
+  "base": {
+    "commit": {
+      "message": "Require validation for bug issue template",
+      "parents": [
+        {
+          "sha": "2eeefcbe1532f3cab672b6e8a6e8ca8407cbcde1"
+        }
+      ],
+      "sha": "bd97cfcd595c882d92b73430d4bf5c880d6062dc",
+      "tree": {
+        "sha": "65b51b71bcf8bb0b97097dc525a04847aa6f9adb"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/advanced/coerce.py": "cd098531d268470b2f5581a4c81647b899444f2aafabf4cf3a8b536f52aad01a",
+      "docs/advanced/semverwithvprefix.py": "ae2324bbff3580d51561fc0852f5b45cf6e1aeee7f111468957d2520671b1f41",
+      "docs/conf.py": "b5861bd20fac0dc669fa52cbb3b7064e5d55d040c910cfcacf69884cf6194453",
+      "src/semver/__about__.py": "720ceac8b2e496d514d6c17ab0383722c014ce18a44a0cc6cb8fd358f78ec9c7",
+      "src/semver/__init__.py": "451063ea4bae61a098e41f602f1c04d21ee6781c2ead811b7d0667bfbb7590a3",
+      "src/semver/__main__.py": "9ac50bab82dbd0057c2b8aee9619b4173cc93bca0c0afe761a37131b6b7c8b0b",
+      "src/semver/_deprecated.py": "38e5fe01e698f90a892b6810184f2974913187fd774cffbd012640920a829ade",
+      "src/semver/_types.py": "f807dacd98279a631eed6b614b1fccfb0d410a7ab674f166cac8e6b533a6d687",
+      "src/semver/cli.py": "1f0be99ea70df791b7388354e1c2e0a2e4470ad5a146cb8a8217e13d6b4639ec",
+      "src/semver/version.py": "82d9a972977f3297cf29343a5bc4cb5ab7cf87b45c3846f94ee3f270a1e3b2a9",
+      "tests/conftest.py": "f111cc31bf8accc95fffd76c2bed5dc5d6c575d1ce1b0cfc34e7a3bc2183577f",
+      "tests/test_bump.py": "82fd45a06ba463fa92229867003baf6eb5f8abf9630ae2a422b80f27ceb3322a",
+      "tests/test_compare.py": "286e052052d664e56fe31358ad49fa4f035a4dda0d6f521edee23fa2d0b880ef",
+      "tests/test_deprecated_functions.py": "dbbe343f0449db4490766bb0fbce3c7a66a785436d06b0636ead06fdf82c4f12",
+      "tests/test_docstrings.py": "b63d4fd4d9cf0c54234eaa2af1bd8c6ee10f85cc83a3558cca70837cf87783f5",
+      "tests/test_format.py": "501e0cb1454597aee73fcabfb4280d5af17c4a8be48945d7b74c3c715f6c1e10",
+      "tests/test_immutable.py": "560baae1c1fbf771746b09ee1e59974687e563f85caf0fea44ae7fd511013772",
+      "tests/test_index.py": "ea9015e7fcbf22feb0d0649a6efd0a391359c76592d45191ac436d2b3989640e",
+      "tests/test_match.py": "d67e0cd8e1ca6a7810465180f48f3c3d0a81c31ba52a858a17b3f2e7713a4b1f",
+      "tests/test_max-min.py": "67e05dfbe2825c034e9dc8cf9a49bc7723c15a210b0071dfc2e350cd9c929e17",
+      "tests/test_parsing.py": "5ee7ce495a731dd119491081fefab59decfb4621443380d95d25739819dbffad",
+      "tests/test_pysemver-cli.py": "a88d04b14a2ddcf18b8daac6d5593318c65cbce8a041ae742de4a83392b64cec",
+      "tests/test_replace.py": "3704c26eaac884e0b4f7a4e48c4188bcfbac9e35eab3196560f83ce09b56f7d9",
+      "tests/test_semver.py": "0b7aca1e22bf93b27a9d7295c3c75cd6bffb6e2c4c3929d9fbe0a431ea2e04bb",
+      "tests/test_subclass.py": "e92f2244fe30d4df06de2a3ea824d95f570f31f1a33f0e2c2c96f72684b35b9d",
+      "tests/test_typeerror-274.py": "3e487a724502eab30e47ac2cf0d301b7e81dd5030c362f41aa485607da40e856"
+    },
+    "tree": {
+      "sha": "65b51b71bcf8bb0b97097dc525a04847aa6f9adb",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "4903985cdb47a0036f0a50a66f712217bec600c7",
+          "size": 229,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "c98add8c75156ed598e0f50dbd7885745889e420",
+          "size": 238,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "026b711c0d20754300c16836cf1229c321dea18c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "64021fe39ab664ad98edd69e3921715966aa6839",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug_report.yaml",
+          "sha": "6e75e2c87572eac897343851e59ce555bd7f1cb7",
+          "size": 2314,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "640cced4cb3b1100f97316d00c482f34347323b3",
+          "size": 325,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature_request.yaml",
+          "sha": "2ec54c11af5954aa9bd789a9f7a65a8da5a21ca5",
+          "size": 1025,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "0c5d1c56b5de52ca2e87cde76660047b126cbe37",
+          "size": 691,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "7d8a8b0980ead2a7ce1d8fdda8fe96890892e22e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/codeql-analysis.yml",
+          "sha": "61d1a1f6b6f78f4655a94ba4aab844790a5e332b",
+          "size": 2374,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-testing.yml",
+          "sha": "7c5759ce914fc2ae493aba1fe029985fcbbb4ca3",
+          "size": 3390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "256de715a6e89063cc733e8e66bd3df3f8e40ec7",
+          "size": 4586,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pytest.ini",
+          "sha": "2058b4fda6e1cd149c64b385991612773ffeadcc",
+          "size": 428,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "33e3e3aa3a9f36094dcad2de743bd743ba4a81fb",
+          "size": 426,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".ruff.toml",
+          "sha": "ddcdbb0744cf738b31769692ca889c7b5e58ab9c",
+          "size": 1167,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.rst",
+          "sha": "2281f1679ca36d8b4f3453acd9dc13cf5b0ed7c2",
+          "size": 12212,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CITATION.cff",
+          "sha": "708f4d0a5af8fb31442b8635d952d68480821d03",
+          "size": 2311,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "ce598e0158d3f5020983321cd4c3002e3a2f4539",
+          "size": 1891,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTORS",
+          "sha": "0d90ab3aed9e8efbe98c2c466afc451ff3441781",
+          "size": 1749,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "bbb09286b958d7d33b2ee9619870ef78156547bd",
+          "size": 1499,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "e37851c97489b37c0d44afa3e91cf377c87e0211",
+          "size": 128,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "f1272fa81eea918c4a1242898db173cc5c060064",
+          "size": 69,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "66552796e3c79895782f285e5e44a5256aa1487c",
+          "size": 3585,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "SUPPORT.md",
+          "sha": "4702eb0830a73965329d02f541390712c0ae9efa",
+          "size": 601,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "changelog.d",
+          "sha": "38a69f0a530e4dd3341a02663c9273aa0d69f6a9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/.gitignore",
+          "sha": "f935021a8f8a7bd22f9d6703cafa5134bb6a57f8",
+          "size": 12,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/README.rst",
+          "sha": "6c4782040c38feca57887fcb2b80191954dcda4c",
+          "size": 2501,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/_template.rst",
+          "sha": "982ad41a4f882589d3cca82c03853999760aa167",
+          "size": 964,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr435.doc.rst",
+          "sha": "87925c3d2058ef2b016706065375ffbc36f174e0",
+          "size": 317,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr436.doc.rst",
+          "sha": "5f078361b1a40ae0b4726c3dcc173e7be8904984",
+          "size": 125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr447.internal.rst",
+          "sha": "2f1e367dc728403e5c50db6fa7c87106ff989c07",
+          "size": 696,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "45e7005644ba922592561400abeea71fea86c84b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "a38fc5bdb2f2466ae87749924c31f6f292298ebe",
+          "size": 761,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "41616398430415bb992d762c5d6dbc4de9ea7870",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static/css",
+          "sha": "26179552cd3e79217f630d479d652bad6731ee24",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/css/custom.css",
+          "sha": "33510db399993f1650aa0c9ecd7c2e3d614eaaac",
+          "size": 1234,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/logo.svg",
+          "sha": "1be72ee6197bb3f66a077b520d1d2d80ff258c20",
+          "size": 7754,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_templates",
+          "sha": "759d71ac59989c904125cd40b9856db29ff0b29b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_templates/layout.html",
+          "sha": "1f72ac26a3e259ca127221eacd6a9bd8acaf552e",
+          "size": 162,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/advanced",
+          "sha": "5791eee654c94120429c71c42dff9f176f2a8493",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/coerce.py",
+          "sha": "7da2031588f0dd131daeed253a337ee7a8407db6",
+          "size": 1208,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/combine-pydantic-and-semver.rst",
+          "sha": "c7566e125589e8f6442fc2d0f170fd4d07790c03",
+          "size": 2840,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/convert-pypi-to-semver.rst",
+          "sha": "82b4f5a37f6a041430319ecd147ca78889bd2193",
+          "size": 6271,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/create-subclasses-from-version.rst",
+          "sha": "3a5194f4ee0db90efd450266b73d6a300cf25b6a",
+          "size": 1173,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/deal-with-invalid-versions.rst",
+          "sha": "120d82a06c3ddfa786899b3a026566ba39e71923",
+          "size": 1203,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/display-deprecation-warnings.rst",
+          "sha": "a2fb83428b7cc6bf0867844d31841637358a3c0f",
+          "size": 1190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/index.rst",
+          "sha": "26cd5729aa1c528b14ddc824fa37989bfacf31c7",
+          "size": 320,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/semverwithvprefix.py",
+          "sha": "7e411d35843e12ec894ed92c873684fec856157e",
+          "size": 819,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/version-from-file.rst",
+          "sha": "5d484438750908ce7539ef3e0cbd41aa0ba4cd3c",
+          "size": 788,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/api.rst",
+          "sha": "0ce4012ce16ce11afbb54634c33f38f7405d52e5",
+          "size": 1878,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/build-semver.rst",
+          "sha": "b5626d22def4c3d9881cb77cc1e5eab7096151f8",
+          "size": 2174,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog-semver3-devel.rst",
+          "sha": "75579d0f9c14a365c65f662b572e5de7f17ceffa",
+          "size": 10562,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog.rst",
+          "sha": "e1e273b477c4a9e1a58fad61ea090705f209d100",
+          "size": 47,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "872f943a5505c7003241086991e5d72d27210055",
+          "size": 8853,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/contribute",
+          "sha": "81288470cd608f96596e3e9de3ca87391fa1735c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/add-changelog-entry.rst",
+          "sha": "30215c76b944b7b810e480b1ae59430e5fccf4c8",
+          "size": 225,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/doc-semver.rst",
+          "sha": "217b1d2116b5da14b0b0a85e20afea1002f8518a",
+          "size": 2879,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/finish-release.rst",
+          "sha": "d1fcce2cc942e980bd41532aa7dc0576e02e1a81",
+          "size": 665,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/index.rst",
+          "sha": "30960ace0e21180124e2d3bc6a3b4b9a2b3f55f7",
+          "size": 597,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/prerequisites.rst",
+          "sha": "1084d2477a40168fcad605d476c0a93815ebf081",
+          "size": 517,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/release-procedure.rst",
+          "sha": "b18672fb20f55df87f875f8cdbd000addcabb434",
+          "size": 3319,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/report-bugs.rst",
+          "sha": "614098b9de64b94461f90a9e8c1ae7b33fe2bf89",
+          "size": 668,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/run-test-suite.rst",
+          "sha": "22f4ebc0c99d360bd494dd3294f274675daad2d5",
+          "size": 2011,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "d0b1588279b0bc70a101699fefd013681ee886ba",
+          "size": 656,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/install.rst",
+          "sha": "786ecc40af103c7ab686862e2f972f9ca8ef0aea",
+          "size": 2864,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/inventories",
+          "sha": "6a1e13a3384b4326fce7335fc067be28714a2f39",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/inventories/pydantic.inv",
+          "sha": "455215a74ed7255fd24b089a523144711cf13f4d",
+          "size": 4080,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/inventories/python-objects.inv",
+          "sha": "90bfa0a6cfed96227e766a910ec7c51af931926e",
+          "size": 134114,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "dae3d085ff7e878ee87ac66aba5e572b4a1bbb18",
+          "size": 804,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/migration",
+          "sha": "58fae23746570edcc670572672ca66132d68fc00",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/index.rst",
+          "sha": "74c3d8663a2eb8e9bfa9f642ee26a3577aaa238d",
+          "size": 219,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/migratetosemver3.rst",
+          "sha": "2c09fb410b76a77c5f1c8e8f6e3cabf11bfcfe54",
+          "size": 1648,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/replace-deprecated-functions.rst",
+          "sha": "df0d799af8284a809e93316b3d5e9712c47998f6",
+          "size": 4263,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/pysemver.rst",
+          "sha": "cea32e6c2d8a31ee894448929affb8f67e5a9044",
+          "size": 3842,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/readme.rst",
+          "sha": "034e9ee69836f3309105db7c05e57af12983f104",
+          "size": 120,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "540348a52c71e95b84e0db755f4865079f29ae36",
+          "size": 147,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/usage",
+          "sha": "d1c0821c8e12485ef6e23911ea0b95c625502ac2",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/access-parts-of-a-version.rst",
+          "sha": "d8a15cb445c0ab2e28a4519b7f81858525f00177",
+          "size": 1197,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/access-parts-through-index.rst",
+          "sha": "cc6b0c2bf2e15333cc34757e3ab5f55d834d6f79",
+          "size": 1323,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/check-compatible-semver-version.rst",
+          "sha": "4cf4790825286c28893d40f2b9b379f0d5c0d044",
+          "size": 2304,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/check-valid-semver-version.rst",
+          "sha": "2e016c6d6073d6e7772805146e67bd02c074ed11",
+          "size": 390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/compare-versions-through-expression.rst",
+          "sha": "5b05a123c756ed1ab86782bb7201375b46492436",
+          "size": 1209,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/compare-versions.rst",
+          "sha": "714cf8ba78eb2eb72118c39c1d37873601ea0338",
+          "size": 2593,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/convert-version-into-different-types.rst",
+          "sha": "c75992f157dd2d69b6c2dd42fc1e8f77c36d9ef5",
+          "size": 954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/create-a-version.rst",
+          "sha": "061652351103a216575ead92009f5f6380e4dfbe",
+          "size": 3604,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/determine-version-equality.rst",
+          "sha": "ba4125ed0d331188f50fed9c0696e1e90725ef5b",
+          "size": 707,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/get-min-and-max-of-multiple-versions.rst",
+          "sha": "35ba77b454e40ec9a7c1c074bd4745a6b88f2d29",
+          "size": 1760,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/increase-parts-of-a-version_prereleases.rst",
+          "sha": "845f22906624b34bd5b27c68556715d851175173",
+          "size": 787,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/index.rst",
+          "sha": "4b8e3fc972b6f8bfd7fabe34bf5d8622c7148b42",
+          "size": 519,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/parse-version-string.rst",
+          "sha": "0cf02650651e114b2d49fffaec8e74664ea900a9",
+          "size": 651,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/raise-parts-of-a-version.rst",
+          "sha": "be89cf8d2885dc3c9d7b6052db9637651b4ff922",
+          "size": 2421,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/replace-parts-of-a-version.rst",
+          "sha": "57ab65e9a5c7a4847f556790e9f33a0cda9eb52d",
+          "size": 672,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/semver-version.rst",
+          "sha": "51165293486001a9b3278ba6fe192bff80276a5b",
+          "size": 175,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/semver_org-version.rst",
+          "sha": "b0a1ad87fdd1637b7e6b9fc7cb0eb934c432c5c8",
+          "size": 330,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/version-policy.rst",
+          "sha": "f0c423f8bbc7b550c2d09edcbc1d6bc6e6ab8585",
+          "size": 1687,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "6c9cb93a4728c6fcc1f499a40d6fd839e3c7c3cb",
+          "size": 4459,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "release-procedure.md",
+          "sha": "4225bfd91a15379ae5853125ff0f7b9eee050393",
+          "size": 3561,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "813d253307a2a34e1bfefcabca8ba0b390f50239",
+          "size": 296,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "873d6d2bb9088ee8421c6d1aa92002da876d7290",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/semver",
+          "sha": "c3cb17795e6d0944d5ebb933953baf12d57aab9d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__about__.py",
+          "sha": "697372f8b1776d816f78a3e1b49081017e381a62",
+          "size": 823,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__init__.py",
+          "sha": "19c88f7854e4a3c25d8c7c9ce9c27aa5b4565578",
+          "size": 1269,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__main__.py",
+          "sha": "c6adb834cf3c1a754c87f8f692dc35bafb4eb0ca",
+          "size": 593,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/_deprecated.py",
+          "sha": "df11bb022f2a52e7bbbb1bce6881eb820f1ba897",
+          "size": 11273,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/_types.py",
+          "sha": "7afb6ff03702688a1472291da47c7e04e8e48f82",
+          "size": 422,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/cli.py",
+          "sha": "43e101e10a3a8173d55bcef3ddb8bcce8c1157a4",
+          "size": 5189,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/version.py",
+          "sha": "2f1f8cb7cdef004f449a99dd9f869a4a13791db2",
+          "size": 24038,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "08bc8fc50b2032cb6a63318fccd80d512f50bb05",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "120000",
+          "path": "tests/coerce.py",
+          "sha": "e79106a2153bb5241b587a7fd796363e79f84b0b",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/conftest.py",
+          "sha": "9017bbbee30c8a8e20f7389b3ff093b4bb1e4886",
+          "size": 739,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "tests/semverwithvprefix.py",
+          "sha": "d1a8d995a45497c73516661d8d5abc38da4d29f8",
+          "size": 37,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_bump.py",
+          "sha": "34e0b2accb35239b9678505fce13c21502184be9",
+          "size": 3667,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_compare.py",
+          "sha": "1c99f450f143da9e5a85c4d6c9a8c1f33d126182",
+          "size": 8068,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_deprecated_functions.py",
+          "sha": "8886268995252fefcf128ff03915852350efab0b",
+          "size": 2097,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_docstrings.py",
+          "sha": "a3ff08b1a0bbe5d888c47a0a53d0233a89ee634f",
+          "size": 1062,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_format.py",
+          "sha": "73ff3122facb7eafa2816597b8e2d8d5fb45db37",
+          "size": 2207,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_immutable.py",
+          "sha": "ef6aa40e513440557ab59f9c10e6a87a9c9248b4",
+          "size": 965,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_index.py",
+          "sha": "79e45025a21e27b9473b3b442f25cfcfa3c5002d",
+          "size": 2988,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_match.py",
+          "sha": "e2685cae1d8bbcb0e2e7de94d2e1c976dc647b21",
+          "size": 1651,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_max-min.py",
+          "sha": "d465fe8e793ffefe7644ce5cedb97f4fc15ce92d",
+          "size": 1356,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_parsing.py",
+          "sha": "ddf521969c810f084e1705081ec0ab1aaf4045e4",
+          "size": 5503,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_pysemver-cli.py",
+          "sha": "e783a0b4ae58157c7d1e6e63f6e63f5f40a660a7",
+          "size": 4182,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_replace.py",
+          "sha": "f223eddbf52b63097a6b289064a48118a1ffb713",
+          "size": 1789,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_semver.py",
+          "sha": "9978b9406c2f3cf3b8dd886383a84405ca0f689e",
+          "size": 3676,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_subclass.py",
+          "sha": "b33f49694fbe4ea83fea013be6d95cf9891e7c94",
+          "size": 1703,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_typeerror-274.py",
+          "sha": "326304b8fbdb6ecb7ddbb00a72ca43a6e92ff336",
+          "size": 341,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "74918c44147b3ec227414cf048a4b8f067471aa2",
+          "size": 1827,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "uv.lock",
+          "sha": "026a5848b6979cc4fc12549c2cdbf65d444ab0df",
+          "size": 160263,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/python-semver/python-semver/commit/bc41390f388d88114e8529b17fe145c5af390cbb",
+  "head": {
+    "commit": {
+      "message": "Fix comparison with subclasses",
+      "parents": [
+        {
+          "sha": "bd97cfcd595c882d92b73430d4bf5c880d6062dc"
+        }
+      ],
+      "sha": "bc41390f388d88114e8529b17fe145c5af390cbb",
+      "tree": {
+        "sha": "28a2d73844ca339a107541cce3a1871971d5b4e1"
+      }
+    },
+    "license": {
+      "path": "LICENSE.txt",
+      "sha256": "cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2013, Konstantine Rybnikov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n  Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n  Redistributions in binary form must reproduce the above copyright notice, this\n  list of conditions and the following disclaimer in the documentation and/or\n  other materials provided with the distribution.\n\n  Neither the name of the python-semver org nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\nANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\nWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR\nANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\nANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "docs/advanced/coerce.py": "cd098531d268470b2f5581a4c81647b899444f2aafabf4cf3a8b536f52aad01a",
+      "docs/advanced/semverwithvprefix.py": "ae2324bbff3580d51561fc0852f5b45cf6e1aeee7f111468957d2520671b1f41",
+      "docs/conf.py": "b5861bd20fac0dc669fa52cbb3b7064e5d55d040c910cfcacf69884cf6194453",
+      "src/semver/__about__.py": "720ceac8b2e496d514d6c17ab0383722c014ce18a44a0cc6cb8fd358f78ec9c7",
+      "src/semver/__init__.py": "451063ea4bae61a098e41f602f1c04d21ee6781c2ead811b7d0667bfbb7590a3",
+      "src/semver/__main__.py": "9ac50bab82dbd0057c2b8aee9619b4173cc93bca0c0afe761a37131b6b7c8b0b",
+      "src/semver/_deprecated.py": "38e5fe01e698f90a892b6810184f2974913187fd774cffbd012640920a829ade",
+      "src/semver/_types.py": "f807dacd98279a631eed6b614b1fccfb0d410a7ab674f166cac8e6b533a6d687",
+      "src/semver/cli.py": "1f0be99ea70df791b7388354e1c2e0a2e4470ad5a146cb8a8217e13d6b4639ec",
+      "src/semver/version.py": "8e963809189c13aa43d07f9a7679c4a90fa68d1911b4c63d5d23edead9de68bf",
+      "tests/conftest.py": "f111cc31bf8accc95fffd76c2bed5dc5d6c575d1ce1b0cfc34e7a3bc2183577f",
+      "tests/test_bump.py": "82fd45a06ba463fa92229867003baf6eb5f8abf9630ae2a422b80f27ceb3322a",
+      "tests/test_compare.py": "286e052052d664e56fe31358ad49fa4f035a4dda0d6f521edee23fa2d0b880ef",
+      "tests/test_deprecated_functions.py": "dbbe343f0449db4490766bb0fbce3c7a66a785436d06b0636ead06fdf82c4f12",
+      "tests/test_docstrings.py": "b63d4fd4d9cf0c54234eaa2af1bd8c6ee10f85cc83a3558cca70837cf87783f5",
+      "tests/test_format.py": "501e0cb1454597aee73fcabfb4280d5af17c4a8be48945d7b74c3c715f6c1e10",
+      "tests/test_immutable.py": "560baae1c1fbf771746b09ee1e59974687e563f85caf0fea44ae7fd511013772",
+      "tests/test_index.py": "ea9015e7fcbf22feb0d0649a6efd0a391359c76592d45191ac436d2b3989640e",
+      "tests/test_match.py": "d67e0cd8e1ca6a7810465180f48f3c3d0a81c31ba52a858a17b3f2e7713a4b1f",
+      "tests/test_max-min.py": "67e05dfbe2825c034e9dc8cf9a49bc7723c15a210b0071dfc2e350cd9c929e17",
+      "tests/test_parsing.py": "5ee7ce495a731dd119491081fefab59decfb4621443380d95d25739819dbffad",
+      "tests/test_pysemver-cli.py": "a88d04b14a2ddcf18b8daac6d5593318c65cbce8a041ae742de4a83392b64cec",
+      "tests/test_replace.py": "3704c26eaac884e0b4f7a4e48c4188bcfbac9e35eab3196560f83ce09b56f7d9",
+      "tests/test_semver.py": "0b7aca1e22bf93b27a9d7295c3c75cd6bffb6e2c4c3929d9fbe0a431ea2e04bb",
+      "tests/test_subclass.py": "dbff47a141fe117f9291d05bbe7e7a4285645495e3d87814e222ec15f36ea135",
+      "tests/test_typeerror-274.py": "3e487a724502eab30e47ac2cf0d301b7e81dd5030c362f41aa485607da40e856"
+    },
+    "tree": {
+      "sha": "28a2d73844ca339a107541cce3a1871971d5b4e1",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".coveragerc",
+          "sha": "4903985cdb47a0036f0a50a66f712217bec600c7",
+          "size": 229,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "c98add8c75156ed598e0f50dbd7885745889e420",
+          "size": 238,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "026b711c0d20754300c16836cf1229c321dea18c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/ISSUE_TEMPLATE",
+          "sha": "64021fe39ab664ad98edd69e3921715966aa6839",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/bug_report.yaml",
+          "sha": "6e75e2c87572eac897343851e59ce555bd7f1cb7",
+          "size": 2314,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "sha": "640cced4cb3b1100f97316d00c482f34347323b3",
+          "size": 325,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/ISSUE_TEMPLATE/feature_request.yaml",
+          "sha": "2ec54c11af5954aa9bd789a9f7a65a8da5a21ca5",
+          "size": 1025,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "0c5d1c56b5de52ca2e87cde76660047b126cbe37",
+          "size": 691,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "7d8a8b0980ead2a7ce1d8fdda8fe96890892e22e",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/codeql-analysis.yml",
+          "sha": "61d1a1f6b6f78f4655a94ba4aab844790a5e332b",
+          "size": 2374,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/python-testing.yml",
+          "sha": "7c5759ce914fc2ae493aba1fe029985fcbbb4ca3",
+          "size": 3390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "256de715a6e89063cc733e8e66bd3df3f8e40ec7",
+          "size": 4586,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pytest.ini",
+          "sha": "2058b4fda6e1cd149c64b385991612773ffeadcc",
+          "size": 428,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".readthedocs.yaml",
+          "sha": "33e3e3aa3a9f36094dcad2de743bd743ba4a81fb",
+          "size": 426,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".ruff.toml",
+          "sha": "ddcdbb0744cf738b31769692ca889c7b5e58ab9c",
+          "size": 1167,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.rst",
+          "sha": "2281f1679ca36d8b4f3453acd9dc13cf5b0ed7c2",
+          "size": 12212,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CITATION.cff",
+          "sha": "708f4d0a5af8fb31442b8635d952d68480821d03",
+          "size": 2311,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.rst",
+          "sha": "ce598e0158d3f5020983321cd4c3002e3a2f4539",
+          "size": 1891,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTORS",
+          "sha": "0d90ab3aed9e8efbe98c2c466afc451ff3441781",
+          "size": 1749,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE.txt",
+          "sha": "bbb09286b958d7d33b2ee9619870ef78156547bd",
+          "size": 1499,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "e37851c97489b37c0d44afa3e91cf377c87e0211",
+          "size": 128,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "f1272fa81eea918c4a1242898db173cc5c060064",
+          "size": 69,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.rst",
+          "sha": "66552796e3c79895782f285e5e44a5256aa1487c",
+          "size": 3585,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "SUPPORT.md",
+          "sha": "4702eb0830a73965329d02f541390712c0ae9efa",
+          "size": 601,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "changelog.d",
+          "sha": "38a69f0a530e4dd3341a02663c9273aa0d69f6a9",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/.gitignore",
+          "sha": "f935021a8f8a7bd22f9d6703cafa5134bb6a57f8",
+          "size": 12,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/README.rst",
+          "sha": "6c4782040c38feca57887fcb2b80191954dcda4c",
+          "size": 2501,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/_template.rst",
+          "sha": "982ad41a4f882589d3cca82c03853999760aa167",
+          "size": 964,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr435.doc.rst",
+          "sha": "87925c3d2058ef2b016706065375ffbc36f174e0",
+          "size": 317,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr436.doc.rst",
+          "sha": "5f078361b1a40ae0b4726c3dcc173e7be8904984",
+          "size": 125,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "changelog.d/pr447.internal.rst",
+          "sha": "2f1e367dc728403e5c50db6fa7c87106ff989c07",
+          "size": 696,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "45e7005644ba922592561400abeea71fea86c84b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/Makefile",
+          "sha": "a38fc5bdb2f2466ae87749924c31f6f292298ebe",
+          "size": 761,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static",
+          "sha": "41616398430415bb992d762c5d6dbc4de9ea7870",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_static/css",
+          "sha": "26179552cd3e79217f630d479d652bad6731ee24",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/css/custom.css",
+          "sha": "33510db399993f1650aa0c9ecd7c2e3d614eaaac",
+          "size": 1234,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_static/logo.svg",
+          "sha": "1be72ee6197bb3f66a077b520d1d2d80ff258c20",
+          "size": 7754,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/_templates",
+          "sha": "759d71ac59989c904125cd40b9856db29ff0b29b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/_templates/layout.html",
+          "sha": "1f72ac26a3e259ca127221eacd6a9bd8acaf552e",
+          "size": 162,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/advanced",
+          "sha": "5791eee654c94120429c71c42dff9f176f2a8493",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/coerce.py",
+          "sha": "7da2031588f0dd131daeed253a337ee7a8407db6",
+          "size": 1208,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/combine-pydantic-and-semver.rst",
+          "sha": "c7566e125589e8f6442fc2d0f170fd4d07790c03",
+          "size": 2840,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/convert-pypi-to-semver.rst",
+          "sha": "82b4f5a37f6a041430319ecd147ca78889bd2193",
+          "size": 6271,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/create-subclasses-from-version.rst",
+          "sha": "3a5194f4ee0db90efd450266b73d6a300cf25b6a",
+          "size": 1173,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/deal-with-invalid-versions.rst",
+          "sha": "120d82a06c3ddfa786899b3a026566ba39e71923",
+          "size": 1203,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/display-deprecation-warnings.rst",
+          "sha": "a2fb83428b7cc6bf0867844d31841637358a3c0f",
+          "size": 1190,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/index.rst",
+          "sha": "26cd5729aa1c528b14ddc824fa37989bfacf31c7",
+          "size": 320,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/semverwithvprefix.py",
+          "sha": "7e411d35843e12ec894ed92c873684fec856157e",
+          "size": 819,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/advanced/version-from-file.rst",
+          "sha": "5d484438750908ce7539ef3e0cbd41aa0ba4cd3c",
+          "size": 788,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/api.rst",
+          "sha": "0ce4012ce16ce11afbb54634c33f38f7405d52e5",
+          "size": 1878,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/build-semver.rst",
+          "sha": "b5626d22def4c3d9881cb77cc1e5eab7096151f8",
+          "size": 2174,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog-semver3-devel.rst",
+          "sha": "75579d0f9c14a365c65f662b572e5de7f17ceffa",
+          "size": 10562,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/changelog.rst",
+          "sha": "e1e273b477c4a9e1a58fad61ea090705f209d100",
+          "size": 47,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/conf.py",
+          "sha": "872f943a5505c7003241086991e5d72d27210055",
+          "size": 8853,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/contribute",
+          "sha": "81288470cd608f96596e3e9de3ca87391fa1735c",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/add-changelog-entry.rst",
+          "sha": "30215c76b944b7b810e480b1ae59430e5fccf4c8",
+          "size": 225,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/doc-semver.rst",
+          "sha": "217b1d2116b5da14b0b0a85e20afea1002f8518a",
+          "size": 2879,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/finish-release.rst",
+          "sha": "d1fcce2cc942e980bd41532aa7dc0576e02e1a81",
+          "size": 665,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/index.rst",
+          "sha": "30960ace0e21180124e2d3bc6a3b4b9a2b3f55f7",
+          "size": 597,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/prerequisites.rst",
+          "sha": "1084d2477a40168fcad605d476c0a93815ebf081",
+          "size": 517,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/release-procedure.rst",
+          "sha": "b18672fb20f55df87f875f8cdbd000addcabb434",
+          "size": 3319,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/report-bugs.rst",
+          "sha": "614098b9de64b94461f90a9e8c1ae7b33fe2bf89",
+          "size": 668,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/contribute/run-test-suite.rst",
+          "sha": "22f4ebc0c99d360bd494dd3294f274675daad2d5",
+          "size": 2011,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/index.rst",
+          "sha": "d0b1588279b0bc70a101699fefd013681ee886ba",
+          "size": 656,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/install.rst",
+          "sha": "786ecc40af103c7ab686862e2f972f9ca8ef0aea",
+          "size": 2864,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/inventories",
+          "sha": "6a1e13a3384b4326fce7335fc067be28714a2f39",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/inventories/pydantic.inv",
+          "sha": "455215a74ed7255fd24b089a523144711cf13f4d",
+          "size": 4080,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/inventories/python-objects.inv",
+          "sha": "90bfa0a6cfed96227e766a910ec7c51af931926e",
+          "size": 134114,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/make.bat",
+          "sha": "dae3d085ff7e878ee87ac66aba5e572b4a1bbb18",
+          "size": 804,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/migration",
+          "sha": "58fae23746570edcc670572672ca66132d68fc00",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/index.rst",
+          "sha": "74c3d8663a2eb8e9bfa9f642ee26a3577aaa238d",
+          "size": 219,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/migratetosemver3.rst",
+          "sha": "2c09fb410b76a77c5f1c8e8f6e3cabf11bfcfe54",
+          "size": 1648,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/migration/replace-deprecated-functions.rst",
+          "sha": "df0d799af8284a809e93316b3d5e9712c47998f6",
+          "size": 4263,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/pysemver.rst",
+          "sha": "cea32e6c2d8a31ee894448929affb8f67e5a9044",
+          "size": 3842,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/readme.rst",
+          "sha": "034e9ee69836f3309105db7c05e57af12983f104",
+          "size": 120,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/requirements.txt",
+          "sha": "540348a52c71e95b84e0db755f4865079f29ae36",
+          "size": 147,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs/usage",
+          "sha": "d1c0821c8e12485ef6e23911ea0b95c625502ac2",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/access-parts-of-a-version.rst",
+          "sha": "d8a15cb445c0ab2e28a4519b7f81858525f00177",
+          "size": 1197,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/access-parts-through-index.rst",
+          "sha": "cc6b0c2bf2e15333cc34757e3ab5f55d834d6f79",
+          "size": 1323,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/check-compatible-semver-version.rst",
+          "sha": "4cf4790825286c28893d40f2b9b379f0d5c0d044",
+          "size": 2304,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/check-valid-semver-version.rst",
+          "sha": "2e016c6d6073d6e7772805146e67bd02c074ed11",
+          "size": 390,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/compare-versions-through-expression.rst",
+          "sha": "5b05a123c756ed1ab86782bb7201375b46492436",
+          "size": 1209,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/compare-versions.rst",
+          "sha": "714cf8ba78eb2eb72118c39c1d37873601ea0338",
+          "size": 2593,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/convert-version-into-different-types.rst",
+          "sha": "c75992f157dd2d69b6c2dd42fc1e8f77c36d9ef5",
+          "size": 954,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/create-a-version.rst",
+          "sha": "061652351103a216575ead92009f5f6380e4dfbe",
+          "size": 3604,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/determine-version-equality.rst",
+          "sha": "ba4125ed0d331188f50fed9c0696e1e90725ef5b",
+          "size": 707,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/get-min-and-max-of-multiple-versions.rst",
+          "sha": "35ba77b454e40ec9a7c1c074bd4745a6b88f2d29",
+          "size": 1760,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/increase-parts-of-a-version_prereleases.rst",
+          "sha": "845f22906624b34bd5b27c68556715d851175173",
+          "size": 787,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/index.rst",
+          "sha": "4b8e3fc972b6f8bfd7fabe34bf5d8622c7148b42",
+          "size": 519,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/parse-version-string.rst",
+          "sha": "0cf02650651e114b2d49fffaec8e74664ea900a9",
+          "size": 651,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/raise-parts-of-a-version.rst",
+          "sha": "be89cf8d2885dc3c9d7b6052db9637651b4ff922",
+          "size": 2421,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/replace-parts-of-a-version.rst",
+          "sha": "57ab65e9a5c7a4847f556790e9f33a0cda9eb52d",
+          "size": 672,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/semver-version.rst",
+          "sha": "51165293486001a9b3278ba6fe192bff80276a5b",
+          "size": 175,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/usage/semver_org-version.rst",
+          "sha": "b0a1ad87fdd1637b7e6b9fc7cb0eb934c432c5c8",
+          "size": 330,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/version-policy.rst",
+          "sha": "f0c423f8bbc7b550c2d09edcbc1d6bc6e6ab8585",
+          "size": 1687,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "6c9cb93a4728c6fcc1f499a40d6fd839e3c7c3cb",
+          "size": 4459,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "release-procedure.md",
+          "sha": "4225bfd91a15379ae5853125ff0f7b9eee050393",
+          "size": 3561,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "813d253307a2a34e1bfefcabca8ba0b390f50239",
+          "size": 296,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "0408d6d152a1d2defd80ca7db04f21cb86dc8732",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/semver",
+          "sha": "0e43975b6f97871f8d2ea038d4924fa92d844ecd",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__about__.py",
+          "sha": "697372f8b1776d816f78a3e1b49081017e381a62",
+          "size": 823,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__init__.py",
+          "sha": "19c88f7854e4a3c25d8c7c9ce9c27aa5b4565578",
+          "size": 1269,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/__main__.py",
+          "sha": "c6adb834cf3c1a754c87f8f692dc35bafb4eb0ca",
+          "size": 593,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/_deprecated.py",
+          "sha": "df11bb022f2a52e7bbbb1bce6881eb820f1ba897",
+          "size": 11273,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/_types.py",
+          "sha": "7afb6ff03702688a1472291da47c7e04e8e48f82",
+          "size": 422,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/cli.py",
+          "sha": "43e101e10a3a8173d55bcef3ddb8bcce8c1157a4",
+          "size": 5189,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/py.typed",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/semver/version.py",
+          "sha": "0ff5b9f462b1bc041a77401966ff4b8f83fb2a01",
+          "size": 24041,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "1a2e2ae81778d5e324f26d4ae9eebac48abb7b6f",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "120000",
+          "path": "tests/coerce.py",
+          "sha": "e79106a2153bb5241b587a7fd796363e79f84b0b",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/conftest.py",
+          "sha": "9017bbbee30c8a8e20f7389b3ff093b4bb1e4886",
+          "size": 739,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "tests/semverwithvprefix.py",
+          "sha": "d1a8d995a45497c73516661d8d5abc38da4d29f8",
+          "size": 37,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_bump.py",
+          "sha": "34e0b2accb35239b9678505fce13c21502184be9",
+          "size": 3667,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_compare.py",
+          "sha": "1c99f450f143da9e5a85c4d6c9a8c1f33d126182",
+          "size": 8068,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_deprecated_functions.py",
+          "sha": "8886268995252fefcf128ff03915852350efab0b",
+          "size": 2097,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_docstrings.py",
+          "sha": "a3ff08b1a0bbe5d888c47a0a53d0233a89ee634f",
+          "size": 1062,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_format.py",
+          "sha": "73ff3122facb7eafa2816597b8e2d8d5fb45db37",
+          "size": 2207,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_immutable.py",
+          "sha": "ef6aa40e513440557ab59f9c10e6a87a9c9248b4",
+          "size": 965,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_index.py",
+          "sha": "79e45025a21e27b9473b3b442f25cfcfa3c5002d",
+          "size": 2988,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_match.py",
+          "sha": "e2685cae1d8bbcb0e2e7de94d2e1c976dc647b21",
+          "size": 1651,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_max-min.py",
+          "sha": "d465fe8e793ffefe7644ce5cedb97f4fc15ce92d",
+          "size": 1356,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_parsing.py",
+          "sha": "ddf521969c810f084e1705081ec0ab1aaf4045e4",
+          "size": 5503,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_pysemver-cli.py",
+          "sha": "e783a0b4ae58157c7d1e6e63f6e63f5f40a660a7",
+          "size": 4182,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_replace.py",
+          "sha": "f223eddbf52b63097a6b289064a48118a1ffb713",
+          "size": 1789,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_semver.py",
+          "sha": "9978b9406c2f3cf3b8dd886383a84405ca0f689e",
+          "size": 3676,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_subclass.py",
+          "sha": "0d390009dcc6f0b016ead624bf7522ddcd0e621e",
+          "size": 2307,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_typeerror-274.py",
+          "sha": "326304b8fbdb6ecb7ddbb00a72ca43a6e92ff336",
+          "size": 341,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "74918c44147b3ec227414cf048a4b8f067471aa2",
+          "size": 1827,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "uv.lock",
+          "sha": "026a5848b6979cc4fc12549c2cdbf65d444ab0df",
+          "size": 160263,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "semver_subclass_comparison",
+  "label_review": {
+    "author": "Codex (source inspection)",
+    "drafted_before_analysis": true,
+    "labels_sha256": "69da12271f3d2f0567fd4a0dd1d35ec2ee0edf21ef0e993a6b9f2324c4f6e3fb",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "python-semver/python-semver",
+  "schema_version": "1.0",
+  "selection_reason": "Check rich-comparison operands against the receiver's class.",
+  "warnings": [
+    "base: skipped 2 symlinks (tests/coerce.py, tests/semverwithvprefix.py).",
+    "head: skipped 2 symlinks (tests/coerce.py, tests/semverwithvprefix.py)."
+  ]
+}

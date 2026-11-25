@@ -1,0 +1,640 @@
+{
+  "cases": [
+    {
+      "base": "409f24286e16ea3086af463edea6b80cdd62deed",
+      "head": "6e0394999fe7d114b89c3b54c8db0cb0eab8c67e",
+      "id": "cached_property_async_wrapper",
+      "license": "BSD-3-Clause",
+      "reason": "Modernize the cached descriptor's standard-library coroutine wrapper.",
+      "repository": "pydanny/cached-property"
+    },
+    {
+      "base": "b4cc28f4f08e9c4bd06b35f92ab0f5a1aa2ae9b7",
+      "head": "c97cf414254e2aed83417785b3890a4f2602ba81",
+      "id": "cached_property_coroutine_metadata",
+      "license": "BSD-3-Clause",
+      "reason": "Apply functools.wraps when building the cached coroutine wrapper.",
+      "repository": "pydanny/cached-property"
+    },
+    {
+      "base": "bd97cfcd595c882d92b73430d4bf5c880d6062dc",
+      "head": "bc41390f388d88114e8529b17fe145c5af390cbb",
+      "id": "semver_subclass_comparison",
+      "license": "BSD-3-Clause",
+      "reason": "Check rich-comparison operands against the receiver's class.",
+      "repository": "python-semver/python-semver"
+    },
+    {
+      "base": "5dae7b67131299c8f955579bb239f2e580baa582",
+      "head": "0f30183605ebb1cb43de1a6b8baad5dcd754f685",
+      "id": "semver_prerelease_comparison",
+      "license": "BSD-3-Clause",
+      "reason": "Compare parsed prerelease identifiers and use identifier counts for equal prefixes.",
+      "repository": "python-semver/python-semver"
+    }
+  ],
+  "exclusions": [
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "f3643addecf9dc66cb7bd120532a8373f19b1e23"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "cce7ed2513e4b4383f76ea300422a5a2287daf4e"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "c06953431785ca9c7b951869b9792ea3cdd4a73c"
+    },
+    {
+      "reason": "Release tooling changes and import formatting.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "0bc72c83915c75718b05daac9f128a4db3161fde"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "a9ae88093ec183bfd53becf847b1e31742898da5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "386646d765211430fcf4ffcf269f3b87ee25918c"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "abad7950685c81bd03c1758fc321ec58b7010c8e"
+    },
+    {
+      "reason": "CI update and source formatting.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "4601845016595bbf6f71ca962d9cf27412db4be4"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "6b2c95dad7710156d8b3522b316103911a83694b"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "4c47628bbe1709cd2d759decc3ee21babedd5619"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "e12de809642cacbec44f80e36cccca02b8bf6e5a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "c3509e4f6dcbb303e5c8465e2c8b2e524be4e1af"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "ed92974ad1f5ecf2000c4d9a7bb1494d67772161"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "1c70f56b2c5083050bfaec7316724b6505e92b19"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "880029ba106735296cb37e01e0d7de9142e3ffdb"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "87630ab0ed59efb1b4e7fbd0f87fbfbb4ce43f41"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "3c62d8a8b1669dedd3e6e99236e615b0289ef4eb"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "8a08c4b82242be480bfacf206d66a56e4615f878"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "eae86dbe363ed596d7e8981ca8ed983eb29637a0"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "dc3627cc0e28ad1d09078df07b6303593a06ae72"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "04a864f33848da6af1dea906ba4922770022ef66"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "a95c26fba8ef44af6d16ad6c5b70d7f9c69ae36c"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "d9ec0f5f74975dfb4ebcc18efeb4cee69aa8e788"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "f8c80b7c0631332c979985f13cc1a803f251c6b7"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "d811454192adb18fc3a9aa333fc27e4e48ddd723"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "04e4ac28b935f7538fa54d8ffd385549015040b5"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "66ec8f71ac52384cc61d1db88672a86903671de4"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "896102d605605ec0f48e26bafb54fb591be66ede"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "a5e9f91e59e54bf1889a7eb2bfb24539a281e181"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "73cb9ef10ac748141f066ada2f29f0f6daf3eb01"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "7d146bd7caf196bd04b44bdb6d395e91256fa88c"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "17f004d5682becb2734d1f3e5473a99090989015"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "3b84fd3fc9424902e98a4a4990ea766e4f0f5380"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "99f28acb4e0364e68491f26489fd71e284e483a2"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "2ecc44f7f21f3551b43c44b7dd0bd9d14904b4a7"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "1855741f3dba6c603c5e806420973214e550a756"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "2fd0f4b512b9b9814210404e78bd84576dbfd5b9"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "462cf393125ec7d31efeb6b7c8c0ee0f533a2d56"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "fa6f0cca141f74512e2b177f2320774165f0346e"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "318be98cc9d04b7fdc08cd00fdc66c9cbb118c1e"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "277e106016db0e81c64c561052be5360b9870974"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "f48c0878f8ecfa5209fc861855265bc4c8601006"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "ae613eb6d298bca0615aa822c6d278f430b24b8f"
+    },
+    {
+      "reason": "Error-message typo fixes.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "63b2682663fb14e4af42edffea1eea106019eabe"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "05232a753b4b03ca248cc947a54be60eb6b68173"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "d348a5ecf28fa9152117632112b2fc05a6f42868"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "ae997af449ee1bb9e78c62f061a918a363d44f6c"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "ebb99789d72f6c7f98f20d20623029ae66db7da8"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "1345d715c40fc9c4c979bbef576b1eda4aff387e"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "df3395ab1db3957e71c5a9701f0d3bb622faf16f"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "76bf9a029fe8c64541a661909e617a7abf31998b"
+    },
+    {
+      "reason": "Changes an extensionless CLI script outside supported source.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "0fb516fa310db0eb4900a7b529c64bde290390bb"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "bae64f61ec5f1057342faf19b89d5bd571b038da"
+    },
+    {
+      "reason": "Head tree has only tests.py for test definitions, outside current filename discovery.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "0d30f12f3f64dbe58bd816597856fb34d9e31fcd"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "ba2af26490f16d1e4f7bf57791af2ade8e90fcb7"
+    },
+    {
+      "reason": "Version bump.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "50d50051c30004b2e7b69e34e610e86fbf9114f5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "13292bbf2ab9c3d7ed6dbffc6a2c095c9f6decd6"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "4f2383b6d7888bfadaf2e3ca6633426f3f7390c5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "d53e6576c27d8b677d0b715741ffeebff2d312d6"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "stefankoegl/python-json-pointer",
+      "revision": "7854cd70958f4248bbebc689a960a4a41807b824"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "c032196d9afdf4b21d041c7d1492c95f5d1d6740"
+    },
+    {
+      "reason": "Release and package metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "ac78c96d1031b76f640878319ae14c20eb37b6e7"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "8cf960d68028e9308774ee402b5ce4f34efef418"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "579e54be3f136a0635e8cb7742ab911c01662dd8"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "2564e5eab2e5f8adf3831a6f8e63a853c2f346de"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "83e14c39e6bec0c81a41526e741cac99b69250c4"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "6037cee0883db900f83062980877f960650b1a09"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "409f24286e16ea3086af463edea6b80cdd62deed"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "4adb33246294a6e7370c62212028b9fb152f6157"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "0be6adca6f173ee7d2d0d5ec31d6b01650bac97e"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "f075b4f71741f84b687327948fc3a65e4d858b2c"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "ab48d01ec5b716b7078fa1da06cbf538da9e8ff7"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "6b4e990aca401ef47f7517c914b6b6cda360f9e5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "4056dca17cfc1bbe18f43819ece998cedb994a28"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "426aa51d08d4c43cd318872c97e8d086abe013b8"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "a5ecd1df8edf1379581f4da37defa7ff1b1d1172"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "deb84ce9c9a53e2ca4969b8aa47dc80795fdf43a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "bad6d273bdedb28e4dc237fa2f4b06b60da1f33a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "d10a9661ae3ae59c60e9edbaa70a639b0dd76ce5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "831c889ecf17ec2933513d45bbff6eeb1513a6dd"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "46b84eb8ccf7f42598e04aab0b61eb21f0c4a290"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "f7b6d211c6d1439253ee0ac01898731219bc27e6"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "0990bfdb9694def81227c87879b180153ffb86ea"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "63c1f67a492d6fc37ea3b72ae6f88e7b87d0bd8a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "9a1b19a8247c3f8ea7adcdfc2e1404f9937a91e0"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "9cb55ecb394a7e82ebb97a9099b7e87766eadddf"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "08a02298bdfd6e8203df7c8620a651be7d03a89f"
+    },
+    {
+      "reason": "Release and package metadata only.",
+      "repository": "pydanny/cached-property",
+      "revision": "472ebcb21b372610e3fae60806c1cf06f6a13a7c"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "df2be962556e9e6e6ee13550f69fed280991c5c5"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "24dfeba9c22ade29ced42dc352e1d0c64321305a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "7d74e03d8497a6c0003cc4e9718c31e26a20c360"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "01f31396128761f41e7f0d6a8412cb7ac0aa20d3"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "c0a93c2b5125561a4ea196704281989694eb83df"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "9b6709f03e1ec57fa91b628e5fbffba5472984d7"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "626f7e88b6a8138e8b805ef217cd87e8833aa4d9"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "8f4879f70ba4ddcb31ed5467140c753d70d12cf2"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "059890397030222cd6410f846bb3000d6fa72c5a"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "9e2573cf6014e42eec7fa291ecb10259ec79b840"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "249771d09feb38f995a20269fbebb4830762c52b"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "5729bfffe4bed24f48a732d94bfbc65389c4c8c8"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "50ab7b5e79cfafaa7faa91935a58318c1cdf2527"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "97d2aaf4b212aca7a95e3be58f9d5bf53ad35943"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "59e46651cd0d1bb5644d8c3607ad4ed7e5c4f08d"
+    },
+    {
+      "reason": "Test or formatting maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "a2d71f19b0cfe7180036835e27a3002f90e81ac7"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "94ddab84ff55355c79a1e16354834c3f5783ad86"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "247fe8884e2ad59384337f67a9e3dc2264174a1b"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "1a9979889d8154f906ee64c6cc498722f4d950ad"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "f1a98a5149b392dfa785188e0c3e1018e5dd82c3"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "9cd3a887e4f12b355876ee29d3743681d369c36b"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "72d9a5c931b8f5b9763a8add14e6dd99ca87000d"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "6eb7e7df48082c8b04001c32220ab18285d90955"
+    },
+    {
+      "reason": "Documentation, CI, or packaging maintenance without a functional production edit.",
+      "repository": "pydanny/cached-property",
+      "revision": "218147363a4085c0826a80a83984f3d20e718aa0"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "pydanny/cached-property",
+      "revision": "fe3aae9fd892e87ca24e33086b45bc2ff9f33108"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "python-semver/python-semver",
+      "revision": "15aa6a67738e05a83a6701decffa2ce601e076ce"
+    },
+    {
+      "reason": "Issue-template or packaging configuration.",
+      "repository": "python-semver/python-semver",
+      "revision": "bd97cfcd595c882d92b73430d4bf5c880d6062dc"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "python-semver/python-semver",
+      "revision": "2eeefcbe1532f3cab672b6e8a6e8ca8407cbcde1"
+    },
+    {
+      "reason": "Issue-template or packaging configuration.",
+      "repository": "python-semver/python-semver",
+      "revision": "06fe49fca6bb65921c65c4b942c1dd75e8e77312"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "python-semver/python-semver",
+      "revision": "37e80d7ecceee9452b9f22dcac71e5157fc5d3dd"
+    },
+    {
+      "reason": "Issue-template or packaging configuration.",
+      "repository": "python-semver/python-semver",
+      "revision": "6208a548e9b2c6923fa42ec280b2005f6f3619ff"
+    },
+    {
+      "reason": "Merge commit.",
+      "repository": "python-semver/python-semver",
+      "revision": "8daa5716f6717360c9f48d14aac8f0ad9ea69520"
+    }
+  ],
+  "policy": "Source-traceable v5 protocol recorded in PROTOCOL.md",
+  "schema_version": "1.0"
+}
