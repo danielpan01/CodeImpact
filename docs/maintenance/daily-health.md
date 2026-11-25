@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-23** (America/New_York).
+Checked on **2026-11-24** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -20,16 +20,13 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/media/mobile.png | PASS | Required file exists and is nonempty |
 | README.md: CONTRIBUTING.md | PASS | Local target exists; fragment not checked |
 | README.md: SECURITY.md | PASS | Local target exists; fragment not checked |
-| README.md: benchmarks/pytest-fixtures-v1-preservation.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/cases/ | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/lfu-callback-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/mapping-fallback-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real-v2/baselines/test-discovery-v1.json | PASS | Local target exists; fragment not checked |
-| README.md: corpus/real-v4/REVIEW_WORKFLOW.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | README.md: corpus/real/REVIEW.md | PASS | Local target exists; fragment not checked |
-| README.md: corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | README.md: docs/ARCHITECTURE.md#bounded-function-local-imports | PASS | Local target exists; fragment not checked |
@@ -37,6 +34,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | README.md: docs/BUILD_PLAN.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/CORPUS.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/CORPUS.md#literal-runtime-import-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
@@ -49,6 +47,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/OYAML_DUMP_LOAD_AUDIT.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/PARAMETER_TABLE_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
@@ -64,6 +63,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/UNCOUNTABLE_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/V4_REVIEW_PILOT.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATION.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/media/milestone8a/after-desktop-dark-map.png | PASS | Local target exists; fragment not checked |
@@ -116,9 +116,11 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: ../web/tests/quality/baselines/zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-pytest-fixture-injection | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ARCHITECTURE.md#literal-runtime-import-calls | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#scoped-aggregate-fallback | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: BUILD_PLAN.md#milestone-sequence-and-remaining-work | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: CORPUS.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: CORPUS.md#literal-runtime-import-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DEPLOYMENT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DESCRIPTOR_REFINEMENT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: DEVELOPER_PILOT.md | PASS | Local target exists; fragment not checked |
@@ -132,6 +134,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: LFU_CALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MAPPING_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: MODULE_DATA_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: OYAML_DUMP_LOAD_AUDIT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: PARAMETER_TABLE_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: PERFORMANCE.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION.md | PASS | Local target exists; fragment not checked |
@@ -147,6 +150,7 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: UNCOUNTABLE_GUARD_REVIEW.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: V4_REVIEW_PILOT.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: VALIDATOR_EXPORT_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-desktop.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: media/before-mobile.png | PASS | Local target exists; fragment not checked |
