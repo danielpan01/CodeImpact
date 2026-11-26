@@ -1105,7 +1105,7 @@ policy and verify the recorded source transition for the policy-aware files.
 
 ## Exact-class equality evidence
 
-The equality proof follows a terminal single `==` assertion in a plain
+The equality proof follows a single `==` in a direct assertion of a plain
 top-level test. An AST-only audit checks captured imports and class creation,
 assignments, ordinary constructor and factory returns, and the direct
 method binding. It requires the two proved operands to have the same exact
@@ -1133,3 +1133,15 @@ budget, a bounded replay recovers comparisons supported by the earlier rule.
 The offline `exact-equality-v1` replay uses the earlier rule, and
 `prerelease-factories-v1` measures the extension on the same pinned cases.
 [Factory scope and measurements](REAL_EVALUATION_V5.md#class-preserving-prerelease-factories)
+
+When more statements follow, the first direct assertion must itself be a
+single equality with a straight-line prefix of supported assignments or
+`pass`. The scope audit covers the entire function. An import, annotation,
+assignment or other local binding later in the body can make an earlier
+read unbound. Only the prefix supplies runtime values for the comparison.
+An early exit, conditional assertion, unsupported prefix or ambiguous operand
+declines the new proof. It also declines functions containing a yield,
+including nested yield syntax. Each revision records the range of the
+comparison it proved. Later assertions supply no additional edges. The
+factory replay keeps its terminal-assertion policy.
+[First assertion trace and measurement](REAL_EVALUATION_V5.md#first-equality-assertion)

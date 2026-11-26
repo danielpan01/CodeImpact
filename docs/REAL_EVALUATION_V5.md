@@ -276,7 +276,7 @@ changed-test recommendations.
 
 The subclass case retains one bump-file miss,
 `test_should_versioninfo_bump_multiple`. Its first equality appears before
-more assignments and a second assertion. The current proof admits one
+more assignments and a second assertion. The factory proof admits one
 terminal equality with a supported prefix. The other 18 misses are the
 previously listed comparison, deprecation, min/max, parsing and replacement
 definitions. Its two draft false positives remain
@@ -285,3 +285,56 @@ definitions. Its two draft false positives remain
 case still has four misses and 40 draft false positives. Cached Property
 retains ten draft false positives and the single selected uncertain definition.
 The receipt lists all remaining IDs per case. Human label review was skipped.
+
+## First equality assertion
+
+The `first-assertion-v1` successor recovers two draft-affected tests in the
+SemVer subclass case. Run `make evaluate-real-v5-first-assertion` to
+reproduce the factory predecessor and compare the complete current report
+against its receipt. All four measurements use the same pinned sources and
+draft labels. [Selection and discrepancy receipt](../datasets/real-v5-successors/first-assertion-v1.json) · [Engine hashes](../benchmarks/first-assertion-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, factories | 13 / 106 | 11 | 2 | 19 | 74 | 0 |
+| Subclass comparison, first assertion | 15 / 106 | 13 | 2 | 17 | 74 | 0 |
+| V5 overall, factories | 112 / 239 | 59 | 52 | 23 | 104 | 1 |
+| V5 overall, first assertion | 114 / 239 | 61 | 52 | 21 | 104 | 1 |
+
+| New recommendation | Before comparison | After comparison | Bound target in both revisions |
+| --- | ---: | ---: | --- |
+| `tests/test_bump.py::test_should_versioninfo_bump_multiple` | 64 | 64 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+| `tests/test_parsing.py::test_equal_versions_have_equal_hashes` | 155 | 155 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+
+**Line 64.** In both snapshots, lines 62–63 parse the receiver and expected
+value into exact `Version` instances. The left operand calls
+`bump_prerelease().bump_build().bump_build()`. Each call constructs
+through `type(self)` after the source-defined scalar helper. The right
+operand reads the original `expected` binding. Comparing them invokes
+the wrapper bound to `Version.__eq__`. The edit replaces `Version` with
+`type(self)` in that wrapper's accepted-type tuple. The factory predecessor
+looked only at the final assertion on line 66 and stopped when its prefix
+encountered the assertion on line 64. Line 65 reassigns `expected` after
+the first comparison. The new edge cites line 64 and the wrapper in each revision.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_bump.py#L61-L66) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_bump.py#L61-L66)
+
+**Line 155.** Two calls to `parse_version_info` establish the exact operands
+of `assert v1 == v2`. This comparison reaches the same edited wrapper.
+The subsequent hash comparison and dictionary and set operations supply
+no evidence in this path. [Pinned test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_parsing.py#L152-L162)
+
+Both additions have one resolved call edge, distance 1 and score 90. The
+wrapper already had enough callers to reach the scoring formula's fan-in
+cap. No recommendation was removed, and every previous recommendation
+retained its score and evidence. The separate prerelease-comparison case
+gains the same two graph edges to an unchanged wrapper. Its 71
+recommendations retain their scores and paths. Both Cached Property
+analyses are unchanged. V5 now records 17 resolved, 88 conservative and
+nine changed-test recommendations.
+
+The subclass case retains 17 draft misses across comparison, deprecation,
+min/max, parsing and replacement tests. Its two draft false positives remain
+`test_replace_from_subclass` and `test_subclass_from_versioninfo`. The
+prerelease-comparison case retains four misses and 40 false positives.
+Cached Property retains ten false positives and the single selected
+uncertain label. The receipt lists each ID. Independent review was skipped.

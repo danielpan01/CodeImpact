@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from codeimpact.partial_bindings import PartialBindings
 
 
-EqualityMode = bool | Literal["exact-class"]
+EqualityMode = bool | Literal["exact-class", "factories"]
 MAX_PROOF_STEPS = 16_000
 
 
@@ -959,13 +959,19 @@ class Proof:
         return False
 
     def comparison(
-        self, fn: ast.FunctionDef, env: dict[str, Value], site: ast.Compare
+        self, fn: ast.FunctionDef, env: dict[str, Value], position: int, site: ast.Compare
     ) -> Function | None:
-        # The final assertion is the only comparison the query relies on.
-        # Function-local assignments shadow globals even before assignment.
-        scoped = audit(body(fn), local=True)
+        # Binding is function-wide, but only the prefix establishes operand values.
+        stmts = body(fn)
+        scoped = audit(stmts, local=True)
+        if position < len(stmts) - 1:
+            # A yield anywhere can change the calling convention, even after return.
+            if scoped.wildcard or any(
+                isinstance(n, (ast.Yield, ast.YieldFrom)) for n in ast.walk(fn)
+            ):
+                return None
         local = env | {name: UNBOUND for name in scoped.counts}
-        if self.statements(body(fn)[:-1], local, 0):
+        if self.statements(stmts[:position], local, 0):
             return None
         lhs = self.expression(site.left, local)
         rhs = self.expression(site.comparators[0], local)
@@ -984,7 +990,7 @@ class Proof:
         return None
 
 
-def equality_site(fn: ast.FunctionDef) -> ast.Compare | None:
+def equality_site(fn: ast.FunctionDef, *, first: bool) -> tuple[int, ast.Compare] | None:
     if (
         fn.decorator_list
         or fn.type_params
@@ -993,10 +999,21 @@ def equality_site(fn: ast.FunctionDef) -> ast.Compare | None:
     ):
         return None
     stmts = body(fn)
-    if stmts and isinstance(stmts[-1], ast.Assert):
-        match stmts[-1].test:
-            case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site:
-                return site
+    for position, stmt in enumerate(stmts):
+        if not isinstance(stmt, ast.Assert):
+            continue
+        if position == len(stmts) - 1 or (
+            first
+            and all(
+                isinstance(prefix, (ast.Assign, ast.AnnAssign, ast.Pass))
+                for prefix in stmts[:position]
+            )
+        ):
+            match stmt.test:
+                case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site:
+                    return position, site
+        if first:
+            break
     return None
 
 
@@ -1041,17 +1058,17 @@ def namespace_writes(resolver: "PartialBindings") -> set[str]:
     return writes
 
 
-def add_equality_edges(index: "Index", *, scalar_factories: bool) -> set[tuple[str, str]]:
+def add_equality_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, str]]:
     resolver = index.partials
     if resolver is None:
         return set()
     candidates = [
-        (sid, node, site)
+        (sid, node, candidate)
         for sid, node in index.syntax.items()
         if index.nodes[sid].kind == "test"
         and isinstance(node, ast.FunctionDef)
         and "." not in index.nodes[sid].name
-        and (site := equality_site(node)) is not None
+        and (candidate := equality_site(node, first=mode is True)) is not None
     ]
     if not candidates:
         return set()
@@ -1062,17 +1079,17 @@ def add_equality_edges(index: "Index", *, scalar_factories: bool) -> set[tuple[s
     proof = Proof(
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
-        scalar_factories=scalar_factories,
+        scalar_factories=mode != "exact-class",
     )
     proof.writes = writes
     edges = set()
-    for sid, fn, site in candidates:
+    for sid, fn, (position, site) in candidates:
         path = index.nodes[sid].path
         try:
             env = proof.module(path)
             if not isinstance(env.get(fn.name), Function):
                 continue
-            target = proof.comparison(fn, env, site)
+            target = proof.comparison(fn, env, position, site)
             if target is None or target.sid not in index.nodes:
                 continue
             index.add_edge(
@@ -1087,8 +1104,8 @@ def add_equality_edges(index: "Index", *, scalar_factories: bool) -> set[tuple[s
             edges.add((sid, target.sid))
         except (Unproved, RecursionError):
             continue
-    if scalar_factories and proof.steps > MAX_PROOF_STEPS:
-        # The new helper may consume the budget before a later, previously
-        # provable comparison. Recover those edges with the original bounded pass.
-        edges.update(add_equality_edges(index, scalar_factories=False))
+    if mode != "exact-class" and proof.steps > MAX_PROOF_STEPS:
+        # Additional sites or helpers may consume the budget before a previously
+        # provable comparison. Preserve that edge with its bounded predecessor.
+        edges.update(add_equality_edges(index, mode="factories" if mode is True else "exact-class"))
     return edges
