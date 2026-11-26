@@ -1,4 +1,4 @@
-"""Resolve a single == between two instances of the same proved source class."""
+"""Resolve the first comparison call between instances of the same proved source class."""
 
 import ast
 from dataclasses import dataclass, field
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from codeimpact.partial_bindings import PartialBindings
 
 
-EqualityMode = bool | Literal["exact-class", "factories"]
+EqualityMode = bool | Literal["exact-class", "factories", "first-assertion"]
 MAX_PROOF_STEPS = 16_000
 
 
@@ -959,12 +959,17 @@ class Proof:
         return False
 
     def comparison(
-        self, fn: ast.FunctionDef, env: dict[str, Value], position: int, site: ast.Compare
+        self,
+        fn: ast.FunctionDef,
+        env: dict[str, Value],
+        position: int,
+        site: ast.Compare,
+        method_name: str,
     ) -> Function | None:
         # Binding is function-wide, but only the prefix establishes operand values.
         stmts = body(fn)
         scoped = audit(stmts, local=True)
-        if position < len(stmts) - 1:
+        if method_name == "__lt__" or position < len(stmts) - 1:
             # A yield anywhere can change the calling convention, even after return.
             if scoped.wildcard or any(
                 isinstance(n, (ast.Yield, ast.YieldFrom)) for n in ast.walk(fn)
@@ -976,7 +981,10 @@ class Proof:
         lhs = self.expression(site.left, local)
         rhs = self.expression(site.comparators[0], local)
         if isinstance(lhs, Instance) and isinstance(rhs, Instance) and lhs.owner is rhs.owner:
-            method = lhs.owner.members.get("__eq__")
+            # Same exact class rules out a right-subclass priority override.
+            # This establishes the initial call only. A NotImplemented result
+            # can lead to a reflected call, which this proof does not follow.
+            method = lhs.owner.members.get(method_name)
             if isinstance(method, Function) and not method.mode:
                 target = method.wrapper or method
                 args = target.node.args
@@ -990,7 +998,9 @@ class Proof:
         return None
 
 
-def equality_site(fn: ast.FunctionDef, *, first: bool) -> tuple[int, ast.Compare] | None:
+def comparison_site(
+    fn: ast.FunctionDef, *, first: bool, less_than: bool
+) -> tuple[int, ast.Compare] | None:
     if (
         fn.decorator_list
         or fn.type_params
@@ -1002,16 +1012,18 @@ def equality_site(fn: ast.FunctionDef, *, first: bool) -> tuple[int, ast.Compare
     for position, stmt in enumerate(stmts):
         if not isinstance(stmt, ast.Assert):
             continue
-        if position == len(stmts) - 1 or (
-            first
-            and all(
-                isinstance(prefix, (ast.Assign, ast.AnnAssign, ast.Pass))
-                for prefix in stmts[:position]
-            )
-        ):
-            match stmt.test:
-                case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site:
-                    return position, site
+        match stmt.test:
+            case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site if position == len(stmts) - 1:
+                return position, site
+            case ast.Compare(ops=[ast.Eq() | ast.Lt() as op], comparators=[_]) as site if (
+                first
+                and (less_than or isinstance(op, ast.Eq))
+                and all(
+                    isinstance(prefix, (ast.Assign, ast.AnnAssign, ast.Pass))
+                    for prefix in stmts[:position]
+                )
+            ):
+                return position, site
         if first:
             break
     return None
@@ -1058,7 +1070,7 @@ def namespace_writes(resolver: "PartialBindings") -> set[str]:
     return writes
 
 
-def add_equality_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, str]]:
+def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, str]]:
     resolver = index.partials
     if resolver is None:
         return set()
@@ -1068,7 +1080,12 @@ def add_equality_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, 
         if index.nodes[sid].kind == "test"
         and isinstance(node, ast.FunctionDef)
         and "." not in index.nodes[sid].name
-        and (candidate := equality_site(node, first=mode is True)) is not None
+        and (
+            candidate := comparison_site(
+                node, first=mode in (True, "first-assertion"), less_than=mode is True
+            )
+        )
+        is not None
     ]
     if not candidates:
         return set()
@@ -1089,14 +1106,18 @@ def add_equality_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, 
             env = proof.module(path)
             if not isinstance(env.get(fn.name), Function):
                 continue
-            target = proof.comparison(fn, env, position, site)
+            op, method_name = (
+                ("<", "__lt__") if isinstance(site.ops[0], ast.Lt) else ("==", "__eq__")
+            )
+            target = proof.comparison(fn, env, position, site, method_name)
             if target is None or target.sid not in index.nodes:
                 continue
             index.add_edge(
                 sid,
                 target.sid,
                 "call",
-                f"{path}:{site.lineno} calls the bound __eq__ via == on the same exact class",
+                f"{path}:{site.lineno} calls the bound {method_name} via {op} "
+                "on the same exact class",
                 SourceLocation(
                     path=path, line=site.lineno, end_line=site.end_lineno or site.lineno
                 ),
@@ -1107,5 +1128,10 @@ def add_equality_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str, 
     if mode != "exact-class" and proof.steps > MAX_PROOF_STEPS:
         # Additional sites or helpers may consume the budget before a previously
         # provable comparison. Preserve that edge with its bounded predecessor.
-        edges.update(add_equality_edges(index, mode="factories" if mode is True else "exact-class"))
+        predecessor: EqualityMode = "exact-class"
+        if mode is True:
+            predecessor = "first-assertion"
+        elif mode == "first-assertion":
+            predecessor = "factories"
+        edges.update(add_comparison_edges(index, mode=predecessor))
     return edges

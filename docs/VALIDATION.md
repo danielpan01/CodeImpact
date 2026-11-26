@@ -4453,3 +4453,31 @@ retain their exact bytes in the stable analyses. Labels remain drafts.
 [Measurements, remaining mistakes and successor receipt](REAL_EVALUATION_V5.md#first-equality-assertion)
 
 Local logs are under `reports/first-equality/`.
+
+## Exact-class less-than evidence
+
+Started on merged `main` at `5dac2ea23cfbf58f9e8d7ba58e9179726c0ea2e9`
+(PR #41). Before implementation, `make evaluate-real-v5-first-assertion`
+reproduced 114/239 selected overall and 15/106 in the SemVer subclass case.
+Five positive regressions failed on that predecessor, including the pinned
+comparison, first dispatch with `NotImplemented`, and evidence available
+in only one revision.
+
+The successor selects 116/239 overall and 17/106 in the subclass case. Its
+two new paths cite line 129 and lines 299–301 of `tests/test_compare.py`.
+Both lead to the edited wrapper at lines 41–52 in base and head. The
+existing recommendations retain their scores and evidence. The subclass
+case retains 15 draft misses and two draft false positives.
+[Trace, measurements and receipt](REAL_EVALUATION_V5.md#exact-class-less-than-evidence)
+
+| Check | Observed result |
+| --- | --- |
+| Focused equality, ordering and preservation tests | 95 passed. Controls cover unknown and mixed operand classes, subclass priority, ambiguous or missing method bindings, chained comparisons, direct assertion scope, proof budget, first dispatch with `NotImplemented`, and before-only and after-only evidence. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,439 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. |
+| Offline evaluations | All 14 targets passed, including `make evaluate-real-v5-less-than`. All 173 pre-existing evaluation files matched their starting SHA-256 hashes. |
+| Determinism | Seeds 7 and 173 each reproduced 16 report files byte for byte, including two earlier authored profiles. Reversing file order in both snapshots reproduced and validated all 143 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases with the first-assertion profile and validated all current recommendation paths. After excluding elapsed time, all 49 pre-v5 analyses and both Cached Property analyses matched. Both SemVer graphs gained the operator edges. Only the subclass case gained recommendations. |
+
+Local logs are under `reports/less-than/`.
