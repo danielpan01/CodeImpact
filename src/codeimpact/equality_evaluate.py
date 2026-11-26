@@ -1,5 +1,6 @@
 """Replay v5's exact-class equality successor against a separate receipt."""
 
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, Literal
 
@@ -20,7 +21,6 @@ from codeimpact.v5_evaluate import (
     metadata,
 )
 
-RECEIPT = Path("datasets/real-v5-successors/exact-equality-v1.json")
 OUTPUT = Path("reports/real-v5-exact-equality-v1-evaluation.json")
 
 
@@ -33,7 +33,7 @@ class Delta(StrictModel):
 
 class Receipt(StrictModel):
     schema_version: Literal["1.0"]
-    name: Literal["exact-equality-v1", "prerelease-factories-v1"]
+    name: Literal["exact-equality-v1", "prerelease-factories-v1", "first-assertion-v1"]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256
     report_sha256: SHA256
@@ -64,21 +64,28 @@ def changes(before: dict[str, Any], after: dict[str, Any]) -> dict[str, Delta]:
     return result
 
 
-def evaluate_equality(directory: Path) -> dict[str, Any]:
-    receipt = Receipt.model_validate(metadata(PROJECT, RECEIPT.as_posix()))
-    require(receipt.name == "exact-equality-v1", "Wrong equality successor")
-    transition = safe_file(PROJECT, EQUALITY_TRANSITION.as_posix())
+def verified_receipt(
+    name: str,
+    transition_path: Path,
+    source_hash: Callable[[Path, str, str], str] | None = None,
+) -> Receipt:
+    receipt = Receipt.model_validate(metadata(PROJECT, f"datasets/real-v5-successors/{name}.json"))
+    require(receipt.name == name, f"Wrong successor for {name}")
+    transition = safe_file(PROJECT, transition_path.as_posix())
     require(
-        file_hash(transition) == receipt.preservation_sha256,
-        "Equality preservation receipt changed",
+        file_hash(transition) == receipt.preservation_sha256, f"{name} preservation receipt changed"
     )
-    recorded = metadata(PROJECT, EQUALITY_TRANSITION.as_posix())
+    recorded = metadata(PROJECT, transition_path.as_posix())
     for path, digest in sorted(recorded["current_sources_sha256"].items()):
-        require(
-            equality_source_hash(PROJECT, path, file_hash(safe_file(PROJECT, path))) == digest,
-            f"Equality source changed: {path}",
-        )
+        actual = file_hash(safe_file(PROJECT, path))
+        if source_hash:
+            actual = source_hash(PROJECT, path, actual)
+        require(actual == digest, f"{name} source changed: {path}")
+    return receipt
 
+
+def evaluate_equality(directory: Path) -> dict[str, Any]:
+    receipt = verified_receipt("exact-equality-v1", EQUALITY_TRANSITION, equality_source_hash)
     return measure(directory, evaluate_v5(directory), receipt, "exact-class", "Exact equality")
 
 

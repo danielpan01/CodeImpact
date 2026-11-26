@@ -544,7 +544,7 @@ def build_index(
     if fixtures:
         add_fixture_edges(index)
     if equality:
-        add_equality_edges(index, scalar_factories=equality is True)
+        add_equality_edges(index, mode=equality)
     return index
 
 
@@ -950,9 +950,9 @@ def analyze(
     if equality:
         # An equality site directly calls the proved binding. Keep the original
         # walks and scores for all other paths, including direct test edits.
-        comparisons = add_equality_edges(
-            before, scalar_factories=equality is True
-        ) | add_equality_edges(after, scalar_factories=equality is True)
+        comparisons = add_equality_edges(before, mode=equality) | add_equality_edges(
+            after, mode=equality
+        )
         active_targets = set(active)
         for source, target in sorted(comparisons):
             if (

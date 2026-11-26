@@ -350,3 +350,161 @@ def test_helper_budget_cannot_displace_a_later_existing_equality(monkeypatch):
     assert ("tests/test_item.py::test_z", WRAPPER, "both") in {
         (edge.source, edge.target, edge.revision) for edge in equality_edges(report)
     }
+
+
+def test_first_assertion_uses_the_established_operands_and_exact_line():
+    source = TESTS + "    right = opaque()\n    assert left == right\n"
+    request = request_for(source)
+    # The same expression can have different before/after source locations.
+    request.head.files["tests/test_item.py"] = "\n" + source
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, "both")
+    assert [ev.location.line for ev in edge.before] == [6]
+    assert [ev.location.line for ev in edge.after] == [7]
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert rec.evidence_path == [TEST, WRAPPER]
+    assert rec.evidence_edges == [edge.id]
+
+
+@pytest.mark.parametrize(
+    "suffix", ["return", "opaque()", "def helper(parse):\n        return parse"]
+)
+def test_first_equality_can_precede_unrelated_statements(suffix):
+    report = analyze(request_for(TESTS + "    " + suffix + "\n"))
+    (edge,) = equality_edges(report)
+    assert [e.location.line for e in edge.before] == [6]
+
+
+@pytest.mark.parametrize(
+    "suffix",
+    [
+        "parse = Item.parse",
+        "parse: object",
+        "del parse",
+        "from values import parse",
+        "if False:\n        parse = Item.parse",
+        "try:\n        pass\n    except Exception as parse:\n        pass",
+        "match 1:\n        case parse:\n            pass",
+        "[(parse := x) for x in ()]",
+        "yield 1",
+        "yield from ()",
+    ],
+)
+def test_function_wide_binding_or_generator_blocks_first_equality(suffix):
+    assert not equality_edges(analyze(request_for(TESTS + "    " + suffix + "\n")))
+
+
+@pytest.mark.parametrize(
+    "statements",
+    [
+        "return\n    assert left == right",
+        "if True:\n        return\n    assert left == right",
+        "if True:\n        assert left == right",
+        "right = unknown()\n    assert left == right",
+        "right = 1\n    assert left == right",
+        "assert unknown() == right\n    assert left == right",
+        "assert False\n    assert left == right",
+    ],
+)
+def test_unproved_prefix_or_first_assertion_declines(statements):
+    source = TESTS.replace("assert left.bump() == right", statements) + "    opaque()\n"
+    assert not equality_edges(analyze(request_for(source)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_first_assertion_can_supply_only_one_revision(side):
+    # Keep the test source identical across revisions so its own edit cannot take precedence.
+    req = request_for(TESTS + "    right = unknown()\n")
+    unsupported = req.head if side == "before" else req.base
+    unsupported.files[SOURCE] = unsupported.files[SOURCE].replace(
+        "return cls(int(value))", "return unknown(value)"
+    )
+    report = analyze(req)
+    validate_report(req, report)
+    (edge,) = equality_edges(report)
+    assert edge.revision == side
+    assert [e.location.line for e in edge.before] == ([6] if side == "before" else [])
+    assert [e.location.line for e in edge.after] == ([6] if side == "after" else [])
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.path_revision, rec.evidence_edges) == (side, [edge.id])
+
+
+def test_pinned_first_comparison_uses_line_64_only():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_bump.py::test_should_versioninfo_bump_multiple"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert rec.path_revision == "both"
+    assert rec.evidence_path == [sid, "src/semver/version.py::_comparator.wrapper"]
+    (edge,) = [e for e in report.edges if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (64, 64)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+def test_current_successor_pins_both_first_comparison_locations(monkeypatch):
+    from codeimpact import equality_evaluate, first_assertion_evaluate
+
+    predecessor = first_assertion_evaluate.evaluate_factories(DIRECTORY)
+    monkeypatch.setattr(first_assertion_evaluate, "evaluate_factories", lambda _: predecessor)
+    result = first_assertion_evaluate.evaluate_first_assertion(DIRECTORY)
+    assert result["evaluation"]["regressions"] == []
+    case = "semver_subclass_comparison"
+    delta = result["delta"][case]
+    assert delta["changed"] == {} and delta["removed"] == []
+    sites = {
+        "tests/test_bump.py::test_should_versioninfo_bump_multiple": 64,
+        "tests/test_parsing.py::test_equal_versions_have_equal_hashes": 155,
+    }
+    assert delta["added"].keys() == sites.keys()
+    analysis = next(c["analysis"] for c in result["evaluation"]["cases"] if c["case"]["id"] == case)
+    edges = {e["id"]: e for e in analysis["edges"]}
+    for sid, line in sites.items():
+        edge = edges[delta["added"][sid]["evidence_edges"][0]]
+        for side in ("before", "after"):
+            assert [ev["location"]["line"] for ev in edge[side]] == [line]
+
+    collect = equality_evaluate.collect
+
+    def wrong_line(directory, *, equality):
+        report = collect(directory, equality=equality)
+        case_data = next(
+            c["analysis"] for c in report["evaluation"]["cases"] if c["case"]["id"] == case
+        )
+        first = next(e for e in case_data["edges"] if e["id"] == edge["id"])
+        first["before"][0]["location"]["line"] += 1
+        return report
+
+    monkeypatch.setattr(equality_evaluate, "collect", wrong_line)
+    assert first_assertion_evaluate.evaluate_first_assertion(DIRECTORY)["evaluation"][
+        "regressions"
+    ] == ["First equality assertion report differs from the successor receipt"]
+
+
+def test_first_assertion_budget_preserves_previously_proved_factory(monkeypatch):
+    from codeimpact import equality
+    from codeimpact.analyzer import build_index
+
+    earlier = TESTS.replace("def test_equal()", "def test_earlier()") + "    opaque()\n"
+    req = request_for(earlier + "\n" + TESTS.split("\n", 1)[1], base_core=FACTORY)
+    steps = []
+    tick = equality.Proof.tick
+
+    def count(proof):
+        tick(proof)
+        steps.append(proof.steps)
+
+    with monkeypatch.context() as measure:
+        measure.setattr(equality.Proof, "tick", count)
+        build_index(req.base, equality="factories")
+    monkeypatch.setattr(equality, "MAX_PROOF_STEPS", max(steps))
+    report = analyze(req)
+    validate_report(req, report)
+    assert (TEST, WRAPPER, "both") in {
+        (e.source, e.target, e.revision) for e in equality_edges(report)
+    }

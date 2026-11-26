@@ -4427,3 +4427,29 @@ Snapshots, draft labels and prior receipts retain their tracked bytes. The
 new measurement pins the predecessor report and the complete current report
 including typed evidence. Upstream Python and regexes were inspected as data.
 Local verification logs are under `reports/prerelease-factory/`.
+
+## First equality assertion before later test statements
+
+Started on clean `main` at `98aa3e6ace145a81042da308e42d5115d232fd20`
+(PR #40). Before the analyzer changed, `make evaluate-real-v5-factories`
+reproduced 112/239 selected overall and 13/106 in the SemVer subclass case.
+Seven new regressions failed on the predecessor. Both pinned snapshots
+placed the first comparison on line 64. The old rule tried line 66 and
+declined because its prefix contained the earlier assertion.
+
+| Check | Observed result |
+| --- | --- |
+| Focused equality and preservation tests | 73 passed. Controls cover shadowing by later local bindings, reassignment, conditional assertions, early exits, generators, ambiguous operands, before-only and after-only proof, comparison line drift, and bounded proof recovery. |
+| `make check` | Ruff, format, mypy and the TypeScript/Vite production build passed. Pytest reported 1,417 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. |
+| Offline replays | All 13 targets passed, including `make evaluate-real-v5-first-assertion`. All 172 pre-existing evaluation JSON files matched their starting SHA-256 hashes. |
+| Current analyzer comparison | Compared 53 captured cases to the factory predecessor and validated each current recommendation. The 49 pre-v5 analyses and both Cached Property analyses were identical with only elapsed time excluded. Both SemVer graphs gained the two operator edges. Only the subclass case gained recommendations. |
+| Determinism | Seeds 7 and 173 each reproduced all 15 report files byte for byte, including the two older authored profiles. Reversing file order in both snapshots reproduced and validated all 139 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Pilot and browser | `make verify-pilot` passed readiness, static UI, demo, protected analysis and the frozen-input report check. All 290 desktop and mobile browser tests passed. |
+
+The new recommendations cite line 64 of `tests/test_bump.py` and line 155
+of `tests/test_parsing.py`. Both target the edited wrapper at lines 41–52
+in base and head. Their scores are 90. All prior recommendation records
+retain their exact bytes in the stable analyses. Labels remain drafts.
+[Measurements, remaining mistakes and successor receipt](REAL_EVALUATION_V5.md#first-equality-assertion)
+
+Local logs are under `reports/first-equality/`.

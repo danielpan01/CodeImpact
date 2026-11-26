@@ -255,19 +255,43 @@ FACTORY_TRANSITION = Path("benchmarks/prerelease-factories-v1-preservation.json"
 FACTORY_SOURCE_CHANGES = EQUALITY_SOURCE_CHANGES | {"src/codeimpact/equality.py"}
 
 
-def equality_source_hash(project: Path, path: str, actual: str) -> str:
-    """Map only the recorded factory transition back to the exact-class engine."""
-    successor = project / FACTORY_TRANSITION
-    if path in FACTORY_SOURCE_CHANGES and successor.is_file():
-        receipt, _ = read_metadata(successor)
-        previous = project / EQUALITY_TRANSITION
+FIRST_ASSERTION_TRANSITION = Path("benchmarks/first-assertion-v1-preservation.json")
+FIRST_ASSERTION_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in ("analyzer", "equality", "fresh_evaluate", "equality_evaluate", "factory_evaluate")
+}
+
+
+def _previous_source_hash(
+    project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
+) -> str:
+    if path in changed and (project / successor).is_file():
+        receipt, _ = read_metadata(project / successor)
         if (
             actual == receipt["current_sources_sha256"][path]
-            and file_hash(previous) == receipt["previous_receipt_sha256"]
+            and file_hash(project / predecessor) == receipt["previous_receipt_sha256"]
         ):
-            equality, _ = read_metadata(previous)
-            return str(equality["current_sources_sha256"][path])
+            previous, _ = read_metadata(project / predecessor)
+            return str(previous["current_sources_sha256"][path])
     return actual
+
+
+def factory_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        FIRST_ASSERTION_TRANSITION,
+        FACTORY_TRANSITION,
+        FIRST_ASSERTION_SOURCE_CHANGES,
+    )
+
+
+def equality_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = factory_source_hash(project, path, actual)
+    return _previous_source_hash(
+        project, path, actual, FACTORY_TRANSITION, EQUALITY_TRANSITION, FACTORY_SOURCE_CHANGES
+    )
 
 
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
