@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-24** (America/New_York).
+Checked on **2026-11-25** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -57,6 +57,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -74,6 +77,8 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: src/codeimpact/ | PASS | Local target exists; fragment not checked |
 | README.md: tests/ | PASS | Local target exists; fragment not checked |
 | README.md: web/ | PASS | Local target exists; fragment not checked |
+| README.md: web/tests/quality/baselines/saved-report-desktop-light.png | PASS | Local target exists; fragment not checked |
+| README.md: web/tests/quality/baselines/saved-report-phone-dark.png | PASS | Local target exists; fragment not checked |
 | CONTRIBUTING.md: docs/USAGE.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: ../corpus/real-v4/README.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
@@ -94,6 +99,8 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#humanize-explicit-re-export-successor | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
@@ -110,9 +117,17 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: ../corpus/real-v4/PROTOCOL.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/real/README.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../corpus/selection-baseline-v1.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../datasets/real-v5/CANDIDATES.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../datasets/real-v5/baseline.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../datasets/real-v5/first-run.json | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../datasets/real-v5/frozen-inputs.json | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/empty-phone-light.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/milestone7-empty-phone-light.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/milestone7-zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/offline-entry-desktop-light.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/offline-entry-phone-dark.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/saved-report-desktop-light.png | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: ../web/tests/quality/baselines/saved-report-phone-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ../web/tests/quality/baselines/zero-discovery-desktop-dark.png | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-constructor-and-factory-arguments | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: ARCHITECTURE.md#bounded-pytest-fixture-injection | PASS | Local target exists; fragment not checked |
@@ -145,6 +160,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: REAL_EVALUATION_V4.md#humanize-inline-parameter-row-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V4.md#mixed-case-unittest-successor | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
