@@ -1145,3 +1145,16 @@ including nested yield syntax. Each revision records the range of the
 comparison it proved. Later assertions supply no additional edges. The
 factory replay keeps its terminal-assertion policy.
 [First assertion trace and measurement](REAL_EVALUATION_V5.md#first-equality-assertion)
+
+### Exact-class less-than evidence
+
+The current profile also accepts a single `<` as the first direct assertion
+after a supported straight-line prefix. Both operands must resolve to the
+same exact source class, whose `__lt__` must bind to a supported callable.
+The edge points to that first call and cites the comparison's range. Exact
+class identity rules out right-subclass priority. The proof stops before
+reflected `__gt__` dispatch, which can follow a `NotImplemented` return.
+Mixed or unknown classes, missing or ambiguous bindings and chained
+comparisons leave the prior analysis in place. The first-assertion replay
+uses its original equality-only profile.
+[Less-than trace and measurement](REAL_EVALUATION_V5.md#exact-class-less-than-evidence)

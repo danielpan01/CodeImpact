@@ -390,6 +390,23 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(first_assertion["current_sources_sha256"]) == set(
         factories["current_sources_sha256"]
     ) | {"src/codeimpact/first_assertion_evaluate.py"}
+    previous = ROOT / "benchmarks/first-assertion-v1-preservation.json"
+    less_than = json.loads((ROOT / "benchmarks/exact-less-than-v1-preservation.json").read_text())
+    assert hashlib.sha256(previous.read_bytes()).hexdigest() == less_than["previous_receipt_sha256"]
+    assert less_than["added_corpus_sha256"] == {}
+    assert set(less_than["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "analyzer",
+            "equality",
+            "fresh_evaluate",
+            "equality_evaluate",
+            "first_assertion_evaluate",
+        )
+    }
+    assert set(less_than["current_sources_sha256"]) == set(
+        first_assertion["current_sources_sha256"]
+    ) | {"src/codeimpact/less_than_evaluate.py"}
     extensions = (
         current,
         latest,
@@ -411,6 +428,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         equality,
         factories,
         first_assertion,
+        less_than,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()

@@ -262,6 +262,19 @@ FIRST_ASSERTION_SOURCE_CHANGES = {
 }
 
 
+LESS_THAN_TRANSITION = Path("benchmarks/exact-less-than-v1-preservation.json")
+LESS_THAN_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "first_assertion_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -276,7 +289,19 @@ def _previous_source_hash(
     return actual
 
 
+def first_assertion_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        LESS_THAN_TRANSITION,
+        FIRST_ASSERTION_TRANSITION,
+        LESS_THAN_SOURCE_CHANGES,
+    )
+
+
 def factory_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = first_assertion_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

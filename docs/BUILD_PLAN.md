@@ -97,7 +97,7 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Offline report reopening — implemented | Resume a previously exported report on desktop or phone | Schema 2.0 and 2.1 files open in the existing workspace with their recorded provenance and matching browser-local plan | Local validation gates report replacement. [Workflow and screenshots](FRONTEND_ROADMAP.md) |
 | Python SemVer class-preserving prerelease factory — implemented | Track an exact receiver class through a source-defined static string helper and constructor | Eight draft-affected tests gain resolved equality evidence in both revisions. The subclass case selects 13/106 with 19 misses and two false positives | The separate `prerelease-factories-v1` replay preserves both earlier measurements. [Factory trace and results](REAL_EVALUATION_V5.md#class-preserving-prerelease-factories) |
 | Python SemVer first equality assertion — implemented | Prove the first direct equality from its preceding assignments while auditing function-wide bindings | The subclass case gains two resolved recommendations at lines 64 and 155 and selects 15/106, with 17 draft misses and two false positives | A separate `first-assertion-v1` replay pins the exact operator evidence. [Results](REAL_EVALUATION_V5.md#first-equality-assertion) |
-| Python SemVer exact-class ordering — next analyzer candidate | Audit the first `<` in `test_should_compare_prerelease_with_numbers_and_letters` | Both operands are constructed in captured source, and the first operation reaches a comparison protocol outside the equality proof | Establish the bound `__lt__` and account for reflected dispatch and `NotImplemented` before adding evidence |
+| Python SemVer exact-class less-than — implemented | Resolve the first `__lt__` call from a supported direct assertion with same-class operands | Two new resolved recommendations cite line 129 and lines 299–301. The subclass case reaches 17/106 selected with 15 draft misses and two false positives | A separate `exact-less-than-v1` replay pins the operator evidence. [Results](REAL_EVALUATION_V5.md#exact-class-less-than-evidence) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, server-side report storage, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -250,7 +250,8 @@ Run focused tests plus `make check`, `make evaluate`, `make evaluate-real`,
 `make evaluate-real-v4-unittest`, `make evaluate-real-v4-variadic`,
 `make evaluate-real-v4-parameter-rows`, `make evaluate-real-v4-reexports`, `make evaluate-real-v5`,
 `make evaluate-real-v5-equality`, `make evaluate-real-v5-factories`,
-`make evaluate-real-v5-first-assertion`, `make verify-pilot`, and
+`make evaluate-real-v5-first-assertion`, `make evaluate-real-v5-less-than`,
+`make verify-pilot`, and
 `cd web && npm run test:e2e` for application changes. Include frontend formatting
 for UI work. Verify relevant determinism and unchanged historical receipts, update
 actual results, and leave changes unstaged/uncommitted for the owner's publication.

@@ -508,3 +508,154 @@ def test_first_assertion_budget_preserves_previously_proved_factory(monkeypatch)
     assert (TEST, WRAPPER, "both") in {
         (e.source, e.target, e.revision) for e in equality_edges(report)
     }
+
+
+ORDERED_CORE = CORE.replace("def __eq__", "def __lt__").replace(
+    "return self._value == rhs._value",
+    """return self._value < rhs._value
+
+    def __gt__(self, rhs):
+        return self._value > rhs._value""",
+)
+ORDERED_TEST = (
+    TESTS.replace("assert left.bump() == right", "assert left < right") + "    opaque()\n"
+)
+
+
+def less_than_edges(report):
+    return [
+        edge
+        for edge in report.edges
+        if any("via < " in entry.text for entry in edge.before + edge.after)
+    ]
+
+
+def test_less_than_uses_first_assertion_and_bound_wrapper():
+    request = request_for(ORDERED_TEST, base_core=ORDERED_CORE)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    assert [entry.location.line for entry in edge.before] == [6]
+    assert edge.before == edge.after
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_path, rec.evidence_edges, rec.path_revision) == (
+        [TEST, WRAPPER],
+        [edge.id],
+        "both",
+    )
+
+
+def test_less_than_proves_first_call_even_if_it_returns_not_implemented():
+    source = ORDERED_CORE.replace("    @checked\n", "").replace(
+        "return self._value < rhs._value", "return NotImplemented"
+    )
+    head = source.replace("return NotImplemented", "return NotImplemented if True else False")
+    head = head.replace("return self._value > rhs._value", "return True")
+    request = request_for(ORDERED_TEST, base_core=source, head_core=head)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert edge.target == f"{SOURCE}::Item.__lt__"
+    assert edge.revision == "both"
+
+
+@pytest.mark.parametrize(
+    "assertion",
+    [
+        "assert left < Item(2) < Item(3)",
+        "assert left < unknown()",
+        "assert left < 1",
+        "assert left < Other()",
+        "assert left < Child(2)",
+        "assert Child(1) < right",
+        "assert left < right or False",
+        "if True:\n        assert left < right",
+        "if False:\n        return\n    assert left < right",
+        "assert False\n    assert left < right",
+    ],
+)
+def test_less_than_declines_unproved_dispatch_or_assertion(assertion):
+    source = ORDERED_TEST.replace("assert left < right", assertion)
+    if "Other" in assertion:
+        source += "\nclass Other: pass\n"
+    if "Child" in assertion:
+        source += "\nclass Child(Item):\n    def __gt__(self, other): return True\n"
+    assert not less_than_edges(analyze(request_for(source, base_core=ORDERED_CORE)))
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        ORDERED_CORE + "\nItem.__lt__ = replacement\n",
+        ORDERED_CORE.replace("@checked", "@unknown"),
+        ORDERED_CORE.replace("@checked", "@property"),
+        ORDERED_CORE.replace("@checked", "@staticmethod"),
+        ORDERED_CORE.replace("def __lt__", "def another_method"),
+        ORDERED_CORE.replace("def wrapper(self, other):", "def wrapper(self):"),
+    ],
+)
+def test_less_than_declines_ambiguous_or_unsupported_method(source):
+    assert not less_than_edges(analyze(request_for(ORDERED_TEST, base_core=source)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_less_than_evidence_is_revision_specific(side):
+    before = ORDERED_CORE if side == "before" else ORDERED_CORE.replace("def __lt__", "def other")
+    head = ORDERED_CORE if side == "after" else ORDERED_CORE.replace("def __lt__", "def other")
+    request = request_for(
+        ORDERED_TEST, base_core=before, head_core=head.replace("and True", "and False")
+    )
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [e.location.line for e in edge.before] == ([6] if side == "before" else [])
+    assert [e.location.line for e in edge.after] == ([6] if side == "after" else [])
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.path_revision) == ([edge.id], side)
+
+
+def test_pinned_less_than_uses_line_129_and_the_changed_wrapper():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert rec.evidence_path == [sid, "src/semver/version.py::_comparator.wrapper"]
+    assert rec.path_revision == "both"
+    (edge,) = [e for e in less_than_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (129, 129)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+def test_less_than_budget_preserves_previously_proved_first_equality(monkeypatch):
+    from codeimpact import equality
+    from codeimpact.analyzer import build_index
+
+    ordered_core = ORDERED_CORE.replace(
+        "\ndef parse(value):",
+        "\n    def __eq__(self, rhs): return True\n\ndef parse(value):",
+    )
+    # Put distinct tests in the same module so they share a proof budget.
+    source = ORDERED_TEST.replace("def test_equal()", "def test_earlier()")
+    source += "\ndef test_equal():\n    assert Item(1) == Item(2)\n    opaque()\n"
+    request = request_for(source, base_core=ordered_core)
+    steps = []
+    tick = equality.Proof.tick
+
+    def count(proof):
+        tick(proof)
+        steps.append(proof.steps)
+
+    with monkeypatch.context() as measure:
+        measure.setattr(equality.Proof, "tick", count)
+        build_index(request.base, equality="first-assertion")
+    monkeypatch.setattr(equality, "MAX_PROOF_STEPS", max(steps))
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, f"{SOURCE}::Item.__eq__", "both")

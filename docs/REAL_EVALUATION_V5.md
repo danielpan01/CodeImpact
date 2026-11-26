@@ -338,3 +338,62 @@ min/max, parsing and replacement tests. Its two draft false positives remain
 prerelease-comparison case retains four misses and 40 false positives.
 Cached Property retains ten false positives and the single selected
 uncertain label. The receipt lists each ID. Independent review was skipped.
+
+## Exact-class less-than evidence
+
+`make evaluate-real-v5-less-than` checks the first-assertion predecessor and
+replays the same four captures with `exact-less-than-v1`. The new receipt
+pins the complete stable report, the recommendation delta and the remaining
+draft-label discrepancy IDs. [Successor receipt](../datasets/real-v5-successors/exact-less-than-v1.json) · [Engine hashes](../benchmarks/exact-less-than-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, first assertion | 15 / 106 | 13 | 2 | 17 | 74 | 0 |
+| Subclass comparison, less-than | 17 / 106 | 15 | 2 | 15 | 74 | 0 |
+| V5 overall, first assertion | 114 / 239 | 61 | 52 | 21 | 104 | 1 |
+| V5 overall, less-than | 116 / 239 | 63 | 52 | 19 | 104 | 1 |
+
+| Added recommendation | Before comparison | After comparison | Bound target in both revisions |
+| --- | ---: | ---: | --- |
+| `tests/test_compare.py::test_should_compare_prerelease_with_numbers_and_letters` | 129 | 129 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+| `tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers` | 299–301 | 299–301 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+
+In both snapshots, `from semver import Version` follows the package
+initializer’s explicit import from `.version`. The assignments on
+lines 127–128 construct two `Version` objects. The left has prerelease `"1unms"` and the right
+has no prerelease. At line 129, Python attempts the left operand's
+`__lt__` because both operands have the same exact class. In both
+snapshots, `@_comparator` on lines 473–475 binds the returned wrapper
+to `Version.__lt__`. The wrapper's type tuple contains `Version` in base
+and `type(self)` in head. Both include the exact class of the right
+operand. The wrapper forwards to the original method, whose body calls
+`self.compare(other) < 0`. The evidence targets the edited wrapper.
+The predecessor's assertion proof accepted only `==`.
+[Base comparison](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L126-L130) · [Head comparison](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L126-L130)
+
+The second test constructs both exact `Version` operands inline in its
+first assertion. The constructor converts the numeric prerelease and
+build inputs to strings. The comparison reaches the same bound wrapper.
+The location covers the entire multiline expression. Each recommendation
+uses one resolved call edge, with score 90 and evidence in both revisions.
+[Head comparison](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L298-L304)
+
+The proof records the first call to a supported source-bound `__lt__`.
+Same exact class rules out a right-hand subclass taking priority through
+`__gt__`. If `__lt__` returns `NotImplemented`, Python can then attempt
+`__gt__`. The analysis models only the first dispatch. It declines mixed
+classes, unknown operands, absent or ambiguous methods, chained comparisons
+and unsupported assertion prefixes. It analyzes before and after separately.
+
+Both Cached Property analyses are identical. The separate SemVer
+prerelease-comparison case gains the two graph edges to an unchanged
+wrapper and keeps the same 71 recommendations. Every previous
+recommendation retains its evidence and score. V5 now has 19 resolved,
+88 conservative and nine changed-test recommendations.
+
+The subclass case retains 15 draft misses and the same two draft false
+positives, `test_replace_from_subclass` and
+`test_subclass_from_versioninfo`. The prerelease-comparison case retains
+four misses and 40 false positives. Cached Property retains ten false
+positives and one selected uncertain definition. The receipt lists the
+exact remaining IDs. Labels remain drafts.

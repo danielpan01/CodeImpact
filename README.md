@@ -344,11 +344,17 @@ v5 result is **112/239 selected**, with **23 draft misses**, **52 draft false
 positives** and **one selected uncertain definition**. Both earlier replays
 remain available. [Factory evidence and exact changes](docs/REAL_EVALUATION_V5.md#class-preserving-prerelease-factories)
 
-The current analyzer can also prove the first equality assertion when a
+The first-assertion replay proves the first equality assertion when a
 test continues afterward. Two additional tests reach the edited SemVer
 wrapper, bringing v5 to **114/239 selected**, with **21 draft misses**,
 **52 draft false positives** and **one selected uncertain definition**.
 [Comparison lines and measured changes](docs/REAL_EVALUATION_V5.md#first-equality-assertion)
+
+The exact-class less-than replay adds two SemVer recommendations by
+resolving the first call made by a `<` assertion. V5 now selects
+**116/239**, with **19 draft misses**, **52 draft false positives** and
+**one selected uncertain definition**.
+[Less-than evidence and measurements](docs/REAL_EVALUATION_V5.md#exact-class-less-than-evidence)
 
 ## Quality checks
 
@@ -367,6 +373,7 @@ make evaluate-real-v5
 make evaluate-real-v5-equality
 make evaluate-real-v5-factories
 make evaluate-real-v5-first-assertion
+make evaluate-real-v5-less-than
 make verify-pilot
 cd web
 npm run install:browsers
@@ -377,7 +384,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all thirteen offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with a bounded matrix of reviewed screenshot comparisons and rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all fourteen offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with a bounded matrix of reviewed screenshot comparisons and rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 
