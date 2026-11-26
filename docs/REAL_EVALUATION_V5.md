@@ -199,3 +199,89 @@ when the source operation runs under ordinary Python and supported
 standard-library behavior. It does not reproduce pytest collection,
 runner hooks, warning handlers, or arbitrary outside code. The labels
 remain drafts and no upstream tests were run.
+
+## Class-preserving prerelease factories
+
+`make evaluate-real-v5-factories` replays the frozen v5 and exact-equality
+measurements first. It then pins the full current report, all recommendation
+differences and every remaining discrepancy in `prerelease-factories-v1`.
+The same four captures and draft labels are used throughout.
+[Successor receipt](../datasets/real-v5-successors/prerelease-factories-v1.json) ·
+[Engine hashes](../benchmarks/prerelease-factories-v1-preservation.json)
+
+| Measurement | Selected / discovered | TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, exact equality | 5 / 106 | 3 | 2 | 27 | 74 | 0 |
+| Subclass comparison, factories | 13 / 106 | 11 | 2 | 19 | 74 | 0 |
+| V5 overall, exact equality | 104 / 239 | 51 | 52 | 31 | 104 | 1 |
+| V5 overall, factories | 112 / 239 | 59 | 52 | 23 | 104 | 1 |
+
+In both revisions, the test on line 78 parses `"3.4.5"` and
+`"3.4.5-rc.1"` through `parse_version_info` and `Version.parse`. The first
+instance has no prerelease. Passing `None` to `bump_prerelease` picks
+`"rc.0"`. The frozen equality proof already binds `cls = type(self)` to
+`Version` and follows the token branches. It first declines at line 335,
+where the call on that class resolves to a static method.
+
+The source binds `_increment_string` with the builtin `staticmethod`.
+It searches the string with the class's compiled standard-library pattern,
+increments the last captured number, and uses the capture span to rebuild
+the string. A search with no match returns the original input. For
+`"rc.0"` the captured digit is `0` and the result is `"rc.1"`.
+Line 336 constructs through the same `cls` with the original numeric
+fields and the rewritten data. Both operands therefore have the same
+exact class on normal return. Looking up `__eq__` on that class yields the
+edited `_comparator.wrapper`. Its accepted-type tuple uses `Version` before and
+`type(self)` after. The evidence records the comparison and wrapper.
+[Base source](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/src/semver/version.py#L308-L336) ·
+[Head source](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/version.py#L308-L336)
+
+The new rule inspects a one-argument static helper with a class-owned regex
+search, a guarded match branch, and one final return of the input binding.
+It checks every assignment in the branch, including scalar additions,
+subtractions, slices, capture reads, span unpacking and unshadowed builtin
+calls. It needs only the kind of the returned data. Captured regexes and
+Python code are never run. Opaque calls, competing helper bindings, dynamic
+receivers, inheritance and alternative operand classes decline. Each
+revision supplies its own proof.
+
+All eight added IDs are in `tests/test_bump.py`. Each has a single resolved
+call edge from the listed comparison to
+`src/semver/version.py::_comparator.wrapper` at lines 41–52. The distance
+is 1 and the score is 90. The ranges below are identical in base and head.
+
+| New test definition | Before comparison line | After comparison line |
+| --- | ---: | ---: |
+| `test_should_versioninfo_bump_patch_and_prerelease` | 40 | 40 |
+| `test_should_versioninfo_bump_patch_and_prerelease_with_token` | 46 | 46 |
+| `test_should_versioninfo_bump_prerelease_and_build` | 52 | 52 |
+| `test_should_versioninfo_bump_prerelease_and_build_with_token` | 58 | 58 |
+| `test_should_versioninfo_bump_prerelease_with_empty_str` | 72 | 72 |
+| `test_should_versioninfo_bump_prerelease_with_none` | 78 | 78 |
+| `test_should_versioninfo_bump_build_with_empty_str` | 84 | 84 |
+| `test_should_versioninfo_bump_build_with_none` | 90 | 90 |
+
+The build method uses the same class and static helper. Its captured body
+repeats the token assignment and helper call before returning the new
+instance. Both occurrences pass the same proof. No recommendations were
+removed. The two previously resolved major/minor and minor/patch tests
+retain their exact evidence. Their scores rise from 82 to 90 because the
+existing formula counts more callers of the changed wrapper.
+
+The separate SemVer prerelease-comparison case gains the same eight graph
+edges. Its wrapper is unchanged and all 71 recommendations retain their
+scores and evidence. Both Cached Property analyses remain byte-identical
+with timing excluded. V5 now has 15 resolved, 88 conservative and nine
+changed-test recommendations.
+
+The subclass case retains one bump-file miss,
+`test_should_versioninfo_bump_multiple`. Its first equality appears before
+more assignments and a second assertion. The current proof admits one
+terminal equality with a supported prefix. The other 18 misses are the
+previously listed comparison, deprecation, min/max, parsing and replacement
+definitions. Its two draft false positives remain
+`tests/test_subclass.py::test_replace_from_subclass` and
+`tests/test_subclass.py::test_subclass_from_versioninfo`. The other SemVer
+case still has four misses and 40 draft false positives. Cached Property
+retains ten draft false positives and the single selected uncertain definition.
+The receipt lists all remaining IDs per case. Human label review was skipped.

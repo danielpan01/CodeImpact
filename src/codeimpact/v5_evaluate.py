@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from codeimpact.corpus import MAX_CORPUS_BYTES, StrictModel, load_corpus
 from codeimpact.discovery import CURRENT_POLICY
+from codeimpact.equality import EqualityMode
 from codeimpact.evaluate import evaluate
 from codeimpact.fresh_evaluate import (
     CURRENT_SOURCES,
@@ -137,7 +138,7 @@ def validate_frozen(directory: Path, *, before_measurement: bool = False) -> Fro
     return frozen
 
 
-def collect(directory: Path, *, equality: bool = False) -> dict[str, Any]:
+def collect(directory: Path, *, equality: EqualityMode = False) -> dict[str, Any]:
     """Validate source, receipts and typed evidence before recording a measurement."""
     selection = Selection.model_validate(metadata(directory, "selection.json"))
     selected = {case.id: case for case in selection.cases}

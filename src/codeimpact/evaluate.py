@@ -12,6 +12,7 @@ from pydantic import BaseModel
 from codeimpact.analyzer import analyze, build_index
 from codeimpact.corpus import CorpusCase, discover_tests, load_corpus
 from codeimpact.discovery import CURRENT_POLICY, V2_POLICY, DiscoveryPolicy
+from codeimpact.equality import EqualityMode
 from codeimpact.models import AnalysisRequest, DependencyEvidence, Report
 
 
@@ -130,7 +131,7 @@ def validate_report(
     reexports: bool = True,
     fixtures: bool = True,
     runtime_imports: bool = True,
-    equality: bool = True,
+    equality: EqualityMode = True,
 ) -> None:
     """Check path contracts independently of selection labels.
 
@@ -266,7 +267,7 @@ def evaluate_case(
     reexports: bool = True,
     fixtures: bool = False,
     runtime_imports: bool = False,
-    equality: bool = False,
+    equality: EqualityMode = False,
     resolved_false_negatives: tuple[str, ...] = (),
 ) -> CaseResult:
     report = analyze(
@@ -340,7 +341,7 @@ def evaluate(
     reexports: bool = True,
     fixtures: bool = False,
     runtime_imports: bool = False,
-    equality: bool = False,
+    equality: EqualityMode = False,
     resolved_false_negatives: dict[str, tuple[str, ...]] | None = None,
 ) -> Evaluation:
     if not cases or len({case.id for case in cases}) != len(cases):

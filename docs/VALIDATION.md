@@ -4396,3 +4396,34 @@ then timed out waiting for a third native file chooser in the same offline
 review. The workflow test opens the initial report by keyboard and selects
 the two comparison files on the same input. All three loads check focus,
 and the test verifies plan isolation and restoration while disconnected.
+
+## Class-preserving prerelease factories
+
+Work started on clean `main` at `d358a171426a743f88277316261a37610c26c704`.
+Before editing the analyzer, `make evaluate-real-v5` reproduced 102/239
+selected and `make evaluate-real-v5-equality` reproduced 104/239. In both
+pinned subclass-comparison revisions the existing proof stopped at the
+static helper call on line 335. Three synthetic cases failed before
+implementation, covering a supported helper in both revisions, before
+only, and after only.
+
+The new `make evaluate-real-v5-factories` selects 112/239. All eight added
+recommendations reach the edited comparison wrapper in both revisions.
+The two previous equality paths retain their locations and gain eight
+score points. The subclass case retains 19 draft misses and two draft
+false positives. The remaining uncertainty is in Cached Property.
+[Measurements, exact IDs and source ranges](REAL_EVALUATION_V5.md#class-preserving-prerelease-factories)
+
+| Check | Observed result |
+| --- | --- |
+| Focused equality regressions | 46 passed. Coverage includes alternate return classes, overridden and rebound helpers, shadowed names, opaque calls, before-only and after-only evidence, bounded proof recovery and a corrupted successor edge. |
+| `make check` | Passed Ruff lint and format, mypy, pytest and the TypeScript/Vite production build. Python reported 1,390 passed, one Linux-only address-space-limit skip on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. The budget-recovery regression was added after this suite collected tests and passed in the 46-test focused run. |
+| Offline evaluations and preservation | All eleven existing targets and the new factory target matched their receipts. All 171 pre-existing evaluation JSON files matched their starting SHA-256 hashes after replay. |
+| Current analyzer against its exact-equality predecessor | Compared all 53 authored and real cases and validated every current recommendation path. All 49 pre-v5 analyses and both Cached Property analyses were identical after excluding only `stats.elapsed_ms`. Only the two SemVer graphs changed. |
+| Determinism | At each of `PYTHONHASHSEED=7` and `173`, 14 replay outputs were byte-identical. Reversing both snapshots' file order reproduced and validated all 135 case analyses per seed, excluding only `stats.elapsed_ms`. The 14 outputs include the two historical authored profiles and the new successor. |
+| Pilot and browser | `make verify-pilot` passed. All 290 Playwright tests passed across desktop Chromium, Firefox, WebKit and both phone projects. |
+
+Snapshots, draft labels and prior receipts retain their tracked bytes. The
+new measurement pins the predecessor report and the complete current report
+including typed evidence. Upstream Python and regexes were inspected as data.
+Local verification logs are under `reports/prerelease-factory/`.

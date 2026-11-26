@@ -2,7 +2,7 @@
 
 import ast
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from codeimpact.models import SourceLocation
 from codeimpact.partial_bindings import audit, dotted
@@ -10,6 +10,10 @@ from codeimpact.partial_bindings import audit, dotted
 if TYPE_CHECKING:
     from codeimpact.analyzer import Index
     from codeimpact.partial_bindings import PartialBindings
+
+
+EqualityMode = bool | Literal["exact-class"]
+MAX_PROOF_STEPS = 16_000
 
 
 class Unproved(Exception):
@@ -152,7 +156,10 @@ def parameters(fn: ast.FunctionDef) -> list[ast.arg]:
 
 
 class Proof:
-    def __init__(self, resolver: "PartialBindings", unparseable: set[str]):
+    def __init__(
+        self, resolver: "PartialBindings", unparseable: set[str], *, scalar_factories: bool
+    ):
+        self.scalar_factories = scalar_factories
         self.resolver = resolver
         self.unparseable = unparseable
         self.paths = {path: module for module, path in resolver.modules.items()}
@@ -164,7 +171,7 @@ class Proof:
 
     def tick(self) -> None:
         self.steps += 1
-        if self.steps > 16_000:
+        if self.steps > MAX_PROOF_STEPS:
             raise Unproved
 
     def module(self, path: str) -> dict[str, Value]:
@@ -553,6 +560,14 @@ class Proof:
                 method = receiver.members.get(attr.attr)
                 if isinstance(method, Function) and method.mode == "builtin:classmethod":
                     return self.constructed(method, receiver, args, kwargs, depth=depth)
+                if (
+                    self.scalar_factories
+                    and not kwargs
+                    and isinstance(method, Function)
+                    and method.mode == "builtin:staticmethod"
+                    and not method.wrapper
+                ):
+                    return self.scalar_transform(receiver, method, args)
                 raise Unproved
             if all(map(self.inert, [*args, *kwargs.values()])) and None not in kwargs:
                 methods = {
@@ -620,6 +635,111 @@ class Proof:
         ):
             return observations[func]
         raise Unproved
+
+    def scalar_transform(self, owner: Class, fn: Function, args: list[Value]) -> Value:
+        """Audit a static one-input regex rewrite on normal return, without running the regex."""
+        params = parameters(fn.node)
+        sig = fn.node.args
+        if (
+            self.loading
+            or args != [DATA]
+            or len(params) != 1
+            or sig.vararg
+            or sig.kwarg
+            or sig.kwonlyargs
+            or sig.defaults
+            or "re" in self.resolver.modules
+            or self.writes
+            & {"compile", "search", "group", "span", "staticmethod", "int", "str", "max", "len"}
+        ):
+            raise Unproved
+        param = params[0].arg
+        stmts = body(fn.node)
+        match stmts:
+            case [
+                ast.Assign(
+                    targets=[ast.Name(id=match_name)],
+                    value=ast.Call(
+                        func=ast.Attribute(
+                            value=ast.Attribute(value=ast.Name(id=class_name), attr=pattern),
+                            attr="search",
+                        ),
+                        args=[ast.Name(id=subject)],
+                        keywords=[],
+                    ),
+                ),
+                ast.If(test=ast.Name(id=guard), body=updates, orelse=[]),
+                ast.Return(value=ast.Name(id=result)),
+            ] if subject == result == param and guard == match_name and match_name != param:
+                pass
+            case _:
+                raise Unproved
+        namespace = self.module(fn.sid.split("::")[0])
+        locals_ = set(audit(stmts, local=True).counts) | {param}
+        if (
+            class_name in locals_
+            or namespace.get(class_name) is not owner
+            or owner.members.get(pattern) != REGEX
+        ):
+            raise Unproved
+
+        # Only plain scalar temporaries, a successful match's capture/span, and
+        # unshadowed builtins can feed the returned argument. No callback/descriptor
+        # on arbitrary data is assumed pure. The no-match branch returns the input.
+        scalars = {param}
+
+        def capture(call: ast.expr, operation: str) -> bool:
+            match call:
+                case ast.Call(
+                    func=ast.Attribute(value=ast.Name(id=name), attr=method),
+                    args=[ast.Constant(value=index)],
+                    keywords=[],
+                ):
+                    return (
+                        name == match_name
+                        and method == operation
+                        and type(index) is int
+                        and index >= 0
+                    )
+            return False
+
+        def scalar(expr: ast.expr) -> bool:
+            self.tick()
+            match expr:
+                case ast.Name(id=name):
+                    return name in scalars
+                case ast.Constant(value=value):
+                    return type(value) in (int, str)
+                case ast.BinOp(left=left, op=ast.Add() | ast.Sub(), right=right):
+                    return scalar(left) and scalar(right)
+                case ast.Subscript(
+                    value=value_expr, slice=ast.Slice(lower=lo, upper=hi, step=None)
+                ):
+                    return scalar(value_expr) and all(scalar(v) for v in (lo, hi) if v is not None)
+                case ast.Call(func=ast.Name(id=name), args=values, keywords=[]):
+                    arity = {"str": 1, "int": 1, "len": 1, "max": 2}
+                    return (
+                        arity.get(name) == len(values)
+                        and name not in locals_
+                        and name not in namespace
+                        and all(scalar(v) for v in values)
+                    )
+            return capture(expr, "group")
+
+        for stmt in updates:
+            self.tick()
+            match stmt:
+                case ast.Assign(targets=[ast.Name(id=name)], value=expr) if (
+                    name != match_name and scalar(expr)
+                ):
+                    scalars.add(name)
+                case ast.Assign(
+                    targets=[ast.Tuple(elts=[ast.Name(id=start), ast.Name(id=end)])], value=expr
+                ) if match_name not in (start, end) and capture(expr, "span"):
+                    scalars.update((start, end))
+                case _:
+                    raise Unproved
+        return DATA
 
     def bind_decorator(
         self, fn: Function, args: list[Value], kwargs: dict[str | None, Value]
@@ -921,7 +1041,7 @@ def namespace_writes(resolver: "PartialBindings") -> set[str]:
     return writes
 
 
-def add_equality_edges(index: "Index") -> set[tuple[str, str]]:
+def add_equality_edges(index: "Index", *, scalar_factories: bool) -> set[tuple[str, str]]:
     resolver = index.partials
     if resolver is None:
         return set()
@@ -942,6 +1062,7 @@ def add_equality_edges(index: "Index") -> set[tuple[str, str]]:
     proof = Proof(
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
+        scalar_factories=scalar_factories,
     )
     proof.writes = writes
     edges = set()
@@ -966,4 +1087,8 @@ def add_equality_edges(index: "Index") -> set[tuple[str, str]]:
             edges.add((sid, target.sid))
         except (Unproved, RecursionError):
             continue
+    if scalar_factories and proof.steps > MAX_PROOF_STEPS:
+        # The new helper may consume the budget before a later, previously
+        # provable comparison. Recover those edges with the original bounded pass.
+        edges.update(add_equality_edges(index, scalar_factories=False))
     return edges

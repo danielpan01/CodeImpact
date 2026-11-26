@@ -251,8 +251,27 @@ EQUALITY_SOURCE_CHANGES = {
 }
 
 
+FACTORY_TRANSITION = Path("benchmarks/prerelease-factories-v1-preservation.json")
+FACTORY_SOURCE_CHANGES = EQUALITY_SOURCE_CHANGES | {"src/codeimpact/equality.py"}
+
+
+def equality_source_hash(project: Path, path: str, actual: str) -> str:
+    """Map only the recorded factory transition back to the exact-class engine."""
+    successor = project / FACTORY_TRANSITION
+    if path in FACTORY_SOURCE_CHANGES and successor.is_file():
+        receipt, _ = read_metadata(successor)
+        previous = project / EQUALITY_TRANSITION
+        if (
+            actual == receipt["current_sources_sha256"][path]
+            and file_hash(previous) == receipt["previous_receipt_sha256"]
+        ):
+            equality, _ = read_metadata(previous)
+            return str(equality["current_sources_sha256"][path])
+    return actual
+
+
 def replay_source_matches(project: Path, path: str, expected: str) -> bool:
-    actual = file_hash(project / path)
+    actual = equality_source_hash(project, path, file_hash(project / path))
     transition = project / EQUALITY_TRANSITION
     if actual != expected and path in EQUALITY_SOURCE_CHANGES and transition.is_file():
         receipt, _ = read_metadata(transition)
