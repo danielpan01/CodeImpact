@@ -375,6 +375,21 @@ PARAMETER_DICTIONARY_EQUALITY_SOURCE_CHANGES = {
 }
 
 
+PARAMETER_REPLACE_EQUALITY_TRANSITION = Path(
+    "benchmarks/parameter-replace-equality-v1-preservation.json"
+)
+PARAMETER_REPLACE_EQUALITY_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "parameter_dictionary_equality_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -389,7 +404,19 @@ def _previous_source_hash(
     return actual
 
 
+def parameter_dictionary_equality_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        PARAMETER_REPLACE_EQUALITY_TRANSITION,
+        PARAMETER_DICTIONARY_EQUALITY_TRANSITION,
+        PARAMETER_REPLACE_EQUALITY_SOURCE_CHANGES,
+    )
+
+
 def keyed_parameters_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = parameter_dictionary_equality_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

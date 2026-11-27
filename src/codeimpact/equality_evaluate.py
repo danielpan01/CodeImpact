@@ -47,6 +47,7 @@ class Receipt(StrictModel):
         "keyed-extrema-v1",
         "keyed-parameters-v1",
         "parameter-dictionary-equality-v1",
+        "parameter-replace-equality-v1",
     ]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256

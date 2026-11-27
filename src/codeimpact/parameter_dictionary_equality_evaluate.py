@@ -4,7 +4,11 @@ from pathlib import Path
 from typing import Any
 
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import PARAMETER_DICTIONARY_EQUALITY_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import (
+    PARAMETER_DICTIONARY_EQUALITY_TRANSITION,
+    PROJECT,
+    parameter_dictionary_equality_source_hash,
+)
 from codeimpact.keyed_parameters_evaluate import evaluate_keyed_parameters
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
@@ -12,13 +16,15 @@ from codeimpact.v5_evaluate import DIRECTORY
 
 def evaluate_parameter_dictionary_equality(directory: Path) -> dict[str, Any]:
     receipt = verified_receipt(
-        "parameter-dictionary-equality-v1", PARAMETER_DICTIONARY_EQUALITY_TRANSITION
+        "parameter-dictionary-equality-v1",
+        PARAMETER_DICTIONARY_EQUALITY_TRANSITION,
+        parameter_dictionary_equality_source_hash,
     )
     return measure(
         directory,
         evaluate_keyed_parameters(directory),
         receipt,
-        True,
+        "parameter-dictionary-equality",
         "Parameter dictionary equality",
     )
 

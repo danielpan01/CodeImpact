@@ -30,6 +30,7 @@ EqualityMode = (
         "raises-greater-than",
         "keyed-extrema",
         "keyed-parameters",
+        "parameter-dictionary-equality",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -66,6 +67,16 @@ class DictionaryParameters:
     factory: ast.Call
     source: str
     expected: str
+
+
+@dataclass(frozen=True)
+class ReplacementParameters:
+    receiver_factory: ast.Call
+    expected_factory: ast.Call
+    method: str
+    strings: frozenset[str]
+    parts: str
+    keys: frozenset[str]
 
 
 @dataclass(frozen=True)
@@ -213,10 +224,12 @@ class Proof:
         scalar_factories: bool,
         literal_parameters: bool = False,
         strict_callable_values: bool = False,
+        literal_keyword_dicts: bool = False,
     ):
         self.scalar_factories = scalar_factories
         self.literal_parameters = literal_parameters
         self.strict_callable_values = strict_callable_values
+        self.literal_keyword_dicts = literal_keyword_dicts
         self.resolver = resolver
         self.unparseable = unparseable
         self.paths = {path: module for module, path in resolver.modules.items()}
@@ -225,6 +238,7 @@ class Proof:
         self.steps = 0
         self.writes: set[str] = set()
         self.initializing: dict[str, dict[str, Value]] = {}
+        self.property_getters: dict[str, ast.FunctionDef] = {}
 
     def tick(self) -> None:
         self.steps += 1
@@ -346,6 +360,8 @@ class Proof:
                         if stmt.name in env:
                             raise Unproved
                         env[stmt.name] = PROPERTY
+                        if self.literal_keyword_dicts:
+                            self.property_getters[fn.sid] = stmt
                         continue
                     if decoration == "property:setter" and outer is not None:
                         if isinstance(decorator, ast.Attribute) and identifier(
@@ -645,6 +661,14 @@ class Proof:
                 if isinstance(receiver, str) and (receiver, attr.attr) in methods:
                     return methods[receiver, attr.attr]
         func = self.expression(call.func, env, depth=depth)
+        if (
+            self.literal_keyword_dicts
+            and func == "builtin:dict"
+            and not call.args
+            and "dict" not in self.writes
+            and literal_keyword_names(call) is not None
+        ):
+            return EXACT_DICT
         if isinstance(func, Class):
             if all(map(self.inert, [*args, *kwargs.values()])):
                 if None in kwargs and kwargs[None] not in (DICT, EXACT_DICT):
@@ -1124,44 +1148,227 @@ class Proof:
             )
         )
 
-    def dictionary_parameter_comparison(
-        self, fn: ast.FunctionDef, env: dict[str, Value], parameter: DictionaryParameters
-    ) -> tuple[Function, str] | None:
-        scoped = audit(body(fn), local=True)
-        columns = {parameter.source, parameter.expected}
-        if (
-            scoped.wildcard
-            or columns & scoped.counts.keys()
-            or any(isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn))
-        ):
-            return None
-        local = (
-            env
-            | {parameter.source: DATA, parameter.expected: EXACT_DICT}
-            | dict.fromkeys(scoped.counts, UNBOUND)
-        )
-        call = parameter.factory
+    def parameter_factory(self, call: ast.Call, local: dict[str, Value]) -> Instance:
+        argument = call.args[0]
+        assert isinstance(argument, ast.Name)
         factory = self.expression(call.func, local)
         if not isinstance(factory, Function) or factory.wrapper:
-            return None
+            raise Unproved
         receiver = None
         if factory.mode == "builtin:classmethod" and isinstance(call.func, ast.Attribute):
             owner = self.expression(call.func.value, local)
             if not isinstance(owner, Class) or factory.sid.rpartition(".")[0] != owner.sid:
-                return None
+                raise Unproved
             receiver = owner
         elif factory.mode:
-            return None
+            raise Unproved
         kwargs: dict[str | None, Value] = {kw.arg: DATA for kw in call.keywords}
         if kwargs.keys() & {arg.arg for arg in factory.node.args.posonlyargs}:
-            return None
-        lhs = self.constructed(factory, receiver, [local[parameter.source]], kwargs, depth=1)
+            raise Unproved
+        return self.constructed(factory, receiver, [local[argument.id]], kwargs, depth=1)
+
+    def dictionary_parameter_comparison(
+        self, fn: ast.FunctionDef, env: dict[str, Value], parameter: DictionaryParameters
+    ) -> tuple[Function, str] | None:
+        local = parameter_locals(fn, env, {parameter.source: DATA, parameter.expected: EXACT_DICT})
+        lhs = self.parameter_factory(parameter.factory, local)
         target = comparison_target(lhs.owner, "__eq__")
         if target is None:
             return None
         return target, (
             f"with an exact builtin dict from pytest parameter {parameter.expected!r} on the right"
         )
+
+    def read_field(self, receiver: Instance, name: str) -> None:
+        owner = receiver.owner
+        if owner.members.get(name) == PROPERTY:
+            getter = self.property_getters.get(f"{owner.sid}.{name}")
+            if getter is None:
+                raise Unproved
+            argument = sole_receiver(getter)
+            match body(getter):
+                case [ast.Return(value=ast.Attribute(value=ast.Name(id=base), attr=field))] if (
+                    base == argument
+                ):
+                    name = field
+                case _:
+                    raise Unproved
+        if name not in receiver.fields or name in owner.members:
+            raise Unproved
+
+    def fresh_fields(self, receiver: Instance, name: str) -> set[str]:
+        fn = instance_method(receiver.owner, name)
+        argument = sole_receiver(fn.node)
+        env = self.module(fn.sid.split("::")[0])
+        if argument == "dict" or "dict" in env or "dict" in self.writes:
+            raise Unproved
+        match body(fn.node):
+            case [ast.Return(value=ast.Call(func=ast.Name(id="dict"), args=[], keywords=fields))]:
+                pass
+            case _:
+                raise Unproved
+        keys = set()
+        for keyword in fields:
+            match keyword:
+                case ast.keyword(
+                    arg=str() as key,
+                    value=ast.Attribute(value=ast.Name(id=base), attr=attr),
+                ) if base == argument and key not in keys:
+                    self.read_field(receiver, attr)
+                    keys.add(key)
+                case _:
+                    raise Unproved
+        return keys
+
+    def replacement_comparison(
+        self, fn: ast.FunctionDef, env: dict[str, Value], parameter: ReplacementParameters
+    ) -> tuple[Function, str] | None:
+        if "dict" in env or "dict" in self.writes:
+            return None
+        bindings: dict[str, Value] = dict.fromkeys(parameter.strings, DATA)
+        bindings[parameter.parts] = EXACT_DICT
+        local = parameter_locals(fn, env, bindings)
+        receiver = self.parameter_factory(parameter.receiver_factory, local)
+        method = instance_method(receiver.owner, parameter.method)
+        method_env = self.module(method.sid.split("::")[0])
+        receiver_name = sole_receiver(method.node, with_keywords=True)
+        assert method.node.args.kwarg is not None
+        parts = method.node.args.kwarg.arg
+        statements = body(method.node)
+        scoped = audit(statements, local=True)
+        if (
+            {"type", "TypeError"}
+            & (method_env.keys() | scoped.counts.keys() | {receiver_name, parts})
+            or {"type", "TypeError"} & self.writes
+            or has_yield(method.node)
+        ):
+            return None
+        match statements:
+            case [
+                ast.Assign(
+                    targets=[ast.Name(id=fields)],
+                    value=ast.Call(
+                        func=ast.Attribute(value=ast.Name(id=base), attr=field_reader),
+                        args=[],
+                        keywords=[],
+                    ),
+                ),
+                ast.Expr(value=ast.Call(func=update, args=[ast.Name(id=updated)], keywords=[])),
+                ast.Try() as trial,
+            ] if (
+                base == receiver_name
+                and fields not in {receiver_name, parts}
+                and dotted(update) == f"{fields}.update"
+                and updated == parts
+                and returns_replacement(trial, receiver_name, fields)
+            ):
+                pass
+            case _:
+                return None
+        keys = self.fresh_fields(receiver, field_reader)
+        if not parameter.keys <= keys or not constructor_accepts_keywords(receiver.owner, keys):
+            return None
+        expected = self.parameter_factory(parameter.expected_factory, local)
+        if receiver.owner is not expected.owner:
+            return None
+        target = comparison_target(receiver.owner, "__eq__")
+        if target is None:
+            return None
+        return target, (
+            "on the same exact class after replacement with literal keyword rows "
+            f"from pytest parameter {parameter.parts!r}"
+        )
+
+
+def has_yield(fn: ast.FunctionDef) -> bool:
+    return any(isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn))
+
+
+def parameter_locals(
+    fn: ast.FunctionDef, env: dict[str, Value], bindings: dict[str, Value]
+) -> dict[str, Value]:
+    scoped = audit(body(fn), local=True)
+    if scoped.wildcard or bindings.keys() & scoped.counts.keys() or has_yield(fn):
+        raise Unproved
+    return env | bindings | dict.fromkeys(scoped.counts, UNBOUND)
+
+
+def instance_method(owner: Class, name: str) -> Function:
+    method = owner.members.get(name)
+    if (
+        not isinstance(method, Function)
+        or method.mode
+        or method.wrapper
+        or method.sid != f"{owner.sid}.{name}"
+    ):
+        raise Unproved
+    return method
+
+
+def sole_receiver(fn: ast.FunctionDef, *, with_keywords: bool = False) -> str:
+    args = fn.args
+    positional = parameters(fn)
+    if (
+        len(positional) != 1
+        or args.defaults
+        or args.vararg
+        or args.kwonlyargs
+        or (args.kwarg is not None) != with_keywords
+    ):
+        raise Unproved
+    return positional[0].arg
+
+
+def returns_replacement(trial: ast.Try, receiver: str, fields: str) -> bool:
+    if trial.orelse or trial.finalbody:
+        return False
+    match trial.body:
+        case [
+            ast.Return(
+                value=ast.Call(
+                    func=ast.Call(func=ast.Name(id="type"), args=[ast.Name(id=base)], keywords=[]),
+                    args=[],
+                    keywords=[ast.keyword(arg=None, value=ast.Name(id=unpacked))],
+                ),
+            ),
+        ] if (base, unpacked) == (receiver, fields):
+            pass
+        case _:
+            return False
+    match trial.handlers:
+        case [ast.ExceptHandler(type=ast.Name(id="TypeError"), name=None, body=[*prefix, last])]:
+            pass
+        case _:
+            return False
+    # The handler can prepare an error in locals and has no normal exit.
+    # The message computation is outside the successful construction path.
+    for stmt in prefix:
+        if not isinstance(stmt, ast.Assign) or len(stmt.targets) != 1:
+            return False
+        if not isinstance(stmt.targets[0], ast.Name):
+            return False
+    match last:
+        case ast.Raise(exc=None, cause=None):
+            return True
+        case ast.Raise(
+            exc=ast.Call(
+                func=ast.Name(id="TypeError"), args=[ast.Name() | ast.Constant()], keywords=[]
+            ),
+            cause=None,
+        ):
+            return True
+    return False
+
+
+def constructor_accepts_keywords(owner: Class, keys: set[str]) -> bool:
+    init = instance_method(owner, "__init__").node
+    args = init.args
+    positional = parameters(init)
+    if not positional or args.vararg or args.kwarg or args.kwonlyargs:
+        return False
+    allowed = {arg.arg for arg in args.args} - {positional[0].arg}
+    required = {arg.arg for arg in positional[1 : len(positional) - len(args.defaults)]}
+    return required <= keys <= allowed
 
 
 def comparison_target(owner: Class, method_name: str) -> Function | None:
@@ -1344,8 +1551,15 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    # The new table sites get a separate proof budget from the existing comparisons.
-    edges = add_comparison_edges(index, mode="keyed-parameters") if mode is True else set()
+    # Keep separate proof budgets for the successive table shapes.
+    predecessor: EqualityMode | None = (
+        "parameter-dictionary-equality"
+        if mode is True
+        else "keyed-parameters"
+        if mode == "parameter-dictionary-equality"
+        else None
+    )
+    edges = add_comparison_edges(index, mode=predecessor) if predecessor is not None else set()
     greater_raises = mode in ("raises-greater-than", "keyed-extrema", "keyed-parameters")
     literal_parameters = greater_raises or mode in (
         "parameterized",
@@ -1371,8 +1585,10 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         and "." not in index.nodes[sid].name
         and (
             candidate := (
-                dictionary_parameter_site(node)
+                replacement_parameter_site(node)
                 if mode is True
+                else dictionary_parameter_site(node)
+                if mode == "parameter-dictionary-equality"
                 else comparison_site(
                     node,
                     first=first,
@@ -1397,8 +1613,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
         scalar_factories=mode != "exact-class",
-        literal_parameters=literal_parameters or mode is True,
-        strict_callable_values=mode is True,
+        literal_parameters=literal_parameters or predecessor is not None,
+        strict_callable_values=predecessor is not None,
+        literal_keyword_dicts=mode is True,
     )
     proof.writes = writes
     for sid, fn, (position, site, parameter) in candidates:
@@ -1415,7 +1632,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 resolver.binding(path, "pytest", site)
             ):
                 continue
-            if isinstance(parameter, DictionaryParameters):
+            if isinstance(parameter, ReplacementParameters):
+                binding = proof.replacement_comparison(fn, env, parameter)
+            elif isinstance(parameter, DictionaryParameters):
                 binding = proof.dictionary_parameter_comparison(fn, env, parameter)
             else:
                 binding = proof.comparison(
@@ -1502,6 +1721,26 @@ def literal_string_columns(fn: ast.FunctionDef) -> frozenset[str] | None:
     return None
 
 
+def literal_keyword_names(call: ast.Call) -> set[str] | None:
+    names = set()
+    for keyword in call.keywords:
+        if (
+            keyword.arg is None
+            or keyword.arg in names
+            or not isinstance(keyword.value, ast.Constant)
+        ):
+            return None
+        names.add(keyword.arg)
+    return names
+
+
+def string_factory_argument(call: ast.Call) -> str | None:
+    match call.args:
+        case [ast.Name(id=name)] if dotted(call.func) and literal_keyword_names(call) is not None:
+            return name
+    return None
+
+
 def dictionary_parameter_site(
     fn: ast.FunctionDef,
 ) -> tuple[int, ast.Compare, DictionaryParameters] | None:
@@ -1523,11 +1762,7 @@ def dictionary_parameter_site(
             pass
         case _:
             return None
-    if (
-        not dotted(factory.func)
-        or any(kw.arg is None or not isinstance(kw.value, ast.Constant) for kw in factory.keywords)
-        or len({kw.arg for kw in factory.keywords}) != len(factory.keywords)
-    ):
+    if string_factory_argument(factory) is None:
         return None
     table = literal_table(fn)
     if table is None:
@@ -1547,6 +1782,68 @@ def dictionary_parameter_site(
         ):
             return None
     return position, site, DictionaryParameters(factory, source, expected)
+
+
+def replacement_parameter_site(
+    fn: ast.FunctionDef,
+) -> tuple[int, ast.Compare, ReplacementParameters] | None:
+    if len(fn.args.args) != 3 or not fn.decorator_list:
+        return None
+    match body(fn):
+        case [
+            ast.Assert(
+                test=ast.Compare(
+                    left=ast.Call(
+                        func=ast.Attribute(value=ast.Call() as receiver, attr=method),
+                        args=[],
+                        keywords=[ast.keyword(arg=None, value=ast.Name(id=parts))],
+                    ),
+                    ops=[ast.Eq()],
+                    comparators=[ast.Call() as expected],
+                ) as site,
+            ),
+            *_,
+        ]:
+            pass
+        case _:
+            return None
+    source_column = string_factory_argument(receiver)
+    expected_column = string_factory_argument(expected)
+    if source_column is None or expected_column is None:
+        return None
+    table = literal_table(fn)
+    if table is None:
+        return None
+    names, rows = table
+    if set(names) != {source_column, expected_column, parts}:
+        return None
+    keys = set()
+    parts_index = names.index(parts)
+    for row in rows:
+        for index, cell in enumerate(row):
+            if index == parts_index:
+                if (
+                    not isinstance(cell, ast.Call)
+                    or not identifier(cell.func, "dict")
+                    or cell.args
+                    or (row_keys := literal_keyword_names(cell)) is None
+                ):
+                    return None
+                keys.update(row_keys)
+            elif not isinstance(cell, ast.Constant) or type(cell.value) is not str:
+                return None
+    return (
+        0,
+        site,
+        ReplacementParameters(
+            receiver,
+            expected,
+            method,
+            frozenset({source_column, expected_column}),
+            parts,
+            frozenset(keys),
+        ),
+    )
 
 
 def keyed_test_site(

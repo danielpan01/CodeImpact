@@ -1282,3 +1282,24 @@ return. Builtin `dict` has no subclass priority over that class, so the
 existing equality resolver records the initial `__eq__` target. Each
 revision must establish the whole call at the test-definition level.
 [Factory and dictionary trace](REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries)
+
+### Replacement equality with literal pytest keywords
+
+A direct equality assertion can compare a factory result after an instance
+method call with another factory result. The bounded table supplies two string
+columns and one column of unshadowed builtin `dict` calls with literal keyword
+values. The method takes the dictionary through a single keyword expansion.
+Each factory must establish the same exact source-owned class.
+
+The supported method reads a fresh builtin dictionary through a proved
+receiver method, updates it from its keyword parameter, and returns
+`type(self)(**fields)` under a `TypeError` handler. Each dictionary value
+must be an initialized field read or the result of a property getter
+that directly reads one. The proof checks builtin bindings and verifies
+that the fresh keys bind the constructor and cover every update key.
+The handler must end in an unconditional raise. The diagnostic message
+is outside the successful construction proof.
+
+The analyzer records the initial `__eq__` binding at the assertion, with
+one test-definition edge and independently proved source ranges.
+[Replacement source trace and evaluation](REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords)
