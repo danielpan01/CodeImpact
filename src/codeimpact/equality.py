@@ -4,8 +4,11 @@ import ast
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
+from codeimpact.discovery import is_test_file
 from codeimpact.models import SourceLocation
+from codeimpact.parameter_rows import inline_decorator
 from codeimpact.partial_bindings import audit, dotted
+from codeimpact.pytest_fixtures import direct_pytest_import
 
 if TYPE_CHECKING:
     from codeimpact.analyzer import Index
@@ -13,16 +16,23 @@ if TYPE_CHECKING:
 
 
 EqualityMode = (
-    bool | Literal["exact-class", "factories", "first-assertion", "less-than", "inequality"]
+    bool
+    | Literal[
+        "exact-class", "factories", "first-assertion", "less-than", "inequality", "dictionary"
+    ]
 )
+SequenceParameter = tuple[str, Literal["tuple", "list"]]
 MAX_PROOF_STEPS = 16_000
+MAX_PARAMETER_ROWS = 64
+MAX_PARAMETER_CELLS = 256
 COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.Eq: ("==", "__eq__"),
     ast.Lt: ("<", "__lt__"),
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "inequality",
+    True: "dictionary",
+    "dictionary": "inequality",
     "inequality": "less-than",
     "less-than": "first-assertion",
     "first-assertion": "factories",
@@ -172,9 +182,15 @@ def parameters(fn: ast.FunctionDef) -> list[ast.arg]:
 
 class Proof:
     def __init__(
-        self, resolver: "PartialBindings", unparseable: set[str], *, scalar_factories: bool
+        self,
+        resolver: "PartialBindings",
+        unparseable: set[str],
+        *,
+        scalar_factories: bool,
+        literal_parameters: bool = False,
     ):
         self.scalar_factories = scalar_factories
+        self.literal_parameters = literal_parameters
         self.resolver = resolver
         self.unparseable = unparseable
         self.paths = {path: module for module, path in resolver.modules.items()}
@@ -252,6 +268,7 @@ class Proof:
         prefix: str,
         outer: dict[str, Value] | None = None,
     ) -> None:
+        test_path = path.startswith("tests/") or (self.literal_parameters and is_test_file(path))
         for stmt in stmts:
             self.tick()
             scope = env if outer is None else outer | env
@@ -265,7 +282,7 @@ class Proof:
                 bindings, _ = self.resolver.decode(stmt, path, self.resolver.modules)
                 for name, qualified in bindings:
                     if (
-                        path.startswith("tests/")
+                        test_path
                         and qualified == "pytest"
                         and qualified not in self.resolver.modules
                     ):
@@ -288,7 +305,7 @@ class Proof:
                 if stmt.decorator_list:
                     decorator = stmt.decorator_list[0]
                     if (
-                        path.startswith("tests/")
+                        test_path
                         and outer is None
                         and isinstance(decorator, ast.Call)
                         and dotted(decorator.func) == "pytest.mark.parametrize"
@@ -1006,6 +1023,7 @@ class Proof:
         method_name: str,
         *,
         dictionary_operands: bool,
+        parameter: SequenceParameter | None,
     ) -> tuple[Function, str] | None:
         # Binding is function-wide, but only the prefix establishes operand values.
         stmts = body(fn)
@@ -1017,46 +1035,93 @@ class Proof:
             ):
                 return None
         local = env | {name: UNBOUND for name in scoped.counts}
+        if parameter is not None:
+            if parameter[0] in scoped.counts:
+                return None
+            # The proof uses the parameter only as the direct right operand.
+            local[parameter[0]] = UNBOUND
         if self.statements(stmts[:position], local, 0, dictionary_operands=dictionary_operands):
             return None
         lhs = self.expression(site.left, local)
-        read_rhs = self.comparison_operand if dictionary_operands else self.expression
-        rhs = read_rhs(site.comparators[0], local)
         if not isinstance(lhs, Instance):
             return None
-        same_class = isinstance(rhs, Instance) and lhs.owner is rhs.owner
-        builtin_dict = dictionary_operands and rhs == EXACT_DICT
-        if same_class or builtin_dict:
-            # The exact class or unrelated builtin dict rules out subclass priority.
-            # This establishes the initial call only. A NotImplemented result
-            # can lead to further dispatch, which this proof does not follow.
-            method = lhs.owner.members.get(method_name)
-            if isinstance(method, Function) and not method.mode:
-                target = method.wrapper or method
-                args = target.node.args
-                pos = len(parameters(target.node))
-                if (
-                    pos - len(args.defaults) <= 2
-                    and (pos >= 2 or args.vararg)
-                    and all(default is not None for default in args.kw_defaults)
-                ):
-                    detail = (
-                        "on the same exact class"
-                        if same_class
-                        else "with an exact builtin dict on the right"
-                    )
-                    return target, detail
+        if parameter is not None:
+            name, container = parameter
+            detail = (
+                f"with an exact builtin {container} from pytest parameter {name!r} on the right"
+            )
+        else:
+            read_rhs = self.comparison_operand if dictionary_operands else self.expression
+            rhs = read_rhs(site.comparators[0], local)
+            if isinstance(rhs, Instance) and lhs.owner is rhs.owner:
+                detail = "on the same exact class"
+            elif dictionary_operands and rhs == EXACT_DICT:
+                detail = "with an exact builtin dict on the right"
+            else:
+                return None
+
+        # The same class or an unrelated exact builtin rules out subclass priority.
+        # The proof stops at the initial call even if it returns NotImplemented.
+        method = lhs.owner.members.get(method_name)
+        if isinstance(method, Function) and not method.mode:
+            target = method.wrapper or method
+            args = target.node.args
+            pos = len(parameters(target.node))
+            if (
+                pos - len(args.defaults) <= 2
+                and (pos >= 2 or args.vararg)
+                and all(default is not None for default in args.kw_defaults)
+            ):
+                return target, detail
         return None
 
 
+def literal_sequence_parameter(fn: ast.FunctionDef) -> SequenceParameter | None:
+    shape = inline_decorator(fn)
+    args = fn.args
+    if shape is None or (
+        len(args.args) != 1
+        or args.posonlyargs
+        or args.kwonlyargs
+        or args.vararg
+        or args.kwarg
+        or args.defaults
+    ):
+        return None
+    decorator, table = shape
+    name = args.args[0].arg
+    if not isinstance(decorator.args[0], ast.Constant) or decorator.args[0].value != name:
+        return None
+    if not 1 <= len(table.elts) <= MAX_PARAMETER_ROWS:
+        return None
+    first_row = table.elts[0]
+    if not isinstance(first_row, (ast.Tuple, ast.List)):
+        return None
+    row_type = type(first_row)
+    cells = 0
+    for row in table.elts:
+        if not isinstance(row, row_type):
+            return None
+        cells += len(row.elts)
+        if cells > MAX_PARAMETER_CELLS or any(
+            not isinstance(cell, ast.Constant) for cell in row.elts
+        ):
+            return None
+    return name, "tuple" if isinstance(first_row, ast.Tuple) else "list"
+
+
 def comparison_site(
-    fn: ast.FunctionDef, *, first: bool, operators: tuple[type[ast.cmpop], ...]
-) -> tuple[int, ast.Compare] | None:
-    if (
-        fn.decorator_list
-        or fn.type_params
-        or fn.returns
-        or (parameters(fn) or fn.args.kwonlyargs or fn.args.vararg or fn.args.kwarg)
+    fn: ast.FunctionDef,
+    *,
+    first: bool,
+    operators: tuple[type[ast.cmpop], ...],
+    literal_parameters: bool,
+) -> tuple[int, ast.Compare, SequenceParameter | None] | None:
+    parameter = literal_sequence_parameter(fn) if literal_parameters else None
+    if fn.type_params or fn.returns:
+        return None
+    if parameter is None and (
+        fn.decorator_list or parameters(fn) or fn.args.kwonlyargs or fn.args.vararg or fn.args.kwarg
     ):
         return None
     stmts = body(fn)
@@ -1064,17 +1129,22 @@ def comparison_site(
         if not isinstance(stmt, ast.Assert):
             continue
         match stmt.test:
-            case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site if position == len(stmts) - 1:
-                return position, site
-            case ast.Compare(ops=[op], comparators=[_]) as site if (
+            case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site if (
+                parameter is None and position == len(stmts) - 1
+            ):
+                return position, site, None
+            case ast.Compare(ops=[op], comparators=[right]) as site if (
                 first
                 and isinstance(op, operators)
+                and (
+                    parameter is None or isinstance(op, ast.Lt) and identifier(right, parameter[0])
+                )
                 and all(
                     isinstance(prefix, (ast.Assign, ast.AnnAssign, ast.Pass))
                     for prefix in stmts[:position]
                 )
             ):
-                return position, site
+                return position, site, parameter
         if first:
             break
     return None
@@ -1125,9 +1195,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    first = mode in (True, "first-assertion", "less-than", "inequality")
+    first = mode in (True, "first-assertion", "less-than", "inequality", "dictionary")
     operators: tuple[type[ast.cmpop], ...] = (ast.Eq,)
-    if mode in (True, "inequality"):
+    if mode in (True, "inequality", "dictionary"):
         operators += (ast.Lt, ast.NotEq)
     elif mode == "less-than":
         operators += (ast.Lt,)
@@ -1137,7 +1207,12 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         if index.nodes[sid].kind == "test"
         and isinstance(node, ast.FunctionDef)
         and "." not in index.nodes[sid].name
-        and (candidate := comparison_site(node, first=first, operators=operators)) is not None
+        and (
+            candidate := comparison_site(
+                node, first=first, operators=operators, literal_parameters=mode is True
+            )
+        )
+        is not None
     ]
     if not candidates:
         return set()
@@ -1149,14 +1224,22 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
         scalar_factories=mode != "exact-class",
+        literal_parameters=mode is True,
     )
     proof.writes = writes
     edges = set()
-    for sid, fn, (position, site) in candidates:
+    for sid, fn, (position, site, parameter) in candidates:
         path = index.nodes[sid].path
         try:
             env = proof.module(path)
-            if not isinstance(env.get(fn.name), Function):
+            test = env.get(fn.name)
+            if not isinstance(test, Function):
+                continue
+            if parameter is not None and (
+                test.mode != "pytest"
+                or writes & {"mark", "parametrize"}
+                or not direct_pytest_import(resolver.binding(path, "pytest", fn.decorator_list[0]))
+            ):
                 continue
             op, method_name = COMPARISON_METHODS[type(site.ops[0])]
             binding = proof.comparison(
@@ -1165,7 +1248,8 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 position,
                 site,
                 method_name,
-                dictionary_operands=mode is True and method_name == "__ne__",
+                dictionary_operands=mode in (True, "dictionary") and method_name == "__ne__",
+                parameter=parameter,
             )
             if binding is None:
                 continue

@@ -4538,3 +4538,32 @@ The subclass case retains 13 draft misses and two draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases against the same-class inequality profile and validated every current recommendation path. All 49 pre-v5 analyses and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained one operator edge. Only the subclass case gained a recommendation. |
 
 Local logs are under `reports/dictionary-inequality/`.
+
+## Less-than with literal pytest parameters
+
+Started on merged `main` at `b8de2b7d71f240bf9bfadf1c37a77ea10137c1fb`
+(PR #44). Before implementation, `make evaluate-real-v5-dictionary-inequality`
+reproduced 118/239 selected overall and 19/106 in the SemVer subclass
+case. Six positive regressions failed on the predecessor, including the
+tuple and list controls, each revision-only case and both pinned comparisons.
+
+The successor selects 120/239 overall and 21/106 in the subclass case.
+The added recommendations point from lines 206 and 235 of
+`tests/test_compare.py` to `src/semver/version.py::_comparator.wrapper`
+at lines 41–52 in both revisions. Each scores 90 and records one
+resolved path per test definition. Earlier recommendation scores and
+evidence match the predecessor. The subclass case retains 11 draft
+misses and two draft false positives.
+[Trace, measurements and successor receipt](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 169 passed, including 33 literal parameter cases. Coverage includes tuple and list tables, mixed or computed rows, shadowing, parameter rebinding, stacked or indirect decorators, reversed operands, subclass scope, one-revision evidence and an initial method that returns `NotImplemented`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,513 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. |
+| Offline evaluations | All 17 passed, including the new parameterized less-than target and the preserved dictionary replay. All 176 pre-existing reports matched their starting SHA-256 hashes. An in-memory alteration to a comparison's after-revision range failed the successor check. |
+| Determinism | Hash seeds 7 and 173 each reproduced 19 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated all 155 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects with `npm run test:e2e -- --workers=3`. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases against the dictionary profile and validated current recommendation paths. The 49 pre-v5 cases and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained two operator edges. Only the subclass case gained recommendations. |
+
+Local logs are under `reports/parameterized-less-than/`.

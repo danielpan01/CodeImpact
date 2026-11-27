@@ -289,6 +289,18 @@ DICTIONARY_INEQUALITY_SOURCE_CHANGES = {
 }
 
 
+PARAMETERIZED_LESS_THAN_TRANSITION = Path("benchmarks/parameterized-less-than-v1-preservation.json")
+PARAMETERIZED_LESS_THAN_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "dictionary_inequality_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -303,7 +315,19 @@ def _previous_source_hash(
     return actual
 
 
+def dictionary_inequality_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        PARAMETERIZED_LESS_THAN_TRANSITION,
+        DICTIONARY_INEQUALITY_TRANSITION,
+        PARAMETERIZED_LESS_THAN_SOURCE_CHANGES,
+    )
+
+
 def inequality_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = dictionary_inequality_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

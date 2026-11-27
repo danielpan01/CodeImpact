@@ -51,6 +51,8 @@ jobs:
         run: make evaluate-real-v5-inequality
       - name: Offline v5 builtin dictionary inequality evaluation
         run: make evaluate-real-v5-dictionary-inequality
+      - name: Offline v5 literal pytest parameter less-than evaluation
+        run: make evaluate-real-v5-parameterized-less-than
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit
