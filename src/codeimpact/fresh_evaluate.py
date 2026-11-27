@@ -390,6 +390,19 @@ PARAMETER_REPLACE_EQUALITY_SOURCE_CHANGES = {
 }
 
 
+COMPARISON_HELPER_TRANSITION = Path("benchmarks/comparison-helper-v1-preservation.json")
+COMPARISON_HELPER_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "parameter_replace_equality_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -404,7 +417,19 @@ def _previous_source_hash(
     return actual
 
 
+def parameter_replace_equality_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        COMPARISON_HELPER_TRANSITION,
+        PARAMETER_REPLACE_EQUALITY_TRANSITION,
+        COMPARISON_HELPER_SOURCE_CHANGES,
+    )
+
+
 def parameter_dictionary_equality_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = parameter_replace_equality_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

@@ -971,3 +971,58 @@ The remaining subclass draft miss is
 `tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`.
 The prerelease case retains four draft misses. The successor receipt
 also records the 52 retained false positives and one uncertain selection.
+
+## Rich comparison paths to the changed helper
+
+`make evaluate-real-v5-comparison-helper` checks the
+`parameter-replace-equality-v1` predecessor and measures the new proof
+on the same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/comparison-helper-v1.json) · [Engine hashes](../benchmarks/comparison-helper-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Prerelease comparison, replacement equality | 71 / 105 | 31 | 40 | 4 | 30 | 0 |
+| Prerelease comparison, comparison helper | 73 / 105 | 33 | 40 | 2 | 30 | 0 |
+| V5 overall, replacement equality | 130 / 239 | 77 | 52 | 5 | 104 | 1 |
+| V5 overall, comparison helper | 132 / 239 | 79 | 52 | 3 | 104 | 1 |
+
+Both prerelease revisions bind the initial comparison to the unchanged
+`_comparator.wrapper`. The wrapper accepts both exact `Version` operands
+and forwards them unchanged at line 52. The bound operator calls
+`Version.compare` and tests its result against zero. The comparison
+method's conversion branches are skipped for these operands. The
+constructor's integer normalization, initialized fields and tuple
+reader establish equal core tuples. The source `_cmp` therefore
+returns zero and the early return is bypassed. The actual call to
+`Version._nat_cmp` is at line 416 before the change and line 412
+after it.
+[Base comparison method](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/src/semver/version.py#L396-L425) · [Head comparison method](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/src/semver/version.py#L392-L421)
+
+| Test in `tests/test_compare.py` | Assertion range | Normalized core | Operator call before / after | Recommendation delta |
+| --- | ---: | --- | --- | --- |
+| `test_should_compare_prerelease_and_build_with_numbers` | 299–301 | `(1, 9, 1)` | `__lt__` at 479 / 475 | Added |
+| `test_should_compare_version_info_objects` | 138 | `(0, 10, 4)` | `__ne__` at 475 / 471 | Added |
+| `test_should_compare_prerelease_with_numbers_and_letters` | 129 | `(1, 9, 1)` | `__lt__` at 479 / 475 | Conservative evidence replaced by a resolved proof |
+
+All three paths are proved independently in both revisions. Each edge
+cites its assertion range and the helper's definition at lines 140–162
+before or 140–160 after. The verified intermediate calls appear in its
+evidence text. The selected edge is scoped to its test so a shared
+wrapper cannot transfer the proof to another test. Each path has
+distance 1 and score 83. The evidence upgrade previously had score
+30 and distance 3. All original graph edges retain their evidence.
+[Base tests](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/tests/test_compare.py) · [Head tests](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/tests/test_compare.py)
+
+The prerelease case retains two draft misses,
+`tests/test_compare.py::test_should_compare_version_dictionaries` and
+`tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments`.
+The subclass case retains its prior recommendations, including its
+single draft miss. The successor receipt records all surviving
+discrepancies and the uncertain selection.
+
+Both SemVer graphs gain three test-scoped edges. In the subclass
+case the additional edges only appear before the change. Its head
+wrapper's acceptance tuple uses `type(self)`, a form outside this
+guard proof, and its helper is unchanged. Both Cached Property
+analyses match the predecessor. The replay has 36 resolved, 87
+conservative and nine changed-test recommendations.

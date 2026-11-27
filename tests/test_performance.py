@@ -601,6 +601,28 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(parameter_replace_equality["current_sources_sha256"]) == set(
         parameter_dictionary_equality["current_sources_sha256"]
     ) | {"src/codeimpact/parameter_replace_equality_evaluate.py"}
+    previous = ROOT / "benchmarks/parameter-replace-equality-v1-preservation.json"
+    comparison_helper = json.loads(
+        (ROOT / "benchmarks/comparison-helper-v1-preservation.json").read_text()
+    )
+    assert (
+        hashlib.sha256(previous.read_bytes()).hexdigest()
+        == comparison_helper["previous_receipt_sha256"]
+    )
+    assert comparison_helper["added_corpus_sha256"] == {}
+    assert set(comparison_helper["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "analyzer",
+            "equality",
+            "fresh_evaluate",
+            "equality_evaluate",
+            "parameter_replace_equality_evaluate",
+        )
+    }
+    assert set(comparison_helper["current_sources_sha256"]) == set(
+        parameter_replace_equality["current_sources_sha256"]
+    ) | {"src/codeimpact/comparison_helper.py", "src/codeimpact/comparison_helper_evaluate.py"}
     extensions = (
         current,
         latest,
@@ -633,6 +655,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         keyed_parameters,
         parameter_dictionary_equality,
         parameter_replace_equality,
+        comparison_helper,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()

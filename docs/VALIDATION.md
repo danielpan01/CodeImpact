@@ -4788,3 +4788,34 @@ selection.
 | `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,727 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
 
 Local logs and the determinism receipt are under `reports/parameter-replace-equality/`.
+
+## Rich comparison paths to the changed helper
+
+Started on clean, merged `main` at `55d34e56c0509409d66d3a7595301c93b9097fa1`
+(PR #52). The `make evaluate-real-v5-parameter-replace-equality`
+baseline reproduced 130/239 selections overall and 71/105 in the
+prerelease case. Six positive regressions failed before the analyzer
+edit, covering both pinned assertions, normalized synthetic operands
+for both operators, and both single-revision cases.
+
+The successor adds two recommendations at lines 138 and 299–301 and
+resolves an existing conservative recommendation at line 129. Each
+edge records the complete forwarding trace and cites the changed
+helper in both revisions. The prerelease case selects 73/105 with 33
+draft true positives, 40 false positives, two false negatives and 30
+true negatives. V5 overall selects 132/239 with 79 true positives,
+52 false positives, three false negatives, 104 true negatives and
+one uncertain selection.
+[Source trace and exact delta](REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 414 passed, including 31 new cases covering exact constructor arguments, equal or unequal normalized core fields, shadowed bindings, forwarding guards, and revision isolation. |
+| Pilot and frontend formatting | `make verify-pilot` passed readiness, built UI, public demo, key protection, exact frozen-input report and absence of report storage. Prettier passed. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the parameter-replace-equality profile. All 49 pre-v5 cases and both Cached Property cases match after excluding elapsed time. Both SemVer graphs gain three edges. The subclass recommendations and all original edge evidence are unchanged. An in-memory change to the after-revision assertion range failed the successor check. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Offline evaluations | All 25 targets passed, including the preserved parameter-replace-equality replay and the comparison helper successor. All 184 pre-existing report files matched their starting SHA-256 hashes. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,758 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+| Determinism | Hash seeds 7 and 173 each reproduced 27 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 187 case analyses per seed, excluding only `stats.elapsed_ms`. |
+
+Local logs and the determinism receipt are under `reports/comparison-helper/`.
