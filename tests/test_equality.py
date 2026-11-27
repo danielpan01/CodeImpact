@@ -1111,3 +1111,102 @@ def test_pinned_string_parameter_less_than_starts_at_line_264():
         (site,) = evidence
         assert (site.location.line, site.location.end_line) == (264, 264)
         assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+RAISES_PARAMETER_TEST = STRING_PARAMETER_TEST.replace(
+    "    assert left < values\n",
+    "    with pytest.raises(ValueError):\n        left < values\n",
+)
+
+
+def test_raises_less_than_records_only_the_call_in_each_revision():
+    request = request_for(RAISES_PARAMETER_TEST, base_core=ORDERED_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + RAISES_PARAMETER_TEST
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    for entries, line in ((edge.before, 7), (edge.after, 8)):
+        (site,) = entries
+        assert "calls the bound __lt__" in site.text
+        assert "inside pytest.raises(ValueError)" in site.text
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert site.target_location.line == 4
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.evidence_path, rec.path_revision) == (
+        [edge.id],
+        [TEST, WRAPPER],
+        "both",
+    )
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        RAISES_PARAMETER_TEST.replace("import pytest", "pytest = 1"),
+        RAISES_PARAMETER_TEST + "\ndef mutate():\n    pytest.raises = alternate\n",
+        RAISES_PARAMETER_TEST + "    pytest = alternate\n",
+        RAISES_PARAMETER_TEST + "\nclass ValueError: pass\n",
+        RAISES_PARAMETER_TEST + "    ValueError: type\n",
+        RAISES_PARAMETER_TEST.replace("    with pytest", "    ValueError = Item\n    with pytest"),
+        RAISES_PARAMETER_TEST.replace("    with pytest", '    values = "3"\n    with pytest'),
+        RAISES_PARAMETER_TEST.replace('["1", "2.0", ""]', '["1", 2]'),
+        RAISES_PARAMETER_TEST.replace('["1", "2.0", ""]', '["1", "2" + "3"]'),
+        RAISES_PARAMETER_TEST.replace('["1", "2.0", ""]', "[(1,), (2,)]"),
+        RAISES_PARAMETER_TEST.replace("raises(ValueError)", "raises(TypeError)"),
+        RAISES_PARAMETER_TEST.replace("raises(ValueError)", "raises((ValueError, TypeError))"),
+        RAISES_PARAMETER_TEST.replace("raises(ValueError)", "raises(ValueError, match='invalid')"),
+        RAISES_PARAMETER_TEST.replace("raises(ValueError)", "raises(ValueError) as info"),
+        RAISES_PARAMETER_TEST.replace("raises(ValueError)", "raises(ValueError), other()"),
+        RAISES_PARAMETER_TEST.replace("        left < values", "        assert left < values"),
+        RAISES_PARAMETER_TEST.replace(
+            "        left < values", "        left < values\n        pass"
+        ),
+        RAISES_PARAMETER_TEST.replace("        left < values", "        values < left"),
+        RAISES_PARAMETER_TEST.replace("        left < values", "        left < values < left"),
+    ],
+)
+def test_raises_less_than_declines_unproved_context_or_operands(source):
+    assert not less_than_edges(analyze(request_for(source, base_core=ORDERED_CORE)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_raises_less_than_proves_only_the_unshadowed_revision(side):
+    request = request_for(RAISES_PARAMETER_TEST, base_core=ORDERED_CORE)
+    unsupported = request.head if side == "before" else request.base
+    unsupported.files["tests/test_item.py"] += "\nclass ValueError: pass\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [site.location.line for site in edge.before] == ([7] if side == "before" else [])
+    assert [site.location.line for site in edge.after] == ([7] if side == "after" else [])
+
+
+def test_pinned_raises_less_than_uses_the_expression_on_line_283():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring"
+    target = "src/semver/version.py::_comparator.wrapper"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert (rec.evidence_path, rec.path_revision) == ([sid, target], "both")
+    (edge,) = [e for e in less_than_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (283, 283)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+def test_raises_less_than_keeps_initial_call_when_method_returns_not_implemented():
+    base = ORDERED_CORE.replace("    @checked\n", "").replace(
+        "return self._value < rhs._value", "return NotImplemented"
+    )
+    head = base.replace("return NotImplemented", "return NotImplemented if True else False")
+    request = request_for(RAISES_PARAMETER_TEST, base_core=base, head_core=head)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__lt__", "both")
+    assert len(edge.before) == len(edge.after) == 1

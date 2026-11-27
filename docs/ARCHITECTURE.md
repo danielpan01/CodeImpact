@@ -1198,3 +1198,16 @@ revision. It cites the assertion and the explicit initial `__lt__`
 binding. Indirect or stacked parametrization, computed rows, reversed
 operands and later dispatch are outside this proof.
 [Literal parameter trace and measurement](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters)
+
+### Less-than inside pytest.raises
+
+The literal string parameter proof also accepts one top-level
+`with pytest.raises(ValueError):` after a supported straight-line prefix.
+It requires the direct pytest import, an unmodified `raises` binding,
+and an unshadowed builtin `ValueError`. The body must contain one
+bare `<` expression. The existing operand proof establishes the exact
+source class on the left and the unrebound literal string parameter on
+the right. Evidence cites the comparison and initial `__lt__` binding
+in each revision. Exception outcomes and reflected dispatch are outside
+the proof.
+[Raises comparison trace and measurement](REAL_EVALUATION_V5.md#less-than-inside-pytestraises)

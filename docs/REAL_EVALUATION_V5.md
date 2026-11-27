@@ -626,3 +626,61 @@ The subclass case retains ten draft misses and two draft false positives.
 The prerelease case retains four misses and 40 false positives. Cached
 Property retains ten false positives and one selected uncertain
 definition. The receipt lists the remaining IDs. Labels remain drafts.
+
+## Less-than inside pytest.raises
+
+`make evaluate-real-v5-raises-less-than` checks the direct string
+assertion predecessor and measures `raises-less-than-v1` on the same
+captures and draft labels. The receipt pins the complete stable report,
+including exact source ranges, the recommendation delta and remaining
+discrepancies.
+[Successor receipt](../datasets/real-v5-successors/raises-less-than-v1.json) · [Engine hashes](../benchmarks/raises-less-than-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, direct string parameters | 22 / 106 | 20 | 2 | 10 | 74 | 0 |
+| Subclass comparison, raises less-than | 23 / 106 | 21 | 2 | 9 | 74 | 0 |
+| V5 overall, direct string parameters | 121 / 239 | 68 | 52 | 14 | 104 | 1 |
+| V5 overall, raises less-than | 122 / 239 | 69 | 52 | 13 | 104 | 1 |
+
+In both revisions, line 279 of `tests/test_compare.py` supplies
+`s` with the literal strings `"1"`, `"1.0"` and `"1.0.x"`. Line 281
+constructs `v` as the source-defined `Version`. Line 282 enters
+`pytest.raises(ValueError)` using the direct pytest import and the
+unshadowed builtin exception class. The block contains one expression,
+`v < s`, at line 283. Builtin `str` is unrelated to `Version`, so Python
+tries the left `__lt__` first. At line 473 of `src/semver/version.py`,
+`@_comparator` installs the wrapper returned by `_comparator`. Its
+type tuple includes `str` through `String.__args__` in both revisions.
+The changed first entry uses `Version` in base and `type(self)` in head.
+The wrapper forwards to `__lt__`, whose body calls `self.compare(other)`.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L279-L285) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L279-L285)
+
+The only added recommendation is
+`tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring`.
+The resolved call edge cites line 283 and
+`src/semver/version.py::_comparator.wrapper` at lines 41–52 in both
+revisions. It has distance 1 and score 90. The later `s > v` expression
+supplies no evidence. The record describes the initial call. The
+exception outcome, reflected dispatch and later statements stay outside
+the proof.
+
+The rule accepts one top-level `with pytest.raises(ValueError):` after
+the existing straight-line prefix. The block must hold one bare
+`<` expression with a proved exact source instance and a direct
+unrebound literal string parameter. The pytest import, `raises` member
+and builtin exception binding must be stable. Bindings such as
+`as info`, keyword options, multiple context managers, extra body
+statements and other expected exceptions are outside the supported form.
+
+Existing recommendation scores and evidence match the predecessor.
+The separate prerelease case gains the same edge to its unchanged
+wrapper and retains its 71 recommendations. Both Cached Property
+cases match their predecessor. Across v5, there are 25 resolved,
+88 conservative and nine changed-test recommendations.
+
+The subclass case retains nine draft misses and two draft false
+positives. The prerelease case retains four misses and 40 false
+positives. Cached Property retains ten false positives and one selected
+uncertain definition. The successor receipt lists the remaining IDs.
+Labels remain drafts.

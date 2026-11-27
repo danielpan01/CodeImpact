@@ -478,6 +478,27 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(string_parameterized["current_sources_sha256"]) == set(
         parameterized["current_sources_sha256"]
     ) | {"src/codeimpact/string_parameter_less_than_evaluate.py"}
+    previous = ROOT / "benchmarks/string-parameter-less-than-v1-preservation.json"
+    raises_less_than = json.loads(
+        (ROOT / "benchmarks/raises-less-than-v1-preservation.json").read_text()
+    )
+    assert (
+        hashlib.sha256(previous.read_bytes()).hexdigest()
+        == raises_less_than["previous_receipt_sha256"]
+    )
+    assert raises_less_than["added_corpus_sha256"] == {}
+    assert set(raises_less_than["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "equality",
+            "fresh_evaluate",
+            "equality_evaluate",
+            "string_parameter_less_than_evaluate",
+        )
+    }
+    assert set(raises_less_than["current_sources_sha256"]) == set(
+        string_parameterized["current_sources_sha256"]
+    ) | {"src/codeimpact/raises_less_than_evaluate.py"}
     extensions = (
         current,
         latest,
@@ -504,6 +525,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         dictionary_inequality,
         parameterized,
         string_parameterized,
+        raises_less_than,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()
