@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality pilot benchmark serve verify-pilot
+.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality evaluate-real-v5-dictionary-inequality pilot benchmark serve verify-pilot
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -44,6 +44,8 @@ evaluate-real-v5-less-than:
 	.venv/bin/python -m codeimpact.less_than_evaluate
 evaluate-real-v5-inequality:
 	.venv/bin/python -m codeimpact.inequality_evaluate
+evaluate-real-v5-dictionary-inequality:
+	.venv/bin/python -m codeimpact.dictionary_inequality_evaluate
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:

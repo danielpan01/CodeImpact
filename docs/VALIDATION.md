@@ -4509,3 +4509,32 @@ The subclass case retains 14 draft misses and two draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases against the less-than profile and validated every current recommendation path. All 49 pre-v5 analyses and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained the operator edge, and only the subclass case gained a recommendation. |
 
 Local logs are under `reports/inequality/`.
+
+## Inequality with a builtin dictionary
+
+Started on merged `main` at `379c0d73943076fb4238016fcfb5afbf8c4d57d0`
+(PR #43). Before implementation, `make evaluate-real-v5-inequality`
+reproduced 117/239 selected overall and 18/106 in the SemVer subclass
+case. Eight positive regressions failed on the predecessor, including
+the pinned comparison, literal and constructor forms, and revision-specific
+evidence.
+
+The successor selects 118/239 overall and 19/106 in the subclass case.
+The added recommendation cites `tests/test_compare.py` line 167 and
+`src/semver/version.py::_comparator.wrapper` lines 41–52 in both revisions.
+All previous recommendation scores and evidence match the predecessor.
+The subclass case retains 13 draft misses and two draft false positives.
+[Trace, measurements and successor receipt](REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 136 passed, including 26 dictionary inequality cases. Controls cover shadowed constructors, unsupported arguments and unpacking, reversed operands, dictionary subclasses, missing or rebound methods, first dispatch with `NotImplemented` and one-revision proofs. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,480 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. |
+| Offline evaluations | All 16 passed, including the new dictionary inequality target and the historical exact-class inequality target. All 175 pre-existing report files matched their starting SHA-256 hashes. |
+| Successor range check | An in-memory change to the new edge's after-revision range failed the replay check. |
+| Determinism | Hash seeds 7 and 173 each reproduced 18 report files byte for byte, including two earlier authored profiles. Reversing snapshot file order reproduced and validated 151 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases against the same-class inequality profile and validated every current recommendation path. All 49 pre-v5 analyses and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained one operator edge. Only the subclass case gained a recommendation. |
+
+Local logs are under `reports/dictionary-inequality/`.

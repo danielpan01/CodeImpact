@@ -450,3 +450,60 @@ prerelease-comparison case retains four misses and 40 false positives.
 Cached Property retains ten false positives and one selected uncertain
 definition. The successor receipt lists the exact remaining IDs. Labels
 remain drafts.
+
+## Inequality with a builtin dictionary
+
+`make evaluate-real-v5-dictionary-inequality` checks the exact-class
+inequality predecessor and measures `dictionary-inequality-v1` on the
+same four captures and draft labels. The receipt pins the complete stable
+report, including the revision-specific evidence ranges, recommendation
+delta and all remaining discrepancy IDs. [Successor receipt](../datasets/real-v5-successors/dictionary-inequality-v1.json) · [Engine hashes](../benchmarks/dictionary-inequality-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, exact-class inequality | 18 / 106 | 16 | 2 | 14 | 74 | 0 |
+| Subclass comparison, dictionary inequality | 19 / 106 | 17 | 2 | 13 | 74 | 0 |
+| V5 overall, exact-class inequality | 117 / 239 | 64 | 52 | 18 | 104 | 1 |
+| V5 overall, dictionary inequality | 118 / 239 | 65 | 52 | 17 | 104 | 1 |
+
+| Added recommendation | Before comparison | After comparison | Bound target in both revisions |
+| --- | ---: | ---: | --- |
+| `tests/test_compare.py::test_should_compare_version_dictionaries` | 167 | 167 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+
+In both pinned revisions, line 164 constructs a source-defined
+`Version` and line 165 calls unshadowed builtin `dict` with the
+`major`, `minor`, `patch`, `prerelease` and `build` keyword arguments.
+The right operand is an exact builtin dictionary. It has no subclass
+relationship to the left operand's class, so Python tries the left
+operand's explicit `__ne__` first. Line 469 in `src/semver/version.py`
+decorates that method with `_comparator`, which binds the edited wrapper.
+Both wrapper type tuples include builtin `dict`. Their first entries
+use `Version` in base and `type(self)` in head. The wrapper
+forwards to the original method on lines 470–471. The recorded edge
+cites the first comparison, `assert v1 != v2`, and the wrapper itself.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L163-L172) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L163-L172)
+
+The new proof tracks dictionaries constructed in the straight-line test
+prefix or inline as the right operand. It recognizes dictionary literals
+with constant keys and supported values, empty `dict()`, and unshadowed
+`dict` calls with explicit keyword arguments whose values the existing
+expression proof supports. Positional constructor inputs and unpacking
+stay outside its scope. The test's whole function supplies local binding
+information, so a local assignment later in the body can shadow the
+constructor. The proof declines reversed operands, dictionary subclasses,
+ambiguous bindings and other mixed types. It records the initial
+invocation only, with later dispatch after `NotImplemented` outside the
+proof.
+
+The new recommendation has distance 1 and score 90. Every previous
+recommendation retained its score and evidence. The separate SemVer
+prerelease case gains the same graph edge to an unchanged wrapper and
+retains its 71 recommendations. Both Cached Property analyses match the
+predecessor. V5 now has 21 resolved, 88 conservative and nine changed-test
+recommendations.
+
+The subclass case retains 13 draft misses and two draft false positives
+(`test_replace_from_subclass` and `test_subclass_from_versioninfo`). The
+prerelease case retains four misses and 40 false positives. Cached Property
+retains ten false positives and one selected uncertain definition. The
+successor receipt lists the exact IDs. Labels remain drafts.

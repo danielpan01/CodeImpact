@@ -1,4 +1,4 @@
-"""Resolve the first comparison call between instances of the same proved source class."""
+"""Resolve initial comparison calls for bounded, source-proved operand types."""
 
 import ast
 from dataclasses import dataclass, field
@@ -12,7 +12,9 @@ if TYPE_CHECKING:
     from codeimpact.partial_bindings import PartialBindings
 
 
-EqualityMode = bool | Literal["exact-class", "factories", "first-assertion", "less-than"]
+EqualityMode = (
+    bool | Literal["exact-class", "factories", "first-assertion", "less-than", "inequality"]
+)
 MAX_PROOF_STEPS = 16_000
 COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.Eq: ("==", "__eq__"),
@@ -20,7 +22,8 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "less-than",
+    True: "inequality",
+    "inequality": "less-than",
     "less-than": "first-assertion",
     "first-assertion": "factories",
     "factories": "exact-class",
@@ -61,6 +64,7 @@ FRAME = "frame"
 CODE = "code"
 LIST = "list"
 DICT = "dict"
+EXACT_DICT = "exact-builtin-dict"
 PROPERTY = "property"
 STDLIB = {
     "__future__",
@@ -434,6 +438,7 @@ class Proof:
                 DATA,
                 LIST,
                 DICT,
+                EXACT_DICT,
                 MATCH,
                 FRAME,
                 CODE,
@@ -520,7 +525,7 @@ class Proof:
                     for item in parts:
                         self.annotation(item, env)
                     return TYPE
-                if value in (DATA, LIST, DICT):
+                if value in (DATA, LIST, DICT, EXACT_DICT):
                     data(subscript)
                     return DATA
             case ast.Slice(lower=start, upper=end, step=step):
@@ -588,6 +593,7 @@ class Proof:
                     (REGEX, "match"): MATCH,
                     (MATCH, "groupdict"): DICT,
                     (DICT, "items"): DATA,
+                    (EXACT_DICT, "items"): DATA,
                     (LIST, "append"): DATA,
                 }
                 if isinstance(receiver, str) and (receiver, attr.attr) in methods:
@@ -595,7 +601,7 @@ class Proof:
         func = self.expression(call.func, env, depth=depth)
         if isinstance(func, Class):
             if all(map(self.inert, [*args, *kwargs.values()])):
-                if None in kwargs and kwargs[None] != DICT:
+                if None in kwargs and kwargs[None] not in (DICT, EXACT_DICT):
                     raise Unproved
                 return self.constructor(func, depth)
             raise Unproved
@@ -882,6 +888,25 @@ class Proof:
             raise Unproved
         self.statements(stmts[:-1], env, depth)
 
+    def comparison_operand(self, expr: ast.expr, env: dict[str, Value], *, depth: int = 0) -> Value:
+        if isinstance(expr, ast.Dict) and all(isinstance(key, ast.Constant) for key in expr.keys):
+            self.expression(expr, env, depth=depth)
+            return EXACT_DICT
+        if (
+            isinstance(expr, ast.Call)
+            and identifier(expr.func, "dict")
+            and "dict" not in env
+            and "dict" not in self.writes
+        ):
+            self.tick()
+            if expr.args or any(
+                kw.arg is None or not self.inert(self.expression(kw.value, env, depth=depth + 1))
+                for kw in expr.keywords
+            ):
+                raise Unproved
+            return EXACT_DICT
+        return self.expression(expr, env, depth=depth)
+
     def statements(
         self,
         stmts: list[ast.stmt],
@@ -889,18 +914,21 @@ class Proof:
         depth: int,
         *,
         receiver: str | None = None,
+        dictionary_operands: bool = False,
     ) -> bool:
+        # Record exact dictionaries in the test's straight-line comparison prefix.
+        read = self.comparison_operand if dictionary_operands else self.expression
         for stmt in stmts:
             self.tick()
             match stmt:
                 case ast.Assign(targets=[ast.Name(id=name)], value=expr):
-                    env[name] = self.expression(expr, env, depth=depth)
+                    env[name] = read(expr, env, depth=depth)
                 case ast.AnnAssign(target=ast.Name(id=name), value=expr) if expr is not None:
-                    env[name] = self.expression(expr, env, depth=depth)
+                    env[name] = read(expr, env, depth=depth)
                 case ast.Assign(
                     targets=[ast.Subscript(value=ast.Name(id=name), slice=key)], value=expr
                 ):
-                    if env.get(name) != DICT or not all(
+                    if env.get(name) not in (DICT, EXACT_DICT) or not all(
                         self.inert(self.expression(term, env, depth=depth)) for term in (key, expr)
                     ):
                         raise Unproved
@@ -976,7 +1004,9 @@ class Proof:
         position: int,
         site: ast.Compare,
         method_name: str,
-    ) -> Function | None:
+        *,
+        dictionary_operands: bool,
+    ) -> tuple[Function, str] | None:
         # Binding is function-wide, but only the prefix establishes operand values.
         stmts = body(fn)
         scoped = audit(stmts, local=True)
@@ -987,12 +1017,17 @@ class Proof:
             ):
                 return None
         local = env | {name: UNBOUND for name in scoped.counts}
-        if self.statements(stmts[:position], local, 0):
+        if self.statements(stmts[:position], local, 0, dictionary_operands=dictionary_operands):
             return None
         lhs = self.expression(site.left, local)
-        rhs = self.expression(site.comparators[0], local)
-        if isinstance(lhs, Instance) and isinstance(rhs, Instance) and lhs.owner is rhs.owner:
-            # Same exact class rules out a right-subclass priority override.
+        read_rhs = self.comparison_operand if dictionary_operands else self.expression
+        rhs = read_rhs(site.comparators[0], local)
+        if not isinstance(lhs, Instance):
+            return None
+        same_class = isinstance(rhs, Instance) and lhs.owner is rhs.owner
+        builtin_dict = dictionary_operands and rhs == EXACT_DICT
+        if same_class or builtin_dict:
+            # The exact class or unrelated builtin dict rules out subclass priority.
             # This establishes the initial call only. A NotImplemented result
             # can lead to further dispatch, which this proof does not follow.
             method = lhs.owner.members.get(method_name)
@@ -1005,7 +1040,12 @@ class Proof:
                     and (pos >= 2 or args.vararg)
                     and all(default is not None for default in args.kw_defaults)
                 ):
-                    return target
+                    detail = (
+                        "on the same exact class"
+                        if same_class
+                        else "with an exact builtin dict on the right"
+                    )
+                    return target, detail
         return None
 
 
@@ -1085,9 +1125,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    first = mode in (True, "first-assertion", "less-than")
+    first = mode in (True, "first-assertion", "less-than", "inequality")
     operators: tuple[type[ast.cmpop], ...] = (ast.Eq,)
-    if mode is True:
+    if mode in (True, "inequality"):
         operators += (ast.Lt, ast.NotEq)
     elif mode == "less-than":
         operators += (ast.Lt,)
@@ -1119,15 +1159,24 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
             if not isinstance(env.get(fn.name), Function):
                 continue
             op, method_name = COMPARISON_METHODS[type(site.ops[0])]
-            target = proof.comparison(fn, env, position, site, method_name)
-            if target is None or target.sid not in index.nodes:
+            binding = proof.comparison(
+                fn,
+                env,
+                position,
+                site,
+                method_name,
+                dictionary_operands=mode is True and method_name == "__ne__",
+            )
+            if binding is None:
+                continue
+            target, detail = binding
+            if target.sid not in index.nodes:
                 continue
             index.add_edge(
                 sid,
                 target.sid,
                 "call",
-                f"{path}:{site.lineno} calls the bound {method_name} via {op} "
-                "on the same exact class",
+                f"{path}:{site.lineno} calls the bound {method_name} via {op} {detail}",
                 SourceLocation(
                     path=path, line=site.lineno, end_line=site.end_lineno or site.lineno
                 ),

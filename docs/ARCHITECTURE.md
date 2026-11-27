@@ -1168,3 +1168,16 @@ revision. Default delegation to `__eq__` and any dispatch after
 `NotImplemented` are outside this proof. The less-than replay retains
 its earlier comparison profile.
 [Inequality trace and measurement](REAL_EVALUATION_V5.md#exact-class-inequality-evidence)
+
+### Inequality with a builtin dictionary
+
+The direct `!=` assertion proof also accepts a source-defined class on
+the left and an exact builtin dictionary on the right. The left class's
+explicit, supported `__ne__` has priority because builtin `dict` is
+unrelated to the proved source class. The proof recognizes constant-key
+dictionary literals and an unshadowed `dict` call with supported explicit
+keyword values, either in the straight-line test prefix or inline on the
+right. It records the initial method and source range per revision.
+Reversed operands, dictionary subclasses, positional constructor inputs,
+unpacking and subsequent dispatch are outside this proof.
+[Dictionary inequality trace and measurement](REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary)

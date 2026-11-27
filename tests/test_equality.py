@@ -767,3 +767,125 @@ def test_pinned_inequality_uses_line_138_and_the_changed_wrapper():
         (site,) = evidence
         assert (site.location.line, site.location.end_line) == (138, 138)
         assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+@pytest.mark.parametrize(
+    "right",
+    ['dict(value="two")', "dict()", '{"value": "two"}', "{}"],
+)
+def test_dictionary_inequality_records_only_the_first_call(right):
+    source = INEQUALITY_TEST.replace('right = parse("2")', f"right = {right}")
+    report = analyze(request := request_for(source, base_core=INEQUALITY_CORE))
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    assert edge.before == edge.after
+    (site,) = edge.before
+    assert (site.location.line, site.location.end_line) == (6, 6)
+    assert "exact builtin dict" in site.text
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_path, rec.evidence_edges, rec.path_revision) == (
+        [TEST, WRAPPER],
+        [edge.id],
+        "both",
+    )
+
+
+def test_dictionary_inequality_accepts_an_inline_literal():
+    source = INEQUALITY_TEST.replace('    right = parse("2")\n', "").replace(
+        "!= right", '!= {"value": "two"}'
+    )
+    (edge,) = inequality_edges(analyze(request_for(source, base_core=INEQUALITY_CORE)))
+    assert edge.before[0].location.line == 5
+
+
+@pytest.mark.parametrize(
+    "right",
+    [
+        'dict(**{"value": 2})',
+        'dict(*({"value": 2},))',
+        'dict({"value": 2})',
+        "dict(value=opaque())",
+        '{**{"value": 2}}',
+        "{[]: 2}",
+        "(2,)",
+        "[2]",
+        "CustomDict()",
+        "unknown()",
+    ],
+)
+def test_dictionary_inequality_declines_unproved_rhs(right):
+    source = INEQUALITY_TEST.replace('right = parse("2")', f"right = {right}")
+    if right == "CustomDict()":
+        source += "\nclass CustomDict(dict): pass\n"
+    assert not inequality_edges(analyze(request_for(source, base_core=INEQUALITY_CORE)))
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        INEQUALITY_TEST.replace('right = parse("2")', "right = dict()") + "    dict = Item\n",
+        INEQUALITY_TEST.replace('right = parse("2")', "dict = Item.parse\n    right = dict()"),
+        INEQUALITY_TEST.replace('right = parse("2")', "right = dict()")
+        + "\ndef dict(): return {}\n",
+        INEQUALITY_TEST.replace('right = parse("2")', "right = {}").replace(
+            "left.bump() != right", "right != left.bump()"
+        ),
+        INEQUALITY_TEST.replace('right = parse("2")', "right = {}").replace("!= right", "< right"),
+    ],
+)
+def test_dictionary_inequality_declines_shadowing_or_other_dispatch(source):
+    report = analyze(request_for(source, base_core=INEQUALITY_CORE))
+    assert not inequality_edges(report)
+    assert not less_than_edges(report)
+
+
+@pytest.mark.parametrize("source", [CORE, INEQUALITY_CORE + "\nItem.__ne__ = external\n"])
+def test_dictionary_inequality_requires_explicit_stable_ne(source):
+    tests = INEQUALITY_TEST.replace('right = parse("2")', "right = {}")
+    assert not inequality_edges(analyze(request_for(tests, base_core=source)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_dictionary_inequality_uses_only_proved_revision(side):
+    tests = INEQUALITY_TEST.replace('right = parse("2")', "right = dict(value=2)")
+    # A source-owned module binding can shadow the builtin in only one snapshot.
+    request = request_for(tests, base_core=INEQUALITY_CORE)
+    other = request.head if side == "before" else request.base
+    other.files["tests/test_item.py"] += "\ndef dict(): return {}\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [ev.location.line for ev in edge.before] == ([6] if side == "before" else [])
+    assert [ev.location.line for ev in edge.after] == ([6] if side == "after" else [])
+
+
+def test_pinned_dictionary_inequality_points_to_line_167():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_compare_version_dictionaries"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert rec.evidence_path == [sid, "src/semver/version.py::_comparator.wrapper"]
+    assert rec.path_revision == "both"
+    (edge,) = [e for e in inequality_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (167, 167)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+def test_dictionary_inequality_stops_at_a_method_that_returns_not_implemented():
+    original = INEQUALITY_CORE.replace("    @checked\n", "").replace(
+        "return self._value != rhs._value", "return NotImplemented"
+    )
+    head = original.replace("return NotImplemented", "return NotImplemented if True else False")
+    source = INEQUALITY_TEST.replace('right = parse("2")', "right = dict(value=2)")
+    request = request_for(source, base_core=original, head_core=head)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__ne__", "both")
+    assert len(edge.before) == len(edge.after) == 1

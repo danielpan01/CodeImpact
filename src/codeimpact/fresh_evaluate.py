@@ -282,6 +282,13 @@ INEQUALITY_SOURCE_CHANGES = {
 }
 
 
+DICTIONARY_INEQUALITY_TRANSITION = Path("benchmarks/dictionary-inequality-v1-preservation.json")
+DICTIONARY_INEQUALITY_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in ("equality", "fresh_evaluate", "equality_evaluate", "inequality_evaluate")
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -296,7 +303,19 @@ def _previous_source_hash(
     return actual
 
 
+def inequality_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        DICTIONARY_INEQUALITY_TRANSITION,
+        INEQUALITY_TRANSITION,
+        DICTIONARY_INEQUALITY_SOURCE_CHANGES,
+    )
+
+
 def less_than_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = inequality_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,
