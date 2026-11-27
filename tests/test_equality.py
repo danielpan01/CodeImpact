@@ -1332,3 +1332,146 @@ def test_pinned_raises_greater_than_uses_the_expression_on_line_291():
         (site,) = evidence
         assert (site.location.line, site.location.end_line) == (291, 291)
         assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+TABLE_FACTORY = CORE.replace("def parse(cls, value):", "def parse(cls, value, allow_short=False):")
+DICTIONARY_TABLE = dedent("""\
+    import pytest
+    from values import Item, parse
+
+    @pytest.mark.parametrize(
+        "expected, value",
+        [({"value": 1, "suffix": None}, "1"), [{"value": 2}, "2"]],
+    )
+    def test_equal(value, expected):
+        result = Item.parse(value, allow_short=True)
+        assert result == expected
+    """)
+
+
+@pytest.mark.parametrize("inline", [False, True])
+def test_factory_dictionary_parameters_resolve_named_columns(inline):
+    tests = DICTIONARY_TABLE
+    line = 10
+    if inline:
+        tests = tests.replace(
+            "    result = Item.parse(value, allow_short=True)\n    assert result",
+            "    assert Item.parse(value, allow_short=True)",
+        )
+        line -= 1
+    request = request_for(tests, base_core=TABLE_FACTORY)
+    request.head.files["tests/test_item.py"] = "\n" + tests
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, "both")
+    for entries, expected_line in ((edge.before, line), (edge.after, line + 1)):
+        (site,) = entries
+        assert (site.location.line, site.location.end_line) == (expected_line, expected_line)
+        assert "calls the bound __eq__" in site.text
+        assert "exact builtin dict from pytest parameter 'expected'" in site.text
+    (rec,) = report.recommendations
+    assert (rec.evidence_path, rec.evidence_edges, rec.path_revision) == (
+        [TEST, WRAPPER],
+        [edge.id],
+        "both",
+    )
+
+
+def test_factory_dictionary_parameters_resolve_a_plain_factory():
+    tests = DICTIONARY_TABLE.replace("Item.parse(value, allow_short=True)", "parse(value)")
+    request = request_for(tests, base_core=TABLE_FACTORY)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, "both")
+
+
+@pytest.mark.parametrize(
+    "tests",
+    [
+        DICTIONARY_TABLE.replace('[{"value": 2}, "2"]', '["not a dict", "2"]'),
+        DICTIONARY_TABLE.replace('[{"value": 2}, "2"]', '[{"value": 2}, 2]'),
+        DICTIONARY_TABLE.replace('[{"value": 2}, "2"]', '[{"value": 2}]'),
+        DICTIONARY_TABLE.replace('{"value": 2}', '{"value": 2, **other}'),
+        DICTIONARY_TABLE.replace('{"value": 2}', '{"value": 1 + 1}'),
+        DICTIONARY_TABLE.replace('{"value": 2}', "{str(2): 2}"),
+        DICTIONARY_TABLE.replace('{"value": 2}', "dict(value=2)"),
+        DICTIONARY_TABLE.replace(', "2"]', ', "2" + ""]'),
+        DICTIONARY_TABLE.replace("expected, value", "expected, expected"),
+        DICTIONARY_TABLE.replace("expected, value", "expected, unrelated"),
+        DICTIONARY_TABLE.replace('"2"]],', '"2"]], indirect=True,'),
+        DICTIONARY_TABLE.replace("import pytest", "import pytest as pytest"),
+        DICTIONARY_TABLE.replace("import pytest", "import pytest\npytest = 1"),
+        DICTIONARY_TABLE + "\ndef mutate():\n    pytest.mark.parametrize = alternate\n",
+        DICTIONARY_TABLE + "    value = 'later'\n",
+        DICTIONARY_TABLE + "    expected = {}\n",
+        DICTIONARY_TABLE + "    Item: type\n",
+        DICTIONARY_TABLE.replace("    assert result", "    expected = {}\n    assert result"),
+        DICTIONARY_TABLE.replace("Item.parse(value,", "Item.parse(*value,"),
+        DICTIONARY_TABLE.replace("Item.parse(value,", "Item.parse(value, **expected,"),
+        DICTIONARY_TABLE.replace("allow_short=True", "allow_short=unknown"),
+        DICTIONARY_TABLE.replace("allow_short=True", "allow_short=True, allow_short=False"),
+        DICTIONARY_TABLE.replace("assert result == expected", "assert expected == result"),
+        DICTIONARY_TABLE.replace("assert result == expected", "assert result != expected"),
+        DICTIONARY_TABLE.replace("    assert result", "    if value:\n        assert result"),
+        DICTIONARY_TABLE + "    yield\n",
+    ],
+)
+def test_factory_dictionary_parameters_decline_unproved_tables_or_bindings(tests):
+    assert not equality_edges(analyze(request_for(tests, base_core=TABLE_FACTORY)))
+
+
+@pytest.mark.parametrize(
+    "factory",
+    [
+        TABLE_FACTORY.replace("return cls(int(value))", 'return {"value": int(value)}'),
+        TABLE_FACTORY.replace("allow_short=False", "allow_short=False, /"),
+        TABLE_FACTORY + "\nItem.parse = unknown\n",
+        TABLE_FACTORY.replace("@classmethod", "@property"),
+    ],
+)
+def test_factory_dictionary_parameters_require_exact_factory_result(factory):
+    assert not equality_edges(analyze(request_for(DICTIONARY_TABLE, base_core=factory)))
+
+
+def test_factory_dictionary_parameters_decline_legacy_dictionary_result():
+    tests = DICTIONARY_TABLE.replace("Item.parse(value, allow_short=True)", "parse(value)")
+    core = TABLE_FACTORY.replace("return Item.parse(value)", 'return {"value": int(value)}')
+    assert not equality_edges(analyze(request_for(tests, base_core=core)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_factory_dictionary_parameters_require_proof_in_each_revision(side):
+    request = request_for(DICTIONARY_TABLE, base_core=TABLE_FACTORY)
+    unproved = request.head if side == "before" else request.base
+    unproved.files["tests/test_item.py"] += (
+        "\ndef mutate():\n    pytest.mark.parametrize = alternate\n"
+    )
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, side)
+    assert bool(edge.before) == (side == "before")
+    assert bool(edge.after) == (side == "after")
+
+
+def test_pinned_factory_dictionary_equality_selects_only_the_source_instance():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    path = "tests/test_parsing.py"
+    test = f"{path}::test_should_parse_version_with_optional_minor_and_patch"
+    legacy = f"{path}::test_should_parse_version"
+    target = "src/semver/version.py::_comparator.wrapper"
+    recs = {rec.symbol: rec for rec in report.recommendations}
+    assert legacy not in recs
+    assert not any(edge.source == legacy for edge in equality_edges(report))
+    rec = recs[test]
+    assert (rec.evidence_path, rec.path_revision, rec.distance) == ([test, target], "both", 1)
+    (edge,) = [e for e in equality_edges(report) if e.id in rec.evidence_edges]
+    for entries in edge.before, edge.after:
+        (site,) = entries
+        assert (site.location.path, site.location.line, site.location.end_line) == (path, 103, 103)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)

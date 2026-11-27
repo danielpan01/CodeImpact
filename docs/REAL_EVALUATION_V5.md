@@ -857,3 +857,63 @@ The remaining subclass draft misses are
 and `tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`.
 The separate prerelease case retains its four draft misses. The receipt
 records the unchanged false positives and uncertain selection.
+
+## Factory equality with literal pytest dictionaries
+
+`make evaluate-real-v5-parameter-dictionary-equality` checks the
+`keyed-parameters-v1` predecessor and measures the new rule against the
+same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/parameter-dictionary-equality-v1.json) · [Engine hashes](../benchmarks/parameter-dictionary-equality-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, keyed literal table | 29 / 106 | 27 | 2 | 3 | 74 | 0 |
+| Subclass comparison, factory dictionary equality | 30 / 106 | 28 | 2 | 2 | 74 | 0 |
+| V5 overall, keyed literal table | 128 / 239 | 75 | 52 | 7 | 104 | 1 |
+| V5 overall, factory dictionary equality | 129 / 239 | 76 | 52 | 6 | 104 | 1 |
+
+In both subclass revisions, `tests/test_parsing.py` lines 56–100 give
+`test_should_parse_version_with_optional_minor_and_patch` five rows
+with a string `version` and literal dictionary `expected`. Line 102
+passes the string to `Version.parse` with
+`optional_minor_and_patch=True`. The bound classmethod uses the optional
+minor-and-patch pattern and returns `cls(**matched_version_parts)` on
+normal completion at line 652 of `src/semver/version.py`.
+Line 103 compares the exact source-class result with the exact builtin
+dictionary. Python first tries the bound `Version.__eq__`, which uses
+the wrapper returned by `_comparator`. The edit is inside that wrapper
+at line 44.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_parsing.py#L56-L103) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_parsing.py#L56-L103)
+
+The neighboring `test_should_parse_version` calls legacy `parse`.
+The latter returns `Version.parse(version).to_dict()` at line 142 of
+`src/semver/_deprecated.py`. The assertion uses two dictionaries and
+the test stays unselected in the subclass case.
+
+The sole added recommendation is
+`tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch`.
+Its one call edge connects test line 103 to
+`src/semver/version.py::_comparator.wrapper` at lines 41–52 in both
+revisions. Distance is 1 and the score is 90. The five rows receive
+one recommendation for the test definition.
+
+Both SemVer graphs gain one edge. The prerelease case uses its
+unchanged wrapper and keeps all 71 recommendations. Both Cached
+Property analyses and all existing recommendation scores and evidence
+match the predecessor. V5 now has 32 resolved, 88 conservative and
+nine changed-test recommendations.
+
+The rule shares the prior table limits of 64 rows and 256 cells.
+It checks the two named columns, scalar dictionary keys and values, a
+stable pytest binding, and the factory's callable and return class.
+It declines row or argument unpacking, computed cells, rebound
+parameters, and unsupported factory bindings. The evidence covers the
+initial `__eq__` call. Its return value and subsequent dispatch are
+outside the proof.
+
+The subclass case retains two draft misses.
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`
+and `tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`
+remain unselected. The prerelease case retains its four draft misses.
+The successor receipt records the exact discrepancies, including the
+unchanged 52 false positives and one uncertain selection.

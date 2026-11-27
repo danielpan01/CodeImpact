@@ -4723,3 +4723,35 @@ negatives, 104 true negatives and one uncertain selection.
 | `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,651 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
 
 Local logs and the determinism receipt are under `reports/keyed-parameters/`.
+
+## Factory equality with literal pytest dictionaries
+
+Started on clean, merged `main` at `165d262ef284eb3ec212a3eea2d98a70732203ca`
+(PR #50). The `make evaluate-real-v5-keyed-parameters` baseline reproduced
+128/239 selections overall and 29/106 in the subclass case. Six positive
+regressions failed before the analyzer edit, covering the pinned test,
+the two assertion shapes, a plain factory, and both single-revision cases.
+
+The successor adds only
+`tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch`.
+Its edge cites assertion line 103 and the comparison wrapper at lines
+41–52 in both revisions. The five rows contribute one recommendation
+with score 90 and distance 1. The legacy parser test remains
+unselected. The subclass case selects 30/106 with 28 draft true positives,
+two false positives, two false negatives and 74 true negatives.
+V5 overall selects 129/239 with 76 draft true positives, 52 false
+positives, six false negatives, 104 true negatives and one uncertain
+selection.
+[Source trace and exact delta](REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 344 passed, including 37 new regressions for dictionary rows, unpacking, factory results, computed inputs, shadowing, rebinding and revision isolation. |
+| Pilot and frontend formatting | `make verify-pilot` passed readiness, built UI, public demo, key protection, exact frozen-input report and absence of report storage. Prettier passed. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the keyed-parameters profile. The 49 pre-v5 cases and both Cached Property cases match after excluding elapsed time. Each SemVer case gains one edge. Only the subclass case gains a recommendation. An in-memory change to the after-revision assertion range failed the successor check. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Offline evaluations | All 23 targets passed, including the preserved keyed-parameters replay and the factory dictionary successor. All 182 pre-existing report files matched their starting SHA-256 hashes. |
+| Determinism | Hash seeds 7 and 173 each reproduced 25 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 179 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,688 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+
+Local logs and the determinism receipt are under `reports/parameter-dictionary-equality/`.

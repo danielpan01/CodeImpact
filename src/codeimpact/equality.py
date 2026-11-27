@@ -29,6 +29,7 @@ EqualityMode = (
         "raises-less-than",
         "raises-greater-than",
         "keyed-extrema",
+        "keyed-parameters",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -42,7 +43,7 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "raises-less-than",
+    "keyed-parameters": "raises-less-than",
     "keyed-extrema": "raises-less-than",
     "raises-greater-than": "raises-less-than",
     "raises-less-than": "string-parameter",
@@ -58,6 +59,13 @@ PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
 
 class Unproved(Exception):
     """The snapshot cannot establish the binding within this slice."""
+
+
+@dataclass(frozen=True)
+class DictionaryParameters:
+    factory: ast.Call
+    source: str
+    expected: str
 
 
 @dataclass(frozen=True)
@@ -204,11 +212,11 @@ class Proof:
         *,
         scalar_factories: bool,
         literal_parameters: bool = False,
-        keyed_extrema: bool = False,
+        strict_callable_values: bool = False,
     ):
         self.scalar_factories = scalar_factories
         self.literal_parameters = literal_parameters
-        self.keyed_extrema = keyed_extrema
+        self.strict_callable_values = strict_callable_values
         self.resolver = resolver
         self.unparseable = unparseable
         self.paths = {path: module for module, path in resolver.modules.items()}
@@ -527,9 +535,8 @@ class Proof:
                 if isinstance(value, Instance) and name not in RISKY:
                     member = value.owner.members.get(name)
                     if isinstance(member, Function) and not member.mode:
-                        # The keyed proof must preserve the receiver of any
-                        # callable it invokes. This value cannot express it.
-                        if self.keyed_extrema:
+                        # The abstract function value cannot represent a bound receiver.
+                        if self.strict_callable_values:
                             raise Unproved
                         return member
                     if member is None and name in value.fields:
@@ -1117,6 +1124,45 @@ class Proof:
             )
         )
 
+    def dictionary_parameter_comparison(
+        self, fn: ast.FunctionDef, env: dict[str, Value], parameter: DictionaryParameters
+    ) -> tuple[Function, str] | None:
+        scoped = audit(body(fn), local=True)
+        columns = {parameter.source, parameter.expected}
+        if (
+            scoped.wildcard
+            or columns & scoped.counts.keys()
+            or any(isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn))
+        ):
+            return None
+        local = (
+            env
+            | {parameter.source: DATA, parameter.expected: EXACT_DICT}
+            | dict.fromkeys(scoped.counts, UNBOUND)
+        )
+        call = parameter.factory
+        factory = self.expression(call.func, local)
+        if not isinstance(factory, Function) or factory.wrapper:
+            return None
+        receiver = None
+        if factory.mode == "builtin:classmethod" and isinstance(call.func, ast.Attribute):
+            owner = self.expression(call.func.value, local)
+            if not isinstance(owner, Class) or factory.sid.rpartition(".")[0] != owner.sid:
+                return None
+            receiver = owner
+        elif factory.mode:
+            return None
+        kwargs: dict[str | None, Value] = {kw.arg: DATA for kw in call.keywords}
+        if kwargs.keys() & {arg.arg for arg in factory.node.args.posonlyargs}:
+            return None
+        lhs = self.constructed(factory, receiver, [local[parameter.source]], kwargs, depth=1)
+        target = comparison_target(lhs.owner, "__eq__")
+        if target is None:
+            return None
+        return target, (
+            f"with an exact builtin dict from pytest parameter {parameter.expected!r} on the right"
+        )
+
 
 def comparison_target(owner: Class, method_name: str) -> Function | None:
     method = owner.members.get(method_name)
@@ -1298,7 +1344,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    greater_raises = mode in (True, "raises-greater-than", "keyed-extrema")
+    # The new table sites get a separate proof budget from the existing comparisons.
+    edges = add_comparison_edges(index, mode="keyed-parameters") if mode is True else set()
+    greater_raises = mode in ("raises-greater-than", "keyed-extrema", "keyed-parameters")
     literal_parameters = greater_raises or mode in (
         "parameterized",
         "string-parameter",
@@ -1322,32 +1370,37 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         and isinstance(node, ast.FunctionDef)
         and "." not in index.nodes[sid].name
         and (
-            candidate := comparison_site(
-                node,
-                first=first,
-                operators=operators,
-                literal_parameters=literal_parameters,
-                allow_strings=greater_raises or mode in ("string-parameter", "raises-less-than"),
-                allow_raises=greater_raises or mode == "raises-less-than",
-                allow_greater_raises=greater_raises,
+            candidate := (
+                dictionary_parameter_site(node)
+                if mode is True
+                else comparison_site(
+                    node,
+                    first=first,
+                    operators=operators,
+                    literal_parameters=literal_parameters,
+                    allow_strings=greater_raises
+                    or mode in ("string-parameter", "raises-less-than"),
+                    allow_raises=greater_raises or mode == "raises-less-than",
+                    allow_greater_raises=greater_raises,
+                )
             )
         )
         is not None
     ]
     if not candidates:
-        return set()
+        return edges
     try:
         writes = namespace_writes(resolver)
     except Unproved:
-        return set()
+        return edges
     proof = Proof(
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
         scalar_factories=mode != "exact-class",
-        literal_parameters=literal_parameters,
+        literal_parameters=literal_parameters or mode is True,
+        strict_callable_values=mode is True,
     )
     proof.writes = writes
-    edges = set()
     for sid, fn, (position, site, parameter) in candidates:
         path = index.nodes[sid].path
         try:
@@ -1362,16 +1415,19 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 resolver.binding(path, "pytest", site)
             ):
                 continue
-            binding = proof.comparison(
-                fn,
-                env,
-                position,
-                site,
-                method_name,
-                dictionary_operands=(literal_parameters or mode == "dictionary")
-                and method_name == "__ne__",
-                parameter=parameter,
-            )
+            if isinstance(parameter, DictionaryParameters):
+                binding = proof.dictionary_parameter_comparison(fn, env, parameter)
+            else:
+                binding = proof.comparison(
+                    fn,
+                    env,
+                    position,
+                    site,
+                    method_name,
+                    dictionary_operands=(literal_parameters or mode == "dictionary")
+                    and method_name == "__ne__",
+                    parameter=parameter,
+                )
             if binding is None:
                 continue
             target, detail = binding
@@ -1396,9 +1452,18 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     return edges
 
 
-def literal_string_columns(fn: ast.FunctionDef) -> frozenset[str] | None:
+def literal_table(fn: ast.FunctionDef) -> tuple[list[str], list[list[ast.expr]]] | None:
     shape = inline_decorator(fn)
-    if shape is None:
+    args = fn.args
+    if shape is None or (
+        fn.returns
+        or fn.type_params
+        or args.posonlyargs
+        or args.kwonlyargs
+        or args.vararg
+        or args.kwarg
+        or args.defaults
+    ):
         return None
     decorator, table = shape
     name_list = decorator.args[0]
@@ -1417,14 +1482,71 @@ def literal_string_columns(fn: ast.FunctionDef) -> frozenset[str] | None:
         or len(names) * len(table.elts) > MAX_PARAMETER_CELLS
     ):
         return None
+    rows = []
+    for row in table.elts:
+        if not isinstance(row, (ast.List, ast.Tuple)) or len(row.elts) != len(names):
+            return None
+        rows.append(row.elts)
+    return names, rows
+
+
+def literal_string_columns(fn: ast.FunctionDef) -> frozenset[str] | None:
+    table = literal_table(fn)
+    if table is None:
+        return None
+    names, rows = table
     if all(
-        isinstance(row, (ast.List, ast.Tuple))
-        and len(row.elts) == len(names)
-        and all(isinstance(cell, ast.Constant) and type(cell.value) is str for cell in row.elts)
-        for row in table.elts
+        isinstance(cell, ast.Constant) and type(cell.value) is str for row in rows for cell in row
     ):
-        return columns
+        return frozenset(names)
     return None
+
+
+def dictionary_parameter_site(
+    fn: ast.FunctionDef,
+) -> tuple[int, ast.Compare, DictionaryParameters] | None:
+    if len(fn.args.args) != 2 or not fn.decorator_list:
+        return None
+    match body(fn):
+        case [
+            ast.Assign(targets=[ast.Name(id=result)], value=ast.Call() as factory),
+            ast.Assert(test=ast.Compare(left=ast.Name(id=left)) as site),
+            *_,
+        ] if result == left:
+            position = 1
+        case [ast.Assert(test=ast.Compare(left=ast.Call() as factory) as site), *_]:
+            position = 0
+        case _:
+            return None
+    match site.ops, site.comparators, factory.args:
+        case [ast.Eq()], [ast.Name(id=expected)], [ast.Name(id=source)] if source != expected:
+            pass
+        case _:
+            return None
+    if (
+        not dotted(factory.func)
+        or any(kw.arg is None or not isinstance(kw.value, ast.Constant) for kw in factory.keywords)
+        or len({kw.arg for kw in factory.keywords}) != len(factory.keywords)
+    ):
+        return None
+    table = literal_table(fn)
+    if table is None:
+        return None
+    names, rows = table
+    if set(names) != {source, expected}:
+        return None
+    text_column, dict_column = names.index(source), names.index(expected)
+    for row in rows:
+        text, dictionary = row[text_column], row[dict_column]
+        if not (
+            isinstance(text, ast.Constant)
+            and type(text.value) is str
+            and isinstance(dictionary, ast.Dict)
+            and all(isinstance(key, ast.Constant) for key in dictionary.keys)
+            and all(isinstance(value, ast.Constant) for value in dictionary.values)
+        ):
+            return None
+    return position, site, DictionaryParameters(factory, source, expected)
 
 
 def keyed_test_site(
@@ -1550,7 +1672,7 @@ def add_keyed_extrema_edges(index: "Index", *, literal_tables: bool) -> set[tupl
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
         scalar_factories=True,
         literal_parameters=True,
-        keyed_extrema=True,
+        strict_callable_values=True,
     )
     proof.writes = writes
     paths = set()

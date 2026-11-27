@@ -4,15 +4,27 @@ from pathlib import Path
 from typing import Any
 
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import KEYED_PARAMETERS_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import (
+    KEYED_PARAMETERS_TRANSITION,
+    PROJECT,
+    keyed_parameters_source_hash,
+)
 from codeimpact.keyed_extrema_evaluate import evaluate_keyed_extrema
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_keyed_parameters(directory: Path) -> dict[str, Any]:
-    receipt = verified_receipt("keyed-parameters-v1", KEYED_PARAMETERS_TRANSITION)
-    return measure(directory, evaluate_keyed_extrema(directory), receipt, True, "Keyed parameters")
+    receipt = verified_receipt(
+        "keyed-parameters-v1", KEYED_PARAMETERS_TRANSITION, keyed_parameters_source_hash
+    )
+    return measure(
+        directory,
+        evaluate_keyed_extrema(directory),
+        receipt,
+        "keyed-parameters",
+        "Keyed parameters",
+    )
 
 
 if __name__ == "__main__":

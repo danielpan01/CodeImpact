@@ -360,6 +360,21 @@ KEYED_PARAMETERS_SOURCE_CHANGES = {
 }
 
 
+PARAMETER_DICTIONARY_EQUALITY_TRANSITION = Path(
+    "benchmarks/parameter-dictionary-equality-v1-preservation.json"
+)
+PARAMETER_DICTIONARY_EQUALITY_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "keyed_parameters_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -374,7 +389,19 @@ def _previous_source_hash(
     return actual
 
 
+def keyed_parameters_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        PARAMETER_DICTIONARY_EQUALITY_TRANSITION,
+        KEYED_PARAMETERS_TRANSITION,
+        PARAMETER_DICTIONARY_EQUALITY_SOURCE_CHANGES,
+    )
+
+
 def keyed_extrema_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = keyed_parameters_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,
