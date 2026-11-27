@@ -741,3 +741,69 @@ positives. The prerelease case retains four misses and 40 false
 positives. Cached Property retains ten false positives and one
 selected uncertain definition. The successor receipt lists all
 remaining IDs. Labels remain drafts.
+
+## Keyed min and max
+
+`make evaluate-real-v5-keyed-extrema` checks the unchanged
+`raises-greater-than-v1` predecessor and measures the keyed helper proof
+on the same snapshots and draft labels.
+[Successor receipt](../datasets/real-v5-successors/keyed-extrema-v1.json) · [Engine hashes](../benchmarks/keyed-extrema-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, raises greater-than | 24 / 106 | 22 | 2 | 8 | 74 | 0 |
+| Subclass comparison, keyed min and max | 28 / 106 | 26 | 2 | 4 | 74 | 0 |
+| V5 overall, raises greater-than | 123 / 239 | 70 | 52 | 12 | 104 | 1 |
+| V5 overall, keyed min and max | 127 / 239 | 74 | 52 | 8 | 104 | 1 |
+
+Both revisions import `max_ver` and `min_ver` from `semver` at line
+3 of `tests/test_max-min.py`. The initializer explicitly re-exports them
+from `._deprecated` at lines 17–18. The source decorator wraps the
+helper with `functools.wraps`, prepares a deprecation warning, and
+forwards `*args` and `**kwargs` to the captured function at line 81
+of `src/semver/_deprecated.py`. Both helpers pass their two operands
+directly to the unshadowed builtin and convert the returned input with
+`str`. Evidence follows the forwarded call to the helper itself.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_max-min.py#L3-L19) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_max-min.py#L3-L19) · [Base helpers](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/src/semver/_deprecated.py#L201-L236) · [Head helpers](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/_deprecated.py#L201-L236)
+
+Both key calls bind `Version.parse` to the exact source class
+`Version`. In both revisions its successful return at line 652 of
+`src/semver/version.py` constructs `cls(**matched_version_parts)`.
+After both calls return, the builtin compares the second key result
+with the first using `>` for `max` or `<` for `min`. The key
+results have the same exact class, ruling out priority for a reflected
+subclass method. Equal inputs still reach the initial ordering call.
+The bound target is the wrapper returned by `_comparator`, whose line 44
+changes from `Version` to `type(self)`.
+[Base key](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/src/semver/version.py#L607-L652) · [Head key](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/version.py#L607-L652) · [CPython min/max loop](https://github.com/python/cpython/blob/v3.12.12/Python/bltinmodule.c#L1689-L1768) · [CPython comparison dispatch](https://github.com/python/cpython/blob/v3.12.12/Objects/object.c#L750-L776)
+
+The following are the only four added recommendations. Each has
+distance 2, score 72 and both-revision evidence. The second hop points
+to `src/semver/version.py::_comparator.wrapper` at lines 41–52.
+
+| Test ID | First hop in `tests/test_max-min.py` | Second hop in `src/semver/_deprecated.py` | Initial binding |
+| --- | ---: | --- | --- |
+| `tests/test_max-min.py::test_should_get_max` | 7 | `max_ver` line 217 | `Version.__gt__` |
+| `tests/test_max-min.py::test_should_get_max_same` | 11 | `max_ver` line 217 | `Version.__gt__` |
+| `tests/test_max-min.py::test_should_get_min` | 15 | `min_ver` line 236 | `Version.__lt__` |
+| `tests/test_max-min.py::test_should_get_min_same` | 19 | `min_ver` line 236 | `Version.__lt__` |
+
+Existing recommendation evidence and scores match the predecessor.
+Each SemVer graph gains four test-to-helper edges and two
+helper-to-wrapper edges. The wrapper is unchanged in the prerelease
+case, which retains all 71 recommendations. Both Cached Property
+analyses match the predecessor.
+The replay now has 30 resolved, 88 conservative and nine changed-test
+recommendations. The parameterized `test_prerelease_order` remains a
+draft miss, along with three other subclass case tests.
+
+- `tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`
+- `tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch`
+- `tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`
+
+The subclass case also retains two draft false positives.
+The prerelease case retains four draft misses and 40 false positives.
+Cached Property retains ten false positives and one selected uncertain
+definition. All discrepancy IDs are pinned in the successor receipt.
+Winner selection, reflected dispatch and warning outcomes are outside
+the proof. Labels remain drafts and upstream code was read as data.

@@ -4655,3 +4655,40 @@ The subclass case retains eight draft misses and two draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases with the raises less-than profile and validated current recommendation paths. All 49 pre-v5 cases and both Cached Property cases matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
 
 Local logs are under `reports/raises-greater-than/`.
+
+## Keyed min and max
+
+Started on clean, merged `main` at `d8916a205a5e5e1906d68e71486a5d441d33048d`
+(PR #48). Before editing the analyzer, `make evaluate-real-v5-raises-greater-than`
+reproduced 123/239 selections overall and 24/106 in the subclass case.
+Seven positive regressions failed on the predecessor, covering the two
+operators, equal inputs, either revision alone and the pinned SemVer tests.
+
+The successor adds four resolved recommendations at score 72. Each has
+two revision-verified hops and a comparison at line 217 or 236 of
+`src/semver/_deprecated.py`. The subclass case selects 28/106 with
+26 draft true positives, two false positives, four false negatives
+and 74 true negatives. V5 overall selects 127/239 with 74 draft true
+positives, 52 false positives, eight false negatives, 104 true negatives
+and one uncertain selection. The frozen labels and prior measurements
+are preserved.
+[Source audit and exact recommendation changes](REAL_EVALUATION_V5.md#keyed-min-and-max)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 273 passed, including 34 keyed-comparison tests. Controls cover equal inputs, shadowed builtins, unproved receiver and key bindings, mixed key returns, unsupported argument forms and evidence in only one revision. The changed-test path retains precedence. |
+| Offline evaluations | All 21 targets passed, including the preserved raises greater-than replay and the keyed successor. All 180 pre-existing report files matched their starting SHA-256 hashes. An in-memory change to the after-revision `max` range failed the successor check. |
+| Pilot and frontend formatting | `make verify-pilot` passed readiness, built UI, public demo, key protection, exact frozen-input report and absence of report storage. Prettier passed. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the raises greater-than profile. The 49 pre-v5 cases and both Cached Property cases match after excluding elapsed time. Each SemVer case gains six edges. Only the subclass case gains recommendations. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The final run used four workers with one retry enabled. No retries were needed. |
+| Determinism | Hash seeds 7 and 173 each reproduced 23 report files byte for byte, including the two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 171 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,617 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+
+Local logs and the determinism receipt are under `reports/keyed-extrema/`.
+
+Publication review reproduced a revision-evidence issue with two tests
+sharing a helper. When opaque setup prevents one test's proof in a
+revision, the other test's helper edge and an ordinary call edge can still
+appear together. The analyzer now checks the complete proof for each
+revision before selecting the resolved path. The added regression passed,
+and the keyed successor still matches its recorded results.

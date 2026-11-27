@@ -27,6 +27,7 @@ EqualityMode = (
         "parameterized",
         "string-parameter",
         "raises-less-than",
+        "raises-greater-than",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -41,6 +42,7 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
     True: "raises-less-than",
+    "raises-greater-than": "raises-less-than",
     "raises-less-than": "string-parameter",
     "string-parameter": "parameterized",
     "parameterized": "dictionary",
@@ -200,9 +202,11 @@ class Proof:
         *,
         scalar_factories: bool,
         literal_parameters: bool = False,
+        keyed_extrema: bool = False,
     ):
         self.scalar_factories = scalar_factories
         self.literal_parameters = literal_parameters
+        self.keyed_extrema = keyed_extrema
         self.resolver = resolver
         self.unparseable = unparseable
         self.paths = {path: module for module, path in resolver.modules.items()}
@@ -521,6 +525,10 @@ class Proof:
                 if isinstance(value, Instance) and name not in RISKY:
                     member = value.owner.members.get(name)
                     if isinstance(member, Function) and not member.mode:
+                        # The keyed proof must preserve the receiver of any
+                        # callable it invokes. This value cannot express it.
+                        if self.keyed_extrema:
+                            raise Unproved
                         return member
                     if member is None and name in value.fields:
                         return DATA
@@ -884,7 +892,7 @@ class Proof:
             return result
         raise Unproved
 
-    def forwarding(self, fn: Function, depth: int) -> None:
+    def forwarding(self, fn: Function, depth: int, *, strict: bool = False) -> None:
         assert fn.wrapper is not None
         factory_sid = fn.wrapper.sid.rsplit(".", 1)[0]
         factory = self.module(factory_sid.split("::")[0]).get(factory_sid.split("::")[1])
@@ -915,7 +923,11 @@ class Proof:
         effect_scope = audit(stmts[:-1], local=True)
         if {func, vararg.arg, kwarg.arg} & effect_scope.counts.keys():
             raise Unproved
-        self.statements(stmts[:-1], env, depth)
+        if strict:
+            env.update((name, UNBOUND) for name in effect_scope.counts)
+        stopped = self.statements(stmts[:-1], env, depth)
+        if strict and stopped:
+            raise Unproved
 
     def comparison_operand(self, expr: ast.expr, env: dict[str, Value], *, depth: int = 0) -> Value:
         if isinstance(expr, ast.Dict) and all(isinstance(key, ast.Constant) for key in expr.keys):
@@ -1085,20 +1097,27 @@ class Proof:
 
         # The same class or an unrelated exact builtin rules out subclass priority.
         # The proof stops at the initial call even if it returns NotImplemented.
-        method = lhs.owner.members.get(method_name)
-        if isinstance(method, Function) and not method.mode:
-            target = method.wrapper or method
-            args = target.node.args
-            pos = len(parameters(target.node))
-            if (
-                pos - len(args.defaults) <= 2
-                and (pos >= 2 or args.vararg)
-                and all(default is not None for default in args.kw_defaults)
-            ):
-                if in_raises:
-                    detail += f" inside pytest.raises({exception})"
-                return target, detail
-        return None
+        target = comparison_target(lhs.owner, method_name)
+        if target is None:
+            return None
+        if in_raises:
+            detail += f" inside pytest.raises({exception})"
+        return target, detail
+
+
+def comparison_target(owner: Class, method_name: str) -> Function | None:
+    method = owner.members.get(method_name)
+    if isinstance(method, Function) and not method.mode:
+        target = method.wrapper or method
+        args = target.node.args
+        pos = len(parameters(target.node))
+        if (
+            pos - len(args.defaults) <= 2
+            and (pos >= 2 or args.vararg)
+            and all(default is not None for default in args.kw_defaults)
+        ):
+            return target
+    return None
 
 
 def literal_parameter(fn: ast.FunctionDef, *, allow_strings: bool) -> LiteralParameter | None:
@@ -1266,7 +1285,12 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    literal_parameters = mode in (True, "parameterized", "string-parameter", "raises-less-than")
+    greater_raises = mode in (True, "raises-greater-than")
+    literal_parameters = greater_raises or mode in (
+        "parameterized",
+        "string-parameter",
+        "raises-less-than",
+    )
     first = literal_parameters or mode in (
         "first-assertion",
         "less-than",
@@ -1290,9 +1314,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 first=first,
                 operators=operators,
                 literal_parameters=literal_parameters,
-                allow_strings=mode in (True, "string-parameter", "raises-less-than"),
-                allow_raises=mode in (True, "raises-less-than"),
-                allow_greater_raises=mode is True,
+                allow_strings=greater_raises or mode in ("string-parameter", "raises-less-than"),
+                allow_raises=greater_raises or mode == "raises-less-than",
+                allow_greater_raises=greater_raises,
             )
         )
         is not None
@@ -1361,3 +1385,162 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         # provable comparison. Preserve that edge with its bounded predecessor.
         edges.update(add_comparison_edges(index, mode=PREVIOUS_MODES[mode]))
     return edges
+
+
+def keyed_test_site(fn: ast.FunctionDef) -> ast.Call | None:
+    args = fn.args
+    if (
+        fn.decorator_list
+        or fn.returns
+        or fn.type_params
+        or parameters(fn)
+        or args.kwonlyargs
+        or args.vararg
+        or args.kwarg
+    ):
+        return None
+    match body(fn):
+        case [
+            ast.Assert(
+                test=ast.Compare(
+                    left=ast.Call(args=[ast.Constant(), ast.Constant()], keywords=[]) as site,
+                    ops=[ast.Eq()],
+                ),
+            ),
+            *_,
+        ]:
+            return site
+    return None
+
+
+def keyed_comparison(proof: Proof, helper: Function) -> tuple[ast.Call, str, str, Function]:
+    args = helper.node.args
+    params = parameters(helper.node)
+    if (
+        helper.mode
+        or len(params) != 2
+        or args.defaults
+        or args.kwonlyargs
+        or args.vararg
+        or args.kwarg
+    ):
+        raise Unproved
+    if helper.wrapper:
+        proof.forwarding(helper, 0, strict=True)
+    match body(helper.node):
+        case [ast.Return(value=ast.Call() as site)]:
+            pass
+        case _:
+            raise Unproved
+    # The caller supplied two scalar constants. Keep their types abstract
+    # because the proof needs only the class of each successful key result.
+    env = proof.module(helper.sid.split("::")[0]) | {arg.arg: DATA for arg in params}
+    # In the captured helper str() consumes the original winning input after
+    # the comparison. Only peel the direct builtin wrapper.
+    match site:
+        case ast.Call(func=ast.Name(id="str"), args=[ast.Call() as inner], keywords=[]) if (
+            "str" not in env and "str" not in proof.writes
+        ):
+            site = inner
+    match site:
+        case ast.Call(
+            func=ast.Name(id="min" | "max" as builtin),
+            args=[ast.Name(id=first), ast.Name(id=second)],
+            keywords=[ast.keyword(arg="key", value=key)],
+        ) if (
+            builtin not in env
+            and builtin not in proof.writes
+            and {first, second} == {arg.arg for arg in params}
+        ):
+            pass
+        case _:
+            raise Unproved
+    receiver = None
+    if isinstance(key, ast.Attribute):
+        owner = proof.expression(key.value, env)
+        if isinstance(owner, Class):
+            receiver = owner
+    function = proof.expression(key, env)
+    expected_mode = "builtin:classmethod" if receiver is not None else ""
+    if not isinstance(function, Function) or function.mode != expected_mode or function.wrapper:
+        raise Unproved
+    left = proof.constructed(function, receiver, [env[first]], {}, depth=1)
+    right = proof.constructed(function, receiver, [env[second]], {}, depth=1)
+    method = "__lt__" if builtin == "min" else "__gt__"
+    target = comparison_target(right.owner, method) if left.owner is right.owner else None
+    if target is None:
+        raise Unproved
+    return site, builtin, method, target
+
+
+def add_keyed_extrema_edges(index: "Index") -> set[tuple[str, str, str]]:
+    resolver = index.partials
+    if resolver is None:
+        return set()
+    candidates = [
+        (sid, fn, site)
+        for sid, fn in index.syntax.items()
+        if index.nodes[sid].kind == "test"
+        and "." not in index.nodes[sid].name
+        and isinstance(fn, ast.FunctionDef)
+        and (site := keyed_test_site(fn)) is not None
+    ]
+    if not candidates:
+        return set()
+    try:
+        writes = namespace_writes(resolver)
+    except Unproved:
+        return set()
+    proof = Proof(
+        resolver,
+        {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
+        scalar_factories=True,
+        literal_parameters=True,
+        keyed_extrema=True,
+    )
+    proof.writes = writes
+    paths = set()
+    for sid, fn, site in candidates:
+        path = index.nodes[sid].path
+        try:
+            scope = audit(body(fn), local=True)
+            if scope.wildcard or any(
+                isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn)
+            ):
+                continue
+            env = proof.module(path) | {name: UNBOUND for name in scope.counts}
+            helper = proof.expression(site.func, env)
+            if (
+                not isinstance(helper, Function)
+                or helper.sid == sid
+                or helper.sid not in index.nodes
+            ):
+                continue
+            comparison, builtin, method, target = keyed_comparison(proof, helper)
+            if target.sid in (sid, helper.sid) or target.sid not in index.nodes:
+                continue
+        except (Unproved, RecursionError):
+            continue
+        helper_path = index.nodes[helper.sid].path
+        forwarded = " via its forwarding wrapper" if helper.wrapper else ""
+        index.add_edge(
+            sid,
+            helper.sid,
+            "call",
+            f"{path}:{site.lineno} calls {helper.sid}{forwarded}",
+            SourceLocation(path=path, line=site.lineno, end_line=site.end_lineno or site.lineno),
+        )
+        index.add_edge(
+            helper.sid,
+            target.sid,
+            "call",
+            f"{helper_path}:{comparison.lineno} calls the bound {method} via builtin {builtin}"
+            " on two key results of the same exact class",
+            SourceLocation(
+                path=helper_path,
+                line=comparison.lineno,
+                end_line=comparison.end_lineno or comparison.lineno,
+            ),
+        )
+        paths.add((sid, helper.sid, target.sid))
+    return paths

@@ -334,6 +334,19 @@ RAISES_GREATER_THAN_SOURCE_CHANGES = {
 }
 
 
+KEYED_EXTREMA_TRANSITION = Path("benchmarks/keyed-extrema-v1-preservation.json")
+KEYED_EXTREMA_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "raises_greater_than_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -348,7 +361,19 @@ def _previous_source_hash(
     return actual
 
 
+def raises_greater_than_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        KEYED_EXTREMA_TRANSITION,
+        RAISES_GREATER_THAN_TRANSITION,
+        KEYED_EXTREMA_SOURCE_CHANGES,
+    )
+
+
 def raises_less_than_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = raises_greater_than_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

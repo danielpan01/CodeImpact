@@ -1224,3 +1224,27 @@ initial `__gt__` binding and the comparison range for each revision.
 Computed operands, booleans, reflected dispatch and the exception
 outcome are outside this proof.
 [Greater-than trace and measurement](REAL_EVALUATION_V5.md#greater-than-inside-pytestraises)
+
+### Two-argument keyed min and max
+
+A plain top-level test can begin with a direct equality assertion whose
+left operand calls a source-owned helper with two positional literals.
+The proof audits the whole test scope and the helper's module binding.
+The helper returns one
+unshadowed builtin `min` or `max` call with both inputs and a single
+`key` keyword. A direct builtin `str` conversion of the result is also
+supported. A decorated helper must have a source-proved forwarding wrapper.
+
+The key is a source-owned plain function or a classmethod bound to a proved
+class. Both normal key returns must establish the same exact source class
+with an explicit initial `__lt__` or `__gt__` binding. The graph records
+the test-to-helper call and the helper-to-comparison call at their own
+source ranges in each revision. Selection requires both hops from a
+single revision. A shared helper edge can overlap an ordinary call edge
+in another revision. The analyzer checks the complete test-specific proof
+before using those combined edges for a recommendation. Existing resolved
+evidence keeps precedence, and new
+recommendations use the existing score formula with distance two. The
+proof ends at the initial ordering call, before any reflected dispatch,
+winner selection or warning outcome.
+[Source trace and successor replay](REAL_EVALUATION_V5.md#keyed-min-and-max)
