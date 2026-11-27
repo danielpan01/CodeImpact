@@ -301,6 +301,20 @@ PARAMETERIZED_LESS_THAN_SOURCE_CHANGES = {
 }
 
 
+STRING_PARAMETER_LESS_THAN_TRANSITION = Path(
+    "benchmarks/string-parameter-less-than-v1-preservation.json"
+)
+STRING_PARAMETER_LESS_THAN_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "parameterized_less_than_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -315,7 +329,19 @@ def _previous_source_hash(
     return actual
 
 
+def parameterized_less_than_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        STRING_PARAMETER_LESS_THAN_TRANSITION,
+        PARAMETERIZED_LESS_THAN_TRANSITION,
+        STRING_PARAMETER_LESS_THAN_SOURCE_CHANGES,
+    )
+
+
 def dictionary_inequality_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = parameterized_less_than_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

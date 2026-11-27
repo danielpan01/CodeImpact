@@ -41,6 +41,7 @@ class Receipt(StrictModel):
         "exact-inequality-v1",
         "dictionary-inequality-v1",
         "parameterized-less-than-v1",
+        "string-parameter-less-than-v1",
     ]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256

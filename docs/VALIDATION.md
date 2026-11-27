@@ -4567,3 +4567,36 @@ misses and two draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases against the dictionary profile and validated current recommendation paths. The 49 pre-v5 cases and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained two operator edges. Only the subclass case gained recommendations. |
 
 Local logs are under `reports/parameterized-less-than/`.
+
+## Less-than with literal pytest string parameters
+
+Started on merged `main` at `5976a758e401fd28cf1ad55da0b6e4c7fc7e6cc3`
+(PR #45). Before implementation, `make evaluate-real-v5-parameterized-less-than`
+reproduced 120/239 selected overall and 21/106 in the SemVer subclass
+case. Four new positive regressions failed against the predecessor,
+including the pinned assertion and before-only and after-only proofs.
+
+The successor selects 121/239 overall and 22/106 for the subclass case.
+The only added recommendation cites `tests/test_compare.py` line 264
+and `src/semver/version.py::_comparator.wrapper` at lines 41–52 in
+both revisions. Its score is 90. Earlier scores and evidence match the
+predecessor. The subclass case retains ten draft misses, including the
+comparison inside `pytest.raises`, and two draft false positives.
+[Trace, measurements and successor receipt](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-string-parameters)
+
+The initial offline run caught the tuple/list evaluator using the new
+profile. The evaluator now explicitly selects its historical profile,
+and the predecessor replay again matches its original receipt. The
+source hashes in the new successor receipt record that fix.
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation checks | 184 passed on the final code, including 15 string cases covering exact string rows, mixed and empty tables, computed rows, shadowing, rebinding, reversed operands, `pytest.raises` and one-revision evidence. |
+| `make check` | Passed with 1,528 Python tests, one Linux-only address-space skip on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. The Python suite was already running when the historical CLI profile was corrected. Ruff lint and format and mypy passed again on the final code, and the offline gates exercised the corrected CLI. The production build passed. |
+| Offline evaluations | All 18 targets passed after the profile fix. All 177 pre-existing report files matched their starting SHA-256 hashes. |
+| Determinism | Hash seeds 7 and 173 each reproduced 20 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated all 159 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Browser suite | First full run had 289 passed and one failure. The full rerun had 287 passed and three failures. Each failure reported a non-finite value from Playwright's injected `expectHitTarget` listener calling `elementsFromPoint` in WebKit. A full run from an isolated copy of merged main reproduced the same stack in a different WebKit test (289 passed, one failure). The initial failed case passed on three isolated repetitions. A rerun of the three later failures passed both Slugify cases and reproduced the error in the mixed/deleted evidence case. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases against the tuple/list profile and validated current recommendation paths. The 49 pre-v5 cases and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
+
+Local logs are under `reports/string-parameter-less-than/`.

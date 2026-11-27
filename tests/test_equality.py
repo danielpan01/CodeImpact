@@ -932,7 +932,7 @@ def test_parameterized_less_than_uses_every_row_type_and_records_both_ranges(row
         "[*((1,),)]",
         "[]",
         "[(1,)] * 2",
-        "['x']",
+        "[b'x']",
         "[(1,), (2,), " + "(), " * 128 + "]",
     ],
 )
@@ -1035,3 +1035,79 @@ def test_parameterized_less_than_keeps_only_the_initial_not_implemented_call():
     (edge,) = less_than_edges(report)
     assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__lt__", "both")
     assert len(edge.before) == len(edge.after) == 1
+
+
+STRING_PARAMETER_TEST = parameterized_test('["1", "2.0", ""]')
+
+
+def test_string_parameter_less_than_records_the_initial_call_in_both_revisions():
+    request = request_for(STRING_PARAMETER_TEST, base_core=ORDERED_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + STRING_PARAMETER_TEST
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    for entries, line in ((edge.before, 6), (edge.after, 7)):
+        (site,) = entries
+        assert "builtin str from pytest parameter 'values'" in site.text
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert site.target_location.path == SOURCE
+        assert site.target_location.line == 4
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.evidence_path, rec.path_revision) == (
+        [edge.id],
+        [TEST, WRAPPER],
+        "both",
+    )
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        parameterized_test('["1", b"2"]'),
+        parameterized_test('["1", ("2",)]'),
+        parameterized_test('["1", "2" + "3"]'),
+        parameterized_test('["1", f"2"]'),
+        parameterized_test('["1", str(2)]'),
+        parameterized_test("[]"),
+        parameterized_test('["1", "2"]', assertion="values < left"),
+        STRING_PARAMETER_TEST + "\ndef replace_mark():\n    pytest.mark.parametrize = foreign\n",
+        STRING_PARAMETER_TEST.replace("import pytest", "import pytest\npytest = 1"),
+        STRING_PARAMETER_TEST.replace("    assert left", '    values = "3"\n    assert left'),
+        STRING_PARAMETER_TEST.replace(
+            "    assert left < values",
+            "    with pytest.raises(ValueError):\n        assert left < values",
+        ),
+    ],
+)
+def test_string_parameter_less_than_declines_unsupported_rows_or_assertions(source):
+    assert not less_than_edges(analyze(request_for(source, base_core=ORDERED_CORE)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_string_parameter_less_than_proves_only_the_string_revision(side):
+    request = request_for(STRING_PARAMETER_TEST, base_core=ORDERED_CORE)
+    unsupported = request.head if side == "before" else request.base
+    unsupported.files["tests/test_item.py"] = parameterized_test('["1", 2]')
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [site.location.line for site in edge.before] == ([6] if side == "before" else [])
+    assert [site.location.line for site in edge.after] == ([6] if side == "after" else [])
+
+
+def test_pinned_string_parameter_less_than_starts_at_line_264():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_compare_version_string"
+    target = "src/semver/version.py::_comparator.wrapper"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert (rec.evidence_path, rec.path_revision) == ([sid, target], "both")
+    (edge,) = [e for e in less_than_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (264, 264)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)

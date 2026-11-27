@@ -574,3 +574,55 @@ The prerelease case retains four misses and 40 false positives.
 Cached Property retains ten false positives and one selected uncertain
 definition. The successor receipt lists the exact IDs. Labels remain
 drafts.
+
+## Less-than with literal pytest string parameters
+
+`make evaluate-real-v5-string-parameter-less-than` checks the tuple and
+list predecessor and measures `string-parameter-less-than-v1` on the
+same captures and draft labels. The stable report hash pins the evidence
+ranges by revision. The receipt also lists the exact recommendation delta
+and remaining discrepancies.
+[Successor receipt](../datasets/real-v5-successors/string-parameter-less-than-v1.json) · [Engine hashes](../benchmarks/string-parameter-less-than-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, tuple and list parameters | 21 / 106 | 19 | 2 | 11 | 74 | 0 |
+| Subclass comparison, string parameters | 22 / 106 | 20 | 2 | 10 | 74 | 0 |
+| V5 overall, tuple and list parameters | 120 / 239 | 67 | 52 | 15 | 104 | 1 |
+| V5 overall, string parameters | 121 / 239 | 68 | 52 | 14 | 104 | 1 |
+
+In both pinned revisions, lines 250–259 of `tests/test_compare.py` give
+`s` the three literal strings `"1.0.0"`, `"1.0.0-pre.2"` and
+`"1.0.0-pre.2+build.4"`. The source-defined `Version` constructor at
+line 261 establishes the exact class of the left operand. The right
+operand is an exact builtin `str` in each row, so it has no subclass
+priority over the left operand. Python first tries the callable
+bound to `Version.__lt__`, installed by `@_comparator` at line 473 of
+`src/semver/version.py`. Both wrappers include `str` through
+`String.__args__`, with `String = Union[str, bytes]` in
+`src/semver/_types.py`. The type tuple starts with `Version` in base
+and `type(self)` in head. The wrapper forwards to the original
+`__lt__`, whose body returns `self.compare(other) < 0`.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L250-L264) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L250-L264)
+
+The only added recommendation is
+`tests/test_compare.py::test_should_compare_version_string`. Its
+resolved call edge runs from line 264 to
+`src/semver/version.py::_comparator.wrapper` at lines 41–52 in both
+revisions. It has distance 1 and score 90. Existing recommendation
+scores and evidence are identical. The separate prerelease case gains
+the same graph edge to its unchanged wrapper and retains its 71
+recommendations. Both Cached Property cases match their predecessor.
+
+The proof uses the existing single-parameter table and direct-assertion
+rules. A string table must contain 1–64 rows, all exact string literals.
+Mixed or empty tables, computed strings, reversed dispatch, guards such
+as `pytest.raises`, and dispatch after `NotImplemented` stay outside the
+proof. Evidence still describes the test definition. The nearby
+`test_should_not_allow_to_compare_invalid_versionstring` remains a
+draft miss because its comparison is inside `pytest.raises`.
+
+The subclass case retains ten draft misses and two draft false positives.
+The prerelease case retains four misses and 40 false positives. Cached
+Property retains ten false positives and one selected uncertain
+definition. The receipt lists the remaining IDs. Labels remain drafts.

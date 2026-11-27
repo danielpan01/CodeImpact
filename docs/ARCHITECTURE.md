@@ -1187,7 +1187,9 @@ unpacking and subsequent dispatch are outside this proof.
 The direct `<` assertion proof accepts one parameter supplied by a
 direct `pytest.mark.parametrize` decorator. The binding must come from
 an unshadowed `import pytest`. A bounded literal table must give the
-parameter the same exact builtin type in every row, either tuple or list.
+parameter the same exact builtin type in every row. The proof accepts
+literal tuples, lists or strings. The earlier replay covers tuples
+and lists.
 The assertion must read the unrebound parameter directly on the right
 and a proved source-class instance on the left. The exact builtin is
 unrelated to that class, so its reflected method has no subclass priority.

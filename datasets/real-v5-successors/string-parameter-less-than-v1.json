@@ -1,0 +1,138 @@
+{
+  "cases": {
+    "cached_property_async_wrapper": {
+      "added": {},
+      "changed": {},
+      "remaining": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry"
+        ],
+        "uncertain_selected": [
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property"
+        ]
+      },
+      "removed": []
+    },
+    "cached_property_coroutine_metadata": {
+      "added": {},
+      "changed": {},
+      "remaining": {
+        "false_negatives": [],
+        "false_positives": [
+          "tests/test_cached_property.py::TestCachedProperty.test_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_none_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_reset_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_set_cached_property",
+          "tests/test_cached_property.py::TestCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_threads_ttl_expiry",
+          "tests/test_cached_property.py::TestCachedPropertyWithTTL.test_ttl_expiry",
+          "tests/test_cached_property.py::TestThreadedCachedProperty.test_threads",
+          "tests/test_cached_property.py::TestThreadedCachedPropertyWithTTL.test_threads_ttl_expiry"
+        ],
+        "uncertain_selected": []
+      },
+      "removed": []
+    },
+    "semver_prerelease_comparison": {
+      "added": {},
+      "changed": {},
+      "remaining": {
+        "false_negatives": [
+          "tests/test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+          "tests/test_compare.py::test_should_compare_version_dictionaries",
+          "tests/test_compare.py::test_should_compare_version_info_objects",
+          "tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments"
+        ],
+        "false_positives": [
+          "tests/test_bump.py::test_should_bump_build",
+          "tests/test_bump.py::test_should_bump_major",
+          "tests/test_bump.py::test_should_bump_minor",
+          "tests/test_bump.py::test_should_bump_patch",
+          "tests/test_bump.py::test_should_bump_prerelease",
+          "tests/test_bump.py::test_should_ignore_build_on_prerelease_bump",
+          "tests/test_bump.py::test_should_ignore_extensions_for_bump",
+          "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+          "tests/test_compare.py::test_should_raise_value_error_for_invalid_value",
+          "tests/test_deprecated_functions.py::test_deprecated_deco_without_argument",
+          "tests/test_format.py::test_parse_method_for_version_info",
+          "tests/test_format.py::test_should_correctly_format_version",
+          "tests/test_format.py::test_should_finalize_version",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_index",
+          "tests/test_index.py::test_version_info_should_be_accessed_with_slice_object",
+          "tests/test_index.py::test_version_info_should_throw_index_error",
+          "tests/test_index.py::test_version_info_should_throw_index_error_when_negative_index",
+          "tests/test_match.py::test_should_match_simple",
+          "tests/test_match.py::test_should_no_match_simple",
+          "tests/test_match.py::test_should_raise_value_error_for_invalid_match_expression",
+          "tests/test_match.py::test_should_raise_value_error_for_unexpected_match_expression",
+          "tests/test_max-min.py::test_should_get_max",
+          "tests/test_max-min.py::test_should_get_min",
+          "tests/test_parsing.py::test_next_version_with_invalid_parts",
+          "tests/test_parsing.py::test_next_version_with_versioninfo",
+          "tests/test_parsing.py::test_parse_method_for_version_info",
+          "tests/test_parsing.py::test_parse_version_info_str_hash",
+          "tests/test_parsing.py::test_should_parse_version",
+          "tests/test_parsing.py::test_should_parse_zero_prerelease",
+          "tests/test_parsing.py::test_should_raise_value_error_for_zero_prefixed_versions",
+          "tests/test_pysemver-cli.py::test_main_file_should_call_cli_main",
+          "tests/test_replace.py::test_replace_method_replaces_requested_parts",
+          "tests/test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg",
+          "tests/test_replace.py::test_replace_raises_ValueError_for_non_numeric_values",
+          "tests/test_semver.py::test_should_versioninfo_isvalid",
+          "tests/test_semver.py::test_versioninfo_compare_should_raise_when_passed_invalid_value",
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo",
+          "tests/test_typeerror-274.py::test_should_not_work_with_invalid_args",
+          "tests/test_typeerror-274.py::test_should_work_with_string_and_bytes"
+        ],
+        "uncertain_selected": []
+      },
+      "removed": []
+    },
+    "semver_subclass_comparison": {
+      "added": {
+        "tests/test_compare.py::test_should_compare_version_string": {
+          "distance": 1,
+          "evidence_edges": [
+            "4809a8abc0513b61c6aef98d08199927691e18ed533fdc2e876bacbafecdfa17"
+          ],
+          "evidence_path": [
+            "tests/test_compare.py::test_should_compare_version_string",
+            "src/semver/version.py::_comparator.wrapper"
+          ],
+          "path_revision": "both",
+          "reason": "Resolved call path",
+          "score": 90,
+          "symbol": "tests/test_compare.py::test_should_compare_version_string"
+        }
+      },
+      "changed": {},
+      "remaining": {
+        "false_negatives": [
+          "tests/test_compare.py::test_should_not_allow_to_compare_invalid_versionstring",
+          "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int",
+          "tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings",
+          "tests/test_max-min.py::test_prerelease_order",
+          "tests/test_max-min.py::test_should_get_max",
+          "tests/test_max-min.py::test_should_get_max_same",
+          "tests/test_max-min.py::test_should_get_min",
+          "tests/test_max-min.py::test_should_get_min_same",
+          "tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch",
+          "tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts"
+        ],
+        "false_positives": [
+          "tests/test_subclass.py::test_replace_from_subclass",
+          "tests/test_subclass.py::test_subclass_from_versioninfo"
+        ],
+        "uncertain_selected": []
+      },
+      "removed": []
+    }
+  },
+  "name": "string-parameter-less-than-v1",
+  "predecessor_report_sha256": "a4b0daff05e32f09b25741341f72d56a4881cb87c4551aa05d4b4ed3d536e4c3",
+  "preservation_sha256": "5af94d99feb8f7973b3dc06acb4c0482530a70e695adf7052752a4eb0362b0c0",
+  "report_sha256": "ef6ee7ceffd4d71ad739b479e3d4de8236ad30d033091f9c9d0019a412a4e9b5",
+  "schema_version": "1.0"
+}
