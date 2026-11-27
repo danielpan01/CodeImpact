@@ -4755,3 +4755,36 @@ selection.
 | `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,688 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
 
 Local logs and the determinism receipt are under `reports/parameter-dictionary-equality/`.
+
+## Replacement equality with literal pytest keywords
+
+Started on clean, merged `main` at `5a76cfe3562c18d7e46022bc0ad3792209266023`
+(PR #51). The `make evaluate-real-v5-parameter-dictionary-equality`
+baseline reproduced 129/239 selections overall and 30/106 in the
+subclass case. Four positive regressions failed before the analyzer
+edit, covering the pinned test, the synthetic method and both
+single-revision cases.
+
+The successor adds only
+`tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`.
+Its edge cites assertion line 45 and the comparison wrapper at lines
+41–52 in both revisions. The five rows contribute one recommendation
+with score 90 and distance 1. The legacy replacement test remains
+unselected. The subclass case selects 31/106 with 29 draft true positives,
+two false positives, one false negative and 74 true negatives.
+V5 overall selects 130/239 with 77 draft true positives, 52 false
+positives, five false negatives, 104 true negatives and one uncertain
+selection.
+[Source trace and exact delta](REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords)
+
+| Check | Observed result |
+| --- | --- |
+| Pilot and frontend formatting | `make verify-pilot` passed readiness, built UI, public demo, key protection, exact frozen-input report and absence of report storage. Prettier passed. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the parameter-dictionary-equality profile. The 49 pre-v5 cases and both Cached Property cases match after excluding elapsed time. Each SemVer case gains one edge. Only the subclass case gains a recommendation. An in-memory change to the after-revision assertion range failed the successor check. |
+| Focused comparison and preservation tests | 383 passed, including 39 replacement regressions for exact field reads, keyword binding, shadowing, unknown keys, unsupported dispatch, alternate returns and revision isolation. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Offline evaluations | All 24 targets passed, including the preserved parameter-dictionary-equality replay and the replacement successor. All 183 pre-existing report files matched their starting SHA-256 hashes. |
+| Determinism | Hash seeds 7 and 173 each reproduced 26 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 183 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,727 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+
+Local logs and the determinism receipt are under `reports/parameter-replace-equality/`.

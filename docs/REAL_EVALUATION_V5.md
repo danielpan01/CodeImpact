@@ -917,3 +917,57 @@ and `tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`
 remain unselected. The prerelease case retains its four draft misses.
 The successor receipt records the exact discrepancies, including the
 unchanged 52 false positives and one uncertain selection.
+
+## Replacement equality with literal pytest keywords
+
+`make evaluate-real-v5-parameter-replace-equality` replays the
+`parameter-dictionary-equality-v1` predecessor and measures the new rule
+against the same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/parameter-replace-equality-v1.json) · [Engine hashes](../benchmarks/parameter-replace-equality-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, factory dictionary equality | 30 / 106 | 28 | 2 | 2 | 74 | 0 |
+| Subclass comparison, replacement equality | 31 / 106 | 29 | 2 | 1 | 74 | 0 |
+| V5 overall, factory dictionary equality | 129 / 239 | 76 | 52 | 6 | 104 | 1 |
+| V5 overall, replacement equality | 130 / 239 | 77 | 52 | 5 | 104 | 1 |
+
+Both subclass revisions supply five rows at `tests/test_replace.py`
+lines 34–43. The `version` and `expected` columns contain strings and
+`parts` uses builtin `dict` with literal keyword values. At line 45,
+the left factory supplies the exact `Version` receiver for
+`replace(**parts)`. The right factory supplies another exact `Version`.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_replace.py#L34-L45) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_replace.py#L34-L45)
+
+`Version.replace` calls `self.to_dict()` at line 668 of
+`src/semver/version.py`. The field reader constructs a fresh dictionary
+at lines 236–242. Its five properties read initialized private fields
+directly. Line 669 updates the fresh dictionary using the collected
+keywords, all of which fit the field dictionary and constructor. The
+normal return at line 671 invokes the receiver's exact class through
+builtin `type(self)(**version)`. The `TypeError` handler builds a
+diagnostic and raises at line 678, so it has no normal exit to the
+assertion. The initial `__eq__` binding is the edited comparison
+wrapper at lines 41–52.
+[Base method](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/src/semver/version.py#L654-L678) · [Head method](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/version.py#L654-L678)
+
+The neighboring `test_replace_method_replaces_requested_parts` uses
+the legacy helper. It returns
+`str(Version.parse(version).replace(**parts))` at line 395 of
+`src/semver/_deprecated.py`. The test remains unselected in the
+subclass case.
+
+The only added recommendation is
+`tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`.
+Its evidence connects test line 45 to
+`src/semver/version.py::_comparator.wrapper` in both revisions.
+The five rows contribute one definition-level recommendation at
+distance 1 and score 90. Both SemVer graphs gain one edge. The
+prerelease case uses its unchanged wrapper and keeps its 71
+recommendations. Both Cached Property cases and all existing
+recommendation scores and evidence match the predecessor.
+
+The remaining subclass draft miss is
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`.
+The prerelease case retains four draft misses. The successor receipt
+also records the 52 retained false positives and one uncertain selection.

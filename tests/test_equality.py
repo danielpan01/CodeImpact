@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from textwrap import dedent
+from textwrap import dedent, indent
 
 import pytest
 
@@ -1474,4 +1474,164 @@ def test_pinned_factory_dictionary_equality_selects_only_the_source_instance():
     for entries in edge.before, edge.after:
         (site,) = entries
         assert (site.location.path, site.location.line, site.location.end_line) == (path, 103, 103)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+REPLACE_CORE = CORE.replace(
+    "    def bump(self):",
+    indent(
+        dedent("""\
+            @property
+            def value(self):
+                return self._value
+
+            def to_dict(self):
+                return dict(value=self.value)
+
+            def replace(self, **parts):
+                fields = self.to_dict()
+                fields.update(parts)
+                try:
+                    return type(self)(**fields)
+                except TypeError:
+                    missing = set(parts) - set(self.to_dict())
+                    message = "%d fields: %s" % (len(missing), ", ".join(missing))
+                    raise TypeError(message)
+            """),
+        "    ",
+    )
+    + "\n    def bump(self):",
+)
+REPLACE_TABLE = dedent("""\
+    import pytest
+    from values import Item
+
+    @pytest.mark.parametrize(
+        "expected, changes, value",
+        [("2", dict(value=2), "1"), ("3", dict(value=3), "1")],
+    )
+    def test_equal(value, changes, expected):
+        assert Item.parse(value).replace(**changes) == Item.parse(expected)
+    """)
+
+
+def test_factory_replacement_resolves_bound_fields_and_keyword_rows():
+    request = request_for(REPLACE_TABLE, base_core=REPLACE_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + REPLACE_TABLE
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, "both")
+    for entries, line in ((edge.before, 9), (edge.after, 10)):
+        (site,) = entries
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert "keyword" in site.text and "'changes'" in site.text
+    (rec,) = report.recommendations
+    assert (rec.evidence_path, rec.evidence_edges, rec.path_revision) == (
+        [TEST, WRAPPER],
+        [edge.id],
+        "both",
+    )
+
+
+@pytest.mark.parametrize(
+    "tests",
+    [
+        REPLACE_TABLE.replace("dict(value=3)", "dict(value=2 + 1)"),
+        REPLACE_TABLE.replace("dict(value=3)", 'dict(**{"value": 3})'),
+        REPLACE_TABLE.replace("dict(value=3)", 'dict({"value": 3})'),
+        REPLACE_TABLE.replace("dict(value=3)", "dict(value=3, value=4)"),
+        REPLACE_TABLE.replace("dict(value=3)", "dict(unknown=3)"),
+        REPLACE_TABLE.replace("dict(value=3)", '{"value": 3}'),
+        REPLACE_TABLE.replace('("3", dict(value=3)', "(3, dict(value=3)"),
+        REPLACE_TABLE.replace('dict(value=3), "1")', 'dict(value=3), "0" + "1")'),
+        REPLACE_TABLE.replace("import pytest", "import pytest\ndict = int"),
+        REPLACE_TABLE.replace("import pytest", "import pytest as pytest"),
+        REPLACE_TABLE + "    changes = {}\n",
+        REPLACE_TABLE + "    expected = 'later'\n",
+        REPLACE_TABLE + "    Item: type\n",
+        REPLACE_TABLE.replace("**changes", "**changes, value=2"),
+        REPLACE_TABLE.replace("**changes", "**computed()"),
+        REPLACE_TABLE.replace("Item.parse(expected)", "Item.parse(expected + '')"),
+        REPLACE_TABLE.replace("    assert", "    if value:\n        assert"),
+    ],
+)
+def test_factory_replacement_declines_unproved_rows_or_test_bindings(tests):
+    assert not equality_edges(analyze(request_for(tests, base_core=REPLACE_CORE)))
+
+
+@pytest.mark.parametrize(
+    "factory",
+    [
+        REPLACE_CORE + "\ndict = int\n",
+        REPLACE_CORE + "\ntype = int\n",
+        REPLACE_CORE + "\nTypeError = ValueError\n",
+        REPLACE_CORE + "\nItem.to_dict = alternate\n",
+        REPLACE_CORE + "\nItem.replace = alternate\n",
+        REPLACE_CORE.replace("    def replace(self", "    @classmethod\n    def replace(self"),
+        REPLACE_CORE.replace(
+            "    def replace(self, **parts)", "    def replace(self, extra, **parts)"
+        ),
+        REPLACE_CORE.replace("return self._value\n", "return self.unknown\n"),
+        REPLACE_CORE.replace("dict(value=self.value)", "dict(missing=self.value)"),
+        REPLACE_CORE.replace("dict(value=self.value)", "dict(value=self.dynamic())"),
+        REPLACE_CORE.replace("fields.update(parts)", "fields.update(computed(parts))"),
+        REPLACE_CORE.replace("fields.update(parts)", "fields.update(other)"),
+        REPLACE_CORE.replace("return type(self)(**fields)", "return str(self)"),
+        REPLACE_CORE.replace("return type(self)(**fields)", "return Item(0).to_dict()"),
+        REPLACE_CORE.replace("raise TypeError(message)", "return self.to_dict()"),
+        REPLACE_CORE.replace(
+            "raise TypeError(message)",
+            "raise TypeError(message)\n        finally:\n            return {}",
+        ),
+        REPLACE_CORE.replace("except TypeError:", "except Exception:"),
+    ],
+)
+def test_factory_replacement_declines_unproved_method_or_field_reads(factory):
+    assert not equality_edges(analyze(request_for(REPLACE_TABLE, base_core=factory)))
+
+
+def test_factory_replacement_declines_legacy_string_result():
+    core = (
+        REPLACE_CORE
+        + "\n\ndef replace(value, **parts):\n    return str(Item.parse(value).replace(**parts))\n"
+    )
+    tests = REPLACE_TABLE.replace(
+        "from values import Item", "from values.core import Item, replace"
+    )
+    tests = tests.replace("Item.parse(value).replace(**changes)", "replace(value, **changes)")
+    assert not equality_edges(analyze(request_for(tests, base_core=core)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_factory_replacement_proves_one_revision_independently(side):
+    request = request_for(REPLACE_TABLE, base_core=REPLACE_CORE)
+    other = request.head if side == "before" else request.base
+    other.files["tests/test_item.py"] += "\ndef rebind():\n    Item.replace = alternate\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = equality_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (TEST, WRAPPER, side)
+    assert bool(edge.before) == (side == "before")
+    assert bool(edge.after) == (side == "after")
+
+
+def test_pinned_factory_replacement_equality_selects_the_instance_method():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    path = "tests/test_replace.py"
+    test = f"{path}::test_should_return_versioninfo_with_replaced_parts"
+    legacy = f"{path}::test_replace_method_replaces_requested_parts"
+    target = "src/semver/version.py::_comparator.wrapper"
+    recs = {rec.symbol: rec for rec in report.recommendations}
+    assert legacy not in recs
+    assert not any(edge.source == legacy for edge in equality_edges(report))
+    rec = recs[test]
+    assert (rec.evidence_path, rec.path_revision, rec.distance) == ([test, target], "both", 1)
+    (edge,) = [edge for edge in equality_edges(report) if edge.id in rec.evidence_edges]
+    for entries in (edge.before, edge.after):
+        (site,) = entries
+        assert (site.location.path, site.location.line, site.location.end_line) == (path, 45, 45)
         assert (site.target_location.line, site.target_location.end_line) == (41, 52)
