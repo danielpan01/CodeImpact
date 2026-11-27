@@ -61,6 +61,8 @@ jobs:
         run: make evaluate-real-v5-raises-greater-than
       - name: Offline v5 keyed min and max evaluation
         run: make evaluate-real-v5-keyed-extrema
+      - name: Offline v5 keyed pytest parameter evaluation
+        run: make evaluate-real-v5-keyed-parameters
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

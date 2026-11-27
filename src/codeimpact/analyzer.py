@@ -545,8 +545,8 @@ def build_index(
         add_fixture_edges(index)
     if equality:
         add_comparison_edges(index, mode=equality)
-    if equality is True:
-        add_keyed_extrema_edges(index)
+    if equality in (True, "keyed-extrema"):
+        add_keyed_extrema_edges(index, literal_tables=equality is True)
     return index
 
 
@@ -969,9 +969,9 @@ def analyze(
         paths.setdefault(source, path)
     extrema_paths: dict[str, list[str]] = {}
     extrema_incoming: dict[str, set[str]] = defaultdict(set)
-    if equality is True:
-        before_extrema = add_keyed_extrema_edges(before)
-        after_extrema = add_keyed_extrema_edges(after)
+    if equality in (True, "keyed-extrema"):
+        before_extrema = add_keyed_extrema_edges(before, literal_tables=equality is True)
+        after_extrema = add_keyed_extrema_edges(after, literal_tables=equality is True)
         for trail in sorted(before_extrema | after_extrema):
             source, helper, target = trail
             extrema_incoming[target].add(helper)

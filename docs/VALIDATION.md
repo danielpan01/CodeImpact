@@ -4692,3 +4692,34 @@ revision, the other test's helper edge and an ordinary call edge can still
 appear together. The analyzer now checks the complete proof for each
 revision before selecting the resolved path. The added regression passed,
 and the keyed successor still matches its recorded results.
+
+## Keyed min and max from literal pytest tables
+
+Started from clean, merged `main` at `06b5343a393a377d2636178ec005fb7f21ca42bc`
+(PR #49). The unchanged `make evaluate-real-v5-keyed-extrema` baseline
+reproduced 127/239 selected overall and 28/106 in the subclass case.
+Seven positive regressions failed on the predecessor, including the
+pinned test, both operators, before-only and after-only proof, and
+shared-helper revision isolation.
+
+The successor adds only `tests/test_max-min.py::test_prerelease_order`.
+Both revisions cite the helper call on line 43 and builtin `min` on
+line 236. The seven rows receive one test-definition recommendation
+with score 72 and distance 2. The subclass case rises to 29/106
+selected with 27 draft true positives, two false positives, three
+false negatives and 74 true negatives. V5 overall selects 128/239
+with 75 draft true positives, 52 false positives, seven false
+negatives, 104 true negatives and one uncertain selection.
+[Source trace and exact delta](REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 307 passed, including 33 tests for keyed pytest tables. They cover malformed and computed rows, duplicate or mismatched columns, size bounds, shadowed or rebound bindings, unsupported decorators or keys, single-revision proof and shared helper isolation. |
+| Pilot and frontend formatting | `make verify-pilot` passed readiness, built UI, public demo, key protection, exact frozen-input report and absence of report storage. Prettier passed. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the keyed-extrema profile. The 49 pre-v5 cases and both Cached Property cases match after excluding elapsed time. Both SemVer graphs gain one edge, and only the subclass case gains a recommendation. An in-memory change to its after-revision call range failed the successor check. |
+| Offline evaluations | All 22 targets passed, including the preserved keyed-extrema replay and the literal-table successor. All 181 pre-existing report files matched their starting SHA-256 hashes. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Determinism | Hash seeds 7 and 173 each reproduced 24 report files byte for byte, including the two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 175 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,651 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+
+Local logs and the determinism receipt are under `reports/keyed-parameters/`.

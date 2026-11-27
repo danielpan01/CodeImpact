@@ -58,6 +58,14 @@ CHOICE = dedent("""\
         ))
     """)
 CHECK = 'from items import choose\n\ndef test_choose():\n    assert choose("a", "b") == "a"\n'
+PARAMETERIZED_CHECK = dedent("""\
+    import pytest
+    from items import choose
+
+    @pytest.mark.parametrize("expected, right, left", [("a", "b", "a"), ["c", "c", "c"]])
+    def test_choose(left, expected, right):
+        assert choose(left, right) == expected
+    """)
 
 
 def request_for(helper=CHOICE, *, tests=CHECK, core=ORDERING):
@@ -246,8 +254,8 @@ def test_keyed_builtin_declines_unsupported_test(test):
 def test_pinned_semver_keyed_extrema_use_the_two_builtin_sites():
     case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
     request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
-    report = analyze(request)
-    validate_report(request, report)
+    report = analyze(request, equality="keyed-extrema")
+    validate_report(request, report, equality="keyed-extrema")
     from_tests = "tests/test_max-min.py"
     selected = {r.symbol: r for r in report.recommendations if r.symbol.startswith(from_tests)}
     for short, helper_line, test_lines in (("max", 217, [7, 11]), ("min", 236, [15, 19])):
@@ -268,3 +276,144 @@ def test_pinned_semver_keyed_extrema_use_the_two_builtin_sites():
                 assert (site.location.line, site.location.end_line) == (helper_line, helper_line)
                 assert (site.target_location.line, site.target_location.end_line) == (41, 52)
     assert not selected
+
+
+@pytest.mark.parametrize(("builtin", "method"), [("min", "__lt__"), ("max", "__gt__")])
+def test_parameterized_keyed_builtin_resolves_named_columns(builtin, method):
+    request = request_for(CHOICE.replace("str(min(", f"str({builtin}("), tests=PARAMETERIZED_CHECK)
+    request.head.files[TESTS] = "\n" + PARAMETERIZED_CHECK
+    report = analyze(request)
+    validate_report(request, report)
+    (rec,) = report.recommendations
+    assert (rec.evidence_path, rec.path_revision, rec.distance) == (
+        [TEST, HELPER, TARGET],
+        "both",
+        2,
+    )
+    first, second = (next(e for e in report.edges if e.id == eid) for eid in rec.evidence_edges)
+    assert any("'left' and 'right'" in site.text for site in first.before)
+    assert any("'left' and 'right'" in site.text for site in first.after)
+    for evidence, line in ((first.before, 6), (first.after, 7)):
+        (site,) = evidence
+        assert (site.location.path, site.location.line, site.location.end_line) == (
+            TESTS,
+            line,
+            line,
+        )
+    (edge,) = keyed_edges(report)
+    assert edge == second
+    assert all(method in site.text for site in edge.before + edge.after)
+
+
+@pytest.mark.parametrize(
+    "test",
+    [
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]', '["c", "c"]'),
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]', '["c", "c", "c", "c"]'),
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]', "('c' + '', 'c', 'c')"),
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]', '["c", "c", 1]'),
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]', "pytest.param('c', 'c', 'c')"),
+        PARAMETERIZED_CHECK.replace('[("a", "b", "a"), ["c", "c", "c"]]', "[]"),
+        PARAMETERIZED_CHECK.replace("expected, right, left", "expected, right, right"),
+        PARAMETERIZED_CHECK.replace("expected, right, left", "expected, right, missing"),
+        PARAMETERIZED_CHECK.replace("expected, right, left", "expected, right, , left"),
+        PARAMETERIZED_CHECK.replace("test_choose(left,", "test_choose(*, left,"),
+        PARAMETERIZED_CHECK.replace(
+            "test_choose(left, expected, right)", "test_choose(left, expected, right='x')"
+        ),
+        PARAMETERIZED_CHECK.replace("import pytest", "import pytest as pytest"),
+        PARAMETERIZED_CHECK.replace("import pytest", "import pytest\npytest = 1"),
+        PARAMETERIZED_CHECK + "\ndef mutate():\n    pytest.mark.parametrize = alternate\n",
+        PARAMETERIZED_CHECK + "    left = 'later'\n",
+        PARAMETERIZED_CHECK + "    choose: str\n",
+        PARAMETERIZED_CHECK.replace("expected", "choose"),
+        PARAMETERIZED_CHECK.replace("expected", "request"),
+        PARAMETERIZED_CHECK.replace("@pytest", "@other\n@pytest", 1),
+        PARAMETERIZED_CHECK.replace('["c", "c", "c"]])', '["c", "c", "c"]], indirect=True)'),
+        PARAMETERIZED_CHECK.replace("choose(left, right)", "choose(left, unrelated)"),
+        PARAMETERIZED_CHECK.replace("choose(left, right)", "choose(left, right.upper())"),
+        PARAMETERIZED_CHECK.replace("choose(left, right)", "choose(left, right=right)"),
+    ],
+)
+def test_parameterized_keyed_builtin_declines_unproved_tables_or_bindings(test):
+    report = analyze(request_for(tests=test))
+    assert not keyed_edges(report)
+
+
+@pytest.mark.parametrize(("rows", "columns"), [(65, 3), (64, 5)])
+def test_parameterized_keyed_builtin_declines_oversized_tables(rows, columns):
+    names = ["left", "right", "expected", *[f"extra{i}" for i in range(columns - 3)]]
+    literals = [tuple("a" for _ in names)] * rows
+    names_arg = ", ".join(names)
+    tests = PARAMETERIZED_CHECK.split("@pytest", 1)[0] + dedent(f"""\
+        @pytest.mark.parametrize({names_arg!r}, {literals!r})
+        def test_choose({names_arg}):
+            assert choose(left, right) == expected
+        """)
+    assert not keyed_edges(analyze(request_for(tests=tests)))
+
+
+def test_parameterized_keyed_builtin_declines_unsupported_key():
+    helper = CHOICE.replace("key=Item.parse", "key=Item.parse if left else unknown")
+    request = request_for(helper, tests=PARAMETERIZED_CHECK)
+    assert not keyed_edges(analyze(request))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_parameterized_keyed_builtin_requires_both_hops_in_each_revision(side):
+    request = request_for(tests=PARAMETERIZED_CHECK)
+    other = request.head if side == "before" else request.base
+    other.files[HELPERS] += "\nmin = choose\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = keyed_edges(report)
+    (rec,) = report.recommendations
+    assert edge.revision == side
+    assert (rec.evidence_path, rec.path_revision) == ([TEST, HELPER, TARGET], side)
+
+
+@pytest.mark.parametrize("unproved", ["base", "head"])
+def test_parameterized_keyed_builtin_does_not_borrow_proof_from_another_test(unproved):
+    tests = PARAMETERIZED_CHECK.replace("from items import", "from items.helpers import")
+    request = request_for(CHOICE.replace("@deprecated\n", ""), tests=tests)
+    other_path = "tests/test_other.py"
+    request.base.files[other_path] = tests
+    request.head.files[other_path] = tests
+    getattr(request, unproved).files[TESTS] += "\nsetup()\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = keyed_edges(report)
+    assert edge.revision == "both"
+    caller = next(e for e in report.edges if (e.source, e.target, e.kind) == (TEST, HELPER, "call"))
+    assert caller.revision == "both"
+    assert any("literal pytest columns" in site.text for site in caller.before + caller.after)
+    unproved_sites = caller.before if unproved == "base" else caller.after
+    assert all("literal pytest columns" not in site.text for site in unproved_sites)
+    recs = {rec.symbol: rec for rec in report.recommendations}
+    assert recs[f"{other_path}::test_choose"].path_revision == "both"
+    assert TEST not in recs or recs[TEST].reason != "Resolved call path"
+
+
+def test_pinned_semver_parameterized_keyed_min_records_one_test_definition():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    test_path = "tests/test_max-min.py"
+    test = f"{test_path}::test_prerelease_order"
+    helper = "src/semver/_deprecated.py::min_ver"
+    target = "src/semver/version.py::_comparator.wrapper"
+    (rec,) = [rec for rec in report.recommendations if rec.symbol == test]
+    assert (rec.evidence_path, rec.path_revision, rec.score) == ([test, helper, target], "both", 72)
+    first, second = (next(e for e in report.edges if e.id == eid) for eid in rec.evidence_edges)
+    for caller, comparison in ((first.before, second.before), (first.after, second.after)):
+        (site,) = caller
+        assert (site.location.path, site.location.line, site.location.end_line) == (
+            test_path,
+            43,
+            43,
+        )
+        assert "literal pytest columns 'left' and 'right'" in site.text
+        (site,) = comparison
+        assert (site.location.line, site.location.end_line) == (236, 236)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
