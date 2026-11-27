@@ -101,6 +101,7 @@ not another replacement of the frontend. See FRONTEND_ROADMAP.md and VALIDATION.
 | Python SemVer exact-class inequality — implemented | Resolve the initial call to an explicit `__ne__` from a supported direct assertion with same-class operands | One new recommendation cites line 138 in both revisions. The subclass case reaches 18/106 selected with 14 draft misses and two false positives | The separate `exact-inequality-v1` replay pins the evidence and discrepancies. [Results](REAL_EVALUATION_V5.md#exact-class-inequality-evidence) |
 | Python SemVer builtin dictionary inequality — implemented | Resolve the initial `__ne__` call from a source-defined class to an exact builtin dictionary | One new recommendation cites line 167 in both revisions. The subclass case reaches 19/106 selected with 13 draft misses and two false positives | The separate `dictionary-inequality-v1` replay pins the evidence and discrepancies. [Results](REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary) |
 | Python SemVer literal pytest parameter less-than — implemented | Prove the initial `__lt__` call when every row supplies the same exact builtin tuple or list type | Two definitions gain evidence at lines 206 and 235. The subclass case reaches 21/106 selected with 11 draft misses and two false positives | The separate `parameterized-less-than-v1` replay pins both assertion ranges and the discrepancies. [Results](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters) |
+| Python SemVer literal string parameter less-than — implemented | Resolve the first `__lt__` call from a source-class instance to a parameter whose rows are exact builtin strings | One new recommendation cites line 264 in both revisions. The subclass case reaches 22/106 selected with ten draft misses and two false positives | The separate `string-parameter-less-than-v1` replay pins the assertion range and remaining discrepancies. [Results](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-string-parameters) |
 | 11 | Developer pilot and usability iteration — owner-deferred | Other developers can expose workflow problems not visible to automated tests | Owner resumes the pilot; actual participants complete prepared tasks; feedback and resulting changes are documented |
 | 12 | Controlled hosted pilot — owner-deferred | The service is verified locally, not on a real host | Owner chooses/authorizes a host; TLS, secrets, Linux isolation/resource behavior, rate limits, recovery and privacy are verified there |
 | 13 | Integrations and persistence — conditional | Accounts, server-side report storage, CI annotations or private repositories need real usage requirements | A specific pilot need justifies one bounded feature and its access/data-retention model |
@@ -255,7 +256,8 @@ Run focused tests plus `make check`, `make evaluate`, `make evaluate-real`,
 `make evaluate-real-v5-equality`, `make evaluate-real-v5-factories`,
 `make evaluate-real-v5-first-assertion`, `make evaluate-real-v5-less-than`,
 `make evaluate-real-v5-inequality`, `make evaluate-real-v5-dictionary-inequality`,
-`make evaluate-real-v5-parameterized-less-than`, `make verify-pilot`, and
+`make evaluate-real-v5-parameterized-less-than`, `make evaluate-real-v5-string-parameter-less-than`,
+`make verify-pilot`, and
 `cd web && npm run test:e2e` for application changes. Include frontend formatting
 for UI work. Verify relevant determinism and unchanged historical receipts, update
 actual results, and leave changes unstaged/uncommitted for the owner's publication.

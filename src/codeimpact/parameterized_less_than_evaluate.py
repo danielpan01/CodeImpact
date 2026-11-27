@@ -5,18 +5,26 @@ from typing import Any
 
 from codeimpact.dictionary_inequality_evaluate import evaluate_dictionary_inequality
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import PARAMETERIZED_LESS_THAN_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import (
+    PARAMETERIZED_LESS_THAN_TRANSITION,
+    PROJECT,
+    parameterized_less_than_source_hash,
+)
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_parameterized_less_than(directory: Path) -> dict[str, Any]:
-    receipt = verified_receipt("parameterized-less-than-v1", PARAMETERIZED_LESS_THAN_TRANSITION)
+    receipt = verified_receipt(
+        "parameterized-less-than-v1",
+        PARAMETERIZED_LESS_THAN_TRANSITION,
+        parameterized_less_than_source_hash,
+    )
     return measure(
         directory,
         evaluate_dictionary_inequality(directory),
         receipt,
-        True,
+        "parameterized",
         "Parameterized less-than",
     )
 

@@ -18,10 +18,16 @@ if TYPE_CHECKING:
 EqualityMode = (
     bool
     | Literal[
-        "exact-class", "factories", "first-assertion", "less-than", "inequality", "dictionary"
+        "exact-class",
+        "factories",
+        "first-assertion",
+        "less-than",
+        "inequality",
+        "dictionary",
+        "parameterized",
     ]
 )
-SequenceParameter = tuple[str, Literal["tuple", "list"]]
+LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
 MAX_PROOF_STEPS = 16_000
 MAX_PARAMETER_ROWS = 64
 MAX_PARAMETER_CELLS = 256
@@ -31,7 +37,8 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "dictionary",
+    True: "parameterized",
+    "parameterized": "dictionary",
     "dictionary": "inequality",
     "inequality": "less-than",
     "less-than": "first-assertion",
@@ -1023,7 +1030,7 @@ class Proof:
         method_name: str,
         *,
         dictionary_operands: bool,
-        parameter: SequenceParameter | None,
+        parameter: LiteralParameter | None,
     ) -> tuple[Function, str] | None:
         # Binding is function-wide, but only the prefix establishes operand values.
         stmts = body(fn)
@@ -1046,9 +1053,9 @@ class Proof:
         if not isinstance(lhs, Instance):
             return None
         if parameter is not None:
-            name, container = parameter
+            name, builtin_type = parameter
             detail = (
-                f"with an exact builtin {container} from pytest parameter {name!r} on the right"
+                f"with an exact builtin {builtin_type} from pytest parameter {name!r} on the right"
             )
         else:
             read_rhs = self.comparison_operand if dictionary_operands else self.expression
@@ -1076,7 +1083,7 @@ class Proof:
         return None
 
 
-def literal_sequence_parameter(fn: ast.FunctionDef) -> SequenceParameter | None:
+def literal_parameter(fn: ast.FunctionDef, *, allow_strings: bool) -> LiteralParameter | None:
     shape = inline_decorator(fn)
     args = fn.args
     if shape is None or (
@@ -1094,6 +1101,10 @@ def literal_sequence_parameter(fn: ast.FunctionDef) -> SequenceParameter | None:
         return None
     if not 1 <= len(table.elts) <= MAX_PARAMETER_ROWS:
         return None
+    if allow_strings and all(
+        isinstance(row, ast.Constant) and type(row.value) is str for row in table.elts
+    ):
+        return name, "str"
     first_row = table.elts[0]
     if not isinstance(first_row, (ast.Tuple, ast.List)):
         return None
@@ -1116,8 +1127,9 @@ def comparison_site(
     first: bool,
     operators: tuple[type[ast.cmpop], ...],
     literal_parameters: bool,
-) -> tuple[int, ast.Compare, SequenceParameter | None] | None:
-    parameter = literal_sequence_parameter(fn) if literal_parameters else None
+    allow_strings: bool,
+) -> tuple[int, ast.Compare, LiteralParameter | None] | None:
+    parameter = literal_parameter(fn, allow_strings=allow_strings) if literal_parameters else None
     if fn.type_params or fn.returns:
         return None
     if parameter is None and (
@@ -1195,9 +1207,15 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    first = mode in (True, "first-assertion", "less-than", "inequality", "dictionary")
+    literal_parameters = mode in (True, "parameterized")
+    first = literal_parameters or mode in (
+        "first-assertion",
+        "less-than",
+        "inequality",
+        "dictionary",
+    )
     operators: tuple[type[ast.cmpop], ...] = (ast.Eq,)
-    if mode in (True, "inequality", "dictionary"):
+    if literal_parameters or mode in ("inequality", "dictionary"):
         operators += (ast.Lt, ast.NotEq)
     elif mode == "less-than":
         operators += (ast.Lt,)
@@ -1209,7 +1227,11 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         and "." not in index.nodes[sid].name
         and (
             candidate := comparison_site(
-                node, first=first, operators=operators, literal_parameters=mode is True
+                node,
+                first=first,
+                operators=operators,
+                literal_parameters=literal_parameters,
+                allow_strings=mode is True,
             )
         )
         is not None
@@ -1224,7 +1246,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
         scalar_factories=mode != "exact-class",
-        literal_parameters=mode is True,
+        literal_parameters=literal_parameters,
     )
     proof.writes = writes
     edges = set()
@@ -1248,7 +1270,8 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 position,
                 site,
                 method_name,
-                dictionary_operands=mode in (True, "dictionary") and method_name == "__ne__",
+                dictionary_operands=(literal_parameters or mode == "dictionary")
+                and method_name == "__ne__",
                 parameter=parameter,
             )
             if binding is None:
