@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-25** (America/New_York).
+Checked on **2026-11-26** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -60,6 +60,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/REAL_EVALUATION_V5.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
 | README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -101,6 +104,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V4.md#icecream-timestamp-successor | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
@@ -163,6 +169,9 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#class-preserving-prerelease-factories | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -215,7 +224,7 @@ Live PyPI metadata compared alongside the declared constraints. The reported lat
 | fastapi | ==0.162.0 | 0.165.0 | >=3.11 |
 | h11 | ==0.16.0 | 0.16.0 | >=3.8 |
 | httpcore | ==1.0.9 | 1.0.9 | >=3.8 |
-| httpx | ==0.28.1 | 0.28.1 | >=3.8 |
+| httpx | ==0.28.1 | 0.29.0 | >=3.10 |
 | idna | ==3.20 | 3.20 | >=3.9 |
 | iniconfig | ==2.3.1 | 2.3.1 | >=3.10 |
 | librt | ==0.16.0 | 0.17.0 | >=3.10 |
