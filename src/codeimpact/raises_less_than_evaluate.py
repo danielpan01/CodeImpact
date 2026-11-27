@@ -4,16 +4,26 @@ from pathlib import Path
 from typing import Any
 
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import PROJECT, RAISES_LESS_THAN_TRANSITION
+from codeimpact.fresh_evaluate import (
+    PROJECT,
+    RAISES_LESS_THAN_TRANSITION,
+    raises_less_than_source_hash,
+)
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.string_parameter_less_than_evaluate import evaluate_string_parameter_less_than
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_raises_less_than(directory: Path) -> dict[str, Any]:
-    receipt = verified_receipt("raises-less-than-v1", RAISES_LESS_THAN_TRANSITION)
+    receipt = verified_receipt(
+        "raises-less-than-v1", RAISES_LESS_THAN_TRANSITION, raises_less_than_source_hash
+    )
     return measure(
-        directory, evaluate_string_parameter_less_than(directory), receipt, True, "Raises less-than"
+        directory,
+        evaluate_string_parameter_less_than(directory),
+        receipt,
+        "raises-less-than",
+        "Raises less-than",
     )
 
 

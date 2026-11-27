@@ -4628,3 +4628,30 @@ draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases with the direct string profile and validated current recommendation paths. All 49 pre-v5 cases and both Cached Property cases matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
 
 Local logs are under `reports/raises-less-than/`.
+
+## Greater-than inside pytest.raises
+
+Started on merged `main` at `e0ed81159ca354012e08e549077e0e5244b373aa`
+(PR #47). Before implementation, the raises less-than replay reproduced
+122/239 selected overall and 23/106 in the SemVer subclass case. Four
+positive regressions failed on that predecessor, including the pinned
+comparison and both evidence-in-one-revision cases.
+
+The successor captures one new recommendation. It cites line 291 in
+`tests/test_compare.py` and lines 41–52 of
+`src/semver/version.py::_comparator.wrapper` in both revisions, with score
+90. Earlier recommendation scores and evidence match the predecessor.
+The subclass case retains eight draft misses and two draft false positives.
+[Trace, measurements and successor receipt](REAL_EVALUATION_V5.md#greater-than-inside-pytestraises)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation checks | 239 passed, including 31 greater-than cases. Controls cover shadowed bindings, booleans, computed and reversed operands, unsupported context manager shapes, ambiguous methods and before-only and after-only evidence. The positive control records the first call even when the method returns `NotImplemented`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,583 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+| Offline evaluations | All 20 targets passed, including the preserved raises less-than replay and the greater-than successor. All 179 pre-existing report files matched their starting hashes. The successor rejected an in-memory alteration to the new after-revision comparison range. |
+| Determinism | Hash seeds 7 and 173 each reproduced 22 report files byte for byte. Reordering both snapshots reproduced and validated all 167 case analyses per seed after excluding only `stats.elapsed_ms`. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. Ran serially with one retry enabled for the known WebKit hit-target error. No retries were needed. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases with the raises less-than profile and validated current recommendation paths. All 49 pre-v5 cases and both Cached Property cases matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
+
+Local logs are under `reports/raises-greater-than/`.

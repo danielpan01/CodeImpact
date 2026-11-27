@@ -684,3 +684,60 @@ positives. The prerelease case retains four misses and 40 false
 positives. Cached Property retains ten false positives and one selected
 uncertain definition. The successor receipt lists the remaining IDs.
 Labels remain drafts.
+
+## Greater-than inside pytest.raises
+
+`make evaluate-real-v5-raises-greater-than` checks the raises less-than
+predecessor and measures `raises-greater-than-v1` on the same captures
+and draft labels. The receipt pins the whole stable report, including
+the exact comparison and target ranges, the recommendation delta and
+remaining discrepancies.
+[Successor receipt](../datasets/real-v5-successors/raises-greater-than-v1.json) · [Engine hashes](../benchmarks/raises-greater-than-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, raises less-than | 23 / 106 | 21 | 2 | 9 | 74 | 0 |
+| Subclass comparison, raises greater-than | 24 / 106 | 22 | 2 | 8 | 74 | 0 |
+| V5 overall, raises less-than | 122 / 239 | 69 | 52 | 13 | 104 | 1 |
+| V5 overall, raises greater-than | 123 / 239 | 70 | 52 | 12 | 104 | 1 |
+
+In both revisions, `tests/test_compare.py` imports the source-owned
+`Version` and constructs `v1` at line 289. Line 290 uses the direct
+pytest binding and unshadowed builtin `TypeError` to enter the context.
+Line 291 contains the single expression `v1 > 1`. The right operand is
+exact builtin `int`, unrelated to `Version`, so its reflected `__lt__`
+has no subclass priority and Python tries the left `__gt__` first.
+In both revisions, `@_comparator` at line 481 of `src/semver/version.py`
+binds the returned wrapper to that method. The wrapper's accepted-type
+tuple changes its first entry from `Version` to `type(self)`. The edge
+cites that wrapper, which is invoked before any decision about
+`NotImplemented`, reflected dispatch or the eventual exception.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L288-L294) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L288-L294)
+
+The only added recommendation is
+`tests/test_compare.py::test_should_not_allow_to_compare_version_with_int`.
+Its resolved edge cites line 291 and
+`src/semver/version.py::_comparator.wrapper` at lines 41–52 in both
+revisions. It has distance 1 and score 90. The following `1 > v1` and
+subsequent blocks supply no evidence.
+
+The new proof reuses the straight-line prefix and single-expression
+`pytest.raises` shape. It requires an undecorated parameterless test,
+an unshadowed direct pytest import and builtin `TypeError`, an exact
+source-class instance on the left, and an exact builtin integer
+constant on the right. Booleans, unary or other computed operands,
+reversed operands, ambiguous comparison methods, and context options
+stay outside the proof. Evidence records the initial call separately
+for each revision.
+
+Earlier recommendation scores and evidence match the predecessor.
+The separate prerelease case gains the same edge to its unchanged
+wrapper and retains its 71 recommendations. Both Cached Property
+analyses match their predecessor. V5 now records 26 resolved,
+88 conservative and nine changed-test recommendations.
+
+The subclass case retains eight draft misses and two draft false
+positives. The prerelease case retains four misses and 40 false
+positives. Cached Property retains ten false positives and one
+selected uncertain definition. The successor receipt lists all
+remaining IDs. Labels remain drafts.
