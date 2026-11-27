@@ -47,6 +47,8 @@ jobs:
         run: make evaluate-real-v5-first-assertion
       - name: Offline v5 exact-class less-than evaluation
         run: make evaluate-real-v5-less-than
+      - name: Offline v5 exact-class inequality evaluation
+        run: make evaluate-real-v5-inequality
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

@@ -397,3 +397,56 @@ positives, `test_replace_from_subclass` and
 four misses and 40 false positives. Cached Property retains ten false
 positives and one selected uncertain definition. The receipt lists the
 exact remaining IDs. Labels remain drafts.
+
+## Exact-class inequality evidence
+
+`make evaluate-real-v5-inequality` first checks the preserved less-than
+replay, then measures `exact-inequality-v1` on the same four captures and
+draft labels. The receipt pins the complete stable report, including the
+before and after source ranges, exact recommendation changes and remaining
+discrepancy IDs. [Successor receipt](../datasets/real-v5-successors/exact-inequality-v1.json) · [Engine hashes](../benchmarks/exact-inequality-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, less-than | 17 / 106 | 15 | 2 | 15 | 74 | 0 |
+| Subclass comparison, inequality | 18 / 106 | 16 | 2 | 14 | 74 | 0 |
+| V5 overall, less-than | 116 / 239 | 63 | 52 | 19 | 104 | 1 |
+| V5 overall, inequality | 117 / 239 | 64 | 52 | 18 | 104 | 1 |
+
+| Added recommendation | Before comparison | After comparison | Bound target in both revisions |
+| --- | ---: | ---: | --- |
+| `tests/test_compare.py::test_should_compare_version_info_objects` | 138 | 138 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+
+In both pinned revisions, the test imports `Version` through the package
+initializer. Lines 134–135 construct two instances of the same exact class.
+Both have version numbers `0.10.4`, and the right operand has prerelease
+`"beta.1"`. Their first assertion, `assert v1 != v2`, calls the left
+operand's explicit `Version.__ne__` binding. The decorator at line 469
+binds the wrapper returned by `_comparator`. Its type check uses `Version`
+in base and `type(self)` in head, so both accept the right operand. The
+wrapper forwards to the method body on line 471, which returns
+`self.compare(other) != 0`. CodeImpact records the initial call from line
+138 to the edited wrapper. The later assertions supply no evidence for this
+recommendation. [Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L133-L143) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L133-L143)
+
+The proof covers one direct `!=` assertion after a supported straight-line
+prefix. It uses the function-wide local binding audit and requires a
+supported source-defined `__ne__` on the exact class. A missing, rebound
+or ambiguous method, unknown or mixed operand classes, and chained
+comparisons stay outside this proof. The default `object.__ne__` delegation
+to `__eq__` and dispatch after an explicit `NotImplemented` return are
+outside the slice. Before and after are proved independently.
+
+The new recommendation has distance 1 and score 90. Every existing
+recommendation retains its score and evidence, and none were removed. The
+separate SemVer prerelease-comparison case gains the same edge to its
+unchanged wrapper and retains its 71 recommendations. Both Cached Property
+analyses match the predecessor. V5 now has 20 resolved, 88 conservative
+and nine changed-test recommendations.
+
+The subclass case retains 14 draft misses and two draft false positives
+(`test_replace_from_subclass` and `test_subclass_from_versioninfo`). The
+prerelease-comparison case retains four misses and 40 false positives.
+Cached Property retains ten false positives and one selected uncertain
+definition. The successor receipt lists the exact remaining IDs. Labels
+remain drafts.

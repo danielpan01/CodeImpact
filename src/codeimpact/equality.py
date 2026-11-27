@@ -12,8 +12,19 @@ if TYPE_CHECKING:
     from codeimpact.partial_bindings import PartialBindings
 
 
-EqualityMode = bool | Literal["exact-class", "factories", "first-assertion"]
+EqualityMode = bool | Literal["exact-class", "factories", "first-assertion", "less-than"]
 MAX_PROOF_STEPS = 16_000
+COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
+    ast.Eq: ("==", "__eq__"),
+    ast.Lt: ("<", "__lt__"),
+    ast.NotEq: ("!=", "__ne__"),
+}
+PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
+    True: "less-than",
+    "less-than": "first-assertion",
+    "first-assertion": "factories",
+    "factories": "exact-class",
+}
 
 
 class Unproved(Exception):
@@ -969,7 +980,7 @@ class Proof:
         # Binding is function-wide, but only the prefix establishes operand values.
         stmts = body(fn)
         scoped = audit(stmts, local=True)
-        if method_name == "__lt__" or position < len(stmts) - 1:
+        if method_name != "__eq__" or position < len(stmts) - 1:
             # A yield anywhere can change the calling convention, even after return.
             if scoped.wildcard or any(
                 isinstance(n, (ast.Yield, ast.YieldFrom)) for n in ast.walk(fn)
@@ -983,7 +994,7 @@ class Proof:
         if isinstance(lhs, Instance) and isinstance(rhs, Instance) and lhs.owner is rhs.owner:
             # Same exact class rules out a right-subclass priority override.
             # This establishes the initial call only. A NotImplemented result
-            # can lead to a reflected call, which this proof does not follow.
+            # can lead to further dispatch, which this proof does not follow.
             method = lhs.owner.members.get(method_name)
             if isinstance(method, Function) and not method.mode:
                 target = method.wrapper or method
@@ -999,7 +1010,7 @@ class Proof:
 
 
 def comparison_site(
-    fn: ast.FunctionDef, *, first: bool, less_than: bool
+    fn: ast.FunctionDef, *, first: bool, operators: tuple[type[ast.cmpop], ...]
 ) -> tuple[int, ast.Compare] | None:
     if (
         fn.decorator_list
@@ -1015,9 +1026,9 @@ def comparison_site(
         match stmt.test:
             case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site if position == len(stmts) - 1:
                 return position, site
-            case ast.Compare(ops=[ast.Eq() | ast.Lt() as op], comparators=[_]) as site if (
+            case ast.Compare(ops=[op], comparators=[_]) as site if (
                 first
-                and (less_than or isinstance(op, ast.Eq))
+                and isinstance(op, operators)
                 and all(
                     isinstance(prefix, (ast.Assign, ast.AnnAssign, ast.Pass))
                     for prefix in stmts[:position]
@@ -1074,18 +1085,19 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
+    first = mode in (True, "first-assertion", "less-than")
+    operators: tuple[type[ast.cmpop], ...] = (ast.Eq,)
+    if mode is True:
+        operators += (ast.Lt, ast.NotEq)
+    elif mode == "less-than":
+        operators += (ast.Lt,)
     candidates = [
         (sid, node, candidate)
         for sid, node in index.syntax.items()
         if index.nodes[sid].kind == "test"
         and isinstance(node, ast.FunctionDef)
         and "." not in index.nodes[sid].name
-        and (
-            candidate := comparison_site(
-                node, first=mode in (True, "first-assertion"), less_than=mode is True
-            )
-        )
-        is not None
+        and (candidate := comparison_site(node, first=first, operators=operators)) is not None
     ]
     if not candidates:
         return set()
@@ -1106,9 +1118,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
             env = proof.module(path)
             if not isinstance(env.get(fn.name), Function):
                 continue
-            op, method_name = (
-                ("<", "__lt__") if isinstance(site.ops[0], ast.Lt) else ("==", "__eq__")
-            )
+            op, method_name = COMPARISON_METHODS[type(site.ops[0])]
             target = proof.comparison(fn, env, position, site, method_name)
             if target is None or target.sid not in index.nodes:
                 continue
@@ -1125,13 +1135,8 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
             edges.add((sid, target.sid))
         except (Unproved, RecursionError):
             continue
-    if mode != "exact-class" and proof.steps > MAX_PROOF_STEPS:
+    if mode in PREVIOUS_MODES and proof.steps > MAX_PROOF_STEPS:
         # Additional sites or helpers may consume the budget before a previously
         # provable comparison. Preserve that edge with its bounded predecessor.
-        predecessor: EqualityMode = "exact-class"
-        if mode is True:
-            predecessor = "first-assertion"
-        elif mode == "first-assertion":
-            predecessor = "factories"
-        edges.update(add_comparison_edges(index, mode=predecessor))
+        edges.update(add_comparison_edges(index, mode=PREVIOUS_MODES[mode]))
     return edges

@@ -659,3 +659,111 @@ def test_less_than_budget_preserves_previously_proved_first_equality(monkeypatch
     validate_report(request, report)
     (edge,) = equality_edges(report)
     assert (edge.source, edge.target, edge.revision) == (TEST, f"{SOURCE}::Item.__eq__", "both")
+
+
+INEQUALITY_CORE = CORE.replace("def __eq__", "def __ne__").replace(
+    "return self._value == rhs._value", "return self._value != rhs._value"
+)
+INEQUALITY_TEST = TESTS.replace("== right", "!= right") + "    opaque()\n"
+
+
+def inequality_edges(report):
+    return [
+        edge
+        for edge in report.edges
+        if any("via != " in entry.text for entry in edge.before + edge.after)
+    ]
+
+
+def test_inequality_resolves_the_first_assertion_and_records_both_ranges():
+    request = request_for(INEQUALITY_TEST, base_core=INEQUALITY_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + INEQUALITY_TEST
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    for entries, line in [(edge.before, 6), (edge.after, 7)]:
+        (entry,) = entries
+        assert (entry.location.line, entry.location.end_line) == (line, line)
+        assert entry.target_location.line == 4
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_path, rec.evidence_edges, rec.path_revision) == (
+        [TEST, WRAPPER],
+        [edge.id],
+        "both",
+    )
+
+
+def test_inequality_only_records_initial_dispatch_when_ne_returns_not_implemented():
+    base = CORE.replace(
+        "    @checked\n",
+        "    def __ne__(self, rhs):\n        return NotImplemented\n\n    @checked\n",
+    )
+    head = base.replace("return NotImplemented", "return NotImplemented if True else False")
+    request = request_for(INEQUALITY_TEST, base_core=base, head_core=head)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__ne__", "both")
+    assert len(edge.before) == len(edge.after) == 1
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        CORE,  # Equality alone does not establish an explicit inequality binding.
+        INEQUALITY_CORE + "\nItem.__ne__ = lambda self, rhs: True\n",
+        INEQUALITY_CORE.replace("@checked", "@unknown"),
+        INEQUALITY_CORE.replace("@checked", "@property"),
+    ],
+)
+def test_inequality_declines_missing_rebound_or_unsupported_ne(source):
+    assert not inequality_edges(analyze(request_for(INEQUALITY_TEST, base_core=source)))
+
+
+@pytest.mark.parametrize(
+    "tests",
+    [
+        INEQUALITY_TEST.replace("!= right", "!= unknown()"),
+        INEQUALITY_TEST.replace("!= right", "!= 2"),
+        INEQUALITY_TEST.replace("!= right", "!= Other()") + "\nclass Other: pass\n",
+        INEQUALITY_TEST.replace("!= right", "!= Item(2) != Item(3)"),
+        INEQUALITY_TEST + "    parse = Item.parse\n",
+        INEQUALITY_TEST.replace('left = parse("1")', "left = Item(1)") + "    Item: type\n",
+    ],
+)
+def test_inequality_declines_unproved_operands_or_scope(tests):
+    assert not inequality_edges(analyze(request_for(tests, base_core=INEQUALITY_CORE)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_inequality_evidence_is_revision_specific(side):
+    base = INEQUALITY_CORE if side == "before" else CORE
+    head = INEQUALITY_CORE if side == "after" else CORE
+    request = request_for(
+        INEQUALITY_TEST, base_core=base, head_core=head.replace("and True", "and False")
+    )
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = inequality_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [ev.location.line for ev in edge.before] == ([6] if side == "before" else [])
+    assert [ev.location.line for ev in edge.after] == ([6] if side == "after" else [])
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.path_revision) == ([edge.id], side)
+
+
+def test_pinned_inequality_uses_line_138_and_the_changed_wrapper():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_compare_version_info_objects"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert rec.evidence_path == [sid, "src/semver/version.py::_comparator.wrapper"]
+    assert rec.path_revision == "both"
+    (edge,) = [e for e in inequality_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (138, 138)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)

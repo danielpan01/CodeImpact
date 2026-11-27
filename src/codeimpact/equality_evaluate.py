@@ -34,7 +34,11 @@ class Delta(StrictModel):
 class Receipt(StrictModel):
     schema_version: Literal["1.0"]
     name: Literal[
-        "exact-equality-v1", "prerelease-factories-v1", "first-assertion-v1", "exact-less-than-v1"
+        "exact-equality-v1",
+        "prerelease-factories-v1",
+        "first-assertion-v1",
+        "exact-less-than-v1",
+        "exact-inequality-v1",
     ]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256

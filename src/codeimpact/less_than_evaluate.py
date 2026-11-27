@@ -5,14 +5,16 @@ from typing import Any
 
 from codeimpact.equality_evaluate import measure, verified_receipt
 from codeimpact.first_assertion_evaluate import evaluate_first_assertion
-from codeimpact.fresh_evaluate import LESS_THAN_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import LESS_THAN_TRANSITION, PROJECT, less_than_source_hash
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_less_than(directory: Path) -> dict[str, Any]:
-    receipt = verified_receipt("exact-less-than-v1", LESS_THAN_TRANSITION)
-    return measure(directory, evaluate_first_assertion(directory), receipt, True, "Exact less-than")
+    receipt = verified_receipt("exact-less-than-v1", LESS_THAN_TRANSITION, less_than_source_hash)
+    return measure(
+        directory, evaluate_first_assertion(directory), receipt, "less-than", "Exact less-than"
+    )
 
 
 if __name__ == "__main__":

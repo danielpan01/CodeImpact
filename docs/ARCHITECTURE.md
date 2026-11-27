@@ -1134,8 +1134,8 @@ The offline `exact-equality-v1` replay uses the earlier rule, and
 `prerelease-factories-v1` measures the extension on the same pinned cases.
 [Factory scope and measurements](REAL_EVALUATION_V5.md#class-preserving-prerelease-factories)
 
-When more statements follow, the first direct assertion must itself be a
-single equality with a straight-line prefix of supported assignments or
+The first-assertion extension accepts a single equality before later
+statements if it has a straight-line prefix of supported assignments or
 `pass`. The scope audit covers the entire function. An import, annotation,
 assignment or other local binding later in the body can make an earlier
 read unbound. Only the prefix supplies runtime values for the comparison.
@@ -1148,7 +1148,7 @@ factory replay keeps its terminal-assertion policy.
 
 ### Exact-class less-than evidence
 
-The current profile also accepts a single `<` as the first direct assertion
+The less-than proof accepts a single `<` as the first direct assertion
 after a supported straight-line prefix. Both operands must resolve to the
 same exact source class, whose `__lt__` must bind to a supported callable.
 The edge points to that first call and cites the comparison's range. Exact
@@ -1158,3 +1158,13 @@ Mixed or unknown classes, missing or ambiguous bindings and chained
 comparisons leave the prior analysis in place. The first-assertion replay
 uses its original equality-only profile.
 [Less-than trace and measurement](REAL_EVALUATION_V5.md#exact-class-less-than-evidence)
+
+### Exact-class inequality evidence
+
+A single `!=` can use the same direct-assertion and operand proof. The
+exact source class must have an explicit, supported `__ne__` binding.
+The edge records the first invocation and comparison range in each proved
+revision. Default delegation to `__eq__` and any dispatch after
+`NotImplemented` are outside this proof. The less-than replay retains
+its earlier comparison profile.
+[Inequality trace and measurement](REAL_EVALUATION_V5.md#exact-class-inequality-evidence)
