@@ -44,6 +44,7 @@ class Receipt(StrictModel):
         "string-parameter-less-than-v1",
         "raises-less-than-v1",
         "raises-greater-than-v1",
+        "keyed-extrema-v1",
     ]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256

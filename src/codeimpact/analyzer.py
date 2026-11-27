@@ -25,7 +25,7 @@ from codeimpact.discovery import (
     shadows_unittest,
 )
 from codeimpact.dispatch_fallback import DispatchFallback
-from codeimpact.equality import EqualityMode, add_comparison_edges
+from codeimpact.equality import EqualityMode, add_comparison_edges, add_keyed_extrema_edges
 from codeimpact.explicit_reexports import add_reexport_edges
 from codeimpact.models import (
     AnalysisRequest,
@@ -545,6 +545,8 @@ def build_index(
         add_fixture_edges(index)
     if equality:
         add_comparison_edges(index, mode=equality)
+    if equality is True:
+        add_keyed_extrema_edges(index)
     return index
 
 
@@ -931,12 +933,12 @@ def analyze(
                 fixture_paths[source] = candidate
     added_calls: dict[str, str] = {}
     added_incoming: dict[str, set[str]] = defaultdict(set)
+    active_targets = set(active)
     if reexports:
         # The existing graph selects tests. New edges can explain those tests
         # without expanding, pruning or rerouting the selection walk.
         additions = add_reexport_edges(before) | add_reexport_edges(after)
         if additions:
-            active_targets = set(active)
             for source, target, _ in sorted(additions):
                 added_incoming[target].add(source)
                 if (
@@ -947,13 +949,13 @@ def analyze(
                     and call_arguments.allows(source, target, nodes[target].path)
                 ):
                     added_calls.setdefault(source, target)
+    comparisons = set()
     if equality:
         # A comparison site directly calls the proved binding. Keep the original
         # walks and scores for all other paths, including direct test edits.
         comparisons = add_comparison_edges(before, mode=equality) | add_comparison_edges(
             after, mode=equality
         )
-        active_targets = set(active)
         for source, target in sorted(comparisons):
             if (
                 target in active_targets
@@ -963,11 +965,34 @@ def analyze(
                 added_calls.setdefault(source, target)
                 added_incoming[target].add(source)
                 paths.setdefault(source, [source, target])
-        if comparisons:
-            edges = merge_edges(before, after)
     for source, path in fixture_paths.items():
         paths.setdefault(source, path)
-    if old_fixtures or new_fixtures or added_incoming:
+    extrema_paths: dict[str, list[str]] = {}
+    extrema_incoming: dict[str, set[str]] = defaultdict(set)
+    if equality is True:
+        before_extrema = add_keyed_extrema_edges(before)
+        after_extrema = add_keyed_extrema_edges(after)
+        for trail in sorted(before_extrema | after_extrema):
+            source, helper, target = trail
+            extrema_incoming[target].add(helper)
+            if (
+                target in active_targets
+                and source not in call_paths
+                and source not in fixture_paths
+                and source not in added_calls
+            ):
+                # An ordinary caller edge and a helper edge proved for another
+                # test can appear together in a revision without this proof.
+                hops = ((source, helper, "call"), (helper, target, "call"))
+                if any(
+                    trail not in proved and all(hop in index.edges for hop in hops)
+                    for index, proved in ((before, before_extrema), (after, after_extrema))
+                ):
+                    continue
+                candidate = [source, helper, target]
+                extrema_paths.setdefault(source, candidate)
+                paths.setdefault(source, candidate)
+    if old_fixtures or new_fixtures or comparisons or added_incoming or extrema_incoming:
         edges = merge_edges(before, after)
     recommendations = []
     for sid in sorted(paths):
@@ -975,10 +1000,17 @@ def analyze(
             continue
         proof = added_calls.get(sid)
         injection = fixture_paths.get(sid)
-        precise = sid in call_paths or proof is not None or injection is not None
-        path = [sid, proof] if proof else call_paths.get(sid) or injection or paths[sid]
+        extremum = extrema_paths.get(sid)
+        resolved = call_paths.get(sid) or injection or extremum
+        precise = proof is not None or resolved is not None
+        path = [sid, proof] if proof else resolved or paths[sid]
         distance = len(path) - 1
-        fan_in = len(reverse[proof] | added_incoming[proof]) if proof else len(reverse[path[-1]])
+        incoming = reverse[path[-1]]
+        if proof:
+            incoming = incoming | added_incoming[proof]
+        elif extremum:
+            incoming = incoming | extrema_incoming[path[-1]]
+        fan_in = len(incoming)
         score = min(100, max(1, (90 if precise else 50) - 10 * distance + min(10, fan_in)))
         reason = "Resolved call path" if precise else "Conservative module/import dependency"
         if distance == 0:
@@ -993,6 +1025,8 @@ def analyze(
             used_edges.extend(
                 edges[(a, b, "call")] for a, b in zip(path[1:], path[2:], strict=False)
             )
+        elif extremum:
+            used_edges = [edges[(a, b, "call")] for a, b in zip(path, path[1:], strict=False)]
         else:
             original = [typed_pairs[(a, b)][0] for a, b in zip(path, path[1:], strict=False)]
             used_edges = [edges[(e.source, e.target, e.kind)] for e in original]
