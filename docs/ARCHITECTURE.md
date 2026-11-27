@@ -1181,3 +1181,18 @@ right. It records the initial method and source range per revision.
 Reversed operands, dictionary subclasses, positional constructor inputs,
 unpacking and subsequent dispatch are outside this proof.
 [Dictionary inequality trace and measurement](REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary)
+
+### Less-than with literal pytest parameters
+
+The direct `<` assertion proof accepts one parameter supplied by a
+direct `pytest.mark.parametrize` decorator. The binding must come from
+an unshadowed `import pytest`. A bounded literal table must give the
+parameter the same exact builtin type in every row, either tuple or list.
+The assertion must read the unrebound parameter directly on the right
+and a proved source-class instance on the left. The exact builtin is
+unrelated to that class, so its reflected method has no subclass priority.
+The report records one edge at the test-definition level in each proved
+revision. It cites the assertion and the explicit initial `__lt__`
+binding. Indirect or stacked parametrization, computed rows, reversed
+operands and later dispatch are outside this proof.
+[Literal parameter trace and measurement](REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters)

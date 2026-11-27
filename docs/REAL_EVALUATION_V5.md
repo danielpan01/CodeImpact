@@ -507,3 +507,70 @@ The subclass case retains 13 draft misses and two draft false positives
 prerelease case retains four misses and 40 false positives. Cached Property
 retains ten false positives and one selected uncertain definition. The
 successor receipt lists the exact IDs. Labels remain drafts.
+
+## Less-than with literal pytest parameters
+
+`make evaluate-real-v5-parameterized-less-than` checks the dictionary
+inequality predecessor and measures `parameterized-less-than-v1` on the
+same four captures and draft labels. The full report hash pins the
+comparison ranges and bound targets in each revision. The receipt also
+records the exact recommendation delta and remaining discrepancies.
+[Successor receipt](../datasets/real-v5-successors/parameterized-less-than-v1.json) · [Engine hashes](../benchmarks/parameterized-less-than-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, dictionary inequality | 19 / 106 | 17 | 2 | 13 | 74 | 0 |
+| Subclass comparison, parameterized less-than | 21 / 106 | 19 | 2 | 11 | 74 | 0 |
+| V5 overall, dictionary inequality | 118 / 239 | 65 | 52 | 17 | 104 | 1 |
+| V5 overall, parameterized less-than | 120 / 239 | 67 | 52 | 15 | 104 | 1 |
+
+| Added recommendation | Before assertion | After assertion | Target in both revisions |
+| --- | ---: | ---: | --- |
+| `tests/test_compare.py::test_should_compare_version_tuples` | 206 | 206 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+| `tests/test_compare.py::test_should_compare_version_list` | 235 | 235 | `src/semver/version.py::_comparator.wrapper`, lines 41–52 |
+
+Both pinned revisions use direct `@pytest.mark.parametrize` calls. Lines
+192–201 give `t` five builtin tuples. Lines 221–230 give `lst` five
+builtin lists. Each table names a single parameter, so each row is the
+value passed to that parameter under standard direct pytest
+parametrization. Rows vary in length and values but agree on their exact
+builtin type. Lines 203 and 232 construct the left operand `v0` from the
+package's source-defined `Version` in the two tests.
+[Base tests](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_compare.py#L192-L235) · [Head tests](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_compare.py#L192-L235)
+
+The exact tuple and list types are unrelated to the left operand's class.
+Python therefore tries the left `__lt__` before considering reflected
+dispatch. The decorator at line 473 binds the wrapper returned by
+`_comparator`. Its type tuple includes builtin `tuple` and `list` in
+both revisions, while its first entry changes from `Version` to
+`type(self)`. It forwards to `Version.__lt__`, whose body returns
+`self.compare(other) < 0`. Each resolved edge cites the first assertion
+and wrapper. The later comparisons supply no evidence in these paths.
+[Head wrapper](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/version.py#L38-L54)
+
+The proof accepts one direct decorator backed by an unshadowed
+`import pytest`, one required positional-or-keyword parameter, and a
+literal list or tuple table. It requires 1–64 rows with at most 256
+constant elements in total. All rows must be tuple literals or all
+must be list literals. The first assertion must read that parameter
+directly on its right, with a supported straight-line prefix and a
+provable source-class instance on the left. Mixed or computed rows,
+rebindings, stacked or indirect parametrization, reversed operands,
+subclasses, and dispatch after `NotImplemented` stay outside this
+proof. Evidence is attached to the test definition, once per proved
+revision. Runner hooks and individual pytest cases are outside the
+recorded source proof.
+
+Each added recommendation has distance 1 and score 90. Every previous
+recommendation retains its score and evidence. The separate SemVer
+prerelease case gains the same two edges to an unchanged wrapper and
+keeps its 71 recommendations. Both Cached Property analyses match the
+predecessor. V5 now records 23 resolved, 88 conservative and nine
+changed-test recommendations.
+
+The subclass case retains 11 draft misses and two draft false positives
+(`test_replace_from_subclass` and `test_subclass_from_versioninfo`).
+The prerelease case retains four misses and 40 false positives.
+Cached Property retains ten false positives and one selected uncertain
+definition. The successor receipt lists the exact IDs. Labels remain
+drafts.

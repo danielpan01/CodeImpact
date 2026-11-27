@@ -889,3 +889,149 @@ def test_dictionary_inequality_stops_at_a_method_that_returns_not_implemented():
     (edge,) = inequality_edges(report)
     assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__ne__", "both")
     assert len(edge.before) == len(edge.after) == 1
+
+
+def parameterized_test(rows="[(1,), (2, 3)]", *, assertion="left < values"):
+    return (
+        "import pytest\nfrom values import Item\n"
+        f'@pytest.mark.parametrize("values", {rows})\n'
+        f"def test_equal(values):\n    left = Item(1)\n    assert {assertion}\n"
+        "    opaque()\n"
+    )
+
+
+@pytest.mark.parametrize(("rows", "kind"), [("[(1,), (2, 3)]", "tuple"), ("([1], [2, 3])", "list")])
+def test_parameterized_less_than_uses_every_row_type_and_records_both_ranges(rows, kind):
+    source = parameterized_test(rows)
+    request = request_for(source, base_core=ORDERED_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + source
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    for evidence, line in [(edge.before, 6), (edge.after, 7)]:
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert "pytest parameter" in site.text and f"builtin {kind}" in site.text
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.evidence_path, rec.path_revision) == (
+        [edge.id],
+        [TEST, WRAPPER],
+        "both",
+    )
+
+
+@pytest.mark.parametrize(
+    "rows",
+    [
+        "[(1,), [2]]",
+        "[(1,), (1 + 1,)]",
+        "[(1,), tuple([2])]",
+        "[(1,), pytest.param((2,))]",
+        "[(*[1],)]",
+        "[*((1,),)]",
+        "[]",
+        "[(1,)] * 2",
+        "['x']",
+        "[(1,), (2,), " + "(), " * 128 + "]",
+    ],
+)
+def test_parameterized_less_than_declines_unproved_or_oversized_tables(rows):
+    assert not less_than_edges(
+        analyze(request_for(parameterized_test(rows), base_core=ORDERED_CORE))
+    )
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        parameterized_test().replace("import pytest", "pytest = 1"),
+        parameterized_test().replace("import pytest", "import pytest\npytest = 1"),
+        parameterized_test() + "\ndef alter():\n    pytest.mark.parametrize = shadow\n",
+        parameterized_test().replace(
+            "def test_equal", "@pytest.mark.parametrize('other', [(1,)])\ndef test_equal"
+        ),
+        parameterized_test().replace("[(1,), (2, 3)])", "[(1,), (2, 3)], indirect=True)"),
+        parameterized_test().replace('"values", ', '"values,", '),
+        parameterized_test().replace("values):", "values, extra):"),
+        parameterized_test().replace("values):", "values, /):"),
+        parameterized_test().replace("    assert left", "    values = Item(2)\n    assert left"),
+        parameterized_test().replace("    assert left", "    Item = factory\n    assert left"),
+        parameterized_test(assertion="values < left"),
+        parameterized_test(assertion="left < values < left"),
+        parameterized_test(assertion="left == values"),
+        parameterized_test().replace("left = Item(1)", "left = Parent(1)")
+        + "\nclass Parent(tuple):\n    def __lt__(self, other): return True\n",
+    ],
+)
+def test_parameterized_less_than_declines_unsupported_bindings_or_dispatch(source):
+    assert not less_than_edges(analyze(request_for(source, base_core=ORDERED_CORE)))
+
+
+def test_parameterized_less_than_declines_a_source_owned_pytest_module():
+    request = request_for(parameterized_test(), base_core=ORDERED_CORE)
+    for snapshot in (request.base, request.head):
+        snapshot.files["pytest.py"] = "mark = None\n"
+    assert not less_than_edges(analyze(request))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_parameterized_less_than_proves_only_the_uniform_revision(side):
+    good = parameterized_test()
+    mixed = parameterized_test("[(1,), [2]]")
+    request = request_for(good, base_core=ORDERED_CORE)
+    unsupported = request.head if side == "before" else request.base
+    unsupported.files["tests/test_item.py"] = mixed
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [ev.location.line for ev in edge.before] == ([6] if side == "before" else [])
+    assert [ev.location.line for ev in edge.after] == ([6] if side == "after" else [])
+
+
+@pytest.mark.parametrize(
+    ("name", "line"),
+    [("test_should_compare_version_tuples", 206), ("test_should_compare_version_list", 235)],
+)
+def test_pinned_parameterized_less_than_uses_first_assertion(name, line):
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = f"tests/test_compare.py::{name}"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert rec.evidence_path == [sid, "src/semver/version.py::_comparator.wrapper"]
+    assert rec.path_revision == "both"
+    (edge,) = [e for e in less_than_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)
+
+
+def test_parameterized_less_than_supports_a_discovered_root_test_file():
+    request = request_for(parameterized_test(), base_core=ORDERED_CORE)
+    for snapshot in (request.base, request.head):
+        snapshot.files["test_item.py"] = snapshot.files.pop("tests/test_item.py")
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.source, edge.target, edge.revision) == (
+        "test_item.py::test_equal",
+        WRAPPER,
+        "both",
+    )
+
+
+def test_parameterized_less_than_keeps_only_the_initial_not_implemented_call():
+    base = ORDERED_CORE.replace("    @checked\n", "").replace(
+        "return self._value < rhs._value", "return NotImplemented"
+    )
+    head = base.replace("return NotImplemented", "return NotImplemented if True else False")
+    request = request_for(parameterized_test(), base_core=base, head_core=head)
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = less_than_edges(report)
+    assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__lt__", "both")
+    assert len(edge.before) == len(edge.after) == 1
