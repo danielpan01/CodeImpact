@@ -58,7 +58,8 @@ as removal and addition.
 
 Edges point **from dependent to dependency**:
 
-- `call`: a supported lexical/imported call resolves to a known symbol.
+- `call`: a supported call resolves to a known symbol through a direct binding
+  or a test-scoped comparison trace.
 - `fixture`: one required test parameter binds to a supported same-directory pytest fixture.
 - `import`: a module, or a function with a supported direct local import, imports a known module.
 - `module`: a symbol depends conservatively on its own module's initialization.
@@ -1303,3 +1304,22 @@ is outside the successful construction proof.
 The analyzer records the initial `__eq__` binding at the assertion, with
 one test-definition edge and independently proved source ranges.
 [Replacement source trace and evaluation](REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords)
+
+### Rich comparison through a changed helper
+
+The first direct `<` or `!=` assertion can reach a helper when both
+operands come from literal constructors of the same exact source class.
+The proof checks the wrapper's type guard and forwarding call, then
+follows the bound operator into the source comparison method. It binds
+the constructor arguments and literal defaults, checks the initialized
+fields and their tuple projection, and proves the core comparison yields
+zero before following the helper invocation. Unknown or unequal fields,
+shadowed bindings and unsupported control flow decline the proof.
+
+The evidence uses one edge from the test assertion to the helper, with
+the wrapper, operator, and comparison call sites in the evidence text.
+Each snapshot must prove its own entire trace. The analyzer adds these
+edges after the ordinary graph traversal so the shared wrapper and
+comparison method cannot supply another test's argument-dependent proof.
+Existing resolved recommendations retain precedence.
+[Source trace and evaluation](REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper)

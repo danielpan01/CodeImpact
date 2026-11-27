@@ -16,6 +16,7 @@ from typing import Literal
 from codeimpact.additive_exports import AdditiveExports
 from codeimpact.arguments import ArgumentFallback
 from codeimpact.call_arguments import CallArgumentFilter, CallBinding
+from codeimpact.comparison_helper import add_comparison_helper_edges
 from codeimpact.descriptor_binding import DescriptorFallback
 from codeimpact.discovery import (
     CURRENT_POLICY,
@@ -545,8 +546,16 @@ def build_index(
         add_fixture_edges(index)
     if equality:
         add_comparison_edges(index, mode=equality)
-    if equality in (True, "parameter-dictionary-equality", "keyed-parameters", "keyed-extrema"):
+    if equality in (
+        True,
+        "parameter-replace-equality",
+        "parameter-dictionary-equality",
+        "keyed-parameters",
+        "keyed-extrema",
+    ):
         add_keyed_extrema_edges(index, literal_tables=equality != "keyed-extrema")
+    if equality is True:
+        add_comparison_helper_edges(index)
     return index
 
 
@@ -969,7 +978,13 @@ def analyze(
         paths.setdefault(source, path)
     extrema_paths: dict[str, list[str]] = {}
     extrema_incoming: dict[str, set[str]] = defaultdict(set)
-    if equality in (True, "parameter-dictionary-equality", "keyed-parameters", "keyed-extrema"):
+    if equality in (
+        True,
+        "parameter-replace-equality",
+        "parameter-dictionary-equality",
+        "keyed-parameters",
+        "keyed-extrema",
+    ):
         before_extrema = add_keyed_extrema_edges(before, literal_tables=equality != "keyed-extrema")
         after_extrema = add_keyed_extrema_edges(after, literal_tables=equality != "keyed-extrema")
         for trail in sorted(before_extrema | after_extrema):
@@ -992,13 +1007,39 @@ def analyze(
                 candidate = [source, helper, target]
                 extrema_paths.setdefault(source, candidate)
                 paths.setdefault(source, candidate)
-    if old_fixtures or new_fixtures or comparisons or added_incoming or extrema_incoming:
+    comparison_helpers = set()
+    helper_calls: dict[str, str] = {}
+    helper_incoming: dict[str, set[str]] = defaultdict(set)
+    if equality is True:
+        comparison_helpers = add_comparison_helper_edges(before) | add_comparison_helper_edges(
+            after
+        )
+        for source, target in sorted(comparison_helpers):
+            if (
+                target in active_targets
+                and source not in call_paths
+                and source not in fixture_paths
+                and source not in added_calls
+                and source not in extrema_paths
+            ):
+                helper_calls.setdefault(source, target)
+                helper_incoming[target].add(source)
+                paths.setdefault(source, [source, target])
+    if (
+        old_fixtures
+        or new_fixtures
+        or comparisons
+        or added_incoming
+        or extrema_incoming
+        or comparison_helpers
+    ):
         edges = merge_edges(before, after)
     recommendations = []
     for sid in sorted(paths):
         if nodes[sid].kind != "test" or sid not in after.nodes:
             continue
-        proof = added_calls.get(sid)
+        helper_target = helper_calls.get(sid)
+        proof = added_calls.get(sid) or helper_target
         injection = fixture_paths.get(sid)
         extremum = extrema_paths.get(sid)
         resolved = call_paths.get(sid) or injection or extremum
@@ -1006,7 +1047,9 @@ def analyze(
         path = [sid, proof] if proof else resolved or paths[sid]
         distance = len(path) - 1
         incoming = reverse[path[-1]]
-        if proof:
+        if helper_target:
+            incoming = incoming | helper_incoming[helper_target]
+        elif proof:
             incoming = incoming | added_incoming[proof]
         elif extremum:
             incoming = incoming | extrema_incoming[path[-1]]

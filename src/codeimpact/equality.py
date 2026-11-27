@@ -31,6 +31,7 @@ EqualityMode = (
         "keyed-extrema",
         "keyed-parameters",
         "parameter-dictionary-equality",
+        "parameter-replace-equality",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -1179,7 +1180,7 @@ class Proof:
             f"with an exact builtin dict from pytest parameter {parameter.expected!r} on the right"
         )
 
-    def read_field(self, receiver: Instance, name: str) -> None:
+    def read_field(self, receiver: Instance, name: str) -> str:
         owner = receiver.owner
         if owner.members.get(name) == PROPERTY:
             getter = self.property_getters.get(f"{owner.sid}.{name}")
@@ -1195,6 +1196,7 @@ class Proof:
                     raise Unproved
         if name not in receiver.fields or name in owner.members:
             raise Unproved
+        return name
 
     def fresh_fields(self, receiver: Instance, name: str) -> set[str]:
         fn = instance_method(receiver.owner, name)
@@ -1551,10 +1553,11 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
+    replacement = mode in (True, "parameter-replace-equality")
     # Keep separate proof budgets for the successive table shapes.
     predecessor: EqualityMode | None = (
         "parameter-dictionary-equality"
-        if mode is True
+        if replacement
         else "keyed-parameters"
         if mode == "parameter-dictionary-equality"
         else None
@@ -1586,7 +1589,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         and (
             candidate := (
                 replacement_parameter_site(node)
-                if mode is True
+                if replacement
                 else dictionary_parameter_site(node)
                 if mode == "parameter-dictionary-equality"
                 else comparison_site(
@@ -1615,7 +1618,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         scalar_factories=mode != "exact-class",
         literal_parameters=literal_parameters or predecessor is not None,
         strict_callable_values=predecessor is not None,
-        literal_keyword_dicts=mode is True,
+        literal_keyword_dicts=replacement,
     )
     proof.writes = writes
     for sid, fn, (position, site, parameter) in candidates:
