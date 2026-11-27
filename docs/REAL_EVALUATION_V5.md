@@ -807,3 +807,53 @@ Cached Property retains ten false positives and one selected uncertain
 definition. All discrepancy IDs are pinned in the successor receipt.
 Winner selection, reflected dispatch and warning outcomes are outside
 the proof. Labels remain drafts and upstream code was read as data.
+
+## Keyed min and max from literal pytest tables
+
+`make evaluate-real-v5-keyed-parameters` checks the unchanged
+`keyed-extrema-v1` predecessor and measures the extension against the
+same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/keyed-parameters-v1.json) · [Engine hashes](../benchmarks/keyed-parameters-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, keyed literal arguments | 28 / 106 | 26 | 2 | 4 | 74 | 0 |
+| Subclass comparison, keyed literal table | 29 / 106 | 27 | 2 | 3 | 74 | 0 |
+| V5 overall, keyed literal arguments | 127 / 239 | 74 | 52 | 8 | 104 | 1 |
+| V5 overall, keyed literal table | 128 / 239 | 75 | 52 | 7 | 104 | 1 |
+
+In both subclass-case revisions, lines 22–41 of `tests/test_max-min.py`
+declare seven three-string rows for `left,right,expected`. For every row,
+the first two named columns feed `min_ver(left, right)` at line 43. The
+third column supplies the expected value on the right of the assertion.
+The deprecation wrapper forwards the call to the helper, which invokes
+`min(ver1, ver2, key=Version.parse)` at line 236. Both key invocations
+use the same bound classmethod and each normal return constructs that
+exact `Version` class. The builtin therefore tries the bound `Version.__lt__`
+first. The changed target is `src/semver/version.py::_comparator.wrapper`
+at lines 41–52 in each revision.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_max-min.py#L22-L43) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_max-min.py#L22-L43)
+
+The sole new recommendation is
+`tests/test_max-min.py::test_prerelease_order`. Its path goes through
+`src/semver/_deprecated.py::min_ver` to the wrapper, with score 72,
+distance 2 and both-revision evidence. It adds a test-to-helper edge
+and reuses the existing helper-to-wrapper edge. The prerelease case
+gains the same graph edge to its unchanged wrapper and keeps all 71
+recommendations. Both Cached Property cases and all prior
+recommendation scores and evidence match the predecessor. V5 now has
+31 resolved, 88 conservative and nine changed-test recommendations.
+
+The proof checks a direct, unshadowed pytest decorator, at least two
+unique named columns, and a nonempty table of at most 64 rows and
+256 literal string cells. It declines unsupported rows, decorator
+options, rebinding and unproved keys. Each revision must establish
+the full trail for that test. Winner selection and reflected dispatch
+are outside the proof.
+
+The remaining subclass draft misses are
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`,
+`tests/test_parsing.py::test_should_parse_version_with_optional_minor_and_patch`
+and `tests/test_replace.py::test_should_return_versioninfo_with_replaced_parts`.
+The separate prerelease case retains its four draft misses. The receipt
+records the unchanged false positives and uncertain selection.

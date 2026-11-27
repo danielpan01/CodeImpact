@@ -1248,3 +1248,20 @@ recommendations use the existing score formula with distance two. The
 proof ends at the initial ordering call, before any reflected dispatch,
 winner selection or warning outcome.
 [Source trace and successor replay](REAL_EVALUATION_V5.md#keyed-min-and-max)
+
+The keyed comparison proof also accepts a top-level test with one direct
+`pytest.mark.parametrize` decorator from an unshadowed `import pytest`.
+A literal comma-separated column list must match the function's required
+positional-or-keyword parameters by name. A nonempty literal list or tuple
+of rows can provide up to 64 rows and 256 cells. Every row must have the
+declared number of columns and every cell must be a string literal.
+
+The two helper operands must directly reference proved columns. The
+test's full lexical scope must preserve those bindings, including after
+the assertion. The same exact-class proof covers all normal key returns,
+so the analyzer records one path for the test definition. It checks the
+whole trail in each revision. If ordinary graph edges and a shared helper
+could make the path appear proved in an unsupported revision, selection
+does not use that trail. The predecessor replay covers parameterless
+tests only.
+[Literal table trace and successor replay](REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables)

@@ -28,6 +28,7 @@ EqualityMode = (
         "string-parameter",
         "raises-less-than",
         "raises-greater-than",
+        "keyed-extrema",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -42,6 +43,7 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
     True: "raises-less-than",
+    "keyed-extrema": "raises-less-than",
     "raises-greater-than": "raises-less-than",
     "raises-less-than": "string-parameter",
     "string-parameter": "parameterized",
@@ -1104,6 +1106,17 @@ class Proof:
             detail += f" inside pytest.raises({exception})"
         return target, detail
 
+    def pytest_parameterization(self, test: Function) -> bool:
+        return (
+            test.mode == "pytest"
+            and not self.writes & {"mark", "parametrize"}
+            and direct_pytest_import(
+                self.resolver.binding(
+                    test.sid.split("::")[0], "pytest", test.node.decorator_list[0]
+                )
+            )
+        )
+
 
 def comparison_target(owner: Class, method_name: str) -> Function | None:
     method = owner.members.get(method_name)
@@ -1285,7 +1298,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    greater_raises = mode in (True, "raises-greater-than")
+    greater_raises = mode in (True, "raises-greater-than", "keyed-extrema")
     literal_parameters = greater_raises or mode in (
         "parameterized",
         "string-parameter",
@@ -1342,11 +1355,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
             test = env.get(fn.name)
             if not isinstance(test, Function):
                 continue
-            if parameter is not None and (
-                test.mode != "pytest"
-                or writes & {"mark", "parametrize"}
-                or not direct_pytest_import(resolver.binding(path, "pytest", fn.decorator_list[0]))
-            ):
+            if parameter is not None and not proof.pytest_parameterization(test):
                 continue
             op, method_name = COMPARISON_METHODS[type(site.ops[0])]
             if method_name == "__gt__" and not direct_pytest_import(
@@ -1387,29 +1396,74 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     return edges
 
 
-def keyed_test_site(fn: ast.FunctionDef) -> ast.Call | None:
+def literal_string_columns(fn: ast.FunctionDef) -> frozenset[str] | None:
+    shape = inline_decorator(fn)
+    if shape is None:
+        return None
+    decorator, table = shape
+    name_list = decorator.args[0]
+    if not isinstance(name_list, ast.Constant) or type(name_list.value) is not str:
+        return None
+    names = [name.strip() for name in name_list.value.split(",")]
+    columns = frozenset(names)
+    if (
+        len(columns) != len(names)
+        or len(names) < 2
+        or "" in columns
+        or "request" in columns
+        or len(names) != len(fn.args.args)
+        or columns != {arg.arg for arg in fn.args.args}
+        or not 1 <= len(table.elts) <= MAX_PARAMETER_ROWS
+        or len(names) * len(table.elts) > MAX_PARAMETER_CELLS
+    ):
+        return None
+    if all(
+        isinstance(row, (ast.List, ast.Tuple))
+        and len(row.elts) == len(names)
+        and all(isinstance(cell, ast.Constant) and type(cell.value) is str for cell in row.elts)
+        for row in table.elts
+    ):
+        return columns
+    return None
+
+
+def keyed_test_site(
+    fn: ast.FunctionDef, *, literal_tables: bool
+) -> tuple[ast.Call, frozenset[str]] | None:
     args = fn.args
     if (
-        fn.decorator_list
-        or fn.returns
+        fn.returns
         or fn.type_params
-        or parameters(fn)
+        or args.posonlyargs
         or args.kwonlyargs
         or args.vararg
         or args.kwarg
+        or args.defaults
     ):
         return None
     match body(fn):
         case [
             ast.Assert(
                 test=ast.Compare(
-                    left=ast.Call(args=[ast.Constant(), ast.Constant()], keywords=[]) as site,
+                    left=ast.Call(args=[first, second], keywords=[]) as site,
                     ops=[ast.Eq()],
                 ),
             ),
             *_,
         ]:
-            return site
+            pass
+        case _:
+            return None
+    if (
+        not fn.decorator_list
+        and not args.args
+        and all(isinstance(arg, ast.Constant) for arg in site.args)
+    ):
+        return site, frozenset()
+    if literal_tables and isinstance(first, ast.Name) and isinstance(second, ast.Name):
+        columns = literal_string_columns(fn)
+        if columns is not None and {first.id, second.id} <= columns:
+            return site, columns
     return None
 
 
@@ -1432,8 +1486,8 @@ def keyed_comparison(proof: Proof, helper: Function) -> tuple[ast.Call, str, str
             pass
         case _:
             raise Unproved
-    # The caller supplied two scalar constants. Keep their types abstract
-    # because the proof needs only the class of each successful key result.
+    # The caller proved both inputs are literal data. The key proof needs
+    # only the class of each successful return, independent of the values.
     env = proof.module(helper.sid.split("::")[0]) | {arg.arg: DATA for arg in params}
     # In the captured helper str() consumes the original winning input after
     # the comparison. Only peel the direct builtin wrapper.
@@ -1473,17 +1527,17 @@ def keyed_comparison(proof: Proof, helper: Function) -> tuple[ast.Call, str, str
     return site, builtin, method, target
 
 
-def add_keyed_extrema_edges(index: "Index") -> set[tuple[str, str, str]]:
+def add_keyed_extrema_edges(index: "Index", *, literal_tables: bool) -> set[tuple[str, str, str]]:
     resolver = index.partials
     if resolver is None:
         return set()
     candidates = [
-        (sid, fn, site)
+        (sid, fn, candidate)
         for sid, fn in index.syntax.items()
         if index.nodes[sid].kind == "test"
         and "." not in index.nodes[sid].name
         and isinstance(fn, ast.FunctionDef)
-        and (site := keyed_test_site(fn)) is not None
+        and (candidate := keyed_test_site(fn, literal_tables=literal_tables)) is not None
     ]
     if not candidates:
         return set()
@@ -1500,15 +1554,24 @@ def add_keyed_extrema_edges(index: "Index") -> set[tuple[str, str, str]]:
     )
     proof.writes = writes
     paths = set()
-    for sid, fn, site in candidates:
+    # Preserve the proof budget available to the existing literal calls.
+    candidates.sort(key=lambda entry: bool(entry[2][1]))
+    for sid, fn, (site, columns) in candidates:
         path = index.nodes[sid].path
         try:
             scope = audit(body(fn), local=True)
-            if scope.wildcard or any(
-                isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn)
+            if (
+                scope.wildcard
+                or columns & scope.counts.keys()
+                or any(isinstance(node, (ast.Yield, ast.YieldFrom)) for node in ast.walk(fn))
             ):
                 continue
-            env = proof.module(path) | {name: UNBOUND for name in scope.counts}
+            env = proof.module(path)
+            if columns:
+                test = env.get(fn.name)
+                if not isinstance(test, Function) or not proof.pytest_parameterization(test):
+                    continue
+            env = env | dict.fromkeys(columns, DATA) | {name: UNBOUND for name in scope.counts}
             helper = proof.expression(site.func, env)
             if (
                 not isinstance(helper, Function)
@@ -1523,11 +1586,16 @@ def add_keyed_extrema_edges(index: "Index") -> set[tuple[str, str, str]]:
             continue
         helper_path = index.nodes[helper.sid].path
         forwarded = " via its forwarding wrapper" if helper.wrapper else ""
+        inputs = (
+            f" from literal pytest columns {dotted(site.args[0])!r} and {dotted(site.args[1])!r}"
+            if columns
+            else ""
+        )
         index.add_edge(
             sid,
             helper.sid,
             "call",
-            f"{path}:{site.lineno} calls {helper.sid}{forwarded}",
+            f"{path}:{site.lineno} calls {helper.sid}{forwarded}{inputs}",
             SourceLocation(path=path, line=site.lineno, end_line=site.end_lineno or site.lineno),
         )
         index.add_edge(

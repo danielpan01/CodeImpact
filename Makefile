@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality evaluate-real-v5-dictionary-inequality evaluate-real-v5-parameterized-less-than evaluate-real-v5-string-parameter-less-than evaluate-real-v5-raises-less-than evaluate-real-v5-raises-greater-than evaluate-real-v5-keyed-extrema pilot benchmark serve verify-pilot
+.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality evaluate-real-v5-dictionary-inequality evaluate-real-v5-parameterized-less-than evaluate-real-v5-string-parameter-less-than evaluate-real-v5-raises-less-than evaluate-real-v5-raises-greater-than evaluate-real-v5-keyed-extrema evaluate-real-v5-keyed-parameters pilot benchmark serve verify-pilot
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -56,6 +56,8 @@ evaluate-real-v5-raises-greater-than:
 	.venv/bin/python -m codeimpact.raises_greater_than_evaluate
 evaluate-real-v5-keyed-extrema:
 	.venv/bin/python -m codeimpact.keyed_extrema_evaluate
+evaluate-real-v5-keyed-parameters:
+	.venv/bin/python -m codeimpact.keyed_parameters_evaluate
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:
