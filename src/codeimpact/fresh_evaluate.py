@@ -315,6 +315,18 @@ STRING_PARAMETER_LESS_THAN_SOURCE_CHANGES = {
 }
 
 
+RAISES_LESS_THAN_TRANSITION = Path("benchmarks/raises-less-than-v1-preservation.json")
+RAISES_LESS_THAN_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "equality",
+        "fresh_evaluate",
+        "equality_evaluate",
+        "string_parameter_less_than_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -329,7 +341,19 @@ def _previous_source_hash(
     return actual
 
 
+def string_parameter_less_than_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        RAISES_LESS_THAN_TRANSITION,
+        STRING_PARAMETER_LESS_THAN_TRANSITION,
+        RAISES_LESS_THAN_SOURCE_CHANGES,
+    )
+
+
 def parameterized_less_than_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = string_parameter_less_than_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

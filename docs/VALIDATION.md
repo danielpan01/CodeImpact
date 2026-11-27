@@ -4600,3 +4600,31 @@ source hashes in the new successor receipt record that fix.
 | Current analyzer comparison | Compared all 53 captured cases against the tuple/list profile and validated current recommendation paths. The 49 pre-v5 cases and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
 
 Local logs are under `reports/string-parameter-less-than/`.
+
+## Less-than inside pytest.raises
+
+Started on merged `main` at `7305fa19501b826c33d6d33222d48a92eb3b1fe6`
+(PR #46). Before implementation, the direct string replay reproduced
+121/239 selections overall and 22/106 in the SemVer subclass case.
+Four positive regressions failed on that predecessor, including the
+pinned comparison and both one-revision controls.
+
+The successor selects 122/239 overall and 23/106 in the subclass case.
+The only added recommendation cites `tests/test_compare.py` line 283
+and `src/semver/version.py::_comparator.wrapper` at lines 41–52 in both
+revisions. Its score is 90. Existing recommendations retain their scores
+and evidence. The subclass case retains nine draft misses and two
+draft false positives.
+[Trace, measurements and successor receipt](REAL_EVALUATION_V5.md#less-than-inside-pytestraises)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation checks | 208 passed, including 24 raises cases. Controls cover shadowed pytest and builtin exception bindings, unsupported context manager and body shapes, mixed and computed rows, local rebinding, reversed operands, and revision-specific evidence. A control confirms that the initial call can be recorded when the method returns `NotImplemented`. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,552 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 92% coverage. |
+| Offline evaluations | All 19 passed. All 178 pre-existing report files matched their starting SHA-256 hashes. |
+| Determinism | Hash seeds 7 and 173 each reproduced 21 report files byte for byte. Reversing snapshot file order reproduced and validated all 163 case analyses per seed, excluding only `stats.elapsed_ms`. An in-memory alteration to the new comparison's after-revision range failed the successor check. |
+| Browser suite | The first full run passed 289 of 290 tests. The WebKit phone Slugify ASCII test reproduced the non-finite Playwright hit-target error previously observed on unchanged main. The full serial rerun with one retry enabled passed all 290 tests without retries. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases with the direct string profile and validated current recommendation paths. All 49 pre-v5 cases and both Cached Property cases matched after excluding elapsed time. Both SemVer graphs gained one edge. Only the subclass case gained a recommendation. |
+
+Local logs are under `reports/raises-less-than/`.

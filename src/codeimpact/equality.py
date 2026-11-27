@@ -25,6 +25,7 @@ EqualityMode = (
         "inequality",
         "dictionary",
         "parameterized",
+        "string-parameter",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -37,7 +38,8 @@ COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "parameterized",
+    True: "string-parameter",
+    "string-parameter": "parameterized",
     "parameterized": "dictionary",
     "dictionary": "inequality",
     "inequality": "less-than",
@@ -1049,6 +1051,13 @@ class Proof:
             local[parameter[0]] = UNBOUND
         if self.statements(stmts[:position], local, 0, dictionary_operands=dictionary_operands):
             return None
+        in_raises = isinstance(stmts[position], ast.With)
+        if in_raises and (
+            local.get("pytest") != "pytest"
+            or "ValueError" in local
+            or self.writes & {"raises", "ValueError"}
+        ):
+            return None
         lhs = self.expression(site.left, local)
         if not isinstance(lhs, Instance):
             return None
@@ -1079,6 +1088,8 @@ class Proof:
                 and (pos >= 2 or args.vararg)
                 and all(default is not None for default in args.kw_defaults)
             ):
+                if in_raises:
+                    detail += " inside pytest.raises(ValueError)"
                 return target, detail
         return None
 
@@ -1121,6 +1132,25 @@ def literal_parameter(fn: ast.FunctionDef, *, allow_strings: bool) -> LiteralPar
     return name, "tuple" if isinstance(first_row, ast.Tuple) else "list"
 
 
+def raises_comparison(stmt: ast.With) -> ast.Compare | None:
+    match stmt:
+        case ast.With(
+            items=[
+                ast.withitem(
+                    context_expr=ast.Call(
+                        func=ast.Attribute(value=ast.Name(id="pytest"), attr="raises"),
+                        args=[ast.Name(id="ValueError")],
+                        keywords=[],
+                    ),
+                    optional_vars=None,
+                )
+            ],
+            body=[ast.Expr(value=ast.Compare(ops=[ast.Lt()], comparators=[_]) as site)],
+        ):
+            return site
+    return None
+
+
 def comparison_site(
     fn: ast.FunctionDef,
     *,
@@ -1128,6 +1158,7 @@ def comparison_site(
     operators: tuple[type[ast.cmpop], ...],
     literal_parameters: bool,
     allow_strings: bool,
+    allow_raises: bool,
 ) -> tuple[int, ast.Compare, LiteralParameter | None] | None:
     parameter = literal_parameter(fn, allow_strings=allow_strings) if literal_parameters else None
     if fn.type_params or fn.returns:
@@ -1138,9 +1169,19 @@ def comparison_site(
         return None
     stmts = body(fn)
     for position, stmt in enumerate(stmts):
-        if not isinstance(stmt, ast.Assert):
+        if isinstance(stmt, ast.Assert):
+            expression = stmt.test
+        elif (
+            allow_raises
+            and isinstance(stmt, ast.With)
+            and parameter is not None
+            and parameter[1] == "str"
+            and (site_in_raises := raises_comparison(stmt)) is not None
+        ):
+            expression = site_in_raises
+        else:
             continue
-        match stmt.test:
+        match expression:
             case ast.Compare(ops=[ast.Eq()], comparators=[_]) as site if (
                 parameter is None and position == len(stmts) - 1
             ):
@@ -1207,7 +1248,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    literal_parameters = mode in (True, "parameterized")
+    literal_parameters = mode in (True, "parameterized", "string-parameter")
     first = literal_parameters or mode in (
         "first-assertion",
         "less-than",
@@ -1231,7 +1272,8 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 first=first,
                 operators=operators,
                 literal_parameters=literal_parameters,
-                allow_strings=mode is True,
+                allow_strings=mode in (True, "string-parameter"),
+                allow_raises=mode is True,
             )
         )
         is not None
