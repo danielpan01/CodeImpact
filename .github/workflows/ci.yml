@@ -63,6 +63,8 @@ jobs:
         run: make evaluate-real-v5-keyed-extrema
       - name: Offline v5 keyed pytest parameter evaluation
         run: make evaluate-real-v5-keyed-parameters
+      - name: Offline v5 factory and dictionary pytest equality evaluation
+        run: make evaluate-real-v5-parameter-dictionary-equality
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit

@@ -1265,3 +1265,20 @@ could make the path appear proved in an unsupported revision, selection
 does not use that trail. The predecessor replay covers parameterless
 tests only.
 [Literal table trace and successor replay](REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables)
+
+### Factory equality with literal pytest dictionaries
+
+The same bounded table shape can supply two columns for an equality assertion.
+One column contains only string literals. The other contains only dictionary
+literals with scalar literal keys and values. The table uses one direct pytest
+decorator bound by an unshadowed import, and both parameter names must remain
+unrebound across the test.
+
+The left operand is a supported source factory call with the string parameter
+and optional literal keyword values, either inline or assigned immediately
+before the assertion. The right operand reads the dictionary parameter.
+The existing factory proof establishes an exact source class on normal
+return. Builtin `dict` has no subclass priority over that class, so the
+existing equality resolver records the initial `__eq__` target. Each
+revision must establish the whole call at the test-definition level.
+[Factory and dictionary trace](REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries)
