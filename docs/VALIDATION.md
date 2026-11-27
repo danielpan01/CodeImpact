@@ -4481,3 +4481,31 @@ case retains 15 draft misses and two draft false positives.
 | Current analyzer comparison | Compared all 53 captured cases with the first-assertion profile and validated all current recommendation paths. After excluding elapsed time, all 49 pre-v5 analyses and both Cached Property analyses matched. Both SemVer graphs gained the operator edges. Only the subclass case gained recommendations. |
 
 Local logs are under `reports/less-than/`.
+
+## Exact-class inequality evidence
+
+Started on merged `main` at `19187f1867b9aa5655611d3d902fa623c64ede5d`
+(PR #42). Before implementation, `make evaluate-real-v5-less-than`
+reproduced 116/239 selected overall and 17/106 in the SemVer subclass case.
+Five positive regressions failed on that predecessor, including the
+pinned comparison, the first dispatch to an explicit `__ne__` returning
+`NotImplemented`, and evidence available in only one revision.
+
+The successor selects 117/239 overall and 18/106 in the subclass case.
+Its added recommendation cites `tests/test_compare.py` line 138 and
+the edited wrapper at `src/semver/version.py` lines 41–52 in both revisions.
+All earlier recommendation scores and evidence match the predecessor.
+The subclass case retains 14 draft misses and two draft false positives.
+[Trace, measurements and receipt](REAL_EVALUATION_V5.md#exact-class-inequality-evidence)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 110 passed. Controls cover missing and rebound `__ne__` bindings, ambiguous decorators, mixed and unknown operands, chained comparisons, later local shadowing, first dispatch with `NotImplemented` and revision-specific evidence. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,454 passed, one Linux-only address-space test skipped on macOS, one existing Starlette TestClient deprecation warning and 93% coverage. |
+| Offline evaluations | All 15 passed, including the new inequality target and the preserved less-than replay. All 174 pre-existing report files matched their starting hashes. An in-memory change to the new edge's before-revision range failed the successor check. |
+| Determinism | Hash seeds 7 and 173 each reproduced 17 report files byte for byte, including two earlier authored profiles. Reversing snapshot file order reproduced and validated 147 case analyses per seed, excluding only `stats.elapsed_ms`. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. |
+| Pilot verification | Passed readiness, static UI, public demo, protected analyses, the frozen-input report check and absence of report storage. |
+| Current analyzer comparison | Compared all 53 captured cases against the less-than profile and validated every current recommendation path. All 49 pre-v5 analyses and both Cached Property analyses matched after excluding elapsed time. Both SemVer graphs gained the operator edge, and only the subclass case gained a recommendation. |
+
+Local logs are under `reports/inequality/`.
