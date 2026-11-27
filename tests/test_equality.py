@@ -1210,3 +1210,125 @@ def test_raises_less_than_keeps_initial_call_when_method_returns_not_implemented
     (edge,) = less_than_edges(report)
     assert (edge.target, edge.revision) == (f"{SOURCE}::Item.__lt__", "both")
     assert len(edge.before) == len(edge.after) == 1
+
+
+GREATER_CORE = (
+    CORE.replace("def __eq__", "def __gt__")
+    .replace("return self._value == rhs._value", "return NotImplemented")
+    .replace(
+        "\ndef parse(value):",
+        "\n    def __lt__(self, rhs): return True\n\ndef parse(value):",
+    )
+)
+GREATER_RAISES_TEST = (
+    "import pytest\nfrom values import Item\n"
+    "def test_equal():\n    left = Item(1)\n"
+    "    with pytest.raises(TypeError):\n        left > 1\n"
+    "    with pytest.raises(TypeError):\n        1 > left\n"
+)
+
+
+def greater_than_edges(report):
+    return [
+        edge
+        for edge in report.edges
+        if any("via > " in site.text for site in edge.before + edge.after)
+    ]
+
+
+def test_raises_greater_than_records_only_the_initial_call_per_revision():
+    request = request_for(GREATER_RAISES_TEST, base_core=GREATER_CORE)
+    request.head.files["tests/test_item.py"] = "\n" + GREATER_RAISES_TEST
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = greater_than_edges(report)
+    assert (edge.source, edge.target, edge.kind, edge.revision) == (TEST, WRAPPER, "call", "both")
+    for entries, line in ((edge.before, 6), (edge.after, 7)):
+        (site,) = entries
+        assert "calls the bound __gt__" in site.text
+        assert "inside pytest.raises(TypeError)" in site.text
+        assert (site.location.line, site.location.end_line) == (line, line)
+        assert site.target_location.path == SOURCE
+        assert site.target_location.line == 4
+    rec = next(r for r in report.recommendations if r.symbol == TEST)
+    assert (rec.evidence_edges, rec.evidence_path, rec.path_revision) == (
+        [edge.id],
+        [TEST, WRAPPER],
+        "both",
+    )
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        GREATER_RAISES_TEST.replace("import pytest", "pytest = 1"),
+        GREATER_RAISES_TEST.replace("import pytest", "import pytest as p\npytest = p"),
+        GREATER_RAISES_TEST + "\ndef mutate():\n    pytest.raises = alternate\n",
+        GREATER_RAISES_TEST + "    pytest = alternate\n",
+        GREATER_RAISES_TEST + "\nclass TypeError: pass\n",
+        GREATER_RAISES_TEST + "    TypeError: type\n",
+        GREATER_RAISES_TEST.replace("    with pytest", "    TypeError = Item\n    with pytest", 1),
+        GREATER_RAISES_TEST.replace("    left = Item(1)", "    left = unknown()"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > True"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > 1.0"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > 1 + 0"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > int(1)"),
+        GREATER_RAISES_TEST.replace("left > 1", "1 > left"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > 1 > 0"),
+        GREATER_RAISES_TEST.replace("left > 1", "assert left > 1"),
+        GREATER_RAISES_TEST.replace("left > 1", "left > 1\n        pass"),
+        GREATER_RAISES_TEST.replace("raises(TypeError)", "raises(ValueError)", 1),
+        GREATER_RAISES_TEST.replace("raises(TypeError)", "raises(TypeError, match='error')", 1),
+        GREATER_RAISES_TEST.replace("raises(TypeError)", "raises(TypeError) as info", 1),
+        GREATER_RAISES_TEST.replace("raises(TypeError)", "raises(TypeError), other()", 1),
+        GREATER_RAISES_TEST.replace("    left = Item(1)", "    return\n    left = Item(1)"),
+        GREATER_RAISES_TEST.replace(
+            "    with pytest.raises(TypeError):\n        left > 1", "    assert left > 1"
+        ),
+        GREATER_RAISES_TEST.replace("left > 1", "pass").replace("1 > left", "left > 1"),
+    ],
+)
+def test_raises_greater_than_declines_unproved_context_or_operands(source):
+    assert not greater_than_edges(analyze(request_for(source, base_core=GREATER_CORE)))
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        GREATER_CORE + "\nItem.__gt__ = alternate\n",
+        GREATER_CORE.replace("@checked", "@unknown"),
+        GREATER_CORE.replace("@checked", "@property"),
+        GREATER_CORE.replace("def __gt__", "def other_method"),
+    ],
+)
+def test_raises_greater_than_requires_a_proved_gt_binding(source):
+    assert not greater_than_edges(analyze(request_for(GREATER_RAISES_TEST, base_core=source)))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_raises_greater_than_proves_only_the_unshadowed_revision(side):
+    request = request_for(GREATER_RAISES_TEST, base_core=GREATER_CORE)
+    other = request.head if side == "before" else request.base
+    other.files["tests/test_item.py"] += "\nclass TypeError: pass\n"
+    report = analyze(request)
+    validate_report(request, report)
+    (edge,) = greater_than_edges(report)
+    assert (edge.target, edge.revision) == (WRAPPER, side)
+    assert [site.location.line for site in edge.before] == ([6] if side == "before" else [])
+    assert [site.location.line for site in edge.after] == ([6] if side == "after" else [])
+
+
+def test_pinned_raises_greater_than_uses_the_expression_on_line_291():
+    case = Path("datasets/real-v5/cases/semver_subclass_comparison.json")
+    request = AnalysisRequest.model_validate(json.loads(case.read_bytes())["request"])
+    report = analyze(request)
+    validate_report(request, report)
+    sid = "tests/test_compare.py::test_should_not_allow_to_compare_version_with_int"
+    target = "src/semver/version.py::_comparator.wrapper"
+    rec = next(r for r in report.recommendations if r.symbol == sid)
+    assert (rec.evidence_path, rec.path_revision) == ([sid, target], "both")
+    (edge,) = [e for e in greater_than_edges(report) if e.id in rec.evidence_edges]
+    for evidence in (edge.before, edge.after):
+        (site,) = evidence
+        assert (site.location.line, site.location.end_line) == (291, 291)
+        assert (site.target_location.line, site.target_location.end_line) == (41, 52)

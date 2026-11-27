@@ -26,6 +26,7 @@ EqualityMode = (
         "dictionary",
         "parameterized",
         "string-parameter",
+        "raises-less-than",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -35,10 +36,12 @@ MAX_PARAMETER_CELLS = 256
 COMPARISON_METHODS: dict[type[ast.cmpop], tuple[str, str]] = {
     ast.Eq: ("==", "__eq__"),
     ast.Lt: ("<", "__lt__"),
+    ast.Gt: (">", "__gt__"),
     ast.NotEq: ("!=", "__ne__"),
 }
 PREVIOUS_MODES: dict[EqualityMode, EqualityMode] = {
-    True: "string-parameter",
+    True: "raises-less-than",
+    "raises-less-than": "string-parameter",
     "string-parameter": "parameterized",
     "parameterized": "dictionary",
     "dictionary": "inequality",
@@ -1052,10 +1055,11 @@ class Proof:
         if self.statements(stmts[:position], local, 0, dictionary_operands=dictionary_operands):
             return None
         in_raises = isinstance(stmts[position], ast.With)
+        exception = "TypeError" if method_name == "__gt__" else "ValueError"
         if in_raises and (
             local.get("pytest") != "pytest"
-            or "ValueError" in local
-            or self.writes & {"raises", "ValueError"}
+            or exception in local
+            or self.writes & {"raises", exception}
         ):
             return None
         lhs = self.expression(site.left, local)
@@ -1066,6 +1070,9 @@ class Proof:
             detail = (
                 f"with an exact builtin {builtin_type} from pytest parameter {name!r} on the right"
             )
+        elif method_name == "__gt__":
+            # The recognized TypeError context requires an exact int constant.
+            detail = "with an exact builtin int on the right"
         else:
             read_rhs = self.comparison_operand if dictionary_operands else self.expression
             rhs = read_rhs(site.comparators[0], local)
@@ -1089,7 +1096,7 @@ class Proof:
                 and all(default is not None for default in args.kw_defaults)
             ):
                 if in_raises:
-                    detail += " inside pytest.raises(ValueError)"
+                    detail += f" inside pytest.raises({exception})"
                 return target, detail
         return None
 
@@ -1132,21 +1139,23 @@ def literal_parameter(fn: ast.FunctionDef, *, allow_strings: bool) -> LiteralPar
     return name, "tuple" if isinstance(first_row, ast.Tuple) else "list"
 
 
-def raises_comparison(stmt: ast.With) -> ast.Compare | None:
+def raises_comparison(
+    stmt: ast.With, *, exception: str, operator: type[ast.cmpop]
+) -> ast.Compare | None:
     match stmt:
         case ast.With(
             items=[
                 ast.withitem(
                     context_expr=ast.Call(
                         func=ast.Attribute(value=ast.Name(id="pytest"), attr="raises"),
-                        args=[ast.Name(id="ValueError")],
+                        args=[ast.Name(id=expected)],
                         keywords=[],
                     ),
                     optional_vars=None,
                 )
             ],
-            body=[ast.Expr(value=ast.Compare(ops=[ast.Lt()], comparators=[_]) as site)],
-        ):
+            body=[ast.Expr(value=ast.Compare(ops=[op], comparators=[_]) as site)],
+        ) if expected == exception and isinstance(op, operator):
             return site
     return None
 
@@ -1159,6 +1168,7 @@ def comparison_site(
     literal_parameters: bool,
     allow_strings: bool,
     allow_raises: bool,
+    allow_greater_raises: bool,
 ) -> tuple[int, ast.Compare, LiteralParameter | None] | None:
     parameter = literal_parameter(fn, allow_strings=allow_strings) if literal_parameters else None
     if fn.type_params or fn.returns:
@@ -1169,16 +1179,24 @@ def comparison_site(
         return None
     stmts = body(fn)
     for position, stmt in enumerate(stmts):
+        site_operators = operators
+        expression: ast.expr | None
         if isinstance(stmt, ast.Assert):
             expression = stmt.test
-        elif (
-            allow_raises
-            and isinstance(stmt, ast.With)
-            and parameter is not None
-            and parameter[1] == "str"
-            and (site_in_raises := raises_comparison(stmt)) is not None
-        ):
-            expression = site_in_raises
+        elif allow_raises and isinstance(stmt, ast.With):
+            if parameter is not None and parameter[1] == "str":
+                expression = raises_comparison(stmt, exception="ValueError", operator=ast.Lt)
+            elif allow_greater_raises and parameter is None:
+                expression = raises_comparison(stmt, exception="TypeError", operator=ast.Gt)
+                if expression is not None:
+                    right_int = expression.comparators[0]
+                    if not isinstance(right_int, ast.Constant) or type(right_int.value) is not int:
+                        continue
+                site_operators = (ast.Gt,)
+            else:
+                continue
+            if expression is None:
+                continue
         else:
             continue
         match expression:
@@ -1188,7 +1206,7 @@ def comparison_site(
                 return position, site, None
             case ast.Compare(ops=[op], comparators=[right]) as site if (
                 first
-                and isinstance(op, operators)
+                and isinstance(op, site_operators)
                 and (
                     parameter is None or isinstance(op, ast.Lt) and identifier(right, parameter[0])
                 )
@@ -1248,7 +1266,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    literal_parameters = mode in (True, "parameterized", "string-parameter")
+    literal_parameters = mode in (True, "parameterized", "string-parameter", "raises-less-than")
     first = literal_parameters or mode in (
         "first-assertion",
         "less-than",
@@ -1272,8 +1290,9 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
                 first=first,
                 operators=operators,
                 literal_parameters=literal_parameters,
-                allow_strings=mode in (True, "string-parameter"),
-                allow_raises=mode is True,
+                allow_strings=mode in (True, "string-parameter", "raises-less-than"),
+                allow_raises=mode in (True, "raises-less-than"),
+                allow_greater_raises=mode is True,
             )
         )
         is not None
@@ -1306,6 +1325,10 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
             ):
                 continue
             op, method_name = COMPARISON_METHODS[type(site.ops[0])]
+            if method_name == "__gt__" and not direct_pytest_import(
+                resolver.binding(path, "pytest", site)
+            ):
+                continue
             binding = proof.comparison(
                 fn,
                 env,

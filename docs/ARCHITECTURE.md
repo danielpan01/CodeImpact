@@ -1211,3 +1211,16 @@ the right. Evidence cites the comparison and initial `__lt__` binding
 in each revision. Exception outcomes and reflected dispatch are outside
 the proof.
 [Raises comparison trace and measurement](REAL_EVALUATION_V5.md#less-than-inside-pytestraises)
+
+### Greater-than inside pytest.raises
+
+The same context proof supports one bare `>` expression in a top-level
+`with pytest.raises(TypeError):` after a supported straight-line prefix.
+It checks the direct pytest import and unshadowed builtin exception
+binding. The left operand must resolve to an exact source-defined
+class and the right operand must be a builtin integer constant.
+The exact `int` has no subclass priority, so the proof records the
+initial `__gt__` binding and the comparison range for each revision.
+Computed operands, booleans, reflected dispatch and the exception
+outcome are outside this proof.
+[Greater-than trace and measurement](REAL_EVALUATION_V5.md#greater-than-inside-pytestraises)
