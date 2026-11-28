@@ -4885,3 +4885,32 @@ compilation. All 38 callback and historical preservation checks passed in the
 focused recheck.
 
 Local logs are under `reports/namespace-callback/`.
+
+## Keyed callbacks in pytest.warns
+
+Started from clean, merged `main` at `c886355a1b6434a18ccd55c0a3332eaf6f904183`
+(PR #55). `make evaluate-real-v5-namespace-callback` reproduced 31/106
+subclass selections and 134/239 v5 selections. The pinned line 63
+regression and both single-revision positive controls failed before
+the analyzer edit.
+
+The successor adds the warning callback test in the subclass case.
+Both revisions record the row 44 path through `max_ver` and the row 45
+path through `min_ver`. The subclass case now selects 32/106 with
+30 draft true positives, two false positives, zero false negatives and
+74 true negatives. V5 selects 135/239 with 82 true positives, 52 false
+positives, zero false negatives, 104 true negatives and one uncertain
+selection.
+[Source trace and exact changes](REAL_EVALUATION_V5.md#keyed-callbacks-in-pytestwarns)
+
+| Check | Observed result |
+| --- | --- |
+| Focused regressions | 505 passed, including 29 warning callback cases and the historical preservation test. Removing both pinned rows removes the path. Independent row and revision controls retain only the proved evidence and preserve changed-test precedence. |
+| Report comparison | Validated current paths across all 53 captured cases. The 49 pre-v5 cases and both Cached Property reports match the namespace callback profile with elapsed time excluded. Both SemVer graphs gain two edges. All prior recommendation evidence and scores match. An in-memory change to the after-revision row witness failed the successor check. |
+| Pilot and frontend formatting | Local verification passed readiness, built UI, public demo, key protection, the exact frozen-input report and absence of report storage. Prettier passed. |
+| Browser suite | The first run reported 289 passes and one flaky mobile Chromium test. Its browser launch timed out before the test ran, and its retry passed. The full rerun with two workers and retries disabled passed all 290 desktop and mobile tests. |
+| Offline evaluations | All 28 targets passed, including the preserved namespace callback replay and the warning callback successor. All 187 starting report files matched their SHA-256 hashes. Existing snapshots, draft labels, provenance, and receipts matched the starting revision. |
+| Determinism | The successor report matched byte for byte at hash seeds 7 and 173 and matched the standard replay. Each seed validated 199 analyses across 30 report profiles with both snapshots' file order reversed, excluding only `stats.elapsed_ms`. |
+| `make check` | Ruff lint and format, mypy, and the production build passed. Pytest reported 1,849 passed, one Linux-only `RLIMIT_AS` test skipped on macOS, one existing Starlette TestClient deprecation warning, and 91% coverage (9,742 of 10,684 statements). |
+
+Local logs are under `reports/warning-callback/`.

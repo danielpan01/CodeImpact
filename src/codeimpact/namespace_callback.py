@@ -121,6 +121,19 @@ class CallbackProof(HelperProof):
     def source_shadows(self, name: str) -> bool:
         return any(m == name or m.startswith(name + ".") for m in self.resolver.modules)
 
+    def forwarding(self, fn: Function, depth: int, *, strict: bool = False) -> None:
+        if (
+            strict
+            and fn.wrapper
+            and any(
+                isinstance(node, ast.Return | ast.Raise)
+                for stmt in body(fn.wrapper.node)[:-1]
+                for node in ast.walk(stmt)
+            )
+        ):
+            raise Unproved
+        super().forwarding(fn, depth, strict=strict)
+
     def imported(self, qualified: str) -> Value:
         root, _, member = qualified.partition(".")
         if root in STDLIB | {"contextlib", "pytest"}:
@@ -487,12 +500,6 @@ class CallbackProof(HelperProof):
         if callback.mode:
             raise Unproved
         if callback.wrapper:
-            if any(
-                isinstance(node, ast.Return | ast.Raise)
-                for stmt in body(callback.wrapper.node)[:-1]
-                for node in ast.walk(stmt)
-            ):
-                raise Unproved
             self.forwarding(callback, 0, strict=True)
         (arg,) = positional(callback.node, 1)
         match body(callback.node):

@@ -51,6 +51,7 @@ class Receipt(StrictModel):
         "comparison-helper-v1",
         "dictionary-comparison-helper-v1",
         "namespace-callback-v1",
+        "warning-callback-v1",
     ]
     preservation_sha256: SHA256
     predecessor_report_sha256: SHA256

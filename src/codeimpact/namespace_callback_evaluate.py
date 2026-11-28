@@ -5,18 +5,24 @@ from typing import Any
 
 from codeimpact.dictionary_comparison_helper_evaluate import evaluate_dictionary_comparison_helper
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import NAMESPACE_CALLBACK_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import (
+    NAMESPACE_CALLBACK_TRANSITION,
+    PROJECT,
+    namespace_callback_source_hash,
+)
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_namespace_callback(directory: Path) -> dict[str, Any]:
-    receipt = verified_receipt("namespace-callback-v1", NAMESPACE_CALLBACK_TRANSITION)
+    receipt = verified_receipt(
+        "namespace-callback-v1", NAMESPACE_CALLBACK_TRANSITION, namespace_callback_source_hash
+    )
     return measure(
         directory,
         evaluate_dictionary_comparison_helper(directory),
         receipt,
-        True,
+        "namespace-callback",
         "Namespace callback",
     )
 

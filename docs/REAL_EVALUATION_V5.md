@@ -1153,3 +1153,62 @@ standard-library context entry and the deprecation wrapper's normal
 forwarding path. It declines captured collection hooks and does not
 establish external plugin or warning-filter behavior. These counts measure
 static evidence against draft dependency labels.
+
+## Keyed callbacks in pytest.warns
+
+`make evaluate-real-v5-warning-callback` replays the
+`namespace-callback-v1` predecessor and measures the warning-context
+proof on the same frozen snapshots and draft labels.
+[Successor receipt](../datasets/real-v5-successors/warning-callback-v1.json) · [Engine hashes](../benchmarks/warning-callback-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Subclass comparison, namespace callback | 31 / 106 | 29 | 2 | 1 | 74 | 0 |
+| Subclass comparison, warning callback | 32 / 106 | 30 | 2 | 0 | 74 | 0 |
+| V5 overall, namespace callback | 134 / 239 | 81 | 52 | 1 | 104 | 1 |
+| V5 overall, warning callback | 135 / 239 | 82 | 52 | 0 | 104 | 1 |
+
+In both subclass snapshots, the table at lines 30–58 of
+`tests/test_deprecated_functions.py` supplies the callbacks imported from
+the package, literal positional tuples, and keyword dictionaries. The
+qualifying rows each use `("1.2.3", "1.2.4")` and `{}`. The supported
+`pytest.warns` context starts at line 60 with the unshadowed builtin
+`DeprecationWarning` and a literal match pattern. Its first statement,
+`func(*args, **kwargs)`, is at line 63. The proof checks eager expressions
+throughout the table, including the unrelated row whose `Namespace`
+stores a source callback as a passive field.
+[Base test](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/tests/test_deprecated_functions.py#L30-L66) · [Head test](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/tests/test_deprecated_functions.py#L30-L66)
+
+The public imports resolve through `src/semver/__init__.py` lines 17–18.
+Both helpers bind the source deprecation wrapper, which forwards the
+original arguments at `src/semver/_deprecated.py:81`. The two helpers
+pass exactly two arguments to builtin extrema with `key=Version.parse`.
+Both literal inputs produce the same exact source class, `Version`.
+Builtin `max` tries the bound `__gt__` and `min` tries the bound
+`__lt__`. Both bindings call `_comparator.wrapper`, whose type tuple
+changes from `Version` to `type(self)` at line 44 of
+`src/semver/version.py`.
+[Package exports](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/__init__.py#L7-L30) · [Forwarding](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/_deprecated.py#L48-L83) · [Base comparator](https://github.com/python-semver/python-semver/blob/bd97cfcd595c882d92b73430d4bf5c880d6062dc/src/semver/version.py#L38-L54) · [Head comparator](https://github.com/python-semver/python-semver/blob/bc41390f388d88114e8529b17fe145c5af390cbb/src/semver/version.py#L38-L54)
+
+| Table row | Test call | Builtin call in `src/semver/_deprecated.py` | Initial binding | Revision |
+| --- | ---: | --- | --- | --- |
+| `max_ver` at line 44 | 63 | `max` at line 217 | `__gt__` → `_comparator.wrapper` at lines 41–52 | Both |
+| `min_ver` at line 45 | 63 | `min` at line 236 | `__lt__` → `_comparator.wrapper` at lines 41–52 | Both |
+
+The only added recommendation is
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`
+in the subclass case. Its primary path uses `max_ver`, with distance 2
+and score 72. The graph retains the separate `min_ver` path. Both SemVer
+graphs gain the two test-to-helper edges and retain their previous edges,
+including the helper-to-wrapper evidence. The prerelease case retains
+all 75 recommendations. Both Cached Property analyses match their
+predecessors. All existing recommendation scores and evidence are
+preserved. The successor contains 39 resolved, 87 conservative and nine
+changed-test recommendations.
+
+The proof covers source reachability under the supported warning context
+and normal forwarding path. It does not determine whether a warning is
+emitted, which warning text matches, which value wins, or how a reflected
+comparison would run. The frozen sample retains 52 draft false positives
+and one uncertain selection. Its zero draft misses apply to these 82
+draft-affected definitions.

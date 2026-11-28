@@ -1,6 +1,7 @@
 """Resolve initial comparison calls for bounded, source-proved operand types."""
 
 import ast
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
@@ -34,6 +35,7 @@ EqualityMode = (
         "parameter-replace-equality",
         "comparison-helper",
         "dictionary-comparison-helper",
+        "namespace-callback",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -1559,6 +1561,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
         True,
         "comparison-helper",
         "dictionary-comparison-helper",
+        "namespace-callback",
         "parameter-replace-equality",
     )
     # Keep separate proof budgets for the successive table shapes.
@@ -1896,7 +1899,12 @@ def keyed_test_site(
     return None
 
 
-def keyed_comparison(proof: Proof, helper: Function) -> tuple[ast.Call, str, str, Function]:
+def keyed_comparison(
+    proof: Proof,
+    helper: Function,
+    *,
+    key_results: Callable[[Function, Class | None], tuple[Instance, Instance]] | None = None,
+) -> tuple[ast.Call, str, str, Function]:
     args = helper.node.args
     params = parameters(helper.node)
     if (
@@ -1947,13 +1955,30 @@ def keyed_comparison(proof: Proof, helper: Function) -> tuple[ast.Call, str, str
     expected_mode = "builtin:classmethod" if receiver is not None else ""
     if not isinstance(function, Function) or function.mode != expected_mode or function.wrapper:
         raise Unproved
-    left = proof.constructed(function, receiver, [env[first]], {}, depth=1)
-    right = proof.constructed(function, receiver, [env[second]], {}, depth=1)
+    if key_results is None:
+        left = proof.constructed(function, receiver, [env[first]], {}, depth=1)
+        right = proof.constructed(function, receiver, [env[second]], {}, depth=1)
+    else:
+        left, right = key_results(function, receiver)
     method = "__lt__" if builtin == "min" else "__gt__"
     target = comparison_target(right.owner, method) if left.owner is right.owner else None
     if target is None:
         raise Unproved
     return site, builtin, method, target
+
+
+def add_keyed_helper_edge(
+    index: "Index", helper: str, target: str, site: ast.Call, builtin: str, method: str
+) -> None:
+    path = index.nodes[helper].path
+    index.add_edge(
+        helper,
+        target,
+        "call",
+        f"{path}:{site.lineno} calls the bound {method} via builtin {builtin}"
+        " on two key results of the same exact class",
+        SourceLocation(path=path, line=site.lineno, end_line=site.end_lineno or site.lineno),
+    )
 
 
 def add_keyed_extrema_edges(index: "Index", *, literal_tables: bool) -> set[tuple[str, str, str]]:
@@ -2013,7 +2038,6 @@ def add_keyed_extrema_edges(index: "Index", *, literal_tables: bool) -> set[tupl
                 continue
         except (Unproved, RecursionError):
             continue
-        helper_path = index.nodes[helper.sid].path
         forwarded = " via its forwarding wrapper" if helper.wrapper else ""
         inputs = (
             f" from literal pytest columns {dotted(site.args[0])!r} and {dotted(site.args[1])!r}"
@@ -2027,17 +2051,6 @@ def add_keyed_extrema_edges(index: "Index", *, literal_tables: bool) -> set[tupl
             f"{path}:{site.lineno} calls {helper.sid}{forwarded}{inputs}",
             SourceLocation(path=path, line=site.lineno, end_line=site.end_lineno or site.lineno),
         )
-        index.add_edge(
-            helper.sid,
-            target.sid,
-            "call",
-            f"{helper_path}:{comparison.lineno} calls the bound {method} via builtin {builtin}"
-            " on two key results of the same exact class",
-            SourceLocation(
-                path=helper_path,
-                line=comparison.lineno,
-                end_line=comparison.end_lineno or comparison.lineno,
-            ),
-        )
+        add_keyed_helper_edge(index, helper.sid, target.sid, comparison, builtin, method)
         paths.add((sid, helper.sid, target.sid))
     return paths
