@@ -1,0 +1,416 @@
+{
+  "base": {
+    "commit": {
+      "message": "fix: validate XML comments",
+      "parents": [
+        {
+          "sha": "b4a5f2a3f04aff68384486e957632c8438396fd6"
+        }
+      ],
+      "sha": "3d4d2d3a4cd0f68d1211dba549010261fa87b969",
+      "tree": {
+        "sha": "83d9bb9cfe4dd893253d4abaae1396d6de2032eb"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55",
+      "spdx": "MIT",
+      "text": "Copyright (C) 2012 Martin Blech and individual contributors.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_dicttoxml.py": "a1662188e3702c0f47f52788fcb7d10699a4d164af4cf258f6ef7c20e0b72f1c",
+      "tests/test_xmltodict.py": "93b5a358c8a4880d58535e97b5ec66d883f65055facf6e87fb84b23b97993bcf",
+      "xmltodict.py": "3d0f1f46cf0f0a90a01ebf6948a9b1626f4e37b4e7bfd7185f557f7662b86025"
+    },
+    "tree": {
+      "sha": "83d9bb9cfe4dd893253d4abaae1396d6de2032eb",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "74958c0febff253923d2b92f70f27ac8e8ca1948",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "30ed3e2ec2842929b836393ce57e972f4987c518",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/commitlint.yml",
+          "sha": "5034627c7b1245a27f090af7e34050967ac607ce",
+          "size": 247,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/publish.yml",
+          "sha": "993946fecdc209e53e96060740b86d864a3b3fe4",
+          "size": 981,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release-please.yml",
+          "sha": "c6cd0d65f1c59ec5a76216d06fce9a8179d06a40",
+          "size": 430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "69829326160bdfda6f072595b704aac28509ae5c",
+          "size": 1070,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "bf1f929dffe28e83b568e9e423cd6f2e46ec618a",
+          "size": 309,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "cdae4ae5797027e713a9d93bd8508eac76c37642",
+          "size": 170,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".release-please-manifest.json",
+          "sha": "37fcefaab34b8e0029e32254fbe848f1e4f73009",
+          "size": 19,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AGENTS.md",
+          "sha": "efb90c2c0a928442455733ccc41af349a2578e07",
+          "size": 3657,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "0bdcef2447fa023f1551587ccd088d82511c2ebd",
+          "size": 10392,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "4a010f0a3c292f370dedd6af5d711f9e8b0d6272",
+          "size": 1850,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "a462778cff0f3fef0d450d05413f047a759ff950",
+          "size": 1085,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "89b6c740606cabfb3892473700a9f081c31aeba0",
+          "size": 60,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "b1782a73e07453b577a65c89310d9e6ef084c1d5",
+          "size": 13737,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "SECURITY.md",
+          "sha": "ed31d564d302a854fd824785eae903785c11b4bb",
+          "size": 2669,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "de696d3713887a9a65c52b4ae4f1c74ecd57ab5d",
+          "size": 1139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "release-please-config.json",
+          "sha": "2c6d3540e8f945c525112a7e4f436ff753279a44",
+          "size": 374,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "c9d942d10f704e707117ff020f627a04cdf49bb7",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_dicttoxml.py",
+          "sha": "bd2300aa38e341ee21fb9de7cc894c60f593651d",
+          "size": 18802,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_xmltodict.py",
+          "sha": "57f92bcbdf3b6feba7032162b30edc6bcdda6575",
+          "size": 16049,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "400e1568874f0965c20feebd866516aa4345ece5",
+          "size": 276,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "xmltodict.py",
+          "sha": "e0a2f1ff47ba5c2501f6523632d5b5bd9fd98549",
+          "size": 22396,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/martinblech/xmltodict/commit/c986d2d37a93d45fcc059b09063d9d9c45a655ec",
+  "head": {
+    "commit": {
+      "message": "fix: fail closed when entities disabled",
+      "parents": [
+        {
+          "sha": "3d4d2d3a4cd0f68d1211dba549010261fa87b969"
+        }
+      ],
+      "sha": "c986d2d37a93d45fcc059b09063d9d9c45a655ec",
+      "tree": {
+        "sha": "d2f80c823bf72082e4ea9b54dbd804f179a5e4ca"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55",
+      "spdx": "MIT",
+      "text": "Copyright (C) 2012 Martin Blech and individual contributors.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/test_dicttoxml.py": "a1662188e3702c0f47f52788fcb7d10699a4d164af4cf258f6ef7c20e0b72f1c",
+      "tests/test_xmltodict.py": "99ec2a779e0d439c50a88517db62234a1559cea715aadc32cc8cfe729f1de1d2",
+      "xmltodict.py": "99742ef362a7ad8347b600a90217888a82d739c27d2e7fe7107b1620369635d5"
+    },
+    "tree": {
+      "sha": "d2f80c823bf72082e4ea9b54dbd804f179a5e4ca",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "74958c0febff253923d2b92f70f27ac8e8ca1948",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "30ed3e2ec2842929b836393ce57e972f4987c518",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/commitlint.yml",
+          "sha": "5034627c7b1245a27f090af7e34050967ac607ce",
+          "size": 247,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/publish.yml",
+          "sha": "993946fecdc209e53e96060740b86d864a3b3fe4",
+          "size": 981,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release-please.yml",
+          "sha": "c6cd0d65f1c59ec5a76216d06fce9a8179d06a40",
+          "size": 430,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "69829326160bdfda6f072595b704aac28509ae5c",
+          "size": 1070,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "bf1f929dffe28e83b568e9e423cd6f2e46ec618a",
+          "size": 309,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "cdae4ae5797027e713a9d93bd8508eac76c37642",
+          "size": 170,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".release-please-manifest.json",
+          "sha": "37fcefaab34b8e0029e32254fbe848f1e4f73009",
+          "size": 19,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "AGENTS.md",
+          "sha": "efb90c2c0a928442455733ccc41af349a2578e07",
+          "size": 3657,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "0bdcef2447fa023f1551587ccd088d82511c2ebd",
+          "size": 10392,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "4a010f0a3c292f370dedd6af5d711f9e8b0d6272",
+          "size": 1850,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "a462778cff0f3fef0d450d05413f047a759ff950",
+          "size": 1085,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "89b6c740606cabfb3892473700a9f081c31aeba0",
+          "size": 60,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "b1782a73e07453b577a65c89310d9e6ef084c1d5",
+          "size": 13737,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "SECURITY.md",
+          "sha": "ed31d564d302a854fd824785eae903785c11b4bb",
+          "size": 2669,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "pyproject.toml",
+          "sha": "de696d3713887a9a65c52b4ae4f1c74ecd57ab5d",
+          "size": 1139,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "release-please-config.json",
+          "sha": "2c6d3540e8f945c525112a7e4f436ff753279a44",
+          "size": 374,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "3cf99d966b9f51a7522428c9f6b67c9692496938",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_dicttoxml.py",
+          "sha": "bd2300aa38e341ee21fb9de7cc894c60f593651d",
+          "size": 18802,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_xmltodict.py",
+          "sha": "9c965ae953b2470f05dc968833655007e603d085",
+          "size": 16043,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "400e1568874f0965c20feebd866516aa4345ece5",
+          "size": 276,
+          "type": "blob"
+        },
+        {
+          "mode": "100755",
+          "path": "xmltodict.py",
+          "sha": "fded477a354598c67cd71b747cf9818216118319",
+          "size": 22876,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "xmltodict_entity_policy",
+  "label_review": {
+    "author": "CodeImpact agent",
+    "drafted_before_analysis": true,
+    "labels_sha256": "dea60191b78d98892a01b8c73d867185509ed3fcfdad46b908483390d970e4c0",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "martinblech/xmltodict",
+  "schema_version": "1.0",
+  "selection_reason": "Changes the default parser handler registrations from ignoring declarations to refusing them. The tests pin declaration inputs and a normal-comment control.",
+  "warnings": []
+}

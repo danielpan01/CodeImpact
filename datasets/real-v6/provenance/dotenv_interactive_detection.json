@@ -1,0 +1,777 @@
+{
+  "base": {
+    "commit": {
+      "message": "docs update",
+      "parents": [
+        {
+          "sha": "6a02ef5a1034d66338811757df07a113a1169af6"
+        }
+      ],
+      "sha": "01f899733de664cda0550207067eb36a1795062f",
+      "tree": {
+        "sha": "caee948ccefc0e8b0d40ad442c1fd814913672c7"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2014, Saurabh Kumar (python-dotenv), 2013, Ted Tieken (django-dotenv-rw), 2013, Jacob Kaplan-Moss (django-dotenv)\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n- Redistributions of source code must retain the above copyright notice,\n  this list of conditions and the following disclaimer.\n\n- Redistributions in binary form must reproduce the above copyright notice,\n  this list of conditions and the following disclaimer in the documentation\n  and/or other materials provided with the distribution.\n\n- Neither the name of django-dotenv nor the names of its contributors\n  may be used to endorse or promote products derived from this software\n  without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\nA PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR\nCONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\nEXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\nPROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "a5c90fb3d30f68e5512259201f6637458e90aa28ab79bc7d897455cc2713134a",
+      "src/dotenv/__init__.py": "58153949f4a2280852de1ceed7bca436ebb06eec320c25fdd52cefe2f51e3ae3",
+      "src/dotenv/__main__.py": "3744612c6ee71c8aad9491f0c1ea48a3ecdb24f371f6c7b0082446639dbc87fe",
+      "src/dotenv/cli.py": "5a3e5daa0764edd4f929fc421cf57a282b276cacb4d262945776af6e1b4d2c7f",
+      "src/dotenv/ipython.py": "6af23a69ecff4719c1a6d62072122ab85d934a0288f863a1637a698aedd5b961",
+      "src/dotenv/main.py": "24885b8b6336f3b35ae544df728f58c1d2f7e1f5d1ea4bead694391ba1ba3094",
+      "src/dotenv/parser.py": "4205391f0330336c0caadd2fcfa7474c9e27ccf9b0a91aaf8b8312c9e5627e05",
+      "src/dotenv/variables.py": "083d2a5cebefa41deae51a4140c0fda97eaf1d7ed2c96f92ba2c063054a5b74f",
+      "src/dotenv/version.py": "2c6550c83b1689f7400a8eeacedc1bf115961ddb3513bb90f99a83f12023cb0e",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/conftest.py": "5bb1e4ac334b1594d3e8738e485eeb772bc134a8eb6d83e8b19c14d9faf0b6b0",
+      "tests/test_cli.py": "ab951c9fa55138a6df9fb7ab2cc7b0d9514d81c7fd3125594ac4db67a0884ed0",
+      "tests/test_ipython.py": "f14576fc11cfdda156e6476251bede3b3dc0cd6c93ca3404d526e65415a0c23c",
+      "tests/test_main.py": "01dbf1c2e771a368a14ba4cf5863445a15b2819febf5d6426a591640a773ef56",
+      "tests/test_parser.py": "1ede9d35239dc47270838c7c5c4913034601bb6de94d1aa56f79a5b02128bf4b",
+      "tests/test_utils.py": "ea5c99ec22e8da66f78c4a5e7a29d32617ed1cf42427d51eacb8f86d0fb75ed0",
+      "tests/test_variables.py": "7eb80016fd56cf50098147f5bc14d7ec0130542de3d7a7738ec701e5fec755c4",
+      "tests/test_zip_imports.py": "3f5c07f823c5184c6b27ddc529731dd9ed979f02d0daec07a0c2451b37dacc4c"
+    },
+    "tree": {
+      "sha": "caee948ccefc0e8b0d40ad442c1fd814913672c7",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "e27640434d3522dc6378dee0cea2c36f23e40550",
+          "size": 243,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "af53518f4f4d12a995d8c9f1856769b61e8cb0c0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "00d4d5e46b05ea81837fc93b177f51d6eb028ed4",
+          "size": 680,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "be006de9a1ae3b9628e796c74277cd6d61e0a34a",
+          "size": 579,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "ff12807f13386c5f8224d31dc9088117a8f235f5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release.yml",
+          "sha": "67668d53c8127cf66efe7092cc210ad35f2c3d85",
+          "size": 721,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "fc86910d80bf2e40693d0764d0cc99e4f4e2f073",
+          "size": 739,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ba1234ce660ef062f926a443a5ec61f7a0c3c9b8",
+          "size": 1566,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "f1afd06da9db1f651875bed5298d05c4056338dc",
+          "size": 15033,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "fac71bffa77a7d135ea02548dbd1fb6f8458924e",
+          "size": 543,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "3a97119010ac82e15e917a69b7b8f9f59b5a4601",
+          "size": 1556,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "9c457e662491cc1de826cc22a733a289198811e2",
+          "size": 276,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "5b58c4c2de21253ef721ba66687e26efdbb41be1",
+          "size": 663,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "e92949ef97c1d36607d54707da62e06eb8284cf4",
+          "size": 7588,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "104b10d6f61db1c256aaffaa367b3f47a65d56ef",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/changelog.md",
+          "sha": "04c99a55caae5d51f17666f554c2c8cea0aadfc0",
+          "size": 15,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/contributing.md",
+          "sha": "44fcc63439371c8c829df00eec6aedbdc4d0e4cd",
+          "size": 18,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/index.md",
+          "sha": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "size": 12,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/license.md",
+          "sha": "ea5b60640b01f74e295037aa8a6b7d4ea278a739",
+          "size": 10,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/reference.md",
+          "sha": "8a3762ad4137717ed5f18719030bd7c32c3debaf",
+          "size": 14,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "mkdocs.yml",
+          "sha": "ba77fa7f9afa9d21034a1d78b13ad77152b2153c",
+          "size": 423,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-docs.txt",
+          "sha": "7f8b71f3907734c148761bc23557882e6b2ee79d",
+          "size": 130,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "af7e1bc417979c20e01d55a089acbbf3aa20c491",
+          "size": 99,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "02dc0695afda6bd24c3fc139557ea4a51c7659ee",
+          "size": 616,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "f3d43ca1027794a8c7547fd2867242e6e7747589",
+          "size": 2082,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "13cf7be7a2ae9ee2315bfca8b642841c51a16ddf",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/dotenv",
+          "sha": "a1398119228bf88b763d5e8dc6230f4d25a72d51",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/__init__.py",
+          "sha": "7f4c631ba11786bceebd22591f91bd378d8b232c",
+          "size": 1292,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/__main__.py",
+          "sha": "3977f55a8b1e94e67bab364885e502e6c89e3bc5",
+          "size": 129,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/cli.py",
+          "sha": "33ae148531288a108d78abeea4532c1663ec7432",
+          "size": 5759,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/ipython.py",
+          "sha": "7df727cd0ba5eb481a9e2568ffdd063bfce90314",
+          "size": 1303,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/main.py",
+          "sha": "1848d602bb7f886df48868827679d5f3eba71939",
+          "size": 12388,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/parser.py",
+          "sha": "735f14a3b425a3ee7d81e6e4aa5a2b04202925c4",
+          "size": 5186,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/py.typed",
+          "sha": "7632ecf77545c5e5501cb3fc5719df0761104ca2",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/variables.py",
+          "sha": "667f2f26ff2182ecdfc5b809ba97a6cf1d1be13a",
+          "size": 2348,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/version.py",
+          "sha": "6849410aae0a8010e76d5f0a44ced13d750b0989",
+          "size": 22,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "35c785bfa619087ccae2770c5dc3f50689259f18",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/conftest.py",
+          "sha": "69193de0cedb4fed05af60f3448acb119d5ff035",
+          "size": 279,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cli.py",
+          "sha": "fc309b48ace7aeeeb37708c30284bf4884f8c12c",
+          "size": 6468,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_ipython.py",
+          "sha": "960479bad1fbf0188c67fa9a1fbb1e980d4fe363",
+          "size": 1402,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_main.py",
+          "sha": "2d63eec1705132d3250d6947f178c3378d5fa513",
+          "size": 11333,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_parser.py",
+          "sha": "b062117376d6357c4f840e9d1568c59b019f75a3",
+          "size": 7256,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_utils.py",
+          "sha": "d691f0e75eec9115841806f504e27814dcfe2b50",
+          "size": 699,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_variables.py",
+          "sha": "86b0646675bc962dcceaa1bc047539ed9c171c2c",
+          "size": 883,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_zip_imports.py",
+          "sha": "46d3c02e6ce63cb4640d54d6858e3ede472c4f77",
+          "size": 2575,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "057a1ae93d4d8950b3755a10be3ca7e1513b3d5f",
+          "size": 1089,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/theskumar/python-dotenv/commit/8411987b9301f716245074872afa30646e9b9eb7",
+  "head": {
+    "commit": {
+      "message": "fix: ensure find_dotenv work reliably on python 3.13 (#563)",
+      "parents": [
+        {
+          "sha": "01f899733de664cda0550207067eb36a1795062f"
+        }
+      ],
+      "sha": "8411987b9301f716245074872afa30646e9b9eb7",
+      "tree": {
+        "sha": "6dcc6898a4d7ec44698ada32823caa53552e6a15"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9",
+      "spdx": "BSD-3-Clause",
+      "text": "Copyright (c) 2014, Saurabh Kumar (python-dotenv), 2013, Ted Tieken (django-dotenv-rw), 2013, Jacob Kaplan-Moss (django-dotenv)\n\nRedistribution and use in source and binary forms, with or without modification,\nare permitted provided that the following conditions are met:\n\n- Redistributions of source code must retain the above copyright notice,\n  this list of conditions and the following disclaimer.\n\n- Redistributions in binary form must reproduce the above copyright notice,\n  this list of conditions and the following disclaimer in the documentation\n  and/or other materials provided with the distribution.\n\n- Neither the name of django-dotenv nor the names of its contributors\n  may be used to endorse or promote products derived from this software\n  without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\nA PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR\nCONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\nEXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\nPROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "a5c90fb3d30f68e5512259201f6637458e90aa28ab79bc7d897455cc2713134a",
+      "src/dotenv/__init__.py": "58153949f4a2280852de1ceed7bca436ebb06eec320c25fdd52cefe2f51e3ae3",
+      "src/dotenv/__main__.py": "3744612c6ee71c8aad9491f0c1ea48a3ecdb24f371f6c7b0082446639dbc87fe",
+      "src/dotenv/cli.py": "5a3e5daa0764edd4f929fc421cf57a282b276cacb4d262945776af6e1b4d2c7f",
+      "src/dotenv/ipython.py": "6af23a69ecff4719c1a6d62072122ab85d934a0288f863a1637a698aedd5b961",
+      "src/dotenv/main.py": "1c98244b45d971dd1fd9565a546c6551cace121a8172643a2f3f6142b31f6aeb",
+      "src/dotenv/parser.py": "4205391f0330336c0caadd2fcfa7474c9e27ccf9b0a91aaf8b8312c9e5627e05",
+      "src/dotenv/variables.py": "083d2a5cebefa41deae51a4140c0fda97eaf1d7ed2c96f92ba2c063054a5b74f",
+      "src/dotenv/version.py": "2c6550c83b1689f7400a8eeacedc1bf115961ddb3513bb90f99a83f12023cb0e",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/conftest.py": "5bb1e4ac334b1594d3e8738e485eeb772bc134a8eb6d83e8b19c14d9faf0b6b0",
+      "tests/test_cli.py": "ab951c9fa55138a6df9fb7ab2cc7b0d9514d81c7fd3125594ac4db67a0884ed0",
+      "tests/test_ipython.py": "f14576fc11cfdda156e6476251bede3b3dc0cd6c93ca3404d526e65415a0c23c",
+      "tests/test_is_interactive.py": "9ccdac55bdf86e084e067a65cfefbe826da21415304ed6f5662c26ad2259405c",
+      "tests/test_main.py": "01dbf1c2e771a368a14ba4cf5863445a15b2819febf5d6426a591640a773ef56",
+      "tests/test_parser.py": "1ede9d35239dc47270838c7c5c4913034601bb6de94d1aa56f79a5b02128bf4b",
+      "tests/test_utils.py": "ea5c99ec22e8da66f78c4a5e7a29d32617ed1cf42427d51eacb8f86d0fb75ed0",
+      "tests/test_variables.py": "7eb80016fd56cf50098147f5bc14d7ec0130542de3d7a7738ec701e5fec755c4",
+      "tests/test_zip_imports.py": "3f5c07f823c5184c6b27ddc529731dd9ed979f02d0daec07a0c2451b37dacc4c"
+    },
+    "tree": {
+      "sha": "6dcc6898a4d7ec44698ada32823caa53552e6a15",
+      "tree": [
+        {
+          "mode": "100644",
+          "path": ".editorconfig",
+          "sha": "e27640434d3522dc6378dee0cea2c36f23e40550",
+          "size": 243,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "af53518f4f4d12a995d8c9f1856769b61e8cb0c0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/SECURITY.md",
+          "sha": "00d4d5e46b05ea81837fc93b177f51d6eb028ed4",
+          "size": 680,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/dependabot.yml",
+          "sha": "be006de9a1ae3b9628e796c74277cd6d61e0a34a",
+          "size": 579,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "ff12807f13386c5f8224d31dc9088117a8f235f5",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/release.yml",
+          "sha": "67668d53c8127cf66efe7092cc210ad35f2c3d85",
+          "size": 721,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/test.yml",
+          "sha": "fc86910d80bf2e40693d0764d0cc99e4f4e2f073",
+          "size": 739,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ba1234ce660ef062f926a443a5ec61f7a0c3c9b8",
+          "size": 1566,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CHANGELOG.md",
+          "sha": "f1afd06da9db1f651875bed5298d05c4056338dc",
+          "size": 15033,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "CONTRIBUTING.md",
+          "sha": "fac71bffa77a7d135ea02548dbd1fb6f8458924e",
+          "size": 543,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "3a97119010ac82e15e917a69b7b8f9f59b5a4601",
+          "size": 1556,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "MANIFEST.in",
+          "sha": "9c457e662491cc1de826cc22a733a289198811e2",
+          "size": 276,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "Makefile",
+          "sha": "5b58c4c2de21253ef721ba66687e26efdbb41be1",
+          "size": 663,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "e92949ef97c1d36607d54707da62e06eb8284cf4",
+          "size": 7588,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "docs",
+          "sha": "104b10d6f61db1c256aaffaa367b3f47a65d56ef",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/changelog.md",
+          "sha": "04c99a55caae5d51f17666f554c2c8cea0aadfc0",
+          "size": 15,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/contributing.md",
+          "sha": "44fcc63439371c8c829df00eec6aedbdc4d0e4cd",
+          "size": 18,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/index.md",
+          "sha": "32d46ee883b58d6a383eed06eb98f33aa6530ded",
+          "size": 12,
+          "type": "blob"
+        },
+        {
+          "mode": "120000",
+          "path": "docs/license.md",
+          "sha": "ea5b60640b01f74e295037aa8a6b7d4ea278a739",
+          "size": 10,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "docs/reference.md",
+          "sha": "8a3762ad4137717ed5f18719030bd7c32c3debaf",
+          "size": 14,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "mkdocs.yml",
+          "sha": "ba77fa7f9afa9d21034a1d78b13ad77152b2153c",
+          "size": 423,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-docs.txt",
+          "sha": "7f8b71f3907734c148761bc23557882e6b2ee79d",
+          "size": 130,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements.txt",
+          "sha": "af7e1bc417979c20e01d55a089acbbf3aa20c491",
+          "size": 99,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "02dc0695afda6bd24c3fc139557ea4a51c7659ee",
+          "size": 616,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "f3d43ca1027794a8c7547fd2867242e6e7747589",
+          "size": 2082,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "src",
+          "sha": "0d3aac92e002fc7cbd74a15c4b9e60f28f1a161b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "src/dotenv",
+          "sha": "a975721a864a2cf48a0f893ecd4f2c874275e75b",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/__init__.py",
+          "sha": "7f4c631ba11786bceebd22591f91bd378d8b232c",
+          "size": 1292,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/__main__.py",
+          "sha": "3977f55a8b1e94e67bab364885e502e6c89e3bc5",
+          "size": 129,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/cli.py",
+          "sha": "33ae148531288a108d78abeea4532c1663ec7432",
+          "size": 5759,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/ipython.py",
+          "sha": "7df727cd0ba5eb481a9e2568ffdd063bfce90314",
+          "size": 1303,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/main.py",
+          "sha": "8e6a7cf460f9bad21a2c0c1f1c10ccabbdf4f118",
+          "size": 12467,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/parser.py",
+          "sha": "735f14a3b425a3ee7d81e6e4aa5a2b04202925c4",
+          "size": 5186,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/py.typed",
+          "sha": "7632ecf77545c5e5501cb3fc5719df0761104ca2",
+          "size": 26,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/variables.py",
+          "sha": "667f2f26ff2182ecdfc5b809ba97a6cf1d1be13a",
+          "size": 2348,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "src/dotenv/version.py",
+          "sha": "6849410aae0a8010e76d5f0a44ced13d750b0989",
+          "size": 22,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "c6be01e23b2f7d3417f3896782d5e57307a5a65d",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/conftest.py",
+          "sha": "69193de0cedb4fed05af60f3448acb119d5ff035",
+          "size": 279,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_cli.py",
+          "sha": "fc309b48ace7aeeeb37708c30284bf4884f8c12c",
+          "size": 6468,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_ipython.py",
+          "sha": "960479bad1fbf0188c67fa9a1fbb1e980d4fe363",
+          "size": 1402,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_is_interactive.py",
+          "sha": "f56378e90c3a7b11c07b8a72c7a20a59c9bb038e",
+          "size": 8892,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_main.py",
+          "sha": "2d63eec1705132d3250d6947f178c3378d5fa513",
+          "size": 11333,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_parser.py",
+          "sha": "b062117376d6357c4f840e9d1568c59b019f75a3",
+          "size": 7256,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_utils.py",
+          "sha": "d691f0e75eec9115841806f504e27814dcfe2b50",
+          "size": 699,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_variables.py",
+          "sha": "86b0646675bc962dcceaa1bc047539ed9c171c2c",
+          "size": 883,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/test_zip_imports.py",
+          "sha": "46d3c02e6ce63cb4640d54d6858e3ede472c4f77",
+          "size": 2575,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "057a1ae93d4d8950b3755a10be3ca7e1513b3d5f",
+          "size": 1089,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "dotenv_interactive_detection",
+  "label_review": {
+    "author": "CodeImpact agent",
+    "drafted_before_analysis": true,
+    "labels_sha256": "5f337eb3d97dac6e2fd5802f99edf178eff5fe7dda7cba6ba38d026326fbd76f",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "theskumar/python-dotenv",
+  "schema_version": "1.0",
+  "selection_reason": "Adds sys.ps1 and sys.ps2 checks inside find_dotenv. New tests model shell state using captured test setup.",
+  "warnings": [
+    "base: skipped 4 symlinks (docs/changelog.md, docs/contributing.md, docs/index.md, docs/license.md).",
+    "head: skipped 4 symlinks (docs/changelog.md, docs/contributing.md, docs/index.md, docs/license.md)."
+  ]
+}

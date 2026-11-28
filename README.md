@@ -40,7 +40,7 @@ A change to `discount(total)` can affect an unchanged API test through `test_cre
 | **Readable analysis notes** | Lossless category/file grouping, literal full-text search, filters and explicit paging; every original warning occurrence remains in exports. |
 | **Authored correctness corpus** | Evaluates 25 complete snapshot cases against explicit dependency labels, records known mistakes, and validates typed paths and revision evidence. |
 | **Real-source evaluation pilot** | Replays six pinned changes across three public repositories offline, with complete supported Python trees, verified provenance, draft-label review packs and explicit mistakes. |
-| **Fresh-source regression gates** | Replays v2–v5 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
+| **Fresh-source regression gates** | Replays v2–v6 pinned changes with preserved first measurements, explicit regression baselines and a test-discovery audit, checking source, label, evidence and result drift in CI. |
 | **Local pilot service** | Serves the built dashboard and API together, protects user-submitted analyses with an in-memory access-key flow, and bounds disposable workers, request sizes, deadlines and admission. |
 
 **Stack:** Python · FastAPI · Python AST · React · TypeScript · React Flow · Vite · pytest · Playwright
@@ -450,6 +450,18 @@ selects **135/239**, with **zero draft misses**, **52 draft false positives**
 and **one selected uncertain definition**.
 [Warning callback evidence and results](docs/REAL_EVALUATION_V5.md#keyed-callbacks-in-pytestwarns)
 
+### Fresh-repository evaluation v6
+
+\`make evaluate-real-v6\` replays six changes from XMLtodict, python-dotenv,
+and tokenize-rt on the merged \`060547c\` engine. All three repositories are
+new to the v1–v5 samples. The first run selected **239/399** definitions.
+It recorded **27 draft true positives**, **208 false positives**, **zero
+false negatives**, and **four selected uncertain definitions**. Independent
+review is pending. Resolved paths to XMLtodict's changed \`parse\` function
+account for 107 false positives and point to a bounded declaration-handler
+reachability check as the next precision milestone.
+[V6 results](docs/REAL_EVALUATION_V6.md) · [Source-only review pack](datasets/real-v6/REVIEW.md)
+
 ## Quality checks
 
 ```sh
@@ -482,6 +494,7 @@ make evaluate-real-v5-comparison-helper
 make evaluate-real-v5-dictionary-comparison-helper
 make evaluate-real-v5-namespace-callback
 make evaluate-real-v5-warning-callback
+make evaluate-real-v6
 make verify-pilot
 cd web
 npm run install:browsers
@@ -492,7 +505,7 @@ npm run quality:container -- visual
 npm run quality:container -- a11y
 ```
 
-[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all 28 offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with a bounded matrix of reviewed screenshot comparisons and rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
+[GitHub Actions](https://github.com/danielpan01/CodeImpact/actions/workflows/ci.yml) is configured to run Python linting and formatting, strict type checks, application tests, the frontend production build, all 29 offline evaluations, and desktop/mobile browser tests. Firefox and WebKit release checks accompany the complete Chromium suite. Milestone 6 adds local production-server verification and built-UI access checks. Milestone 8C adds a separate pinned Linux ARM64 job with a bounded matrix of reviewed screenshot comparisons and rendered WCAG A/AA scans. [Canonical setup, baseline review and failure artifacts](docs/FRONTEND_MILESTONE8C.md) include the Colima context commands for this Mac and optional native previews. The [validation record](docs/VALIDATION.md) distinguishes observed local results from remote CI runs. Check Actions for the exact commit being reviewed.
 
 ## Scope & next steps
 

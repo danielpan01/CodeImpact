@@ -1,4 +1,4 @@
-.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality evaluate-real-v5-dictionary-inequality evaluate-real-v5-parameterized-less-than evaluate-real-v5-string-parameter-less-than evaluate-real-v5-raises-less-than evaluate-real-v5-raises-greater-than evaluate-real-v5-keyed-extrema evaluate-real-v5-keyed-parameters evaluate-real-v5-parameter-dictionary-equality evaluate-real-v5-parameter-replace-equality evaluate-real-v5-comparison-helper evaluate-real-v5-dictionary-comparison-helper evaluate-real-v5-namespace-callback evaluate-real-v5-warning-callback pilot benchmark serve verify-pilot
+.PHONY: setup dev check demo evaluate evaluate-real evaluate-real-v2 evaluate-real-v3 evaluate-real-v4 evaluate-real-v4-unittest evaluate-real-v4-variadic evaluate-real-v4-parameter-rows evaluate-real-v4-reexports evaluate-real-v5 evaluate-real-v5-equality evaluate-real-v5-factories evaluate-real-v5-first-assertion evaluate-real-v5-less-than evaluate-real-v5-inequality evaluate-real-v5-dictionary-inequality evaluate-real-v5-parameterized-less-than evaluate-real-v5-string-parameter-less-than evaluate-real-v5-raises-less-than evaluate-real-v5-raises-greater-than evaluate-real-v5-keyed-extrema evaluate-real-v5-keyed-parameters evaluate-real-v5-parameter-dictionary-equality evaluate-real-v5-parameter-replace-equality evaluate-real-v5-comparison-helper evaluate-real-v5-dictionary-comparison-helper evaluate-real-v5-namespace-callback evaluate-real-v5-warning-callback evaluate-real-v6 pilot benchmark serve verify-pilot
 setup:
 	python3 -m venv .venv
 	.venv/bin/python -m pip install -r requirements-dev.lock
@@ -70,6 +70,8 @@ evaluate-real-v5-namespace-callback:
 	.venv/bin/python -m codeimpact.namespace_callback_evaluate
 evaluate-real-v5-warning-callback:
 	.venv/bin/python -m codeimpact.warning_callback_evaluate
+evaluate-real-v6:
+	.venv/bin/python -m codeimpact.v6_evaluate
 pilot:
 	.venv/bin/python scripts/prepare_pilot.py
 benchmark:

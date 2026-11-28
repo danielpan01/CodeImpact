@@ -1,0 +1,369 @@
+{
+  "base": {
+    "commit": {
+      "message": "Merge pull request #190 from asottile/all-repos_autofix_all-repos-manual\n\npy39+",
+      "parents": [
+        {
+          "sha": "ac3b85e491fc2b8c208985599ec24b819e78aca7"
+        },
+        {
+          "sha": "1ae6bf25aeb57acf1520b37975d6bb27c0732a57"
+        }
+      ],
+      "sha": "75de5c5c84e105531bd2702fae81ba973e40d830",
+      "tree": {
+        "sha": "c64377ac1fb3b6dd95c7e0f593ee479899438803"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "ec1e7339c4ff924852df2f5d74170120e3a722aab28c8b6ef20660c3dbe9a2b7",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2017 Anthony Sottile\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "807226de22b4f5c90b757cf06b21e97bc485468379a73e8e59e310ca0144d7eb",
+      "testing/resources/backslash_continuation.py": "bc563fbcdda40b5a8d8bb5e1ba122b4caeb9f4a5c5bdd04a2f892e6ca13ea739",
+      "testing/resources/empty.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "testing/resources/unicode_snowman.py": "ed95237112d190afedd244a8473f576533193b155c34eb68f77a5b1c70b78e81",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/tokenize_rt_test.py": "dc869741c3d941f018370e1f4550d541585024f9028574973dfac8db81f42476",
+      "tokenize_rt.py": "d32ed54447755974343ee0638a31918f951b1793b923fcb3201680b030488b81"
+    },
+    "tree": {
+      "sha": "c64377ac1fb3b6dd95c7e0f593ee479899438803",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "45a8f38b6d49e303847db6d3027d632b8c284e9f",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "53be90763b167011d1d5d308b9a53c317ffdb655",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/main.yml",
+          "sha": "8e1eb8dd4787ca69378a3435bf7c980981c5df3e",
+          "size": 396,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ca1d90ea180858ae143c0e62d920e350d3acc62d",
+          "size": 34,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "fedfab33e8c986f9388cabe42e360720fbea3319",
+          "size": 1134,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "522fbe20b89911bb8d68b4a684a51225dd571764",
+          "size": 1059,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "d1c2452182c53c28c5b8df34d0c34af6dbe6330e",
+          "size": 3438,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-dev.txt",
+          "sha": "8c38c3fa07daab3596dae959bfec1e3571868cb0",
+          "size": 33,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "69ceec296006ca58eeabf606a9959cde12ec5f70",
+          "size": 1091,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "3d93aefb2da505dba9c0114404cfaaeee5ad0d3f",
+          "size": 73,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "testing",
+          "sha": "d16d0a552bb043466f5447561d1082af16ad62c0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "testing/resources",
+          "sha": "1a1fb4025c33291627db97bf912a2923d998c6f0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/backslash_continuation.py",
+          "sha": "e4ff460383dbb51589d32abc5d38a3da52187671",
+          "size": 121,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/empty.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/unicode_snowman.py",
+          "sha": "9a8fcdd341e4111115dd48adc913b7777696ed17",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "0e9f5d2bf4e726c560d1d637ffaafc3e102a3612",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/tokenize_rt_test.py",
+          "sha": "b6f572a3d733ff144ff9f94fb4439598f6e09000",
+          "size": 11601,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tokenize_rt.py",
+          "sha": "559b6d52a453ba9dc9c5f29835d61c9d6fd3d2fe",
+          "size": 6019,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "5370c9485451439199ab7ab9ba30c95d9a046275",
+          "size": 317,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "change_url": "https://github.com/asottile/tokenize-rt/commit/32e62360acc5f0eb311ce0197ecfd57875f90066",
+  "head": {
+    "commit": {
+      "message": "handle unicode named escapes in fstring components",
+      "parents": [
+        {
+          "sha": "75de5c5c84e105531bd2702fae81ba973e40d830"
+        }
+      ],
+      "sha": "32e62360acc5f0eb311ce0197ecfd57875f90066",
+      "tree": {
+        "sha": "abbdaaacfd1b558af0e969fd8ae70829c1d7d843"
+      }
+    },
+    "license": {
+      "path": "LICENSE",
+      "sha256": "ec1e7339c4ff924852df2f5d74170120e3a722aab28c8b6ef20660c3dbe9a2b7",
+      "spdx": "MIT",
+      "text": "Copyright (c) 2017 Anthony Sottile\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+    },
+    "source_sha256": {
+      "setup.py": "807226de22b4f5c90b757cf06b21e97bc485468379a73e8e59e310ca0144d7eb",
+      "testing/resources/backslash_continuation.py": "bc563fbcdda40b5a8d8bb5e1ba122b4caeb9f4a5c5bdd04a2f892e6ca13ea739",
+      "testing/resources/empty.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "testing/resources/unicode_snowman.py": "ed95237112d190afedd244a8473f576533193b155c34eb68f77a5b1c70b78e81",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tests/tokenize_rt_test.py": "50a4cc9ddcf1deb5313d2d5373fae76ce34d00d609f503ff1ae99b639db59234",
+      "tokenize_rt.py": "baefdf218c8bf793d7ca4146a893551600504f544b481efd78d9410499298a39"
+    },
+    "tree": {
+      "sha": "abbdaaacfd1b558af0e969fd8ae70829c1d7d843",
+      "tree": [
+        {
+          "mode": "040000",
+          "path": ".github",
+          "sha": "45a8f38b6d49e303847db6d3027d632b8c284e9f",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": ".github/workflows",
+          "sha": "53be90763b167011d1d5d308b9a53c317ffdb655",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": ".github/workflows/main.yml",
+          "sha": "8e1eb8dd4787ca69378a3435bf7c980981c5df3e",
+          "size": 396,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".gitignore",
+          "sha": "ca1d90ea180858ae143c0e62d920e350d3acc62d",
+          "size": 34,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": ".pre-commit-config.yaml",
+          "sha": "fedfab33e8c986f9388cabe42e360720fbea3319",
+          "size": 1134,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "LICENSE",
+          "sha": "522fbe20b89911bb8d68b4a684a51225dd571764",
+          "size": 1059,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "README.md",
+          "sha": "d1c2452182c53c28c5b8df34d0c34af6dbe6330e",
+          "size": 3438,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "requirements-dev.txt",
+          "sha": "8c38c3fa07daab3596dae959bfec1e3571868cb0",
+          "size": 33,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.cfg",
+          "sha": "69ceec296006ca58eeabf606a9959cde12ec5f70",
+          "size": 1091,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "setup.py",
+          "sha": "3d93aefb2da505dba9c0114404cfaaeee5ad0d3f",
+          "size": 73,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "testing",
+          "sha": "d16d0a552bb043466f5447561d1082af16ad62c0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "040000",
+          "path": "testing/resources",
+          "sha": "1a1fb4025c33291627db97bf912a2923d998c6f0",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/backslash_continuation.py",
+          "sha": "e4ff460383dbb51589d32abc5d38a3da52187671",
+          "size": 121,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/empty.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "testing/resources/unicode_snowman.py",
+          "sha": "9a8fcdd341e4111115dd48adc913b7777696ed17",
+          "size": 45,
+          "type": "blob"
+        },
+        {
+          "mode": "040000",
+          "path": "tests",
+          "sha": "4f6c8e5e23fa6cc8007c3f8b44b80273893495fa",
+          "size": null,
+          "type": "tree"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/__init__.py",
+          "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "size": 0,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tests/tokenize_rt_test.py",
+          "sha": "258f399bc1467e7c54805e44a8c16931c7be0346",
+          "size": 12932,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tokenize_rt.py",
+          "sha": "f909ead7a289a11e5eafaf32aec18f24e28e788c",
+          "size": 6370,
+          "type": "blob"
+        },
+        {
+          "mode": "100644",
+          "path": "tox.ini",
+          "sha": "5370c9485451439199ab7ab9ba30c95d9a046275",
+          "size": 317,
+          "type": "blob"
+        }
+      ],
+      "truncated": false
+    }
+  },
+  "id": "tokenize_rt_unicode_escapes",
+  "label_review": {
+    "author": "CodeImpact agent",
+    "drafted_before_analysis": true,
+    "labels_sha256": "fffd62cd49c1b49d66c53fbbc38d38a9ff6410e528885e58a3b7159e6eebec5a",
+    "review_reference": null,
+    "reviewer": null,
+    "status": "draft"
+  },
+  "repository": "asottile/tokenize-rt",
+  "schema_version": "1.0",
+  "selection_reason": "Introduces a named-Unicode escape aware brace transformation and exercises it directly and through f-string tokenization.",
+  "warnings": []
+}
