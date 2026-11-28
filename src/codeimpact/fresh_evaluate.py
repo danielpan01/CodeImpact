@@ -403,6 +403,22 @@ COMPARISON_HELPER_SOURCE_CHANGES = {
 }
 
 
+DICTIONARY_COMPARISON_HELPER_TRANSITION = Path(
+    "benchmarks/dictionary-comparison-helper-v1-preservation.json"
+)
+DICTIONARY_COMPARISON_HELPER_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "comparison_helper",
+        "comparison_helper_evaluate",
+        "equality",
+        "equality_evaluate",
+        "fresh_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -417,7 +433,19 @@ def _previous_source_hash(
     return actual
 
 
+def comparison_helper_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        DICTIONARY_COMPARISON_HELPER_TRANSITION,
+        COMPARISON_HELPER_TRANSITION,
+        DICTIONARY_COMPARISON_HELPER_SOURCE_CHANGES,
+    )
+
+
 def parameter_replace_equality_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = comparison_helper_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

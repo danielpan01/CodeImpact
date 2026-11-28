@@ -4819,3 +4819,34 @@ one uncertain selection.
 | Determinism | Hash seeds 7 and 173 each reproduced 27 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 187 case analyses per seed, excluding only `stats.elapsed_ms`. |
 
 Local logs and the determinism receipt are under `reports/comparison-helper/`.
+
+## Rich comparison through literal dictionary conversion
+
+Started on clean, merged `main` at `1bdb1f6d60c7530445fe96cce389c65f058ea4ad`
+(PR #53). `make evaluate-real-v5-comparison-helper` reproduced 132/239
+selections overall and 73/105 in the prerelease case. Four positive
+regressions failed before the analyzer edit. They covered the pinned
+line 167 assertion, synthetic dictionary conversion, and separate
+before-only and after-only evidence.
+
+The successor adds `test_should_compare_version_dictionaries` in the
+prerelease case. It records line 167 in each snapshot and cites the
+verified conversion and helper definition for that revision. The
+prerelease case reaches 74/105 with 34 draft true positives, 40 false
+positives, one false negative and 30 true negatives. V5 overall reaches
+133/239 with 80 true positives, 52 false positives, two false negatives,
+104 true negatives and one uncertain selection. Three existing same-helper
+scores move from 83 to 84 under the existing incoming-edge formula.
+[Source trace, exact recommendation delta and remaining misses](REAL_EVALUATION_V5.md#rich-comparison-through-literal-dictionary-conversion)
+
+| Check | Observed result |
+| --- | --- |
+| Focused comparison and preservation tests | 439 passed, including 25 new cases for wrapper acceptance, constructor binding, normalized cores, unsupported inputs and revision-specific evidence. |
+| Current analyzer comparison | Validated paths for all 53 captured cases against the comparison-helper profile. The 49 earlier cases and both Cached Property cases match with elapsed time excluded. Each SemVer graph gains one test-scoped edge. The subclass recommendations and all existing edge evidence stay intact. An in-memory change to the new after-revision assertion range failed the successor check. |
+| Pilot and frontend formatting | Local verification passed readiness, built UI, public demo, key protection, the exact frozen-input report and absence of report storage. Prettier passed. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Offline evaluations | All 26 targets passed, including both the comparison helper baseline and its dictionary successor. All 185 starting report files matched their SHA-256 hashes. Existing corpus inputs, labels, provenance and receipts matched the starting revision. |
+| `make check` | Ruff lint and format, mypy and the production build passed. Pytest reported 1,783 passed, one Linux-only `RLIMIT_AS` test skipped on macOS, one existing Starlette TestClient deprecation warning and 91% coverage (9,298 of 10,163 statements). |
+| Determinism | Hash seeds 7 and 173 each reproduced 28 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 191 case analyses per seed, excluding only `stats.elapsed_ms`. |
+
+Local logs and the determinism receipt are under `reports/dictionary-comparison-helper/`.

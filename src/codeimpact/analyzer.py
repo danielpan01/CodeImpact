@@ -548,14 +548,15 @@ def build_index(
         add_comparison_edges(index, mode=equality)
     if equality in (
         True,
+        "comparison-helper",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
         "keyed-extrema",
     ):
         add_keyed_extrema_edges(index, literal_tables=equality != "keyed-extrema")
-    if equality is True:
-        add_comparison_helper_edges(index)
+    if equality in (True, "comparison-helper"):
+        add_comparison_helper_edges(index, allow_dictionary=equality is True)
     return index
 
 
@@ -980,6 +981,7 @@ def analyze(
     extrema_incoming: dict[str, set[str]] = defaultdict(set)
     if equality in (
         True,
+        "comparison-helper",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
@@ -1010,10 +1012,10 @@ def analyze(
     comparison_helpers = set()
     helper_calls: dict[str, str] = {}
     helper_incoming: dict[str, set[str]] = defaultdict(set)
-    if equality is True:
-        comparison_helpers = add_comparison_helper_edges(before) | add_comparison_helper_edges(
-            after
-        )
+    if equality in (True, "comparison-helper"):
+        comparison_helpers = add_comparison_helper_edges(
+            before, allow_dictionary=equality is True
+        ) | add_comparison_helper_edges(after, allow_dictionary=equality is True)
         for source, target in sorted(comparison_helpers):
             if (
                 target in active_targets

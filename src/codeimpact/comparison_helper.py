@@ -43,6 +43,11 @@ class Operand:
     arguments: dict[str, Scalar]
 
 
+@dataclass(frozen=True)
+class DictionaryOperand:
+    keywords: dict[str, Scalar]
+
+
 def literal(node: ast.expr) -> Scalar:
     if isinstance(node, ast.Constant):
         value = node.value
@@ -94,7 +99,18 @@ def attribute(node: ast.AST, receiver: str) -> str:
     raise Unproved
 
 
-def bind_constructor(init: ast.FunctionDef, call: ast.Call) -> dict[str, Scalar]:
+def literal_keywords(call: ast.Call) -> dict[str, Scalar]:
+    keywords: dict[str, Scalar] = {}
+    for item in call.keywords:
+        if item.arg is None or item.arg in keywords:
+            raise Unproved
+        keywords[item.arg] = literal(item.value)
+    return keywords
+
+
+def bind_constructor(
+    init: ast.FunctionDef, arguments: list[Scalar], keywords: dict[str, Scalar]
+) -> dict[str, Scalar]:
     args = init.args
     positional_args = parameters(init)
     names = [p.arg for p in positional_args]
@@ -104,15 +120,14 @@ def bind_constructor(init: ast.FunctionDef, call: ast.Call) -> dict[str, Scalar]
         or args.kwonlyargs
         or args.vararg
         or args.kwarg
-        or len(call.args) >= len(names)
+        or len(arguments) >= len(names)
     ):
         raise Unproved
-    bound = dict(zip(names[1:], map(literal, call.args), strict=False))
-    keywords = {p.arg for p in args.args} - {names[0]}
-    for item in call.keywords:
-        if item.arg is None or item.arg in bound or item.arg not in keywords:
-            raise Unproved
-        bound[item.arg] = literal(item.value)
+    bound = dict(zip(names[1:], arguments, strict=False))
+    allowed = {p.arg for p in args.args} - {names[0]}
+    if keywords.keys() - allowed or keywords.keys() & bound.keys():
+        raise Unproved
+    bound.update(keywords)
     first_default = len(names) - len(args.defaults)
     for i, name in enumerate(names[1:], start=1):
         if name in bound:
@@ -219,19 +234,40 @@ class HelperProof(Proof):
         return self.module(fn.sid.split("::")[0]) | dict.fromkeys(names, UNBOUND)
 
     def operand(
-        self, expr: ast.expr, env: dict[str, Value], operands: dict[str, Operand]
-    ) -> Operand:
+        self,
+        expr: ast.expr,
+        env: dict[str, Value],
+        operands: dict[str, Operand | DictionaryOperand],
+        *,
+        allow_dictionary: bool,
+    ) -> Operand | DictionaryOperand:
         self.tick()
         if isinstance(expr, ast.Name) and expr.id in operands:
             return operands[expr.id]
         if not isinstance(expr, ast.Call) or not dotted(expr.func):
             raise Unproved
+        if (
+            allow_dictionary
+            and identifier(expr.func, "dict")
+            and "dict" not in env
+            and "dict" not in self.writes
+        ):
+            if expr.args:
+                raise Unproved
+            return DictionaryOperand(literal_keywords(expr))
         owner = self.expression(expr.func, env)
         if not isinstance(owner, Class):
             raise Unproved
+        return self.construct_operand(
+            owner, [literal(arg) for arg in expr.args], literal_keywords(expr)
+        )
+
+    def construct_operand(
+        self, owner: Class, arguments: list[Scalar], keywords: dict[str, Scalar]
+    ) -> Operand:
         init = instance_method(owner, "__init__")
-        arguments = bind_constructor(init.node, expr)
-        return Operand(self.constructor(owner, 0), arguments)
+        bound = bind_constructor(init.node, arguments, keywords)
+        return Operand(self.constructor(owner, 0), bound)
 
     def core(self, operand: Operand, fields: list[str]) -> tuple[int, ...]:
         init = instance_method(operand.instance.owner, "__init__")
@@ -285,7 +321,7 @@ class HelperProof(Proof):
             result.append(normalized)
         return tuple(result)
 
-    def check_builtin_union(self, name: str, path: str, env: dict[str, Value]) -> None:
+    def builtin_union(self, name: str, path: str, env: dict[str, Value]) -> set[str]:
         if env.get(name) != TYPE or "__args__" in self.writes:
             raise Unproved
         binding = self.resolver.binding(path, name)
@@ -308,16 +344,19 @@ class HelperProof(Proof):
             raise Unproved
         if not binding.value.slice.elts:
             raise Unproved
+        types = set()
         for child in binding.value.slice.elts:
             value = self.expression(child, alias_env)
             if not isinstance(value, str) or value not in BUILTIN_PARAMETER_TYPES:
                 raise Unproved
+            types.add(value)
+        return types
 
     def accepts_type(
-        self, expr: ast.expr, owner: Class, fn: Function, env: dict[str, Value]
+        self, expr: ast.expr, operand_type: Class | str, fn: Function, env: dict[str, Value]
     ) -> bool:
         if isinstance(expr, ast.Tuple):
-            return any([self.accepts_type(item, owner, fn, env) for item in expr.elts])
+            return any([self.accepts_type(item, operand_type, fn, env) for item in expr.elts])
         if isinstance(expr, ast.Starred):
             expr = expr.value
             if not isinstance(expr, ast.Attribute) or expr.attr != "__args__":
@@ -327,26 +366,31 @@ class HelperProof(Proof):
             and expr.attr == "__args__"
             and isinstance(expr.value, ast.Name)
         ):
-            self.check_builtin_union(expr.value.id, fn.sid.split("::")[0], env)
-            return False
+            types = self.builtin_union(expr.value.id, fn.sid.split("::")[0], env)
+            return isinstance(operand_type, str) and operand_type in types
         value = self.expression(expr, env)
         if isinstance(value, Class):
-            return value is owner
+            return value is operand_type
         if isinstance(value, str) and value in BUILTIN_PARAMETER_TYPES:
-            return False
+            return value == operand_type
         raise Unproved
 
     def isinstance_accepts(
-        self, check: ast.expr, argument: str, owner: Class, fn: Function, env: dict[str, Value]
+        self,
+        check: ast.expr,
+        argument: str,
+        operand_type: Class | str,
+        fn: Function,
+        env: dict[str, Value],
     ) -> bool:
         if "isinstance" in env or "isinstance" in self.writes:
             raise Unproved
         actual, types = call_to(check, "isinstance", 2)
         if not identifier(actual, argument):
             raise Unproved
-        return self.accepts_type(types, owner, fn, env)
+        return self.accepts_type(types, operand_type, fn, env)
 
-    def wrapper_forwards(self, operator: Function, owner: Class) -> ast.Call:
+    def wrapper_forwards(self, operator: Function, operand_type: Class | str) -> ast.Call:
         wrapper = operator.wrapper
         if wrapper is None:
             raise Unproved
@@ -394,24 +438,32 @@ class HelperProof(Proof):
             accepted = (
                 identifier(actual, rhs)
                 and identifier(declared, name)
-                and self.accepts_type(types, owner, wrapper, env)
+                and self.accepts_type(types, operand_type, wrapper, env)
             )
         else:
-            accepted = self.isinstance_accepts(condition, rhs, owner, wrapper, env)
+            accepted = self.isinstance_accepts(condition, rhs, operand_type, wrapper, env)
         if not accepted:
             raise Unproved
         return forwarding
 
     def after_conversions(
-        self, fn: Function, receiver: str, other: str, owner: Class, env: dict[str, Value]
-    ) -> list[ast.stmt]:
+        self,
+        fn: Function,
+        receiver: str,
+        other: str,
+        owner: Class,
+        right: Operand | DictionaryOperand,
+        env: dict[str, Value],
+    ) -> tuple[list[ast.stmt], Operand, ast.Call | None]:
         statements = body(fn.node)
         if not statements or not isinstance(statements[0], ast.Assign):
             raise Unproved
         if not isinstance(statements[0].value, ast.Call) or not identifier(
             statements[0].value.func, "type"
         ):
-            return statements
+            if isinstance(right, DictionaryOperand):
+                raise Unproved
+            return statements, right, None
         name, value = assigned(statements[0])
         (argument,) = call_to(value, "type", 1)
         if (
@@ -432,10 +484,30 @@ class HelperProof(Proof):
                 if isinstance(branch.test, ast.UnaryOp) and negated
                 else branch.test
             )
-            if self.isinstance_accepts(condition, other, owner, fn, env) != negated:
+            operand_type = "builtin:dict" if isinstance(right, DictionaryOperand) else owner
+            if self.isinstance_accepts(condition, other, operand_type, fn, env) != negated:
+                if isinstance(right, DictionaryOperand) and not negated:
+                    match branch.body:
+                        case [
+                            ast.Assign(
+                                targets=[ast.Name(id=target)],
+                                value=ast.Call(
+                                    func=ast.Name(id=constructor),
+                                    args=[],
+                                    keywords=[ast.keyword(arg=None, value=ast.Name(id=source))],
+                                ) as conversion,
+                            )
+                        ] if target == source == other and constructor == name:
+                            return (
+                                statements[2:],
+                                self.construct_operand(owner, [], right.keywords),
+                                conversion,
+                            )
                 raise Unproved
             if not branch.orelse:
-                return statements[2:]
+                if isinstance(right, DictionaryOperand):
+                    raise Unproved
+                return statements[2:], right, None
             if len(branch.orelse) != 1 or not isinstance(branch.orelse[0], ast.If):
                 raise Unproved
             branch = branch.orelse[0]
@@ -483,11 +555,15 @@ class HelperProof(Proof):
                 return
         raise Unproved
 
-    def helper_call(self, fn: Function, left: Operand, right: Operand) -> tuple[Function, ast.Call]:
+    def helper_call(
+        self, fn: Function, left: Operand, right: Operand | DictionaryOperand
+    ) -> tuple[Function, ast.Call, ast.Call | None]:
         receiver, other = positional(fn.node, 2)
         env = self.function_env(fn)
         owner = left.instance.owner
-        statements = self.after_conversions(fn, receiver, other, owner, env)
+        statements, right_instance, conversion = self.after_conversions(
+            fn, receiver, other, owner, right, env
+        )
         if len(statements) < 5:
             raise Unproved
         a, first = assigned(statements[0])
@@ -496,9 +572,9 @@ class HelperProof(Proof):
         if len({a, b, guard, receiver, other}) != 5:
             raise Unproved
         fields = self.tuple_projection(first, receiver, left.instance)
-        if fields != self.tuple_projection(second, other, right.instance):
+        if fields != self.tuple_projection(second, other, right_instance.instance):
             raise Unproved
-        if self.core(left, fields) != self.core(right, fields):
+        if self.core(left, fields) != self.core(right_instance, fields):
             raise Unproved
         self.compare_core(comparison, a, b, env)
         match statements[3:]:
@@ -519,7 +595,7 @@ class HelperProof(Proof):
                 *_,
             ] if condition == early == guard and len({x, y, receiver, other}) == 4:
                 self.read_field(left.instance, attribute(read_left, receiver))
-                self.read_field(right.instance, attribute(read_right, other))
+                self.read_field(right_instance.instance, attribute(read_right, other))
                 name = attribute(call.func, receiver)
                 args = call_to(call, f"{receiver}.{name}", 2)
                 if not identifier(args[0], x) or not identifier(args[1], y):
@@ -532,32 +608,34 @@ class HelperProof(Proof):
                     and not helper.wrapper
                 ):
                     positional(helper.node, 3)
-                    return helper, call
+                    return helper, call, conversion
         raise Unproved
 
     def trail(
-        self, fn: ast.FunctionDef, path: str, position: int, site: ast.Compare
+        self, fn: ast.FunctionDef, path: str, position: int, site: ast.Compare, *, dictionary: bool
     ) -> tuple[Function, str]:
         scoped = audit(body(fn), local=True)
         if scoped.wildcard or has_yield(fn):
             raise Unproved
         env = self.module(path) | dict.fromkeys(scoped.counts, UNBOUND)
-        operands: dict[str, Operand] = {}
+        operands: dict[str, Operand | DictionaryOperand] = {}
         for stmt in body(fn)[:position]:
             if not isinstance(stmt, ast.Pass):
                 name, expr = assigned(stmt)
-                operands[name] = self.operand(expr, env, operands)
-        left = self.operand(site.left, env, operands)
-        right = self.operand(site.comparators[0], env, operands)
+                operands[name] = self.operand(expr, env, operands, allow_dictionary=dictionary)
+        left = self.operand(site.left, env, operands, allow_dictionary=False)
+        right = self.operand(site.comparators[0], env, operands, allow_dictionary=dictionary)
+        if not isinstance(left, Operand) or dictionary != isinstance(right, DictionaryOperand):
+            raise Unproved
         owner = left.instance.owner
-        if owner is not right.instance.owner:
+        if isinstance(right, Operand) and owner is not right.instance.owner:
             raise Unproved
         op, method = COMPARISON_METHODS[type(site.ops[0])]
         operator = owner.members.get(method)
         wrapper = comparison_target(owner, method)
         if not isinstance(operator, Function) or wrapper is None or operator.wrapper is not wrapper:
             raise Unproved
-        forwarding = self.wrapper_forwards(operator, owner)
+        forwarding = self.wrapper_forwards(operator, "builtin:dict" if dictionary else owner)
         receiver, other = positional(operator.node, 2)
         match one_return(operator.node):
             case ast.Compare(
@@ -570,22 +648,28 @@ class HelperProof(Proof):
             case _:
                 raise Unproved
         compare = instance_method(owner, name)
-        helper, invocation = self.helper_call(compare, left, right)
+        helper, invocation, conversion = self.helper_call(compare, left, right)
         wrapper_name = wrapper.sid.split("::")[1]
         compare_name = compare.sid.split("::")[1]
         target_name = helper.sid.split("::")[1]
-        detail = (
+        route = (
             f"{op} reaches {target_name} via {wrapper_name} at line {forwarding.lineno}, "
-            f"{method} at line {call.lineno}, and {compare_name} at line {invocation.lineno} "
-            "after equal normalized core fields bypass the early return"
+            f"{method} at line {call.lineno}, and {compare_name} at line {invocation.lineno}"
         )
-        return helper, detail
+        if conversion is not None:
+            route += f" following {ast.unparse(conversion)} at line {conversion.lineno}"
+        return helper, route + " after equal normalized core fields bypass the early return"
 
 
-def add_comparison_helper_edges(index: "Index") -> set[tuple[str, str]]:
+def add_comparison_helper_edges(
+    index: "Index", *, allow_dictionary: bool = False
+) -> set[tuple[str, str]]:
     resolver = index.partials
     if resolver is None:
         return set()
+    # Dictionary sites have a separate budget so they cannot displace existing proofs.
+    edges = add_comparison_helper_edges(index) if allow_dictionary else set()
+    operators = (ast.NotEq,) if allow_dictionary else OPERATORS
     candidates = []
     for sid, node in index.syntax.items():
         if index.nodes[sid].kind != "test" or "." in index.nodes[sid].name:
@@ -595,20 +679,20 @@ def add_comparison_helper_edges(index: "Index") -> set[tuple[str, str]]:
         found = comparison_site(
             node,
             first=True,
-            operators=OPERATORS,
+            operators=operators,
             literal_parameters=False,
             allow_strings=False,
             allow_raises=False,
             allow_greater_raises=False,
         )
-        if found is not None and isinstance(found[1].ops[0], OPERATORS):
+        if found is not None and isinstance(found[1].ops[0], operators):
             candidates.append((sid, node, found[0], found[1]))
     if not candidates:
-        return set()
+        return edges
     try:
         writes = namespace_writes(resolver)
     except Unproved:
-        return set()
+        return edges
     proof = HelperProof(
         resolver,
         {path for path, source in index.sources.items() if source.parse_status == "unparseable"},
@@ -618,11 +702,10 @@ def add_comparison_helper_edges(index: "Index") -> set[tuple[str, str]]:
         literal_keyword_dicts=True,
     )
     proof.writes = writes
-    edges = set()
     for sid, node, position, site in candidates:
         path = index.nodes[sid].path
         try:
-            target, detail = proof.trail(node, path, position, site)
+            target, detail = proof.trail(node, path, position, site, dictionary=allow_dictionary)
         except (Unproved, RecursionError):
             continue
         if target.sid in index.nodes:

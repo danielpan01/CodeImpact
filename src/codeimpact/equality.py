@@ -32,6 +32,7 @@ EqualityMode = (
         "keyed-parameters",
         "parameter-dictionary-equality",
         "parameter-replace-equality",
+        "comparison-helper",
     ]
 )
 LiteralParameter = tuple[str, Literal["tuple", "list", "str"]]
@@ -1553,7 +1554,7 @@ def add_comparison_edges(index: "Index", *, mode: EqualityMode) -> set[tuple[str
     resolver = index.partials
     if resolver is None:
         return set()
-    replacement = mode in (True, "parameter-replace-equality")
+    replacement = mode in (True, "comparison-helper", "parameter-replace-equality")
     # Keep separate proof budgets for the successive table shapes.
     predecessor: EqualityMode | None = (
         "parameter-dictionary-equality"
