@@ -5,20 +5,26 @@ from typing import Any
 
 from codeimpact.comparison_helper_evaluate import evaluate_comparison_helper
 from codeimpact.equality_evaluate import measure, verified_receipt
-from codeimpact.fresh_evaluate import DICTIONARY_COMPARISON_HELPER_TRANSITION, PROJECT
+from codeimpact.fresh_evaluate import (
+    DICTIONARY_COMPARISON_HELPER_TRANSITION,
+    PROJECT,
+    dictionary_comparison_helper_source_hash,
+)
 from codeimpact.real_evaluate import main as real_main
 from codeimpact.v5_evaluate import DIRECTORY
 
 
 def evaluate_dictionary_comparison_helper(directory: Path) -> dict[str, Any]:
     receipt = verified_receipt(
-        "dictionary-comparison-helper-v1", DICTIONARY_COMPARISON_HELPER_TRANSITION
+        "dictionary-comparison-helper-v1",
+        DICTIONARY_COMPARISON_HELPER_TRANSITION,
+        dictionary_comparison_helper_source_hash,
     )
     return measure(
         directory,
         evaluate_comparison_helper(directory),
         receipt,
-        True,
+        "dictionary-comparison-helper",
         "Dictionary comparison helper",
     )
 

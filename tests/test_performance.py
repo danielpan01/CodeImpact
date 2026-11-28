@@ -646,6 +646,29 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
     assert set(dictionary_comparison_helper["current_sources_sha256"]) == set(
         comparison_helper["current_sources_sha256"]
     ) | {"src/codeimpact/dictionary_comparison_helper_evaluate.py"}
+    previous = ROOT / "benchmarks/dictionary-comparison-helper-v1-preservation.json"
+    namespace_callback = json.loads(
+        (ROOT / "benchmarks/namespace-callback-v1-preservation.json").read_text()
+    )
+    assert (
+        hashlib.sha256(previous.read_bytes()).hexdigest()
+        == namespace_callback["previous_receipt_sha256"]
+    )
+    assert namespace_callback["added_corpus_sha256"] == {}
+    assert set(namespace_callback["changed_historical_sources"]) == {
+        f"src/codeimpact/{name}.py"
+        for name in (
+            "analyzer",
+            "comparison_helper",
+            "dictionary_comparison_helper_evaluate",
+            "equality",
+            "equality_evaluate",
+            "fresh_evaluate",
+        )
+    }
+    assert set(namespace_callback["current_sources_sha256"]) == set(
+        dictionary_comparison_helper["current_sources_sha256"]
+    ) | {"src/codeimpact/namespace_callback.py", "src/codeimpact/namespace_callback_evaluate.py"}
     extensions = (
         current,
         latest,
@@ -680,6 +703,7 @@ def test_historical_corpus_engine_and_evaluators_remain_preserved():
         parameter_replace_equality,
         comparison_helper,
         dictionary_comparison_helper,
+        namespace_callback,
     )
     assert corpus == historical.union(*(r["added_corpus_sha256"] for r in extensions))
     assert CURRENT_SOURCES <= params["current_sources_sha256"].keys()

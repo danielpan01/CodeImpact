@@ -4850,3 +4850,38 @@ scores move from 83 to 84 under the existing incoming-edge formula.
 | Determinism | Hash seeds 7 and 173 each reproduced 28 report files byte for byte, including two earlier authored profiles. Reversing both snapshots' file order reproduced and validated 191 case analyses per seed, excluding only `stats.elapsed_ms`. |
 
 Local logs and the determinism receipt are under `reports/dictionary-comparison-helper/`.
+
+## Literal namespace callbacks through the CLI
+
+Started from clean, merged `main` at `b29ae315d0dda710c869390a9fa260466d68eec6`
+(PR #54). `make evaluate-real-v5-dictionary-comparison-helper` reproduced
+74/105 prerelease selections and 133/239 v5 selections. The pinned
+line 104 regression failed before the analyzer edit.
+
+The successor selects the CLI callback test in the prerelease case with
+a resolved path to `Version._nat_cmp` in both revisions. Prerelease now
+selects 75/105 with 35 draft true positives, 40 false positives, zero false
+negatives and 30 true negatives. V5 selects 134/239 with 81 true positives,
+52 false positives, one false negative, 104 true negatives and one
+uncertain selection. Four existing scores rise from 84 to 85 under the
+existing incoming-edge formula.
+[Source trace, exact delta and remaining miss](REAL_EVALUATION_V5.md#literal-namespace-callbacks-through-the-cli)
+
+| Check | Observed result |
+| --- | --- |
+| Callback controls | Pinned evidence cites only the equal-version row. Removing that row from both in-memory snapshots removes the helper edge and selection while both unequal-version rows remain. The synthetic checks cover shadowed bindings, computed fields, context entry, wrapper forwarding and independent revision proof. |
+| Focused regressions | 475 passed, including 36 callback cases and the historical preservation test. |
+| Report comparison | Validated current paths across all 53 captured cases. The 49 pre-v5 cases and both Cached Property reports match the dictionary helper profile with elapsed time excluded. Both SemVer graphs gain one test-scoped edge. All prior edges and the subclass recommendations retain their evidence. Changing the new after-revision call range in memory caused the strict successor check to fail. |
+| Pilot and frontend formatting | Local verification passed readiness, the built UI, public demo, key protection, the exact frozen-input report and absence of report storage. Prettier passed. |
+| Browser suite | All 290 tests passed across desktop Chromium, Firefox and WebKit and both mobile projects. The run used four workers with one retry enabled. No retries were needed. |
+| Offline evaluations | All 27 targets passed, including the dictionary helper predecessor and the namespace callback successor. All 186 prior report files matched their starting SHA-256 hashes. Existing corpus inputs, labels, provenance and receipts matched the starting revision. |
+| `make check` | Ruff lint and format, mypy, and the production build passed. Pytest reported 1,819 passed, one Linux-only `RLIMIT_AS` test skipped on macOS, one existing Starlette TestClient deprecation warning, and 91% coverage (9,612 of 10,536 statements). |
+| Determinism | Hash seeds 7 and 173 each reproduced all 29 report profiles byte for byte, including the two earlier authored profiles. Each seed also reproduced 195 case analyses with both snapshots' file order reversed, excluding only `stats.elapsed_ms`. |
+
+Publication review added a regression for a class-local regex template declared
+after pattern compilation. It reproduced a resolved edge obtained from the later
+declaration. The proof now checks only class-local declarations that precede
+compilation. All 38 callback and historical preservation checks passed in the
+focused recheck.
+
+Local logs are under `reports/namespace-callback/`.

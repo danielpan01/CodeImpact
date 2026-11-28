@@ -1336,3 +1336,31 @@ conversion branches decline the proof. The evidence text includes the
 conversion site with the wrapper and helper calls. Dictionary sites have
 a separate proof budget so they cannot displace exact-instance proofs.
 [Dictionary conversion trace](REAL_EVALUATION_V5.md#rich-comparison-through-literal-dictionary-conversion)
+
+### Literal namespace callbacks
+
+A top-level pytest test can use one direct literal parameter table to supply
+a source-owned callback, an unshadowed `argparse.Namespace` of literal
+keywords, and a `contextlib.contextmanager` that only yields its argument.
+The test must enter that context and pass the namespace directly to the
+callback. The proof checks eager table setup in declaration order. Captured
+collection hooks, rebinding, computed cells and unproved context entry
+decline this path.
+
+The callback can resolve through an explicit re-export and a proved
+forwarding wrapper. It must read the two literal string fields directly,
+parse the first through a source classmethod, and compare it with the second.
+The comparison method must invoke the same parser on the second string.
+The parser proof recognizes a narrow anchored pattern for three decimal
+fields, with a supported optional suffix pattern. A class-local template
+must be declared before the pattern is compiled. The grammar verifies the
+captured pattern text and extracts fields from canonical dotted inputs. All
+matching uses analyzer-owned expressions. The constructor and guard proof
+requires equal normalized core tuples before recording the helper call.
+
+Each revision proves the path from its own row to the helper. The edge
+cites the callback expression, and its text identifies the row, context,
+wrapper, conversion and helper invocation. The proof assumes the supported
+standard-library bindings, ordinary pytest collection and normal warning
+processing. It does not infer behavior from external plugins or warning filters.
+[CLI callback trace](REAL_EVALUATION_V5.md#literal-namespace-callbacks-through-the-cli)

@@ -48,6 +48,12 @@ class DictionaryOperand:
     keywords: dict[str, Scalar]
 
 
+@dataclass(frozen=True)
+class ParsedOperand:
+    value: Operand
+    factory: Function
+
+
 def literal(node: ast.expr) -> Scalar:
     if isinstance(node, ast.Constant):
         value = node.value
@@ -452,7 +458,7 @@ class HelperProof(Proof):
         receiver: str,
         other: str,
         owner: Class,
-        right: Operand | DictionaryOperand,
+        right: Operand | DictionaryOperand | ParsedOperand,
         env: dict[str, Value],
     ) -> tuple[list[ast.stmt], Operand, ast.Call | None]:
         statements = body(fn.node)
@@ -461,7 +467,7 @@ class HelperProof(Proof):
         if not isinstance(statements[0].value, ast.Call) or not identifier(
             statements[0].value.func, "type"
         ):
-            if isinstance(right, DictionaryOperand):
+            if not isinstance(right, Operand):
                 raise Unproved
             return statements, right, None
         name, value = assigned(statements[0])
@@ -477,6 +483,11 @@ class HelperProof(Proof):
             raise Unproved
         env[name] = owner
         branch = statements[1]
+        operand_type = (
+            owner
+            if isinstance(right, Operand)
+            else ("builtin:dict" if isinstance(right, DictionaryOperand) else "builtin:str")
+        )
         for _ in range(8):
             negated = isinstance(branch.test, ast.UnaryOp) and isinstance(branch.test.op, ast.Not)
             condition = (
@@ -484,7 +495,6 @@ class HelperProof(Proof):
                 if isinstance(branch.test, ast.UnaryOp) and negated
                 else branch.test
             )
-            operand_type = "builtin:dict" if isinstance(right, DictionaryOperand) else owner
             if self.isinstance_accepts(condition, other, operand_type, fn, env) != negated:
                 if isinstance(right, DictionaryOperand) and not negated:
                     match branch.body:
@@ -503,9 +513,19 @@ class HelperProof(Proof):
                                 self.construct_operand(owner, [], right.keywords),
                                 conversion,
                             )
+                if isinstance(right, ParsedOperand) and not negated and len(branch.body) == 1:
+                    target, expr = assigned(branch.body[0])
+                    if target == other and isinstance(expr, ast.Call):
+                        method = attribute(expr.func, name)
+                        (argument,) = call_to(expr, f"{name}.{method}", 1)
+                        if (
+                            identifier(argument, other)
+                            and owner.members.get(method) is right.factory
+                        ):
+                            return statements[2:], right.value, expr
                 raise Unproved
             if not branch.orelse:
-                if isinstance(right, DictionaryOperand):
+                if not isinstance(right, Operand):
                     raise Unproved
                 return statements[2:], right, None
             if len(branch.orelse) != 1 or not isinstance(branch.orelse[0], ast.If):
@@ -556,7 +576,7 @@ class HelperProof(Proof):
         raise Unproved
 
     def helper_call(
-        self, fn: Function, left: Operand, right: Operand | DictionaryOperand
+        self, fn: Function, left: Operand, right: Operand | DictionaryOperand | ParsedOperand
     ) -> tuple[Function, ast.Call, ast.Call | None]:
         receiver, other = positional(fn.node, 2)
         env = self.function_env(fn)
