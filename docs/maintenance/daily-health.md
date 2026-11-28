@@ -1,6 +1,6 @@
 # CodeImpact daily maintenance report
 
-Checked on **2026-11-26** (America/New_York).
+Checked on **2026-11-27** (America/New_York).
 
 Generated automatically by the daily project health workflow. This is a maintenance observation, not a new research result or application test run.
 
@@ -62,7 +62,17 @@ Generated automatically by the daily project health workflow. This is a maintena
 | README.md: docs/REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries | PASS | Local target exists; fragment not checked |
 | README.md: docs/REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#greater-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#keyed-min-and-max | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#less-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#less-than-with-literal-pytest-string-parameters | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords | PASS | Local target exists; fragment not checked |
+| README.md: docs/REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper | PASS | Local target exists; fragment not checked |
 | README.md: docs/REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | README.md: docs/SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
@@ -106,7 +116,16 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#greater-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#keyed-min-and-max | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#less-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords | PASS | Local target exists; fragment not checked |
+| docs/ARCHITECTURE.md: REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/ARCHITECTURE.md: TEST_DISCOVERY.md | PASS | Local target exists; fragment not checked |
@@ -171,7 +190,17 @@ Generated automatically by the daily project health workflow. This is a maintena
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-equality-successor | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-inequality-evidence | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#exact-class-less-than-evidence | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#factory-equality-with-literal-pytest-dictionaries | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REAL_EVALUATION_V5.md#first-equality-assertion | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#greater-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#inequality-with-a-builtin-dictionary | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#keyed-min-and-max | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#keyed-min-and-max-from-literal-pytest-tables | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#less-than-inside-pytestraises | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#less-than-with-literal-pytest-parameters | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#less-than-with-literal-pytest-string-parameters | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#replacement-equality-with-literal-pytest-keywords | PASS | Local target exists; fragment not checked |
+| docs/VALIDATION.md: REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: REPOSITORY_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SET_CLEANUP_REVIEW.md | PASS | Local target exists; fragment not checked |
 | docs/VALIDATION.md: SLUGIFY_FALLBACK_REVIEW.md | PASS | Local target exists; fragment not checked |
