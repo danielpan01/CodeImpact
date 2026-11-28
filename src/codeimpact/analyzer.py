@@ -51,6 +51,7 @@ from codeimpact.pytest_fixtures import add_fixture_edges
 from codeimpact.runtime_imports import add_runtime_import_edges
 from codeimpact.selection import AggregateFallback, propagation_changes
 from codeimpact.variadic_fallback import VariadicFallback
+from codeimpact.warning_callback import add_warning_callback_edges
 
 DEFINITIONS = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
 
@@ -551,16 +552,24 @@ def build_index(
         True,
         "comparison-helper",
         "dictionary-comparison-helper",
+        "namespace-callback",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
         "keyed-extrema",
     ):
         add_keyed_extrema_edges(index, literal_tables=equality != "keyed-extrema")
-    if equality in (True, "comparison-helper", "dictionary-comparison-helper"):
+    if equality in (
+        True,
+        "comparison-helper",
+        "dictionary-comparison-helper",
+        "namespace-callback",
+    ):
         add_comparison_helper_edges(index, allow_dictionary=equality != "comparison-helper")
-    if equality is True:
+    if equality in (True, "namespace-callback"):
         add_namespace_callback_edges(index)
+    if equality is True:
+        add_warning_callback_edges(index)
     return index
 
 
@@ -987,6 +996,7 @@ def analyze(
         True,
         "comparison-helper",
         "dictionary-comparison-helper",
+        "namespace-callback",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
@@ -994,6 +1004,9 @@ def analyze(
     ):
         before_extrema = add_keyed_extrema_edges(before, literal_tables=equality != "keyed-extrema")
         after_extrema = add_keyed_extrema_edges(after, literal_tables=equality != "keyed-extrema")
+        if equality is True:
+            before_extrema |= add_warning_callback_edges(before)
+            after_extrema |= add_warning_callback_edges(after)
         for trail in sorted(before_extrema | after_extrema):
             source, helper, target = trail
             extrema_incoming[target].add(helper)
@@ -1017,11 +1030,16 @@ def analyze(
     comparison_helpers = set()
     helper_calls: dict[str, str] = {}
     helper_incoming: dict[str, set[str]] = defaultdict(set)
-    if equality in (True, "comparison-helper", "dictionary-comparison-helper"):
+    if equality in (
+        True,
+        "comparison-helper",
+        "dictionary-comparison-helper",
+        "namespace-callback",
+    ):
         comparison_helpers = add_comparison_helper_edges(
             before, allow_dictionary=equality != "comparison-helper"
         ) | add_comparison_helper_edges(after, allow_dictionary=equality != "comparison-helper")
-        if equality is True:
+        if equality in (True, "namespace-callback"):
             comparison_helpers |= add_namespace_callback_edges(
                 before
             ) | add_namespace_callback_edges(after)

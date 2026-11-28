@@ -433,6 +433,20 @@ NAMESPACE_CALLBACK_SOURCE_CHANGES = {
 }
 
 
+WARNING_CALLBACK_TRANSITION = Path("benchmarks/warning-callback-v1-preservation.json")
+WARNING_CALLBACK_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "equality",
+        "equality_evaluate",
+        "fresh_evaluate",
+        "namespace_callback",
+        "namespace_callback_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -447,7 +461,19 @@ def _previous_source_hash(
     return actual
 
 
+def namespace_callback_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        WARNING_CALLBACK_TRANSITION,
+        NAMESPACE_CALLBACK_TRANSITION,
+        WARNING_CALLBACK_SOURCE_CHANGES,
+    )
+
+
 def dictionary_comparison_helper_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = namespace_callback_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

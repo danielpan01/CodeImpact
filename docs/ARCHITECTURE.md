@@ -1364,3 +1364,23 @@ wrapper, conversion and helper invocation. The proof assumes the supported
 standard-library bindings, ordinary pytest collection and normal warning
 processing. It does not infer behavior from external plugins or warning filters.
 [CLI callback trace](REAL_EVALUATION_V5.md#literal-namespace-callbacks-through-the-cli)
+
+### Keyed callbacks in `pytest.warns`
+
+A direct literal pytest table can also supply a source-owned callback, a
+tuple of two literal strings, and an empty keyword dictionary to the first
+statement inside `with pytest.warns(DeprecationWarning)`. The proof requires
+the unshadowed pytest import and builtin warning category. It accepts `match`
+with a supported literal pattern and verifies that eager expressions in every
+row are within scope. Computed cells, unresolved bindings, and captured
+collection hooks decline the proof.
+
+Each qualifying row separately resolves the callback and checks that its
+wrapper forwards the expanded arguments. The keyed extrema proof verifies the
+builtin `min` or `max` and two exact-class key results. The bounded source
+parser verifies normal construction from the actual string inputs. The graph
+records the row and callback location on the first call edge and the builtin
+comparison location on the second. Selection uses the existing per-revision
+keyed path check. Warning emission, message matching, reflected dispatch,
+and the result of the comparison are outside this proof.
+[Warning callback trace](REAL_EVALUATION_V5.md#keyed-callbacks-in-pytestwarns)
