@@ -419,6 +419,20 @@ DICTIONARY_COMPARISON_HELPER_SOURCE_CHANGES = {
 }
 
 
+NAMESPACE_CALLBACK_TRANSITION = Path("benchmarks/namespace-callback-v1-preservation.json")
+NAMESPACE_CALLBACK_SOURCE_CHANGES = {
+    f"src/codeimpact/{name}.py"
+    for name in (
+        "analyzer",
+        "comparison_helper",
+        "dictionary_comparison_helper_evaluate",
+        "equality",
+        "equality_evaluate",
+        "fresh_evaluate",
+    )
+}
+
+
 def _previous_source_hash(
     project: Path, path: str, actual: str, successor: Path, predecessor: Path, changed: set[str]
 ) -> str:
@@ -433,7 +447,19 @@ def _previous_source_hash(
     return actual
 
 
+def dictionary_comparison_helper_source_hash(project: Path, path: str, actual: str) -> str:
+    return _previous_source_hash(
+        project,
+        path,
+        actual,
+        NAMESPACE_CALLBACK_TRANSITION,
+        DICTIONARY_COMPARISON_HELPER_TRANSITION,
+        NAMESPACE_CALLBACK_SOURCE_CHANGES,
+    )
+
+
 def comparison_helper_source_hash(project: Path, path: str, actual: str) -> str:
+    actual = dictionary_comparison_helper_source_hash(project, path, actual)
     return _previous_source_hash(
         project,
         path,

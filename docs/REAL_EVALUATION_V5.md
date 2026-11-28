@@ -1084,3 +1084,72 @@ in the prerelease case and
 in the subclass case. The successor records all 52 retained draft false
 positives and the single uncertain selection. These measurements use
 the frozen source labels and static analysis.
+
+## Literal namespace callbacks through the CLI
+
+`make evaluate-real-v5-namespace-callback` first replays the
+`dictionary-comparison-helper-v1` predecessor. The successor measures the
+same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/namespace-callback-v1.json) · [Engine hashes](../benchmarks/namespace-callback-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Prerelease comparison, dictionary helper | 74 / 105 | 34 | 40 | 1 | 30 | 0 |
+| Prerelease comparison, namespace callback | 75 / 105 | 35 | 40 | 0 | 30 | 0 |
+| V5 overall, dictionary helper | 133 / 239 | 80 | 52 | 2 | 104 | 1 |
+| V5 overall, namespace callback | 134 / 239 | 81 | 52 | 1 | 104 | 1 |
+
+In both prerelease snapshots, the pytest table at lines 48–101 of
+`tests/test_pysemver-cli.py` supplies a callback, a fresh namespace and
+a context manager. The row at lines 71–75 supplies `cmd_compare`,
+`Namespace(version1="1.2.3", version2="1.2.3")` and
+`does_not_raise("0")`. The local context factory is bound by
+`contextlib.contextmanager` and immediately yields its supplied value.
+Entry to the context at line 103 reaches the direct `func(args)` call at
+line 104.
+[Base test](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/tests/test_pysemver-cli.py#L48-L105) · [Head test](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/tests/test_pysemver-cli.py#L48-L105)
+
+The public import resolves through `src/semver/__init__.py:23` to the
+assignment at `src/semver/_deprecated.py:401–403`. The assignment
+wraps the source-owned `cli.cmd_compare` with the deprecation factory.
+After its supported warning prefix, the wrapper forwards the original
+arguments at line 81. The CLI command reads `version1` and parses it at
+line 70, then passes `version2` to `Version.compare` at line 71.
+[Base wrapper](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/src/semver/_deprecated.py#L398-L406) · [Head wrapper](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/src/semver/_deprecated.py#L398-L406) · [Command](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/src/semver/cli.py#L62-L71)
+
+`Version.compare` converts the second string through the same bound parser
+at line 398 before or 394 after. The source parser uses the default strict
+pattern, captures three decimal strings and leaves the prerelease and build
+groups empty for these inputs. The source constructor normalizes both core
+tuples to `(1, 2, 3)`. Their equality bypasses the early return and reaches
+`Version._nat_cmp` at line 416 before or 412 after. The neighboring compare
+rows use `(1, 2, 3)` versus `(2, 1, 3)` and `(2, 4, 0)` versus
+`(2, 1, 3)`. Their nonzero core comparisons return at line 413 before or
+409 after. Those rows supply no helper evidence.
+[Base compare](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/src/semver/version.py#L396-L416) · [Head compare](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/src/semver/version.py#L392-L412)
+
+The only added recommendation is
+`tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments`.
+Its resolved edge cites line 104 in both revisions and the helper definition
+at lines 140–162 before and 140–160 after. It has distance 1 and score 85.
+The same additional incoming edge raises four scores from 84 to 85.
+Their selected IDs and evidence are preserved. The four definitions in
+`tests/test_compare.py` are `test_should_compare_prerelease_and_build_with_numbers`,
+`test_should_compare_prerelease_with_numbers_and_letters`,
+`test_should_compare_version_dictionaries` and
+`test_should_compare_version_info_objects`.
+
+All earlier graph edges retain their evidence. The subclass case gains
+the callback edge in both revisions to its unchanged helper and retains
+all 31 recommendations. Both Cached Property reports match their
+predecessors. The successor contains 38 resolved, 87 conservative and
+nine changed-test recommendations. The remaining v5 draft miss is
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`
+in the subclass case. The 52 draft false positives and one uncertain
+selection are retained.
+
+The proof covers the source route under ordinary pytest collection, with
+standard-library context entry and the deprecation wrapper's normal
+forwarding path. It declines captured collection hooks and does not
+establish external plugin or warning-filter behavior. These counts measure
+static evidence against draft dependency labels.

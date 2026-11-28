@@ -44,6 +44,7 @@ from codeimpact.models import (
     SymbolChange,
 )
 from codeimpact.module_data import ModuleDataFallback
+from codeimpact.namespace_callback import add_namespace_callback_edges
 from codeimpact.parameter_rows import ParameterRows
 from codeimpact.partial_bindings import PartialBindings
 from codeimpact.pytest_fixtures import add_fixture_edges
@@ -549,14 +550,17 @@ def build_index(
     if equality in (
         True,
         "comparison-helper",
+        "dictionary-comparison-helper",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
         "keyed-extrema",
     ):
         add_keyed_extrema_edges(index, literal_tables=equality != "keyed-extrema")
-    if equality in (True, "comparison-helper"):
-        add_comparison_helper_edges(index, allow_dictionary=equality is True)
+    if equality in (True, "comparison-helper", "dictionary-comparison-helper"):
+        add_comparison_helper_edges(index, allow_dictionary=equality != "comparison-helper")
+    if equality is True:
+        add_namespace_callback_edges(index)
     return index
 
 
@@ -982,6 +986,7 @@ def analyze(
     if equality in (
         True,
         "comparison-helper",
+        "dictionary-comparison-helper",
         "parameter-replace-equality",
         "parameter-dictionary-equality",
         "keyed-parameters",
@@ -1012,10 +1017,14 @@ def analyze(
     comparison_helpers = set()
     helper_calls: dict[str, str] = {}
     helper_incoming: dict[str, set[str]] = defaultdict(set)
-    if equality in (True, "comparison-helper"):
+    if equality in (True, "comparison-helper", "dictionary-comparison-helper"):
         comparison_helpers = add_comparison_helper_edges(
-            before, allow_dictionary=equality is True
-        ) | add_comparison_helper_edges(after, allow_dictionary=equality is True)
+            before, allow_dictionary=equality != "comparison-helper"
+        ) | add_comparison_helper_edges(after, allow_dictionary=equality != "comparison-helper")
+        if equality is True:
+            comparison_helpers |= add_namespace_callback_edges(
+                before
+            ) | add_namespace_callback_edges(after)
         for source, target in sorted(comparison_helpers):
             if (
                 target in active_targets

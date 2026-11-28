@@ -71,6 +71,8 @@ jobs:
         run: make evaluate-real-v5-comparison-helper
       - name: Offline v5 dictionary comparison helper evaluation
         run: make evaluate-real-v5-dictionary-comparison-helper
+      - name: Offline v5 namespace callback evaluation
+        run: make evaluate-real-v5-namespace-callback
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit
