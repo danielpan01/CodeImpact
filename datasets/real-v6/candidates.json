@@ -1,0 +1,520 @@
+{
+  "cutoff": "2025-10-01T00:00:00Z",
+  "repositories": [
+    {
+      "commits": [
+        {
+          "case_id": null,
+          "parents": [
+            "25b61a41f580cfc211df07c5fbbf603bd8eb5a5f"
+          ],
+          "reason": "Release bookkeeping and version metadata only.",
+          "revision": "d079849136b031c471ec96a168ad7859ed5994ff",
+          "subject": "chore(master): release 1.0.2"
+        },
+        {
+          "case_id": "xmltodict_doctype",
+          "parents": [
+            "a2a9ab7e0692a62f64d97ff12553d0d53368c854"
+          ],
+          "reason": "Permits a DOCTYPE without entities while retaining an entity declaration refusal. The tests pin both inputs and explicit disabled and enabled parsing.",
+          "revision": "25b61a41f580cfc211df07c5fbbf603bd8eb5a5f",
+          "subject": "fix: allow DOCTYPE with disable_entities=True (default)"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "656e6af9543e640fda7e96d6bdd6e693756687be"
+          ],
+          "reason": "Publish workflow permission change only.",
+          "revision": "a2a9ab7e0692a62f64d97ff12553d0d53368c854",
+          "subject": "ci(publish): allow uploading release assets"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "c986d2d37a93d45fcc059b09063d9d9c45a655ec"
+          ],
+          "reason": "Release bookkeeping and version metadata only.",
+          "revision": "656e6af9543e640fda7e96d6bdd6e693756687be",
+          "subject": "chore(master): release 1.0.1"
+        },
+        {
+          "case_id": "xmltodict_entity_policy",
+          "parents": [
+            "3d4d2d3a4cd0f68d1211dba549010261fa87b969"
+          ],
+          "reason": "Changes the default parser handler registrations from ignoring declarations to refusing them. The tests pin declaration inputs and a normal-comment control.",
+          "revision": "c986d2d37a93d45fcc059b09063d9d9c45a655ec",
+          "subject": "fix: fail closed when entities disabled"
+        }
+      ],
+      "default_branch": "master",
+      "repository": "martinblech/xmltodict"
+    },
+    {
+      "commits": [
+        {
+          "case_id": null,
+          "parents": [
+            "c715d19fb88e81f04cf3506a3c2c2812621d1b46"
+          ],
+          "reason": "Moves an unchanged helper and edits documentation and formatting. The flag behavior is already present in the parent.",
+          "revision": "16f2bdad2ebbaae72790514cce713d2d22ab0f7c",
+          "subject": "Update spacing and docs"
+        },
+        {
+          "case_id": "dotenv_disable_loading",
+          "parents": [
+            "666984de9a730a54438362b1adedd09bb1e9f5c7"
+          ],
+          "reason": "Introduces the environment flag at the public load_dotenv entry. Tests exercise recognized and unrecognized values with explicit environment setup.",
+          "revision": "c715d19fb88e81f04cf3506a3c2c2812621d1b46",
+          "subject": "feat:  add `PYTHON_DOTENV_DISABLED` flag to disable load_dotenv (fixes #510) (#569)"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "02b68577f37da2c4f4b9377d7a0ca2b58fdacf20"
+          ],
+          "reason": "The relevant CLI tests reach the exit replacement through external Click dispatch or a launched command.",
+          "revision": "666984de9a730a54438362b1adedd09bb1e9f5c7",
+          "subject": "Use sys.exit() instead of exit() (#568)"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "16e660d384b942b11879b44500afbbe021650448"
+          ],
+          "reason": "Ruff migration and formatting across the repository, with no focal behavior.",
+          "revision": "02b68577f37da2c4f4b9377d7a0ca2b58fdacf20",
+          "subject": "style: upgrade to use ruff (#567)"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "667e82f18d6e5306894c8746c46b1da2d031bd23"
+          ],
+          "reason": "Package version and release metadata only.",
+          "revision": "16e660d384b942b11879b44500afbbe021650448",
+          "subject": "Bump version: 1.1.0 \u2192 1.1.1"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "9d85edb3b8652de4601f9ad8a7a49ad9909f898a"
+          ],
+          "reason": "Changelog only.",
+          "revision": "667e82f18d6e5306894c8746c46b1da2d031bd23",
+          "subject": "update changelog"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "8411987b9301f716245074872afa30646e9b9eb7"
+          ],
+          "reason": "The Windows behavior needs an external Click and subprocess execution path. The captured tests do not isolate the Windows branch.",
+          "revision": "9d85edb3b8652de4601f9ad8a7a49ad9909f898a",
+          "subject": "fix(cli): issue with execvpe on Windows (#566)"
+        },
+        {
+          "case_id": "dotenv_interactive_detection",
+          "parents": [
+            "01f899733de664cda0550207067eb36a1795062f"
+          ],
+          "reason": "Adds sys.ps1 and sys.ps2 checks inside find_dotenv. New tests model shell state using captured test setup.",
+          "revision": "8411987b9301f716245074872afa30646e9b9eb7",
+          "subject": "fix: ensure find_dotenv work reliably on python 3.13 (#563)"
+        }
+      ],
+      "default_branch": "main",
+      "repository": "theskumar/python-dotenv"
+    },
+    {
+      "commits": [
+        {
+          "case_id": null,
+          "parents": [
+            "77f75bdadee3b2c57ccb3dcc6078cbd5d0331711",
+            "59343a43b4ba869f7d2b711b776fe85182c5cf20"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "2ea37655190845d13ae7756b066685014e398628",
+          "subject": "Merge pull request #209 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "77f75bdadee3b2c57ccb3dcc6078cbd5d0331711"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "59343a43b4ba869f7d2b711b776fe85182c5cf20",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "b2f4fb77868698b9bcdf565c88e46a7efcfd919a",
+            "23b33a0edf3403ca42ea3db681e4a38342a7ae1d"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "77f75bdadee3b2c57ccb3dcc6078cbd5d0331711",
+          "subject": "Merge pull request #208 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "b2f4fb77868698b9bcdf565c88e46a7efcfd919a"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "23b33a0edf3403ca42ea3db681e4a38342a7ae1d",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "d3874b787677593fc34aedf7174a2934e2caa94b",
+            "3bef5e00c8a732da10dd1549263102508a7d8029"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "b2f4fb77868698b9bcdf565c88e46a7efcfd919a",
+          "subject": "Merge pull request #207 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "d3874b787677593fc34aedf7174a2934e2caa94b"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "3bef5e00c8a732da10dd1549263102508a7d8029",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "bcc3c664874b810b40398065cb8c7d5c75030aa7",
+            "200023563d5e38de4334f859d422595a5a3387be"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "d3874b787677593fc34aedf7174a2934e2caa94b",
+          "subject": "Merge pull request #206 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "bcc3c664874b810b40398065cb8c7d5c75030aa7"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "200023563d5e38de4334f859d422595a5a3387be",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "94ef0f9d66d681c8cf75d60cb50f37484a6dc1bb",
+            "0b4e506ea21f46007e9e4420fcdb8bfbafadcaa6"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "bcc3c664874b810b40398065cb8c7d5c75030aa7",
+          "subject": "Merge pull request #205 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "94ef0f9d66d681c8cf75d60cb50f37484a6dc1bb"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "0b4e506ea21f46007e9e4420fcdb8bfbafadcaa6",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "ccae6e3455302c9b88c030591c1f3ac8ba352faf",
+            "d5e695e54d38292cbcd63f7e56c89c9025f110a9"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "94ef0f9d66d681c8cf75d60cb50f37484a6dc1bb",
+          "subject": "Merge pull request #204 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "ccae6e3455302c9b88c030591c1f3ac8ba352faf"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "d5e695e54d38292cbcd63f7e56c89c9025f110a9",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "606dc2211b872f04ef49256ee560e57516e3a1b7",
+            "64e37114c350aae8ba3e1b4b6dc2a203b8c0c6d5"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "ccae6e3455302c9b88c030591c1f3ac8ba352faf",
+          "subject": "Merge pull request #203 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "606dc2211b872f04ef49256ee560e57516e3a1b7"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "64e37114c350aae8ba3e1b4b6dc2a203b8c0c6d5",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "1582bcf0259d183259da1761444c6fc73fa7ad9a",
+            "4b03e57c5c6247d83ff75e60277ee729cbc3e5c0"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "606dc2211b872f04ef49256ee560e57516e3a1b7",
+          "subject": "Merge pull request #202 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "1582bcf0259d183259da1761444c6fc73fa7ad9a"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "4b03e57c5c6247d83ff75e60277ee729cbc3e5c0",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "07ad77b23e3e102f92ee1a97ad4d3e283d1c398e"
+          ],
+          "reason": "Configuration or release metadata only (setup.cfg).",
+          "revision": "1582bcf0259d183259da1761444c6fc73fa7ad9a",
+          "subject": "v6.2.0"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "ed9a32cc33e454dea90a7715663453b7070bb8cd",
+            "2cb9c40dd1b7dc3942b45f8675ebba49149afbc0"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "07ad77b23e3e102f92ee1a97ad4d3e283d1c398e",
+          "subject": "Merge pull request #201 from asottile/handle-tstring-tokens"
+        },
+        {
+          "case_id": "tokenize_rt_tstrings",
+          "parents": [
+            "ed9a32cc33e454dea90a7715663453b7070bb8cd"
+          ],
+          "reason": "Applies the existing brace handling to template-string middle tokens. The new test pins the 3.14 input and result, with independent token utilities in the same suite.",
+          "revision": "2cb9c40dd1b7dc3942b45f8675ebba49149afbc0",
+          "subject": "handle tstring tokens"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "82fd4e13b3b4ac8f4c344f51b1b77e7937aa61ba",
+            "09148b30c80e5e97599a141d7a0e23d01290596b"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "ed9a32cc33e454dea90a7715663453b7070bb8cd",
+          "subject": "Merge pull request #200 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "9dd86b710108e783094d6e63698814c008fd0250"
+          ],
+          "reason": "Configuration or release metadata only (setup.cfg).",
+          "revision": "09148b30c80e5e97599a141d7a0e23d01290596b",
+          "subject": "[pre-commit.ci] auto fixes from pre-commit.com hooks"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "82fd4e13b3b4ac8f4c344f51b1b77e7937aa61ba"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "9dd86b710108e783094d6e63698814c008fd0250",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "2052c5939a8f1ddb9ccdc945a732e29f250355ec",
+            "d3a79470d82e77d938c9e250e85c1825ae064912"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "82fd4e13b3b4ac8f4c344f51b1b77e7937aa61ba",
+          "subject": "Merge pull request #199 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "2052c5939a8f1ddb9ccdc945a732e29f250355ec"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "d3a79470d82e77d938c9e250e85c1825ae064912",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "fce6e674509468d22f884c6b361dbb4564d6b7d0",
+            "7debf602d6b5a5fcb4aa2ae902dbf1e6fd2af3ba"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "2052c5939a8f1ddb9ccdc945a732e29f250355ec",
+          "subject": "Merge pull request #198 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "fce6e674509468d22f884c6b361dbb4564d6b7d0"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "7debf602d6b5a5fcb4aa2ae902dbf1e6fd2af3ba",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "ff8337fa67e49c27cbaf755a8f3e45d6e7488bb3",
+            "c0aa27b20f98753c74e86bb83e5dfef647bd649c"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "fce6e674509468d22f884c6b361dbb4564d6b7d0",
+          "subject": "Merge pull request #197 from asottile/all-repos_autofix_all-repos-sed"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "ff8337fa67e49c27cbaf755a8f3e45d6e7488bb3"
+          ],
+          "reason": "Configuration or release metadata only (.github/workflows/main.yml).",
+          "revision": "c0aa27b20f98753c74e86bb83e5dfef647bd649c",
+          "subject": "upgrade asottile/workflows"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "413692b7c1ad8a873caec39dd4f427d55ee538ea",
+            "34e4619397df919daed01d63aa6263e9f148d94b"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "ff8337fa67e49c27cbaf755a8f3e45d6e7488bb3",
+          "subject": "Merge pull request #196 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "413692b7c1ad8a873caec39dd4f427d55ee538ea"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "34e4619397df919daed01d63aa6263e9f148d94b",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "956ea47ad95ffb642ce6c4becb2101b74dd9e345",
+            "123aaf54b5390d2e97810ef125c613c4e1c4cfd1"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "413692b7c1ad8a873caec39dd4f427d55ee538ea",
+          "subject": "Merge pull request #195 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "956ea47ad95ffb642ce6c4becb2101b74dd9e345"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "123aaf54b5390d2e97810ef125c613c4e1c4cfd1",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "a661ff9e465ff05065b2380be2991668a0fb1d76",
+            "dfa21941abc9de43c763eb437d493baf995c8299"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "956ea47ad95ffb642ce6c4becb2101b74dd9e345",
+          "subject": "Merge pull request #194 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "a661ff9e465ff05065b2380be2991668a0fb1d76"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "dfa21941abc9de43c763eb437d493baf995c8299",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "532687a2c2f5f6583ba4e60e6b62650360833dd8",
+            "23619a47701177efdcaf5d53728f5991ecef0f35"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "a661ff9e465ff05065b2380be2991668a0fb1d76",
+          "subject": "Merge pull request #193 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "532687a2c2f5f6583ba4e60e6b62650360833dd8"
+          ],
+          "reason": "Configuration or release metadata only (.pre-commit-config.yaml).",
+          "revision": "23619a47701177efdcaf5d53728f5991ecef0f35",
+          "subject": "[pre-commit.ci] pre-commit autoupdate"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "a3a7bed0a05d82af907cbfa14437715f7bb91b5d",
+            "fcc8925a178be0855769de3d44f10e775173d40b"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "532687a2c2f5f6583ba4e60e6b62650360833dd8",
+          "subject": "Merge pull request #191 from asottile/pre-commit-ci-update-config"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "3686bae7ade95e9feb14bb9eb97a4f23e06fba8d"
+          ],
+          "reason": "Configuration or release metadata only (setup.cfg).",
+          "revision": "a3a7bed0a05d82af907cbfa14437715f7bb91b5d",
+          "subject": "v6.1.0"
+        },
+        {
+          "case_id": null,
+          "parents": [
+            "75de5c5c84e105531bd2702fae81ba973e40d830",
+            "32e62360acc5f0eb311ce0197ecfd57875f90066"
+          ],
+          "reason": "Merge with multiple parents.",
+          "revision": "3686bae7ade95e9feb14bb9eb97a4f23e06fba8d",
+          "subject": "Merge pull request #192 from asottile/named-escapes"
+        },
+        {
+          "case_id": "tokenize_rt_unicode_escapes",
+          "parents": [
+            "75de5c5c84e105531bd2702fae81ba973e40d830"
+          ],
+          "reason": "Introduces a named-Unicode escape aware brace transformation and exercises it directly and through f-string tokenization.",
+          "revision": "32e62360acc5f0eb311ce0197ecfd57875f90066",
+          "subject": "handle unicode named escapes in fstring components"
+        }
+      ],
+      "default_branch": "main",
+      "repository": "asottile/tokenize-rt"
+    }
+  ],
+  "schema_version": "1.0"
+}

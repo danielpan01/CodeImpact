@@ -4914,3 +4914,35 @@ selection.
 | `make check` | Ruff lint and format, mypy, and the production build passed. Pytest reported 1,849 passed, one Linux-only `RLIMIT_AS` test skipped on macOS, one existing Starlette TestClient deprecation warning, and 91% coverage (9,742 of 10,684 statements). |
 
 Local logs are under `reports/warning-callback/`.
+
+## Fresh real-repository evaluation v6
+
+Started from clean merged `main` at `060547c3375a999eb4bc8d582cff9883f7c39ef5`
+(PR #56). Recorded protocol and hashes for 61 reference files before candidate
+inspection. Inspected 53 commits and excluded 47 under that protocol. Captured
+12 complete supported Python snapshots across XMLtodict, python-dotenv, and
+tokenize-rt. None of the three repositories appeared in v1–v5.
+
+The 32-file input freeze predates the first analysis of the v6 snapshots.
+It includes the 399 source-based head labels and source-only review pack.
+Independent review is pending. The selected source path is read and indexed
+as data. The upstream packages and tests were never executed.
+
+The first measurement selected 239/399 definitions with 27 draft true positives,
+208 false positives, zero false negatives, and 152 true negatives. Four of 12
+uncertain definitions were selected. The engine and scoring remained at the
+reference revision. Resolved paths to XMLtodict's `parse` account for 107 of
+the false positives and are the next precision target.
+[Measured results and proposed scope](REAL_EVALUATION_V6.md)
+
+| Check | Observed result |
+| --- | --- |
+| Focused v6 regressions | 11 passed, covering edited or incomplete snapshots, label errors, engine and candidate hashes, first-run integrity, evidence drift, and discrepancy drift. |
+| Capture and replay integrity | Checked the exact first parents and reconstructed every captured Git tree. Verified source blobs, SHA-256 hashes, licenses, discovery inventories, and label receipts. The replay validates every recommendation's typed path and source ranges. |
+| Pilot and frontend formatting | Local verification passed readiness, the built UI, public demo, key protection, the exact frozen-input report, and absence of report storage. Prettier passed. |
+| Browser suite | All 290 tests passed with two workers and retries disabled across desktop Chromium, Firefox, and WebKit and both mobile projects. |
+| Determinism | Hash seeds 7 and 173 produced byte-identical v6 reports. At each seed, 205 analyses across 31 report profiles matched with both snapshots' file order reversed. The full v6 evaluation also matched with case order reversed. The only excluded analysis field was `stats.elapsed_ms`. |
+| Offline evaluations | All 29 targets passed, including the new v6 gate. Each of the 188 pre-existing report files matched its starting SHA-256 hash. Earlier datasets, receipts, and all 61 reference files matched the starting revision. The frozen input manifest and review pack retained their independent pre-analysis hashes. |
+| `make check` | Ruff lint and format, mypy, and the production build passed. Pytest reported 1,860 passed, one Linux-only `RLIMIT_AS` test skipped on macOS, one existing Starlette TestClient deprecation warning, and 91% coverage (9,866 of 10,809 statements). |
+
+Local logs and the initial full report are under `reports/fresh-v6/`.

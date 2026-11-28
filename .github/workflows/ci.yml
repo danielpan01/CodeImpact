@@ -75,6 +75,8 @@ jobs:
         run: make evaluate-real-v5-namespace-callback
       - name: Offline v5 warning callback evaluation
         run: make evaluate-real-v5-warning-callback
+      - name: Offline v6 evaluation
+        run: make evaluate-real-v6
       - name: Verify protected local deployment
         run: make verify-pilot
       - run: npx playwright install --with-deps chromium firefox webkit
