@@ -1323,3 +1323,16 @@ edges after the ordinary graph traversal so the shared wrapper and
 comparison method cannot supply another test's argument-dependent proof.
 Existing resolved recommendations retain precedence.
 [Source trace and evaluation](REAL_EVALUATION_V5.md#rich-comparison-paths-to-the-changed-helper)
+
+A first direct `!=` assertion may also compare the exact source-class
+instance with an unshadowed builtin `dict` call whose keyword values are
+string, integer or `None` literals. The wrapper must accept the dictionary
+and forward it to the bound `__ne__`. The comparison method binds `cls = type(self)`,
+then select a proved type branch whose sole statement replaces the input
+with `cls(**other)`. The same constructor binder checks the keys, defaults
+and initialized fields before comparing the normalized core tuples.
+Computed inputs, unpacking at the test site, unknown keys, and ambiguous
+conversion branches decline the proof. The evidence text includes the
+conversion site with the wrapper and helper calls. Dictionary sites have
+a separate proof budget so they cannot displace exact-instance proofs.
+[Dictionary conversion trace](REAL_EVALUATION_V5.md#rich-comparison-through-literal-dictionary-conversion)

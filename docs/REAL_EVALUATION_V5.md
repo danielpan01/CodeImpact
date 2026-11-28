@@ -1026,3 +1026,61 @@ wrapper's acceptance tuple uses `type(self)`, a form outside this
 guard proof, and its helper is unchanged. Both Cached Property
 analyses match the predecessor. The replay has 36 resolved, 87
 conservative and nine changed-test recommendations.
+
+## Rich comparison through literal dictionary conversion
+
+`make evaluate-real-v5-dictionary-comparison-helper` replays the
+`comparison-helper-v1` predecessor and checks the successor against the
+same snapshots and frozen draft labels.
+[Successor receipt](../datasets/real-v5-successors/dictionary-comparison-helper-v1.json) · [Engine hashes](../benchmarks/dictionary-comparison-helper-v1-preservation.json)
+
+| Measurement | Selected / discovered | Draft TP | FP | FN | TN | Uncertain selected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Prerelease comparison, comparison helper | 73 / 105 | 33 | 40 | 2 | 30 | 0 |
+| Prerelease comparison, dictionary comparison helper | 74 / 105 | 34 | 40 | 1 | 30 | 0 |
+| V5 overall, comparison helper | 132 / 239 | 79 | 52 | 3 | 104 | 1 |
+| V5 overall, dictionary comparison helper | 133 / 239 | 80 | 52 | 2 | 104 | 1 |
+
+The only added recommendation is
+`tests/test_compare.py::test_should_compare_version_dictionaries` in the
+prerelease case. Its first assertion is at line 167 in both revisions.
+The left operand is `Version(0, 10, 4)`. The right operand is a builtin
+`dict` with literal keyword values for `major`, `minor`, `patch`,
+`prerelease` and `build`. Builtin `dict` has no subclass priority over the
+verified source class. The wrapper's guard accepts this dictionary and
+forwards it to `__ne__` at line 52. The bound operator invokes
+`Version.compare` at line 475 before or 471 after.
+[Base assertion](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/tests/test_compare.py#L161-L167) · [Head assertion](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/tests/test_compare.py#L161-L167)
+
+`Version.compare` binds `cls = type(self)`, skips the string branch, and
+converts the dictionary with `other = cls(**other)` at line 400 before
+or 396 after. The explicit keys bind the constructor. Both normalized
+core tuples are `(0, 10, 4)`, so the comparison bypasses the early
+return and calls `Version._nat_cmp` at line 416 before or 412 after.
+The resolved evidence is a test-scoped edge from line 167 to the helper
+at lines 140–162 before and 140–160 after. It records the conversion and
+intermediate call sites. Later assertions and the comparator's outcome
+are outside the proof.
+[Base conversion and helper call](https://github.com/python-semver/python-semver/blob/5dae7b67131299c8f955579bb239f2e580baa582/src/semver/version.py#L396-L416) · [Head conversion and helper call](https://github.com/python-semver/python-semver/blob/0f30183605ebb1cb43de1a6b8baad5dcd754f685/src/semver/version.py#L392-L412)
+
+The new recommendation has distance 1 and score 84. The additional
+incoming edge changes three existing scores from 83 to 84 with the
+same scoring formula and evidence. The three tests in `tests/test_compare.py`
+are `test_should_compare_prerelease_and_build_with_numbers`,
+`test_should_compare_prerelease_with_numbers_and_letters`, and
+`test_should_compare_version_info_objects`. There are no removals. The
+replay has 37 resolved, 87 conservative and nine changed-test recommendations.
+
+The subclass graph also gains a dictionary-to-helper proof in its base
+revision. Its head wrapper's acceptance tuple uses `type(self)`, which the
+guard proof declines. Its helper is unchanged, and its recommendations
+match the predecessor. Both Cached Property analyses and all earlier
+recommendation evidence remain intact.
+
+The remaining draft misses are
+`tests/test_pysemver-cli.py::test_should_process_parsed_cli_arguments`
+in the prerelease case and
+`tests/test_deprecated_functions.py::test_should_raise_deprecation_warnings`
+in the subclass case. The successor records all 52 retained draft false
+positives and the single uncertain selection. These measurements use
+the frozen source labels and static analysis.
